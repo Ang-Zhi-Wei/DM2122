@@ -8,7 +8,6 @@ Matrix 4 by 4 use for affine transformation
 */
 /******************************************************************************/
 #include "Mtx44.h"
-#include "Vector3.h"
 /******************************************************************************/
 /*!
 \brief
@@ -278,6 +277,25 @@ Mtx44 Mtx44::operator*(float scalar) const {
 	Mtx44 ret;
 	for(int i = 0; i < 16; i++)
 		ret.a[i] = scalar * a[i];
+	return ret;
+}
+
+/******************************************************************************/
+/*!
+\brief
+operator* overload for matrix-vector3 multiplication
+
+\param rhs
+	Vector3 to multiply with
+\return 
+	Resulting vector
+*/
+/******************************************************************************/
+Vector3 Mtx44::operator*(const Vector3& rhs) const {
+	float b[4];
+	for(int i = 0; i < 4; i++)
+		b[i] = a[0 * 4 + i] * rhs.x + a[1 * 4 + i] * rhs.y + a[2 * 4 + i] * rhs.z + a[3 * 4 + i] * 0;
+	Vector3 ret(b[0], b[1], b[2]);
 	return ret;
 }
 

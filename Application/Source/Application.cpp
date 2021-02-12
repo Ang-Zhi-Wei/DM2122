@@ -10,9 +10,20 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "SceneUi.h"
+#include "SceneText.h"
+#include "SceneModel.h"
+#include "Sceneskybox.h"
+#include "SceneTexture.h"
+#include "SceneLight2.h"
+#include "SceneLight.h"
+#include "Scene5.h"
+#include "Scene4.h"
+#include "Scene3.h"
+#include "Scene2.h"
 #include "Scene1.h"
-
+#include "Assigment2.h"
+#include "Assigment1.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -31,6 +42,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
+
 bool Application::IsKeyPressed(unsigned short key)
 {
     return ((GetAsyncKeyState(key) & 0x8001) != 0);
@@ -43,9 +55,15 @@ Application::Application()
 Application::~Application()
 {
 }
-
+void resize_callback(GLFWwindow* window, int w, int h)
+{
+	Application::m_width = w;
+	Application::m_height = h;
+	glViewport(0, 0, w, h);
+}
 void Application::Init()
 {
+	glfwSetWindowSizeCallback(m_window, resize_callback);
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
 
@@ -64,8 +82,9 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800, 600, "Test Window", NULL, NULL);
-
+	m_window = glfwCreateWindow(1920, 1080, "Windows", NULL, NULL);
+	//megumin
+	//m_window = glfwCreateWindow(1440, 1080, "Megumin", NULL, NULL);
 	//If the window couldn't be created
 	if (!m_window)
 	{
@@ -95,7 +114,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new Scene1();
+	Scene* scene = new Assigment2;
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -110,9 +129,28 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 
 	} //Check if the ESC key had been pressed or if the window had been closed
-	scene->Exit();
 	delete scene;
 }
+unsigned Application::m_width;
+unsigned Application::m_height;
+
+bool Application::IsMousePressed(unsigned short key) //0 - Left, 1 - Right, 2 - Middle
+{
+	return glfwGetMouseButton(m_window, key) != 0;
+}
+void Application::GetCursorPos(double* xpos, double* ypos)
+{
+	glfwGetCursorPos(m_window, xpos, ypos);
+}
+int Application::GetWindowWidth()
+{
+	return m_width;
+}
+int Application::GetWindowHeight()
+{
+	return m_height;
+}
+
 
 void Application::Exit()
 {
@@ -121,3 +159,4 @@ void Application::Exit()
 	//Finalize and clean up GLFW
 	glfwTerminate();
 }
+
