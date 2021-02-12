@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{44c0ff91-8153-479b-b068-187e4d8b6346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{2002a20e-d81e-4229-9293-1097c5af3028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assigment2Images">
+      <UniqueIdentifier>{9a2b8ff4-b664-4ab8-89b4-f99c69423127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Night">
+      <UniqueIdentifier>{8308d970-93fd-4b7c-88c7-258c373cb244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Glitch">
+      <UniqueIdentifier>{c9efabe2-e605-48ba-a2a4-40609c4ead34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WidthTextFile">
+      <UniqueIdentifier>{53f7a7ec-6d11-4103-aff4-699109dc439e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -27,6 +45,72 @@
     <ClCompile Include="Source\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assigment1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLight2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sceneskybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assigment2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Loadobj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -38,8 +122,224 @@
     <ClInclude Include="Source\Scene1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scene2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assigment1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLight2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sceneskybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assigment2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneUi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\Shading.vertexshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\TransformVertexShader.vertexshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\SimpleVertexShader.vertexshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\SimpleFragmentShader.fragmentshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Shading.fragmentshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\LightSource.fragmentshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Texture.fragmentshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Texture.vertexshader">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Blending.fragmentshader">
+      <Filter>Shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Image\color.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\Rushia.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\Environment.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\back.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\bottom.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\front.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\left.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\right.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\sidm.jpg">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\top.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\Hell.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Back.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Bottom.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Front.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Left.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Right.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Top.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\GroundMesh.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Image\shoe.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\winebottle.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\chair.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\dart.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\dartboard.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\doorman.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Glitch\GlitchingTextures.tga">
+      <Filter>Glitch</Filter>
+    </Image>
+    <Image Include="Image\calibri.tga">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Assigment2Images\RuinTexture.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Arial.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+    <Image Include="Night\Back.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Night\Bottom.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Night\Front.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Night\Left.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Night\Right.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Night\Top.tga">
+      <Filter>Night</Filter>
+    </Image>
+    <Image Include="Assigment2Images\Fire_Axe.tga">
+      <Filter>Assigment2Images</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="WidthTextFile\WidthInfo.txt">
+      <Filter>WidthTextFile</Filter>
+    </Text>
   </ItemGroup>
 </Project>

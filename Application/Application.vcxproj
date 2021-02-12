@@ -95,7 +95,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)glew\lib;$(SolutionDir)glfw\lib-vc2019;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,6 +106,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,7 +115,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)glew\lib;$(SolutionDir)glfw\lib-vc2019;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,15 +147,113 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Assigment1.cpp" />
+    <ClCompile Include="Source\Assigment2.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Camera2.cpp" />
+    <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\Camera4.cpp" />
+    <ClCompile Include="Source\Loadobj.cpp" />
+    <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Mesh.cpp" />
+    <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Scene1.cpp" />
+    <ClCompile Include="Source\Scene2.cpp" />
+    <ClCompile Include="Source\Scene3.cpp" />
+    <ClCompile Include="Source\Scene4.cpp" />
+    <ClCompile Include="Source\Scene5.cpp" />
+    <ClCompile Include="Source\SceneModel.cpp" />
+    <ClCompile Include="Source\Sceneskybox.cpp" />
+    <ClCompile Include="Source\SceneText.cpp" />
+    <ClCompile Include="Source\SceneTexture.cpp" />
+    <ClCompile Include="Source\SceneLight.cpp" />
+    <ClCompile Include="Source\SceneLight2.cpp" />
+    <ClCompile Include="Source\SceneUi.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Assigment1.h" />
+    <ClInclude Include="Source\Assigment2.h" />
+    <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Camera2.h" />
+    <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\Camera4.h" />
+    <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\LoadOBJ.h" />
+    <ClInclude Include="Source\LoadTGA.h" />
+    <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Scene1.h" />
+    <ClInclude Include="Source\Scene2.h" />
+    <ClInclude Include="Source\Scene3.h" />
+    <ClInclude Include="Source\Scene4.h" />
+    <ClInclude Include="Source\Scene5.h" />
+    <ClInclude Include="Source\SceneModel.h" />
+    <ClInclude Include="Source\Sceneskybox.h" />
+    <ClInclude Include="Source\SceneText.h" />
+    <ClInclude Include="Source\SceneTexture.h" />
+    <ClInclude Include="Source\SceneLight.h" />
+    <ClInclude Include="Source\SceneLight2.h" />
+    <ClInclude Include="Source\SceneUi.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Utility.h" />
+    <ClInclude Include="Source\Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\Blending.fragmentshader" />
+    <None Include="Shader\LightSource.fragmentshader" />
+    <None Include="Shader\Shading.fragmentshader" />
+    <None Include="Shader\Shading.vertexshader" />
+    <None Include="Shader\SimpleFragmentShader.fragmentshader" />
+    <None Include="Shader\SimpleVertexShader.vertexshader" />
+    <None Include="Shader\Texture.fragmentshader" />
+    <None Include="Shader\Texture.vertexshader" />
+    <None Include="Shader\TransformVertexShader.vertexshader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assigment2Images\Arial.tga" />
+    <Image Include="Assigment2Images\Back.tga" />
+    <Image Include="Assigment2Images\Bottom.tga" />
+    <Image Include="Assigment2Images\Fire_Axe.tga" />
+    <Image Include="Assigment2Images\Front.tga" />
+    <Image Include="Assigment2Images\GroundMesh.tga" />
+    <Image Include="Assigment2Images\Left.tga" />
+    <Image Include="Assigment2Images\Right.tga" />
+    <Image Include="Assigment2Images\RuinTexture.tga" />
+    <Image Include="Assigment2Images\Top.tga" />
+    <Image Include="Glitch\GlitchingTextures.tga" />
+    <Image Include="Image\back.tga" />
+    <Image Include="Image\bottom.tga" />
+    <Image Include="Image\calibri.tga" />
+    <Image Include="Image\chair.tga" />
+    <Image Include="Image\color.tga" />
+    <Image Include="Image\dart.tga" />
+    <Image Include="Image\dartboard.tga" />
+    <Image Include="Image\doorman.tga" />
+    <Image Include="Image\Environment.tga" />
+    <Image Include="Image\front.tga" />
+    <Image Include="Image\Hell.tga" />
+    <Image Include="Image\left.tga" />
+    <Image Include="Image\right.tga" />
+    <Image Include="Image\Rushia.tga" />
+    <Image Include="Image\shoe.tga" />
+    <Image Include="Image\sidm.jpg" />
+    <Image Include="Image\top.tga" />
+    <Image Include="Image\winebottle.tga" />
+    <Image Include="Night\Back.tga" />
+    <Image Include="Night\Bottom.tga" />
+    <Image Include="Night\Front.tga" />
+    <Image Include="Night\Left.tga" />
+    <Image Include="Night\Right.tga" />
+    <Image Include="Night\Top.tga" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="WidthTextFile\WidthInfo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
