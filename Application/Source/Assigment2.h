@@ -4,6 +4,7 @@
 #include "Mtx44.h"
 #include "Application.h"
 #include "Camera4.h"
+#include "CameraSP2.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
@@ -147,7 +148,7 @@ private:
 	float scaleAll;
 	MS modelStack, viewStack, projectionStack;
 	Light light[5];
-	Camera4 camera;
+	CameraSP2 camera;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
