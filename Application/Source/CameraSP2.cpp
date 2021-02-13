@@ -19,69 +19,64 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
-	yaw = 0;
-	boundX1 = -35;
-	boundX2 = 40;
-	boundZ1 = -280;
-	boundZ2 = 280;
-	AxeYaw = 0;
-	AxePosition = target + view;
-	AxePosition = target + right;
-	Skullposition = target;
+	viewTarget = (0,0,0);
+	rawTarget = pos;
 }
 
 void CameraSP2::Update(double dt)
 {
 	static const float CAMERA_SPEED = 0.5f;
 	static const float ZOOM_SPEED = 20.f;
-	static const float rotational_speed = 45.0f;
+	//static const float rotational_speed = 45.0f;
+	static const float viewY = 0.9f;
+
+	Application::GetCursorPos(&mousePosX, &mousePosY);
+	//mousePosY = mousePosY / 10.0f;
+	//mousePosX = mousePosX / 10.0f;
+	if (mousePosY > 1080)
+	{
+		mousePosY = 1080;
+	}
+	else if (mousePosY < 0)
+	{
+		mousePosY = 0;
+	}
+	if (mousePosX > 1920)
+	{
+		mousePosX = 1920;
+	}
+	else if (mousePosX < 0)
+	{
+		mousePosX = 0;
+	}
+
+	viewTarget.x = -1 * sin(Math::DegreeToRadian(mousePosX * (3.0f/16)));
+	viewTarget.z = cos(Math::DegreeToRadian(mousePosX * (3.0f/16)));
+	viewTarget.y = viewY * cos(Math::DegreeToRadian(mousePosY * (1.0f/6)));
+	target = rawTarget + viewTarget;
+	
+	view = (target - position).Normalized();
+	up = defaultUp;
+	right = view.Cross(up);
+	up = right.Cross(view).Normalized();
+
 	if (Application::IsKeyPressed('W'))
 	{
-		position += view * CAMERA_SPEED;
-		target += view * CAMERA_SPEED;
-		if (!((position.x > boundX1 && position.x < boundX2) && (position.z > boundZ1 && position.z < boundZ2))) {
-			position -= view * CAMERA_SPEED;
-			target -= view * CAMERA_SPEED;
-		}
+		
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		yaw = rotational_speed * static_cast<float>(dt);
-		AxeYaw += rotational_speed * static_cast<float>(dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
+		
 	}
 	if (Application::IsKeyPressed('S'))
 	{
 	
-		position -= view * CAMERA_SPEED;
-		target -= view * CAMERA_SPEED;
-		if (!((position.x > boundX1 && position.x < boundX2) && (position.z > boundZ1 && position.z < boundZ2))) {
-			position += view * CAMERA_SPEED;
-			target += view * CAMERA_SPEED;
-		}
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		yaw = -rotational_speed * static_cast<float>(dt);
-		AxeYaw -= rotational_speed * static_cast<float>(dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
-
+		
 	}
-	view = (target - position).Normalized();
-	right = view.Cross(up);
-	up = defaultUp = right.Cross(view).Normalized();
-	Mtx44 scaleview;
-	scaleview.SetToScale(5, 1, 5);
-	Mtx44 scaleright;
-	scaleright.SetToScale(1.5, 1, 1.5);
-	AxePosition = target + (scaleview*view)+(scaleright*right);
-	Skullposition = target +(scaleview*view);
+	
 }
 
 void CameraSP2::Reset()

@@ -1,5 +1,5 @@
-#ifndef SCENEAssigment2_H
-#define SCENEAssigment2_H
+#ifndef SCENESceneTest_H
+#define SCENESceneTest_H
 #include "Scene.h"
 #include "Mtx44.h"
 #include "Application.h"
@@ -10,11 +10,11 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
-class Assigment2 : public Scene
+class SceneTest : public Scene
 {
 public:
-	Assigment2();
-	~Assigment2();
+	SceneTest();
+	~SceneTest();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -136,53 +136,24 @@ public:
 	};
 private:
 	void RenderSkybox();
-	void RenderMegumin();
+	//void RenderMegumin();
 	void RenderDeadTree(int x, int z,float rotate);
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
-	float rotateAngle;
-	double translateX;
-	double translateY;
-	float scaleAll;
+	
 	MS modelStack, viewStack, projectionStack;
 	Light light[5];
-	Camera4 camera;
+	CameraSP2 camera;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float LSPEED;
-	bool skyboxglitch;
-	bool meguminglitch;
-	bool instructiontext;
-	float translateAxe;
-	float axerotation;
-	float delay;
-	bool treestatus;
-	bool swinganimation;
-	bool swingforward;
-	bool swingback;
-	bool takeaxe;
-	int glitchcount;
+
 	float fps;
-	int textduration;
-	int phase;
-	int glitchphase;
-	float movingtextX[30];
-	float movingtextY[30];
-	float movingtextZ[30];
-	float movingtextspeed[30];
-	float TranslateSkullY;
-	bool floatup;
-	bool renderskull;
-	bool meguminrotation;
-	float rotatehead;
-	bool allglitch;
-	bool rendermegumin;
-	bool finalfloatdown;
-	bool finalscreen;
+	
 };
 
 #endif
