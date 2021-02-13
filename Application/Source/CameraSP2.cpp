@@ -25,7 +25,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void CameraSP2::Update(double dt)
 {
-	static const float CAMERA_SPEED = 0.5f;
+	static const float CAMERA_SPEED = 10.f;
 	static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
 	static const float viewY = 0.9f;
@@ -53,6 +53,7 @@ void CameraSP2::Update(double dt)
 	viewTarget.x = -1 * sin(Math::DegreeToRadian(mousePosX * (3.0f/16)));
 	viewTarget.z = cos(Math::DegreeToRadian(mousePosX * (3.0f/16)));
 	viewTarget.y = viewY * cos(Math::DegreeToRadian(mousePosY * (1.0f/6)));
+	
 	target = rawTarget + viewTarget;
 	
 	view = (target - position).Normalized();
@@ -62,20 +63,38 @@ void CameraSP2::Update(double dt)
 
 	if (Application::IsKeyPressed('W'))
 	{
+		position.x += view.x * CAMERA_SPEED * dt;
+		position.z += view.z * CAMERA_SPEED * dt;
+		rawTarget.x += view.x * CAMERA_SPEED * dt;
+		rawTarget.z += view.z * CAMERA_SPEED * dt;
+		target = rawTarget + viewTarget;
 		
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		
+		position.x -= right.x * CAMERA_SPEED * dt;
+		position.z -= right.z * CAMERA_SPEED * dt;
+		rawTarget.x -= right.x * CAMERA_SPEED * dt;
+		rawTarget.z -= right.z * CAMERA_SPEED * dt;
+		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('S'))
 	{
-	
+		position.x += view.x * CAMERA_SPEED * dt;
+		position.z += view.z * CAMERA_SPEED * dt;
+		rawTarget.x += view.x * CAMERA_SPEED * dt;
+		rawTarget.z += view.z * CAMERA_SPEED * dt;
+		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		
+		position.x += right.x * CAMERA_SPEED * dt;
+		position.z += right.z * CAMERA_SPEED * dt;
+		rawTarget.x += right.x * CAMERA_SPEED * dt;
+		rawTarget.z += right.z * CAMERA_SPEED * dt;
+		target = rawTarget + viewTarget;
 	}
+
 	
 }
 
