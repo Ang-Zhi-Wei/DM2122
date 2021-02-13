@@ -24,6 +24,7 @@
 #include "Scene1.h"
 #include "Assigment2.h"
 #include "Assigment1.h"
+#include "SceneTest.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -114,7 +115,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene* scene = new Assigment2;
+	Scene* scene = new SceneTest;
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
