@@ -198,7 +198,8 @@ bool LoadMTL(const char* file_path, std::map<std::string, Material*>& materials_
 		if (strncmp("newmtl ", buf, 7) == 0) { //process newmtl
 			char mtl_name[256];
 			strcpy_s(mtl_name, buf + 7);
-			mtl_name[strlen(mtl_name) - 1] = '\0';
+		
+			mtl_name[strlen(mtl_name)-1] = '\0';
 			mtl = nullptr;
 			if (materials_map.find(mtl_name) == materials_map.end())
 			{
@@ -232,7 +233,6 @@ bool LoadMTL(const char* file_path, std::map<std::string, Material*>& materials_
 		}
 	}
 	fileStream.close(); // close file
-
 	return true;
 }
 
@@ -251,7 +251,6 @@ bool LoadOBJMTL(const char* file_path, const char* mtl_path, std::vector<Positio
 	std::map<std::string, Material*> materials_map;
 	if(mtl_path != nullptr && !LoadMTL(mtl_path, materials_map))
 		return false;
-
 	while (!fileStream.eof()) {
 		char buf[256];
 		fileStream.getline(buf, 256);
@@ -262,12 +261,12 @@ bool LoadOBJMTL(const char* file_path, const char* mtl_path, std::vector<Positio
 		}
 		else if (strncmp("vt ", buf, 3) == 0) { //process texcoord
 			TexCoord texCoord;
-			sscanf_s((buf + 3), "%f%f", &texCoord.u, &texCoord.v);
+			sscanf_s((buf + 2), "%f%f", &texCoord.u, &texCoord.v);
 			temp_uvs.push_back(texCoord);
 		}
 		else if (strncmp("vn ", buf, 3) == 0) { //process normal
 			Vector3 normal;
-			sscanf_s((buf + 3), "%f%f%f", &normal.x, &normal.y, &normal.z);
+			sscanf_s((buf + 2), "%f%f%f", &normal.x, &normal.y, &normal.z);
 			temp_normals.push_back(normal);
 		}
 		//else if (strncmp("mtllib ", buf, 7) == 0) { //process mtllib
@@ -278,6 +277,7 @@ bool LoadOBJMTL(const char* file_path, const char* mtl_path, std::vector<Positio
 		else if (strncmp("usemtl ", buf, 7) == 0) { //process usemtl
 			char mtl_name[256];
 			strcpy_s(mtl_name, buf + 7);
+			mtl_name[strlen(mtl_name) - 1] = '\0';
 			if (materials_map.find(mtl_name) != materials_map.end())
 			{
 				Material* mtl = materials_map.find(mtl_name)->second;
@@ -344,7 +344,6 @@ bool LoadOBJMTL(const char* file_path, const char* mtl_path, std::vector<Positio
 		}
 	}
 	fileStream.close(); // close file
-
 	// For each vertex of each triangle, after fileStream.close()
 	for (unsigned i = 0; i < vertexIndices.size(); ++i)
 	{
@@ -372,3 +371,5 @@ bool LoadOBJMTL(const char* file_path, const char* mtl_path, std::vector<Positio
 
 	return true;
 }
+
+

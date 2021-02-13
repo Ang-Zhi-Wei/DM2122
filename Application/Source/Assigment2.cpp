@@ -297,8 +297,9 @@ void Assigment2::Init()
 	meshList[Orb]->material.kShininess = 1.f;
 	// Make sure you pass uniform parameters after glUseProgram()
 	//Dead Tree
-	meshList[Deadtrees] = MeshBuilder::GenerateOBJMTL("Dead Tree", "OBJ//DeadTree.obj", "MTL//DeadTree.mtl");
-	meshList[Deadtrees]->material.kAmbient.Set(0.12,0.08,0.04);//as dark as possible
+	//meshList[Deadtrees] = MeshBuilder::GenerateOBJMTL("Dead Tree", "OBJ//DeadTree.obj", "MTL//DeadTree.mtl");
+	meshList[Deadtrees] = MeshBuilder::GenerateOBJ("Dead Tree", "OBJ//DeadTree.obj");
+	meshList[Deadtrees]->material.kAmbient.Set(0.12, 0.08, 0.04);//as dark as possible
 	//Skull cause i can't find ghost
 	meshList[Skeleton] = MeshBuilder::GenerateOBJ("Skull", "OBJ//Skull.obj");
 	meshList[Skeleton]->material.kAmbient.Set(Gray);

@@ -5,7 +5,6 @@
 #include "Vertex.h"
 #include "Vector3.h"
 #include "Material.h"
-
 bool LoadOBJ(
 	const char *file_path, 
 	std::vector<Position> & out_vertices, 
@@ -30,5 +29,6 @@ bool LoadOBJMTL(
 	std::vector<Vector3>& out_normals,
 	std::vector<Material>& out_materials
 );
+
 
 #endif

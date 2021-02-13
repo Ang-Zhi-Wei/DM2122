@@ -9,9 +9,7 @@ struct Component
 	Component& operator=(const Component& rhs)
 	{
 		Set(rhs.r, rhs.g, rhs.b);
-		//dk why it wants me to return something when material does not need to
-		Component a(rhs.r, rhs.g, rhs.b);
-		return a;
+		return *this;
 	}
 
 	void Set(float r, float g, float b)
@@ -99,10 +97,10 @@ struct Material
 	Component kDiffuse;
 	Component kSpecular;
 	float kShininess;
-	int size;
+    unsigned size;
 	Material() {
 		kAmbient = {
-			1.0f,1.0f,1.0f
+			0.5f,0.5f,0.5f
 		};
 		kDiffuse = {
 			0.3f,0.3f,0.3f
@@ -119,6 +117,7 @@ struct Material
 		kSpecular = rhs.kSpecular;
 		kShininess = rhs.kShininess;
 		size = rhs.size;
+		return *this;
 	}
 
 };	
