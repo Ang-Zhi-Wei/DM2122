@@ -29,7 +29,6 @@ void CameraSP2::Update(double dt)
 	static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
 	static const float viewY = 0.9f;
-
 	Application::GetCursorPos(&mousePosX, &mousePosY);
 	//mousePosY = mousePosY / 10.0f;
 	//mousePosX = mousePosX / 10.0f;
