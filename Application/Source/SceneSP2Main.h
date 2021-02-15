@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "ColliderBox.h"
 class SceneSP2Main : public Scene
 {
 public:
@@ -39,6 +40,7 @@ public:
 		//objs
 		GEO_BUILDING,
 		Ruins,
+		Colliderbox,
 
 		//UI tings
 		GEO_TEXT,
@@ -116,7 +118,6 @@ private:
 	Light light[2];
 	CameraSP2 camera;
 	float LSPEED;
-
 	float fps;
 
 
@@ -126,7 +127,8 @@ private:
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 
-	
+	ColliderBox Ruincollider;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
