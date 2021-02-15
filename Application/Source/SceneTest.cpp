@@ -31,6 +31,8 @@ void SceneTest::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
+	//hide cursor
+	Application::hidemousecursor();
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -266,7 +268,8 @@ void SceneTest::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
 	//init update stuff
 	LSPEED = 10.F;
-	
+	//Set boundary here
+	camera.SetBounds(-300, 300, -300, 300);
 }
 
 void SceneTest::Update(double dt)
@@ -291,6 +294,7 @@ void SceneTest::Update(double dt)
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
+	
 	
 }
 
@@ -354,18 +358,18 @@ void SceneTest::Render()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 
-
-	//std::ostringstream test1;
-	//test1 << "camera view target: " << camera.viewTarget;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	//std::ostringstream test3;
-	//test3 << "camera target: " << camera.target;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	//std::ostringstream test2;
-	//test2 << "camera view: " << camera.view;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-
-
+	std::ostringstream test1;
+	test1 << "camera view target: " << camera.viewTarget;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	std::ostringstream test3;
+	test3 << "camera target: " << camera.target;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test2;
+	test2 << "camera view: " << camera.view;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	//checking
+	std::cout << camera.position.x << std::endl;
+	//std::cout << camera.position.z << std::endl;
 }
 
 void SceneTest::Exit()

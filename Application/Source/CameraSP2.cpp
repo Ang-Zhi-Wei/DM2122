@@ -23,6 +23,10 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	rawTarget = pos;
 	Application::SetCursorPos(960, 540);
 	offsetX = 0;
+	boundX1 = 0;
+	boundX2 = 300;
+	boundZ1 = 0;
+	boundZ2 = 300;
 }
 
 void CameraSP2::Update(double dt)
@@ -57,12 +61,18 @@ void CameraSP2::Update(double dt)
 
 	if (Application::IsKeyPressed('W'))
 	{
+		
 		position.x += view.x * CAMERA_SPEED * dt;
 		position.z += view.z * CAMERA_SPEED * dt;
 		rawTarget.x += view.x * CAMERA_SPEED * dt;
 		rawTarget.z += view.z * CAMERA_SPEED * dt;
+		if ((position.x < boundX1) || (position.x > boundX2)||(position.z < boundZ1) || (position.z > boundZ2)) {
+			position.x -= view.x * CAMERA_SPEED * dt;
+			position.z -= view.z * CAMERA_SPEED * dt;
+			rawTarget.x -= view.x * CAMERA_SPEED * dt;
+			rawTarget.z -= view.z * CAMERA_SPEED * dt;
+		}
 		target = rawTarget + viewTarget;
-		
 	}
 	if (Application::IsKeyPressed('A'))
 	{
@@ -70,6 +80,12 @@ void CameraSP2::Update(double dt)
 		position.z -= right.z * CAMERA_SPEED * dt;
 		rawTarget.x -= right.x * CAMERA_SPEED * dt;
 		rawTarget.z -= right.z * CAMERA_SPEED * dt;
+		if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+			position.x += right.x * CAMERA_SPEED * dt;
+			position.z += right.z * CAMERA_SPEED * dt;
+			rawTarget.x += right.x * CAMERA_SPEED * dt;
+			rawTarget.z += right.z * CAMERA_SPEED * dt;
+		}
 		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('S'))
@@ -78,6 +94,12 @@ void CameraSP2::Update(double dt)
 		position.z -= view.z * CAMERA_SPEED * dt;
 		rawTarget.x -= view.x * CAMERA_SPEED * dt;
 		rawTarget.z -= view.z * CAMERA_SPEED * dt;
+		if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+			position.x += view.x * CAMERA_SPEED * dt;
+			position.z += view.z * CAMERA_SPEED * dt;
+			rawTarget.x += view.x * CAMERA_SPEED * dt;
+			rawTarget.z += view.z * CAMERA_SPEED * dt;
+		}
 		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('D'))
@@ -86,6 +108,12 @@ void CameraSP2::Update(double dt)
 		position.z += right.z * CAMERA_SPEED * dt;
 		rawTarget.x += right.x * CAMERA_SPEED * dt;
 		rawTarget.z += right.z * CAMERA_SPEED * dt;
+		if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+			position.x -= right.x * CAMERA_SPEED * dt;
+			position.z -= right.z * CAMERA_SPEED * dt;
+			rawTarget.x -= right.x * CAMERA_SPEED * dt;
+			rawTarget.z -= right.z * CAMERA_SPEED * dt;
+		}
 		target = rawTarget + viewTarget;
 	}
 
@@ -98,7 +126,7 @@ void CameraSP2::Reset()
 	target = defaultTarget;
 	up = defaultUp;
 }
-
+//param X1 smaller than x2,z1 smaller than z2
 void CameraSP2::SetBounds(float X1, float X2, float Z1, float Z2)
 {
 	boundX1 = X1;
