@@ -110,13 +110,19 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+	scenetype = Scenetest;
 }
 
 void Application::Run()
 {
-	//Main Loop
 	Scene* scene = new SceneTest;
-	scene->Init();
+	//Main Loop
+	switch (scenetype) {
+	case Scenetest:
+		scene->Init();
+		break;
+	}
+	
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -150,6 +156,11 @@ int Application::GetWindowWidth()
 int Application::GetWindowHeight()
 {
 	return m_height;
+}
+
+void Application::setscene(int scenenum)
+{
+	scenetype = scenenum;
 }
 
 

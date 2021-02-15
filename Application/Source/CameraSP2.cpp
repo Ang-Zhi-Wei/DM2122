@@ -55,7 +55,6 @@ void CameraSP2::Update(double dt)
 	viewTarget.y = viewY * cos(Math::DegreeToRadian(mousePosY * (1.0f/6)));
 	
 	target = rawTarget + viewTarget;
-	
 	view = (target - position).Normalized();
 	up = defaultUp;
 	right = view.Cross(up);

@@ -19,11 +19,14 @@ public:
 	static int GetWindowHeight();
 	static unsigned m_width;
 	static unsigned m_height;
+	void setscene(int scenenum);
+	int scenetype;
 private:
-
 	//Declare a window object
 	StopWatch m_timer;
-	
+};
+enum Scenemanager {
+	Scenetest,
 };
 
 #endif
