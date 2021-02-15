@@ -18,7 +18,7 @@ SceneTest::~SceneTest()
 void SceneTest::Init()
 {
 	// Init VBO here
-	glClearColor(0, 0, 0, 0.0f);
+	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -31,6 +31,8 @@ void SceneTest::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
+	//hide cursor
+	Application::hidemousecursor();
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -268,11 +270,12 @@ void SceneTest::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//vignette
-	meshList[GEO_VIGNETTE] = MeshBuilder::GenerateQuad("vision limiy thingy", 1, 1, 0);
-	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//FLASHON.tga");
+	meshList[GEO_VIGNETTE] = MeshBuilder::GenerateQuad2("vision limit thingy", 1, 1, 0);
+	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//VISIONOFF.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
 	//init update stuff
 	LSPEED = 10.F;
-	
+	//Set boundary here
+	camera.SetBounds(-300, 300, -300, 300);
 }
 
 void SceneTest::Update(double dt)
@@ -297,6 +300,7 @@ void SceneTest::Update(double dt)
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
+	
 	
 }
 
@@ -360,8 +364,7 @@ void SceneTest::Render()
 	modelStack.PopMatrix();
 
 	//UI OVERLAY
-	//RenderMeshOnScreen(meshList[GEO_VIGNETTE], 40, 30, 1, 1);
-
+	RenderMeshOnScreen(meshList[GEO_VIGNETTE], 40, 30, 80, 60);
 
 	std::ostringstream test1;
 	test1 << "camera view target: " << camera.viewTarget;
@@ -372,7 +375,9 @@ void SceneTest::Render()
 	std::ostringstream test2;
 	test2 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-
+	//checking
+	std::cout << camera.position.x << std::endl;
+	//std::cout << camera.position.z << std::endl;
 }
 
 void SceneTest::Exit()
@@ -566,7 +571,7 @@ void SceneTest::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int size
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI  
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();

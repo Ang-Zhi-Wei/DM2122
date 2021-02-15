@@ -18,7 +18,7 @@ public:
 
 	Vector3 rawTarget, viewTarget;
 	double mousePosX, mousePosY;
-	double offsetX;
+	double offsetX, offsetY;
 	Vector3 forwardVector;
     float yaw;
 	float boundX1;

@@ -67,7 +67,6 @@ void Application::Init()
 	glfwSetWindowSizeCallback(m_window, resize_callback);
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
-
 	//Initialize GLFW
 	if (!glfwInit())
 	{
@@ -155,6 +154,11 @@ void Application::GetCursorPos(double* xpos, double* ypos)
 void Application::SetCursorPos(double xpos, double ypos)
 {
 	glfwSetCursorPos(m_window, xpos, ypos);
+}
+
+void Application::hidemousecursor(void)
+{
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 
