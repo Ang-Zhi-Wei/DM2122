@@ -136,8 +136,8 @@ void SceneSP2Main::Init()
 	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
 	//building
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//environment.obj");
-	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//housetexture.tga");
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
+	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
 	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//Text
@@ -345,7 +345,7 @@ void SceneSP2Main::Render()
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
-	modelStack.Scale(600, 1, 600);
+	modelStack.Scale(900, 1, 900);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
 	//destroyed small building
@@ -360,11 +360,201 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
+
+	//front
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 15, -150);
-	modelStack.Scale(20, 20, 20);
+	modelStack.Translate(-350, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-100, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(350, 91, -400);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	
+
+	//left
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, -280);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, -180);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, -80);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, 80);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, 180);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-450, 91, 280);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	//right
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, -280);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, -180);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, -80);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, 80);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, 180);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(450, 91, 280);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	
+	//back
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-350, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-100, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(350, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 91, 400);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+
 
 	//UI OVERLAY
 	//vision vignette
