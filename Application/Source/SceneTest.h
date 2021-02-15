@@ -31,9 +31,12 @@ public:
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+		GEO_BUILDING,
+
 		Ground_Mesh,
 		GEO_TEXT,
 		GEO_VIGNETTE,
+		GEO_OVERLAY,
 		Ruins,
 		Colliderbox,
 		NUM_GEOMETRY,
