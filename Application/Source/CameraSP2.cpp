@@ -51,15 +51,15 @@ void CameraSP2::Update(double dt)
 	else if (mousePosX < 20)
 	{
 		SetCursorPos(960, 540);
-		yaw = acos(view.Dot(defaultview));
+		offsetX -= 940;
 	}
+
 	Application::GetCursorPos(&mousePosX, &mousePosY);
-	Mtx44 rotation;
-	rotation.SetToRotation(yaw, 0, 1, 0);
-	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX) * (3.0f/16) + offsetX));
-	viewTarget.z = cos(Math::DegreeToRadian((mousePosX) * (3.0f/16) + offsetX));
+	
+	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX+ offsetX) * (3.0f/16) ));
+	viewTarget.z = cos(Math::DegreeToRadian((mousePosX+ offsetX) * (3.0f/16) ));
 	viewTarget.y = viewY * cos(Math::DegreeToRadian(mousePosY * (1.0f/6)));
-	viewTarget = rotation * viewTarget;
+	
 	target = rawTarget + viewTarget;
 	view = (target - position).Normalized();
 	up = defaultUp;
