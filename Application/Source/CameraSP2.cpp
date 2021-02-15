@@ -79,10 +79,10 @@ void CameraSP2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('S'))
 	{
-		position.x += view.x * CAMERA_SPEED * dt;
-		position.z += view.z * CAMERA_SPEED * dt;
-		rawTarget.x += view.x * CAMERA_SPEED * dt;
-		rawTarget.z += view.z * CAMERA_SPEED * dt;
+		position.x -= view.x * CAMERA_SPEED * dt;
+		position.z -= view.z * CAMERA_SPEED * dt;
+		rawTarget.x -= view.x * CAMERA_SPEED * dt;
+		rawTarget.z -= view.z * CAMERA_SPEED * dt;
 		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('D'))
