@@ -14,12 +14,11 @@ public:
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
+	Vector3 defaultview;
 
 	Vector3 rawTarget, viewTarget;
 	double mousePosX, mousePosY;
-
-
-
+	double offsetX;
 	Vector3 forwardVector;
     float yaw;
 	float boundX1;
