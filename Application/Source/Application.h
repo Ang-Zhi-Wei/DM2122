@@ -28,7 +28,11 @@ private:
 	StopWatch m_timer;
 };
 enum Scenemanager {
-	Scenetest,
+	Scene_1,
+	Scene_2,
+	Scene_3,
+	Scene_4,
+	Scene_5,
 };
 
 #endif

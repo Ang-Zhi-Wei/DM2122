@@ -213,8 +213,13 @@ void SceneSP2Main::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+	//collidertest
+	Ruincollider.setlength(42, 20, 97);
+	Ruincollider.Setposition(Vector3(0, 5, -227));
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Ruincollider.getxlength(), Ruincollider.getylength(), Ruincollider.getzlength());
 	//Set boundary here
 	camera.SetBounds(-300, 300, -300, 300);
+
 }
 
 void SceneSP2Main::Update(double dt)
@@ -333,6 +338,11 @@ void SceneSP2Main::Render()
 	modelStack.Translate(0, -4, -230);
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[Ruins], true);
+	modelStack.PopMatrix();
+	//Ruin Collider
+	modelStack.PushMatrix();
+	modelStack.Translate(Ruincollider.getPosition().x, Ruincollider.getPosition().y, Ruincollider.getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();

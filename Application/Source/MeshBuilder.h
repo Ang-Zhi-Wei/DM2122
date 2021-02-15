@@ -29,7 +29,7 @@ public:
 	static Mesh* GenerateOBJ(const std::string& meshName, const std::string& file_path);
 	static Mesh* GenerateText(const std::string& meshName, unsigned numRow, unsigned numCol);
 	static Mesh* GenerateOBJMTL(const std::string& meshName, const std::string& file_path, const std::string& mtl_path);
-
+	static Mesh* GenerateColliderBox(const std::string& meshName, double legnthx,double lengthy,double lengthz);
 };
 
 #endif
