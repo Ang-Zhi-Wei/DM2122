@@ -115,15 +115,18 @@ void Application::Init()
 
 void Application::Run()
 {
-	Scene* scene = new SceneSP2Room1;
+	Scene* scene = new SceneSP2Main;
 	//Main Loop
 	//Scene Manager
 	switch (scenetype) {
 	case Scene_1:
 		scene->Init();
 		break;
-	//case something
-		//delete scene then new scene
+	case Scene_2:
+		delete scene;
+		scene = new SceneSP2Room1();
+		scene->Init();
+		break;
 	}
 	
 

@@ -4,7 +4,6 @@ class ColliderBox
 {
 public:
 	ColliderBox();
-	
 	bool iscollide(Vector3 cameraposition);
 	void Setposition(Vector3 Position);
 	void setlength(double xlength,double ylength,double zlength);
@@ -18,4 +17,3 @@ private:
 	double zlength;
 	Vector3 Position;
 };
-

@@ -2,10 +2,12 @@
 
 ColliderBox::ColliderBox()
 {
+	//default length
 	xlength = 3;
 	ylength = 3;
 	zlength = 3;
 }
+
 
 
 

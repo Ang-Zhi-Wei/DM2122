@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "Mtx44.h"
 
-void CameraSP2::setchecker(ColliderBox Checker)
+void CameraSP2::setchecker(std::vector<ColliderBox>Checker)
 {
 	this->Checker = Checker;
 }
@@ -82,12 +82,15 @@ void CameraSP2::Update(double dt)
 			rawTarget.x -= view.x * CAMERA_SPEED * dt;
 			rawTarget.z -= view.z * CAMERA_SPEED * dt;
 		}
-		else if (Checker.iscollide(position)) {
-			position.x -= view.x * CAMERA_SPEED * dt;
-			position.z -= view.z * CAMERA_SPEED * dt;
-			rawTarget.x -= view.x * CAMERA_SPEED * dt;
-			rawTarget.z -= view.z * CAMERA_SPEED * dt;
+		for (int i = 0; i < Checker.size(); i++) {
+			if (Checker[i].iscollide(position)) {
+				position.x -= view.x * CAMERA_SPEED * dt;
+				position.z -= view.z * CAMERA_SPEED * dt;
+				rawTarget.x -= view.x * CAMERA_SPEED * dt;
+				rawTarget.z -= view.z * CAMERA_SPEED * dt;
+			}
 		}
+	
 		target = rawTarget + viewTarget;
 	}
 	if (Application::IsKeyPressed('A'))
@@ -102,11 +105,13 @@ void CameraSP2::Update(double dt)
 			rawTarget.x += right.x * CAMERA_SPEED * dt;
 			rawTarget.z += right.z * CAMERA_SPEED * dt;
 		}
-		else if (Checker.iscollide(position)) {
-			position.x += right.x * CAMERA_SPEED * dt;
-			position.z += right.z * CAMERA_SPEED * dt;
-			rawTarget.x += right.x * CAMERA_SPEED * dt;
-			rawTarget.z += right.z * CAMERA_SPEED * dt;
+		for (int i = 0; i < Checker.size(); i++) {
+			if (Checker[i].iscollide(position)) {
+				position.x += right.x * CAMERA_SPEED * dt;
+				position.z += right.z * CAMERA_SPEED * dt;
+				rawTarget.x += right.x * CAMERA_SPEED * dt;
+				rawTarget.z += right.z * CAMERA_SPEED * dt;
+			}
 		}
 		target = rawTarget + viewTarget;
 	}
@@ -122,11 +127,13 @@ void CameraSP2::Update(double dt)
 			rawTarget.x += view.x * CAMERA_SPEED * dt;
 			rawTarget.z += view.z * CAMERA_SPEED * dt;
 		}
-		else if (Checker.iscollide(position)) {
-			position.x += view.x * CAMERA_SPEED * dt;
-			position.z += view.z * CAMERA_SPEED * dt;
-			rawTarget.x += view.x * CAMERA_SPEED * dt;
-			rawTarget.z += view.z * CAMERA_SPEED * dt;
+		for (int i = 0; i < Checker.size(); i++) {
+			if (Checker[i].iscollide(position)) {
+				position.x += view.x * CAMERA_SPEED * dt;
+				position.z += view.z * CAMERA_SPEED * dt;
+				rawTarget.x += view.x * CAMERA_SPEED * dt;
+				rawTarget.z += view.z * CAMERA_SPEED * dt;
+			}
 		}
 		target = rawTarget + viewTarget;
 	}
@@ -142,11 +149,13 @@ void CameraSP2::Update(double dt)
 			rawTarget.x -= right.x * CAMERA_SPEED * dt;
 			rawTarget.z -= right.z * CAMERA_SPEED * dt;
 		}
-		else if (Checker.iscollide(position)) {
-			position.x -= right.x * CAMERA_SPEED * dt;
-			position.z -= right.z * CAMERA_SPEED * dt;
-			rawTarget.x -= right.x * CAMERA_SPEED * dt;
-			rawTarget.z -= right.z * CAMERA_SPEED * dt;
+		for (int i = 0; i < Checker.size(); i++) {
+			if (Checker[i].iscollide(position)) {
+				position.x -= right.x * CAMERA_SPEED * dt;
+				position.z -= right.z * CAMERA_SPEED * dt;
+				rawTarget.x -= right.x * CAMERA_SPEED * dt;
+				rawTarget.z -= right.z * CAMERA_SPEED * dt;
+			}
 		}
 		target = rawTarget + viewTarget;
 	}
