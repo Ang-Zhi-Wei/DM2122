@@ -2,7 +2,7 @@
 #define CAMERA_SP2_H
 
 #include "Camera.h"
-
+#include "ColliderBox.h"
 class CameraSP2 : public Camera
 {
 public:
@@ -15,11 +15,12 @@ public:
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
 	Vector3 defaultview;
-
 	Vector3 rawTarget, viewTarget;
+	ColliderBox Checker;
 	double mousePosX, mousePosY;
 	double offsetX, offsetY;
 	Vector3 forwardVector;
+	void setchecker(ColliderBox Checker);
     float yaw;
 	float boundX1;
 	float boundX2;
@@ -29,6 +30,7 @@ public:
 	float AxeYaw;
 	Vector3 AxePosition;
 	Vector3 Skullposition;
+	bool collisionstatus;
 	CameraSP2();
 	~CameraSP2();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
