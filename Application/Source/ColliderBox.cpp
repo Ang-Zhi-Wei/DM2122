@@ -11,7 +11,12 @@ ColliderBox::ColliderBox()
 
 bool ColliderBox::iscollide(Vector3 cameraposition)
 {
-	return false;
+	if ((cameraposition.x > (-xlength / 2)+Position.x && cameraposition.x < (xlength / 2)+Position.x) && ((cameraposition.z > (-zlength / 2)+Position.z && cameraposition.z < (zlength / 2)+Position.z))) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void ColliderBox::Setposition(Vector3 Position)

@@ -213,6 +213,9 @@ void SceneSP2Main::Init()
 	Ruincollider.setlength(42, 20, 97);
 	Ruincollider.Setposition(Vector3(0, 5, -227));
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Ruincollider.getxlength(), Ruincollider.getylength(), Ruincollider.getzlength());
+	//one collider to check for now,will edit later
+	camera.setchecker(Ruincollider);
+	
 	//Set boundary here
 	camera.SetBounds(-300, 300, -300, 300);
 
@@ -336,7 +339,6 @@ void SceneSP2Main::Render()
 
 	//skybox
 	RenderSkybox();
-
 
 	//ground Mesh
 	modelStack.PushMatrix();
