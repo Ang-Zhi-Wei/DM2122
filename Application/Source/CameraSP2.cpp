@@ -32,6 +32,8 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	boundX2 = 300;
 	boundZ1 = 0;
 	boundZ2 = 300;
+	playerStamina = 10;
+	cooldown = 1;
 }
 
 void CameraSP2::Update(double dt)
@@ -40,9 +42,28 @@ void CameraSP2::Update(double dt)
 	static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
 	
+	//shift to sprint
 	if (Application::IsKeyPressed(160))
 	{
-		CAMERA_SPEED += 15;
+		if (playerStamina > 0)
+		{
+			CAMERA_SPEED += 20;
+			playerStamina -= 2 * dt;
+		}
+	}
+	//stamina
+	else if (playerStamina <= 0 && cooldown > 0)
+	{
+		cooldown -= dt;
+	}
+	else if (playerStamina < 10)
+	{
+		playerStamina += 3 * dt;
+		cooldown = 1;
+	}
+	else if (playerStamina > 10)
+	{
+		playerStamina = 10;
 	}
 
 	static const float viewY = 0.9f;
