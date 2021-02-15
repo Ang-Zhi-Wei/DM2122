@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "ColliderBox.h";
 class SceneTest : public Scene
 {
 public:
@@ -23,24 +24,18 @@ public:
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
-
 		LightSphere,
-
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
-
 		Ground_Mesh,
-
 		GEO_TEXT,
-
 		GEO_VIGNETTE,
-
 		Ruins,
-		
+		Colliderbox,
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -140,7 +135,7 @@ private:
 	float LSPEED;
 
 	float fps;
-	
+	ColliderBox Ruincollider;
 };
 
 #endif

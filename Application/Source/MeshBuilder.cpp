@@ -407,6 +407,54 @@ Mesh* MeshBuilder::GenerateOBJMTL(const std::string& meshName, const std::string
 	mesh->mode = Mesh::DRAW_TRIANGLES;
 	return mesh;
 }
+Mesh* MeshBuilder::GenerateColliderBox(const std::string& meshName, double legnthx, double lengthy, double lengthz)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<unsigned> index_buffer_data;
+	//bottom
+	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	//top
+	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	//sides
+	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	Mesh* mesh = new Mesh(meshName);
+	for (int i = 0; i < 24; i++) {
+		index_buffer_data.push_back(i);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex),
+		&vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
+		&index_buffer_data[0], GL_STATIC_DRAW);;
+	mesh->mode = Mesh::DRAW_LINES;
+	mesh->indexSize = index_buffer_data.size();;
+	return mesh;
+}
+
+
 //generate a circle
 Mesh* MeshBuilder::GenerateCircle(const std::string& meshName, float lengthX, float lengthY, float lengthZ) {
 	Vertex v;
@@ -491,7 +539,7 @@ Mesh* MeshBuilder::GenerateAxes(const std::string &meshName, float lengthX, floa
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_LINES;
-	mesh->indexSize = 6;
+	mesh->indexSize = index_buffer_data.size();;
 	return mesh;
 }
 

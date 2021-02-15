@@ -269,8 +269,13 @@ void SceneTest::Init()
 	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//VISIONOFF.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
 	//init update stuff
 	LSPEED = 10.F;
+	//collidertest
+	Ruincollider.setlength(42, 20, 97);
+	Ruincollider.Setposition(Vector3(0, 5, -227));
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Ruincollider.getxlength(), Ruincollider.getylength(), Ruincollider.getzlength());
 	//Set boundary here
 	camera.SetBounds(-300, 300, -300, 300);
+
 }
 
 void SceneTest::Update(double dt)
@@ -334,7 +339,7 @@ void SceneTest::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 
 	}
-
+	
 	//skybox
 	RenderSkybox();
 	//ground Mesh
@@ -349,7 +354,11 @@ void SceneTest::Render()
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();
-
+	//Ruin Collider
+	modelStack.PushMatrix();
+	modelStack.Translate(Ruincollider.getPosition().x, Ruincollider.getPosition().y, Ruincollider.getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();
 	//UI OVERLAY
 	RenderMeshOnScreen(meshList[GEO_VIGNETTE], 40, 30, 80, 60);
 

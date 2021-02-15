@@ -109,7 +109,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scenetest;
+	scenetype = Scene_1;
 }
 
 void Application::Run()
@@ -118,7 +118,7 @@ void Application::Run()
 	//Main Loop
 	//Scene Manager
 	switch (scenetype) {
-	case Scenetest:
+	case Scene_1:
 		scene->Init();
 		break;
 	//case something
