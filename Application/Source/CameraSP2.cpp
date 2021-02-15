@@ -52,6 +52,7 @@ void CameraSP2::Update(double dt)
 	{
 		SetCursorPos(960, 540);
 		offsetX -= 940;
+		//something i added
 	}
 
 	Application::GetCursorPos(&mousePosX, &mousePosY);
