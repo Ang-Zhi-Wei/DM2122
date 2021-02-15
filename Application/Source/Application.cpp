@@ -24,7 +24,7 @@
 #include "Scene1.h"
 #include "Assigment2.h"
 #include "Assigment1.h"
-#include "SceneTest.h"
+#include "SceneSP2Main.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -114,7 +114,7 @@ void Application::Init()
 
 void Application::Run()
 {
-	Scene* scene = new SceneTest;
+	Scene* scene = new SceneSP2Main;
 	//Main Loop
 	//Scene Manager
 	switch (scenetype) {

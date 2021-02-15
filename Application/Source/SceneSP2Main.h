@@ -1,5 +1,5 @@
-#ifndef SCENESceneTest_H
-#define SCENESceneTest_H
+#ifndef SCENESceneSP2Main_H
+#define SCENESceneSP2Main_H
 #include "Scene.h"
 #include "Mtx44.h"
 #include "Application.h"
@@ -10,12 +10,12 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
-#include "ColliderBox.h";
-class SceneTest : public Scene
+#include "ColliderBox.h"
+class SceneSP2Main : public Scene
 {
 public:
-	SceneTest();
-	~SceneTest();
+	SceneSP2Main();
+	~SceneSP2Main();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -25,20 +25,28 @@ public:
 	{
 		GEO_AXES,
 		LightSphere,
+
+		//skybox
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
-		GEO_BUILDING,
 
+		//ground mesh
 		Ground_Mesh,
-		GEO_TEXT,
-		GEO_VIGNETTE,
-		GEO_OVERLAY,
+
+		//objs
+		GEO_BUILDING,
 		Ruins,
 		Colliderbox,
+
+		//UI tings
+		GEO_TEXT,
+		GEO_OVERLAY,
+
+		
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -50,6 +58,11 @@ public:
 		U_MATERIAL_DIFFUSE,
 		U_MATERIAL_SPECULAR,
 		U_MATERIAL_SHININESS,
+		U_NUMLIGHTS,
+		U_COLOR_TEXTURE_ENABLED,
+		U_COLOR_TEXTURE,
+		U_TEXT_ENABLED,
+		U_TEXT_COLOR,
 		//light 0
 		U_LIGHT0_POSITION,
 		U_LIGHT0_COLOR,
@@ -75,51 +88,24 @@ public:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
-		//light 2
-		U_LIGHT2_POSITION,
-		U_LIGHT2_COLOR,
-		U_LIGHT2_POWER,
-		U_LIGHT2_KC,
-		U_LIGHT2_KL,
-		U_LIGHT2_KQ,
-		U_LIGHT2_TYPE,
-		U_LIGHT2_SPOTDIRECTION,
-		U_LIGHT2_COSCUTOFF,
-		U_LIGHT2_COSINNER,
-		U_LIGHT2_EXPONENT,
-		//light 3
-		U_LIGHT3_POSITION,
-		U_LIGHT3_COLOR,
-		U_LIGHT3_POWER,
-		U_LIGHT3_KC,
-		U_LIGHT3_KL,
-		U_LIGHT3_KQ,
-		U_LIGHT3_TYPE,
-		U_LIGHT3_SPOTDIRECTION,
-		U_LIGHT3_COSCUTOFF,
-		U_LIGHT3_COSINNER,
-		U_LIGHT3_EXPONENT,
-		//light 4
-		U_LIGHT4_POSITION,
-		U_LIGHT4_COLOR,
-		U_LIGHT4_POWER,
-		U_LIGHT4_KC,
-		U_LIGHT4_KL,
-		U_LIGHT4_KQ,
-		U_LIGHT4_TYPE,
-		U_LIGHT4_SPOTDIRECTION,
-		U_LIGHT4_COSCUTOFF,
-		U_LIGHT4_COSINNER,
-		U_LIGHT4_EXPONENT,
-		U_NUMLIGHTS,
-		U_COLOR_TEXTURE_ENABLED,
-		U_COLOR_TEXTURE,
-		U_TEXT_ENABLED,
-		U_TEXT_COLOR,
+		
 		U_TOTAL,
 
 	};
+
 private:
+
+	struct Item
+	{
+
+	};
+
+	struct Inventory
+	{
+		Item* selected;
+		Item* inventory[10];
+	};
+
 	void RenderSkybox();
 	//void RenderMegumin();
 	//void RenderDeadTree(int x, int z,float rotate);
@@ -129,16 +115,24 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[5];
+	Light light[2];
 	CameraSP2 camera;
+	float LSPEED;
+	float fps;
+
+
+
+	bool flashlight;
+	bool Fpressed, Freleased;
+	bool Epressed, Ereleased;
+	bool Qpressed, Qreleased;
+
+	ColliderBox Ruincollider;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-	float LSPEED;
-
-	float fps;
-	ColliderBox Ruincollider;
 };
 
 #endif

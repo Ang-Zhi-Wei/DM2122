@@ -36,10 +36,15 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void CameraSP2::Update(double dt)
 {
-	static const float CAMERA_SPEED = 10.f;
+	float CAMERA_SPEED = 20.f;
 	static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
 	
+	if (Application::IsKeyPressed(160))
+	{
+		CAMERA_SPEED += 15;
+	}
+
 	static const float viewY = 0.9f;
 	if (mousePosX > 1900)
 	{
@@ -61,7 +66,7 @@ void CameraSP2::Update(double dt)
 	view = (target - position).Normalized();
 	
 	up = defaultUp;
-	right = view.Cross(up);
+	right = view.Cross(up).Normalized();
 	up = right.Cross(view).Normalized();
 
 	if (Application::IsKeyPressed('W'))
