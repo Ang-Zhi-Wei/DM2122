@@ -269,7 +269,8 @@ void SceneTest::Init()
 	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//VISIONOFF.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
 	//init update stuff
 	LSPEED = 10.F;
-	
+	//Set boundary here
+	camera.SetBounds(-300, 300, -300, 300);
 }
 
 void SceneTest::Update(double dt)
@@ -294,6 +295,7 @@ void SceneTest::Update(double dt)
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
+	
 	
 }
 
@@ -360,8 +362,9 @@ void SceneTest::Render()
 	std::ostringstream test2;
 	test2 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-
-
+	//checking
+	std::cout << camera.position.x << std::endl;
+	//std::cout << camera.position.z << std::endl;
 }
 
 void SceneTest::Exit()
