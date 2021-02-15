@@ -213,11 +213,13 @@ void SceneSP2Main::Init()
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	//collidertest
-	Ruincollider.setlength(42, 20, 97);
-	Ruincollider.Setposition(Vector3(0, 5, -227));
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Ruincollider.getxlength(), Ruincollider.getylength(), Ruincollider.getzlength());
-	//one collider to check for now,will edit later
-	camera.setchecker(Ruincollider);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(42, 20, 97);
+	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	//colliderbox for checking any collider(just one)
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	//list of colliders
+	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
 	camera.SetBounds(-300, 300, -300, 300);
@@ -355,9 +357,9 @@ void SceneSP2Main::Render()
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();
-	//Ruin Collider
+	//Any one Collider,must make sure correct Colliderlist is entered;
 	modelStack.PushMatrix();
-	modelStack.Translate(Ruincollider.getPosition().x, Ruincollider.getPosition().y, Ruincollider.getPosition().z);
+	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 

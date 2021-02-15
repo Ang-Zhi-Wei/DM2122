@@ -122,8 +122,11 @@ void Application::Run()
 	case Scene_1:
 		scene->Init();
 		break;
-	//case something
-		//delete scene then new scene
+	case Scene_2:
+		delete scene;
+		scene = new SceneSP2Room1();
+		scene->Init();
+		break;
 	}
 	
 

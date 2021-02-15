@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "ColliderBox.h"
+#include <vector>
 class CameraSP2 : public Camera
 {
 public:
@@ -16,11 +17,11 @@ public:
 	Vector3 defaultUp;
 	Vector3 defaultview;
 	Vector3 rawTarget, viewTarget;
-	ColliderBox Checker;
+	std::vector<ColliderBox>Checker;
 	double mousePosX, mousePosY;
 	double offsetX, offsetY;
 	Vector3 forwardVector;
-	void setchecker(ColliderBox Checker);
+	void setchecker(std::vector<ColliderBox>Checker);
     float yaw;
 	float boundX1;
 	float boundX2;
