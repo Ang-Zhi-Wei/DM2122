@@ -119,19 +119,19 @@ void SceneTest::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Assigment2Images//front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Assigment2Images//back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Assigment2Images//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Night//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Assigment2Images//right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Assigment2Images//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Assigment2Images//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
-	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
+	meshList[Ground_Mesh]->textureID = LoadTGA("Night//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
 	//light 0
 	light[0].type = Light::LIGHT_DIRECTIONAL;

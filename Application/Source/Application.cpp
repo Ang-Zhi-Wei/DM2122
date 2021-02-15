@@ -117,10 +117,13 @@ void Application::Run()
 {
 	Scene* scene = new SceneTest;
 	//Main Loop
+	//Scene Manager
 	switch (scenetype) {
 	case Scenetest:
 		scene->Init();
 		break;
+	//case something
+		//delete scene then new scene
 	}
 	
 
