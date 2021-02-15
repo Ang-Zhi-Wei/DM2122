@@ -131,7 +131,7 @@ void SceneTest::Init()
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
-	meshList[Ground_Mesh]->textureID = LoadTGA("Night//GroundMesh.tga");
+	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
 	//light 0
 	light[0].type = Light::LIGHT_DIRECTIONAL;
