@@ -47,7 +47,8 @@ public:
 
 		//UI tings
 		GEO_TEXT,
-		GEO_OVERLAY,
+		GEO_OVERLAY, //vision, camcorder
+		GEO_BAR, //stamina
 
 		
 		NUM_GEOMETRY,
@@ -126,6 +127,7 @@ private:
 
 
 	bool flashlight;
+	float stamina;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
