@@ -358,17 +358,17 @@ void SceneTest::Render()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 
-	std::ostringstream test1;
-	test1 << "camera view target: " << camera.viewTarget;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
-	test3 << "camera target: " << camera.target;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	std::ostringstream test2;
-	test2 << "camera view: " << camera.view;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-	//checking
-	std::cout << camera.position.x << std::endl;
+	//std::ostringstream test1;
+	//test1 << "camera view target: " << camera.viewTarget;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	//std::ostringstream test3;
+	//test3 << "camera target: " << camera.target;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	//std::ostringstream test2;
+	//test2 << "camera view: " << camera.view;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	////checking
+	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
 }
 
