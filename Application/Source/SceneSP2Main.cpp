@@ -259,6 +259,10 @@ void SceneSP2Main::Update(double dt)
 		Qpressed = false;
 	}
 
+	//fps
+	fps = 1.f / dt;
+	//camera
+	camera.Update(dt);
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -280,11 +284,55 @@ void SceneSP2Main::Update(double dt)
 		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
+	//ghost
 	
-	//fps
-	fps = 1.f / dt;
-	//camera
-	camera.Update(dt);
+	switch (ghost.state)
+	{
+	case Ghost::NORMAL:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 20)
+		{
+			ghost.state = Ghost::CHASING;
+			ghost.speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 3 && inLocker)
+		{
+			ghost.state = Ghost::WAITING;
+			ghost.waitTime = 5;
+		}
+		else if (ghost.distance <= 1)
+		{
+			//TBC
+			//end game condition met, either that or HP - 1
+		}
+		break;
+	case Ghost::WAITING:
+		ghost.waitTime -= dt;
+		if (ghost.waitTime <= 0)
+		{
+			ghost.state = Ghost::SPEEDRUN;
+			ghost.speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost.facing = (ghost.pos - camera.position).Normalized();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance > 300 || !inLocker)
+		{
+			ghost.state = Ghost::NORMAL;
+			ghost.speed = 5;
+		}
+		break;
+
+	}
+	
 	
 	
 }

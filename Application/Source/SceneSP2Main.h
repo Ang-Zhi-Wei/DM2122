@@ -99,16 +99,6 @@ public:
 
 private:
 
-	struct Item
-	{
-
-	};
-
-	struct Inventory
-	{
-		Item* selected;
-		Item* inventory[10];
-	};
 
 
 	unsigned m_vertexArrayID;
@@ -125,8 +115,108 @@ private:
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 
+	struct Item
+	{
 
+	};
+
+	struct Inventory
+	{
+		Item* selected;
+		Item* inventory[10];
+	};
+
+	struct Ghost
+	{
+		enum GHOST_STATE
+		{
+			NORMAL,
+			CHASING,
+			WAITING,
+			SPEEDRUN
+		};
+		int state;
+		Vector3 pos;
+		Vector3 facing; //ghost direction
+		float speed; //TBC normal - 5, chasing - 25, speedrunning away - 50; //player is 20 normal and 40 sprinting
+		float distance;
+		float waitTime;
+		float rotateY;
+
+		Ghost()
+		{
+			speed = 5;
+			pos = (0, 0, 0); //TBC
+			rotateY = 0;
+			state = NORMAL;
+			waitTime = 5;
+		}
+		
+		void UpdateMovement(double dt)
+		{
+			float newangle = Math::RadianToDegree(atan(facing.x / facing.z)); //facing is vector that player/char shud be facing
+																				//newangle is angle of rotation for playerr/char based on the vector
+
+			//since tan inverse returns basic angle, gotta set the angle myself
+			if (newangle == 0 && facing.z < 0)
+			{
+				newangle = 180;
+			}
+			else if (newangle < 0 && facing.x >= 0 && facing.z <= 0)
+			{
+				newangle = newangle + 180;
+			}
+			else if (newangle > 0 && facing.x <= 0 && facing.z <= 0)
+			{
+				newangle = newangle - 180;
+			}
+
+			//if angle exceeds one cycle, bring it back to within 0 to 360 cycle
+			if (rotateY > 360)
+			{
+				rotateY -= 360;
+			}
+			if (rotateY < 0)
+			{
+				rotateY += 360;
+			}
+			if (newangle > 360)
+			{
+				newangle -= 360;
+			}
+			if (newangle < 0)
+			{
+				newangle += 360;
+			}
+
+			//int/float offset for checking
+			if (abs(newangle - rotateY) < 5)
+			{
+				rotateY = newangle;
+			}
+
+			//update rotate angle(in render) to face/turn towards direction player is walking in
+			int dir = (newangle - rotateY) / abs(newangle - rotateY);
+			if ((int)rotateY != newangle)
+			{
+				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
+				{
+					dir *= -1;
+				}
+				rotateY += dir * 200 * dt;
+			}
+			else
+			{
+				pos += facing * speed * dt;
+			}
+		}
+	};
+
+	//game related vars
 	bool flashlight;
+	bool inLocker;
+
+	Ghost ghost;
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
