@@ -168,7 +168,7 @@ void SceneSP2Main::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 3, 270);
 	light[1].color.Set(White);
-	light[1].power = 5;
+	light[1].power = 2;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -201,8 +201,11 @@ void SceneSP2Main::Init()
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//vignette
+	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
+	//meshList[GEO_BAR] = MeshBuilder::
+
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
@@ -261,7 +264,7 @@ void SceneSP2Main::Update(double dt)
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 5;
+			light[1].power = 2;
 		}
 		else
 		{
