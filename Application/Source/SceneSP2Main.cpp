@@ -26,7 +26,7 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 0, 270), Vector3(0, 0, 250), Vector3(0, 1,
+	camera.Init(Vector3(0, 5, 270), Vector3(0, 5, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -144,10 +144,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
 	//light 0
-	light[0].type = Light::LIGHT_DIRECTIONAL;
-	light[0].position.Set(0, 20, 0);
+	light[0].type = Light::LIGHT_POINT;
+	light[0].position.Set(0, 7, 270);
 	light[0].color.Set(White);
-	light[0].power = 0.2;
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -165,17 +165,17 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	//light 1
-	light[1].type = Light::LIGHT_POINT;
-	light[1].position.Set(7.75,0.5 , -175);
+	light[1].type = Light::LIGHT_SPOT;
+	light[1].position.Set(0, 3, 270);
 	light[1].color.Set(White);
-	light[1].power = 1;
+	light[1].power = 5;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].cosCutoff = cos(Math::DegreeToRadian(7));
+	light[1].cosInner = cos(Math::DegreeToRadian(1));
 	light[1].exponent = 3.f;
-	light[1].spotDirection.Set(0.f, 1.f, 0.f);
+	light[1].spotDirection.Set(0.f, -1.f, 0.f);
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,
 		&light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
@@ -187,11 +187,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	
-	//Set Material locations
-	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
-		m_parameters[U_MATERIAL_DIFFUSE],
-		m_parameters[U_MATERIAL_SPECULAR],
-		m_parameters[U_MATERIAL_SHININESS]);
+	
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -252,11 +248,26 @@ void SceneSP2Main::Update(double dt)
 		Qpressed = false;
 	}
 
+	//light
+	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
+	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
+	light[1].spotDirection = -1 * camera.view;
 
+	//toggle flashlight on/off
 	if (Qreleased)
 	{
 		flashlight = !flashlight;
 		Qreleased = false;
+		//updates if flashlight status changes
+		if (flashlight)
+		{
+			light[1].power = 5;
+		}
+		else
+		{
+			light[1].power = 0;
+		}
+		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
 	
 	//fps
@@ -366,12 +377,12 @@ void SceneSP2Main::Render()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 
-	//std::ostringstream test1;
-	//test1 << "camera view target: " << camera.viewTarget;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	//std::ostringstream test3;
-	//test3 << "camera target: " << camera.target;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test1;
+	test1 << "camera view: " << camera.view;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	std::ostringstream test3;
+	test3 << "light[1]spotdirec: " << light[1].spotDirection;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	//std::ostringstream test2;
 	//test2 << "camera view: " << camera.view;
 	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
