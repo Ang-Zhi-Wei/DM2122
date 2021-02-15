@@ -32,6 +32,7 @@ public:
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+		GEO_BUILDING,
 
 		Ground_Mesh,
 

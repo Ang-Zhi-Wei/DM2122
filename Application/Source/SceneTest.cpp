@@ -135,6 +135,11 @@ void SceneTest::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
+	//building
+	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//environment.obj");
+	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//housetexture.tga");
+	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -336,6 +341,8 @@ void SceneTest::Render()
 
 	//skybox
 	RenderSkybox();
+
+
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
@@ -349,6 +356,11 @@ void SceneTest::Render()
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 15, -150);
+	modelStack.Scale(20, 20, 20);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
 
 	//UI OVERLAY
 	//vision vignette
