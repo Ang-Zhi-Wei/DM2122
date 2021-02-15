@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 #include "ColliderBox.h"
+#include <vector>
 class SceneSP2Main : public Scene
 {
 public:
@@ -39,7 +40,9 @@ public:
 
 		//objs
 		GEO_BUILDING,
+		GEO_ROAD,
 		Ruins,
+		//colliderbox 
 		Colliderbox,
 
 		//UI tings
@@ -129,7 +132,7 @@ private:
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 
-	ColliderBox Ruincollider;
+	std::vector<ColliderBox>Colliderlist;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);

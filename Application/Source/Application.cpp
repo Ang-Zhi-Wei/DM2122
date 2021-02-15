@@ -25,6 +25,7 @@
 #include "Assigment2.h"
 #include "Assigment1.h"
 #include "SceneSP2Main.h"
+#include "SceneSP2Room1.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -46,7 +47,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 bool Application::IsKeyPressed(unsigned short key)
 {
-    return ((GetAsyncKeyState(key) & 0x8001) != 0);
+	    return ((GetAsyncKeyState(key) & 0x8001) != 0);
 }
 
 Application::Application()
@@ -80,7 +81,8 @@ void Application::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-
+	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
+	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
 	//megumin
@@ -121,8 +123,11 @@ void Application::Run()
 	case Scene_1:
 		scene->Init();
 		break;
-	//case something
-		//delete scene then new scene
+	case Scene_2:
+		delete scene;
+		scene = new SceneSP2Room1();
+		scene->Init();
+		break;
 	}
 	
 
