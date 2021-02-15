@@ -48,18 +48,18 @@ void CameraSP2::Update(double dt)
 		if (playerStamina > 0)
 		{
 			CAMERA_SPEED += 20;
-			playerStamina -= 2 * dt;
+			playerStamina -= 5 * dt;
+			cooldown = 1;
 		}
 	}
 	//stamina
-	else if (playerStamina <= 0 && cooldown > 0)
+	else if (cooldown > 0)
 	{
 		cooldown -= dt;
 	}
-	else if (playerStamina < 10)
+	else if (playerStamina < 10 && cooldown <= 0)
 	{
-		playerStamina += 3 * dt;
-		cooldown = 1;
+		playerStamina += 5 * dt;
 	}
 	else if (playerStamina > 10)
 	{
