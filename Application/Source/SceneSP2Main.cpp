@@ -222,7 +222,7 @@ void SceneSP2Main::Init()
 	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
-	camera.SetBounds(-300, 300, -300, 300);
+	camera.SetBounds(-415, 415, -365, 360);
 
 }
 
