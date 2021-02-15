@@ -21,10 +21,8 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	this->up = defaultUp = right.Cross(view).Normalized();
 	viewTarget = (0,0,0);
 	rawTarget = pos;
-	SetCursorPos(960, 540);
-	yaw = 0;
+	Application::SetCursorPos(960, 540);
 	offsetX = 0;
-	
 }
 
 void CameraSP2::Update(double dt)
@@ -32,36 +30,26 @@ void CameraSP2::Update(double dt)
 	static const float CAMERA_SPEED = 10.f;
 	static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
+	
 	static const float viewY = 0.9f;
-	
-	if (mousePosY > 1080)
-	{
-		mousePosY = 1080;
-	
-	}
-	else if (mousePosY < 0)
-	{
-		mousePosY = 0;
-	}
 	if (mousePosX > 1900)
 	{
-		SetCursorPos(960, 540);
-		
+		Application::SetCursorPos(960, mousePosY);
+		offsetX += 940;
 	}
 	else if (mousePosX < 20)
 	{
-		SetCursorPos(960, 540);
+		Application::SetCursorPos(960, mousePosY);
 		offsetX -= 940;
 	}
 
 	Application::GetCursorPos(&mousePosX, &mousePosY);
-	
-	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX+ offsetX) * (3.0f/16) ));
-	viewTarget.z = cos(Math::DegreeToRadian((mousePosX+ offsetX) * (3.0f/16) ));
-	viewTarget.y = viewY * cos(Math::DegreeToRadian(mousePosY * (1.0f/6)));
-	
+	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.z = cos(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.y = viewY * cos(Math::DegreeToRadian((mousePosY) * (1.0f / 6)));
 	target = rawTarget + viewTarget;
 	view = (target - position).Normalized();
+	
 	up = defaultUp;
 	right = view.Cross(up);
 	up = right.Cross(view).Normalized();
