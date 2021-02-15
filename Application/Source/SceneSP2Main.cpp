@@ -1,4 +1,4 @@
-#include "SceneTest.h"
+#include "SceneSP2Main.h"
 #include "GL\glew.h"
 #include <stdlib.h>
 #include <time.h>
@@ -6,16 +6,16 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-SceneTest::SceneTest()
+SceneSP2Main::SceneSP2Main()
 {
 }
 
-SceneTest::~SceneTest()
+SceneSP2Main::~SceneSP2Main()
 {
 }
 
 
-void SceneTest::Init()
+void SceneSP2Main::Init()
 {
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -186,84 +186,20 @@ void SceneTest::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-	//light 2
-	light[2].type = Light::LIGHT_POINT;
-	light[2].position.Set(-21.75, 1, -86.25);
-	light[2].color.Set(White);
-	light[2].power = 1;
-	light[2].kC = 1.f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.f;
-	light[2].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1,&light[2].color.r);
-	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
-	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
-	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
-	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
-	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
-	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
-	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
-	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
-	//light 3
-	light[3].type = Light::LIGHT_POINT;
-	light[3].position.Set(10.5, 0.6, 26.25);
-	light[3].color.Set(White);
-	light[3].power = 1;
-	light[3].kC = 1.f;
-	light[3].kL = 0.01f;
-	light[3].kQ = 0.001f;
-	light[3].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[3].cosInner = cos(Math::DegreeToRadian(30));
-	light[3].exponent = 3.f;
-	light[3].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1,&light[3].color.r);
-	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
-	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
-	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
-	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
-	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
-	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
-	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
-	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
+	
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
 		m_parameters[U_MATERIAL_DIFFUSE],
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
-	//light 4
-	light[4].type = Light::LIGHT_POINT;
-	light[4].position.Set(17, -0.5, 131.5);
-	light[4].color.Set(White);
-	light[4].power = 1;
-	light[4].kC = 1.f;
-	light[4].kL = 0.01f;
-	light[4].kQ = 0.001f;
-	light[4].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[4].cosInner = cos(Math::DegreeToRadian(30));
-	light[4].exponent = 3.f;
-	light[4].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT4_COLOR], 1, &light[4].color.r);
-	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
-	glUniform1f(m_parameters[U_LIGHT4_KC], light[4].kC);
-	glUniform1f(m_parameters[U_LIGHT4_KL], light[4].kL);
-	glUniform1f(m_parameters[U_LIGHT4_KQ], light[4].kQ);
-	glUniform1i(m_parameters[U_LIGHT4_TYPE], light[4].type);
-	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
-	glUniform1f(m_parameters[U_LIGHT4_COSCUTOFF], light[4].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT4_COSINNER], light[4].cosInner);
-	glUniform1f(m_parameters[U_LIGHT4_EXPONENT], light[4].exponent);
+
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
 		m_parameters[U_MATERIAL_DIFFUSE],
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 5);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
 	//ruins
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
@@ -273,11 +209,15 @@ void SceneTest::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
 	//init update stuff
 	LSPEED = 10.F;
+	flashlight = true;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
 	//Set boundary here
 	camera.SetBounds(-300, 300, -300, 300);
 }
 
-void SceneTest::Update(double dt)
+void SceneSP2Main::Update(double dt)
 {
 	
 	//key input
@@ -293,7 +233,26 @@ void SceneTest::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	if (Application::IsKeyPressed('Q'))
+	{
+		Qpressed = true;
+		Qreleased = false;
+	}
+	else
+	{
+		if (Qpressed)
+		{
+			Qreleased = true;
+		}
+		Qpressed = false;
+	}
 
+
+	if (Qreleased)
+	{
+		flashlight = !flashlight;
+		Qreleased = false;
+	}
 	
 	//fps
 	fps = 1.f / dt;
@@ -303,7 +262,7 @@ void SceneTest::Update(double dt)
 	
 }
 
-void SceneTest::Render()
+void SceneSP2Main::Render()
 {
 
 
@@ -338,6 +297,26 @@ void SceneTest::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 
 	}
+	if (light[1].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[1].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else if (light[1].type == Light::LIGHT_POINT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+
+	}
+
 
 	//skybox
 	RenderSkybox();
@@ -364,10 +343,17 @@ void SceneTest::Render()
 
 	//UI OVERLAY
 	//vision vignette
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
+	if (flashlight)
+	{
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga"); 
+	}
+	else
+	{
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 
 	//std::ostringstream test1;
@@ -384,14 +370,14 @@ void SceneTest::Render()
 	//std::cout << camera.position.z << std::endl;
 }
 
-void SceneTest::Exit()
+void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
 
-void SceneTest::RenderSkybox()
+void SceneSP2Main::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
@@ -438,7 +424,7 @@ void SceneTest::RenderSkybox()
 
 
 
-//void SceneTest::RenderDeadTree(int x, int z,float rotate)
+//void SceneSP2Main::RenderDeadTree(int x, int z,float rotate)
 //{
 //	modelStack.PushMatrix();
 //	modelStack.Translate(x, -5, z);
@@ -448,7 +434,7 @@ void SceneTest::RenderSkybox()
 //	modelStack.PopMatrix();
 //}
 
-void SceneTest::RenderMesh(Mesh* mesh, bool enableLight)
+void SceneSP2Main::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	MVP = projectionStack.Top() * viewStack.Top() *
@@ -498,7 +484,7 @@ void SceneTest::RenderMesh(Mesh* mesh, bool enableLight)
 	}
 }
 
-void SceneTest::RenderText(Mesh* mesh, std::string text, Color color)
+void SceneSP2Main::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -526,7 +512,7 @@ void SceneTest::RenderText(Mesh* mesh, std::string text, Color color)
 
 }
 
-void SceneTest::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -571,7 +557,7 @@ void SceneTest::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 
 }
 
-void SceneTest::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void SceneSP2Main::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;

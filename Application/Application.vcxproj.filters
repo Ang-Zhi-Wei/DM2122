@@ -114,7 +114,7 @@
     <ClCompile Include="Source\CameraSP2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneTest.cpp">
+    <ClCompile Include="Source\SceneSP2Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,10 +203,10 @@
     <ClInclude Include="Source\SceneUi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneTest.h">
+    <ClInclude Include="Source\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Vertex.h">
+    <ClInclude Include="Source\SceneSP2Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
