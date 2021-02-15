@@ -39,6 +39,7 @@ public:
 
 		//objs
 		GEO_BUILDING,
+		GEO_ROAD,
 		Ruins,
 		Colliderbox,
 

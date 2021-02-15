@@ -139,6 +139,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
 	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Building", "OBJ//road.obj");
+	meshList[GEO_ROAD]->textureID = LoadTGA("Assigment2Images//road.tga");
+	meshList[GEO_ROAD]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -550,6 +553,32 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -44, -340);
+	modelStack.Scale(35, 35, 15);
+	RenderMesh(meshList[GEO_ROAD], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -44, 340);
+	modelStack.Scale(35, 35, 15);
+	RenderMesh(meshList[GEO_ROAD], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(380, -44, 100);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(35, 35, 15);
+	RenderMesh(meshList[GEO_ROAD], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-380, -44, 100);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(35, 35, 15);
+	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 

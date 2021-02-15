@@ -115,7 +115,7 @@ void Application::Init()
 
 void Application::Run()
 {
-	Scene* scene = new SceneSP2Room1;
+	Scene* scene = new SceneSP2Main;
 	//Main Loop
 	//Scene Manager
 	switch (scenetype) {
