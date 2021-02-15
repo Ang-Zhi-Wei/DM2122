@@ -31,6 +31,8 @@ void SceneTest::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
+	//hide cursor
+	Application::hidemousecursor();
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
