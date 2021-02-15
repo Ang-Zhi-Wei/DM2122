@@ -133,6 +133,9 @@ void SceneTest::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
+	//Text
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
 	//light 0
 	light[0].type = Light::LIGHT_DIRECTIONAL;
 	light[0].position.Set(0, 20, 0);
@@ -254,72 +257,14 @@ void SceneTest::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 5);
-	//Megumin
-	//Red Cube
-	meshList[BodyRed] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Red);
-	meshList[BodyRed]->material.kAmbient.Set(Red);
-	//Brown Cube
-	meshList[BodyBrown] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Brown);
-	meshList[BodyBrown]->material.kAmbient.Set(Brown);
-	//Yellow Cube
-	meshList[BodyYellow] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Yellow);
-	meshList[BodyYellow]->material.kAmbient.Set(Yellow);
-	//Silver Cube
-	meshList[BodySilver] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Silver);
-	meshList[BodySilver]->material.kAmbient.Set(Silver);
-	//Wheat Cube
-	meshList[BodyWheat] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Wheat);
-	meshList[BodyWheat]->material.kAmbient.Set(Wheat);
-	//Black Cube
-	meshList[BodyBlack] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, Black);
-	meshList[BodyBlack]->material.kAmbient.Set(Black);
-	//White Cube
-	meshList[BodyWhite] = MeshBuilder::GenerateCube("Cube", 1, 1, 1, White);
-	meshList[BodyWhite]->material.kAmbient.Set(White);
-	//Arm
-	meshList[Arm] = MeshBuilder::GenerateCylinder("Cylinder", 1, 1, 1, Crimson);
-	meshList[Arm]->material.kAmbient.Set(Crimson);
-	//Leg
-	meshList[Leg] = MeshBuilder::GenerateCylinder("Cylinder", 1, 1, 1, Wheat);
-	meshList[Leg]->material.kAmbient.Set(Wheat);
-	//Torus
-	meshList[Torus] = MeshBuilder::GenerateTorus("Torus", 36, 36, 1, 0.5, Black);
-	meshList[Torus]->material.kAmbient.Set(Black);
-	//Santa clause
-	meshList[HatCone] = MeshBuilder::GenerateCone("Santa Clause", 1, 1, 1, Black);
-	meshList[HatCone]->material.kAmbient.Set(Black);
-	//HalfCube brown
-	meshList[HalfCube] = MeshBuilder::GenerateHalfCube("Weapon part and hair", 1, 1, 1, Brown);
-	meshList[HalfCube]->material.kAmbient.Set(Brown);
-	//orb
-	meshList[Orb] = MeshBuilder::Generatesphere("Orb", 1, 1, 1, Red);
-	meshList[Orb]->material.kAmbient.Set(Red);
-	meshList[Orb]->material.kShininess = 1.f;
-	// Make sure you pass uniform parameters after glUseProgram()
-	//Dead Tree
-	meshList[Deadtrees] = MeshBuilder::GenerateOBJMTL("Dead Tree", "OBJ//DeadTree.obj", "MTL//DeadTree.mtl");
-	meshList[Deadtrees]->material.kAmbient.Set(0.12,0.08,0.04);//as dark as possible
-	//Skull cause i can't find ghost
-	meshList[Skeleton] = MeshBuilder::GenerateOBJ("Skull", "OBJ//Skull.obj");
-	meshList[Skeleton]->material.kAmbient.Set(Gray);
+
 	//ruins
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//Axe
-	meshList[Axe] = MeshBuilder::GenerateOBJ("Axe", "OBJ//Fire_Axe.obj");
-	meshList[Axe]->textureID = LoadTGA("Assigment2Images//Fire_Axe.tga");
-	//Text
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
-	//World Text
-	meshList[World_Text] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[World_Text]->textureID = LoadTGA("Assigment2Images//Arial.tga");
-	//Lamp
-	meshList[Lamp] = MeshBuilder::GenerateOBJ("Lamp", "OBJ//Lamp.obj");
-	meshList[Lamp]->material.kAmbient.Set(0.49,0.49,0.49);
-	//Black screen of death
-	meshList[FinalScreen] = MeshBuilder::GenerateQuad2("End", 16, 16, Black);
+	//vignette
+	meshList[GEO_VIGNETTE] = MeshBuilder::GenerateQuad("vision limiy thingy", 1, 1, 0);
+	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//FLASHON.tga");
 	//init update stuff
 	LSPEED = 10.F;
 	
@@ -401,6 +346,10 @@ void SceneTest::Render()
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();
 
+	//UI OVERLAY
+	//RenderMeshOnScreen(meshList[GEO_VIGNETTE], 40, 30, 1, 1);
+
+
 	std::ostringstream test1;
 	test1 << "camera view target: " << camera.viewTarget;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
@@ -467,15 +416,15 @@ void SceneTest::RenderSkybox()
 
 
 
-void SceneTest::RenderDeadTree(int x, int z,float rotate)
-{
-	modelStack.PushMatrix();
-	modelStack.Translate(x, -5, z);
-	modelStack.Rotate(rotate, 0, 0, 1);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[Deadtrees], true);
-	modelStack.PopMatrix();
-}
+//void SceneTest::RenderDeadTree(int x, int z,float rotate)
+//{
+//	modelStack.PushMatrix();
+//	modelStack.Translate(x, -5, z);
+//	modelStack.Rotate(rotate, 0, 0, 1);
+//	modelStack.Scale(5, 5, 5);
+//	RenderMesh(meshList[Deadtrees], true);
+//	modelStack.PopMatrix();
+//}
 
 void SceneTest::RenderMesh(Mesh* mesh, bool enableLight)
 {

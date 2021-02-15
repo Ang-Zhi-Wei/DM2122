@@ -23,37 +23,24 @@ public:
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
+
 		LightSphere,
+
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+
 		Ground_Mesh,
-		BodyRed,
-		BodyBrown,
-		BodyYellow,
-		BodySilver,
-		BodyWheat,
-		BodyBlack,
-		Eye,
-		BodyWhite,
-		Arm,
-		Leg,
-		Torus,
-		HatCone,
-		HalfCube,
-		Orb,
-		Deadtrees,
-		Ruins,
-		Ghost,
+
 		GEO_TEXT,
-		World_Text,
-		Skeleton,
-		Axe,
-		FinalScreen,
-		Lamp,
+
+		GEO_VIGNETTE,
+
+		Ruins,
+		
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -137,7 +124,7 @@ public:
 private:
 	void RenderSkybox();
 	//void RenderMegumin();
-	void RenderDeadTree(int x, int z,float rotate);
+	//void RenderDeadTree(int x, int z,float rotate);
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];

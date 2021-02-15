@@ -156,6 +156,9 @@ void Application::SetCursorPos(double xpos, double ypos)
 {
 	glfwSetCursorPos(m_window, xpos, ypos);
 }
+
+
+
 int Application::GetWindowWidth()
 {
 	return m_width;
