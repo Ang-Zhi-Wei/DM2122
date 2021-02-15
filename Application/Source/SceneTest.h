@@ -37,7 +37,7 @@ public:
 
 		GEO_TEXT,
 
-		GEO_VIGNETTE,
+		GEO_OVERLAY,
 
 		Ruins,
 		

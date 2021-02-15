@@ -263,8 +263,7 @@ void SceneTest::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//vignette
-	meshList[GEO_VIGNETTE] = MeshBuilder::GenerateQuad2("vision limit thingy", 1, 1, 0);
-	meshList[GEO_VIGNETTE]->textureID = LoadTGA("Image//VISIONOFF.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
 	//init update stuff
 	LSPEED = 10.F;
 	
@@ -346,18 +345,25 @@ void SceneTest::Render()
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();
 
-	//UI OVERLAY
-	RenderMeshOnScreen(meshList[GEO_VIGNETTE], 40, 30, 80, 60);
 
-	std::ostringstream test1;
-	test1 << "camera view target: " << camera.viewTarget;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
-	test3 << "camera target: " << camera.target;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	std::ostringstream test2;
-	test2 << "camera view: " << camera.view;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	//UI OVERLAY
+	//vision vignette
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//camcorder
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); //VISIONON.tga - with flashlight on, VISIONOFF.tga - with flashlight off
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+
+
+	//std::ostringstream test1;
+	//test1 << "camera view target: " << camera.viewTarget;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	//std::ostringstream test3;
+	//test3 << "camera target: " << camera.target;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	//std::ostringstream test2;
+	//test2 << "camera view: " << camera.view;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 
 
 }
