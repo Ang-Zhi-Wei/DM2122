@@ -44,29 +44,23 @@ void CameraSP2::Update(double dt)
 	//static const float rotational_speed = 45.0f;
 	
 	//shift to sprint
-	if (Application::IsKeyPressed(160))
+	
+	//stamina
+	if (!Application::IsKeyPressed(160))
 	{
-		if (playerStamina > 0)
+		if (cooldown > 0)
 		{
-			CAMERA_SPEED += 20;
-			playerStamina -= 5 * dt;
-			cooldown = 1;
+			cooldown -= dt;
+		}
+		else if (playerStamina < 10 && cooldown <= 0)
+		{
+			playerStamina += 5 * dt;
+		}
+		else if (playerStamina > 10)
+		{
+			playerStamina = 10;
 		}
 	}
-	//stamina
-	else if (cooldown > 0)
-	{
-		cooldown -= dt;
-	}
-	else if (playerStamina < 10 && cooldown <= 0)
-	{
-		playerStamina += 5 * dt;
-	}
-	else if (playerStamina > 10)
-	{
-		playerStamina = 10;
-	}
-
 	static const float viewY = 0.9f;
 	if (mousePosX > 1900)
 	{
@@ -92,7 +86,12 @@ void CameraSP2::Update(double dt)
 	up = right.Cross(view).Normalized();
 	if (Application::IsKeyPressed('W'))
 	{
-		
+		if (Application::IsKeyPressed(160) && playerStamina > 0)
+		{
+			CAMERA_SPEED += 20;
+			playerStamina -= 5 * dt;
+			cooldown = 1;
+		}
 		position.x += view.x * CAMERA_SPEED * dt;
 		position.z += view.z * CAMERA_SPEED * dt;
 		rawTarget.x += view.x * CAMERA_SPEED * dt;
@@ -116,6 +115,12 @@ void CameraSP2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('A'))
 	{
+		if (Application::IsKeyPressed(160) && playerStamina > 0)
+		{
+			CAMERA_SPEED += 20;
+			playerStamina -= 5 * dt;
+			cooldown = 1;
+		}
 		position.x -= right.x * CAMERA_SPEED * dt;
 		position.z -= right.z * CAMERA_SPEED * dt;
 		rawTarget.x -= right.x * CAMERA_SPEED * dt;
@@ -138,6 +143,12 @@ void CameraSP2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('S'))
 	{
+		if (Application::IsKeyPressed(160) && playerStamina > 0)
+		{
+			CAMERA_SPEED += 20;
+			playerStamina -= 5 * dt;
+			cooldown = 1;
+		}
 		position.x -= view.x * CAMERA_SPEED * dt;
 		position.z -= view.z * CAMERA_SPEED * dt;
 		rawTarget.x -= view.x * CAMERA_SPEED * dt;
@@ -160,6 +171,12 @@ void CameraSP2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('D'))
 	{
+		if (Application::IsKeyPressed(160) && playerStamina > 0)
+		{
+			CAMERA_SPEED += 20;
+			playerStamina -= 5 * dt;
+			cooldown = 1;
+		}
 		position.x += right.x * CAMERA_SPEED * dt;
 		position.z += right.z * CAMERA_SPEED * dt;
 		rawTarget.x += right.x * CAMERA_SPEED * dt;

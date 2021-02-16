@@ -217,6 +217,11 @@ private:
 	bool flashlight;
 	bool inLocker;
 
+	bool camBlinkOn;
+	bool camBlinkOff;
+	double camBlinkOnSec;
+	double camBlinkOffSec;
+
 	Ghost ghost;
 	Vector3 temp;
 	void RenderSkybox();
