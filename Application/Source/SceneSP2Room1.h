@@ -45,8 +45,9 @@ public:
 
 		//UI tings
 		GEO_TEXT,
-		GEO_OVERLAY,
-
+		GEO_OVERLAY, //vision
+		GEO_OVERLAY2,//Camcorder
+		GEO_BAR, //stamina
 		
 		NUM_GEOMETRY,
 	};

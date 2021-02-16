@@ -48,7 +48,8 @@ public:
 
 		//UI tings
 		GEO_TEXT,
-		GEO_OVERLAY, //vision, camcorder
+		GEO_OVERLAY, //vision
+		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 
 		
@@ -253,6 +254,12 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	bool switchtga1;
+	bool switchtga2;
+	bool camBlinkOn;
+	bool camBlinkOff;
+	double camBlinkOnSec;
+	double camBlinkOffSec;
 };
 
 #endif
