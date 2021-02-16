@@ -137,10 +137,10 @@ void SceneSP2Room1::Init()
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
 	
 	//House layout
-	meshList[House_Floor] = MeshBuilder::GenerateQuad("Floor", 1, 1, White);
-	meshList[House_Floor]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
-	meshList[House_Walls] = MeshBuilder::GenerateQuad("Walls", 1, 1, White);
-	meshList[House_Walls] -> textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -324,160 +324,14 @@ void SceneSP2Room1::Render()
 	//skybox
 	RenderSkybox();
 
-	modelStack.PushMatrix();
-	
 	//House layout
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, 250);
-	modelStack.Scale(20, 5, 50);
-	RenderMesh(meshList[House_Floor], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 7.5, 250);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(20, 5, 50);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 7.5, 250);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(20, 5, 50);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-	//living room
-	modelStack.PushMatrix();
-	modelStack.Translate(7.5, 0, 215);
-	modelStack.Scale(20, 5, 20);
-	RenderMesh(meshList[House_Floor], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(15, 7.5, 215);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(20, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 7.5, 215);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(20, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(5.5, 7.5, 207.5);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(16, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
+	modelStack.Scale(100, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(10, 7.5, 222.5);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(15, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	
-	//Side room?
-	modelStack.PushMatrix();
-	modelStack.Translate(21, 0, 200 );
-	modelStack.Scale(15, 5, 10);
-	RenderMesh(meshList[House_Floor], true);
-	modelStack.PopMatrix();
-
-	//Right wall
-	modelStack.PushMatrix();
-	modelStack.Translate(26, 7.5, 200);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(20, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	//Left wall
-	modelStack.PushMatrix();
-	modelStack.Translate(16, 7.5, 200);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(20, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	//Back wall
-	modelStack.PushMatrix();
-	modelStack.Translate(21, 7.5, 197.5);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(15, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(24.75, 7.5, 202.5);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(7.5, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-
-
-
-	//Third room hall
-	modelStack.PushMatrix();
-	modelStack.Translate(19.25, 0, 215);
-	modelStack.Scale(3.5, 5, 20);
-	RenderMesh(meshList[House_Floor], true);
-	modelStack.PopMatrix();
-
-	//Left wall from doorway
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 2.5, 215);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(10, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	//Right wall from Doorway
-	modelStack.PushMatrix();
-	modelStack.Translate(18.5, 2.5, 215);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(10, 5, 20);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-	//Third room
-	modelStack.PushMatrix();
-	modelStack.Translate(22.5, 0, 230);
-	modelStack.Scale(10, 5, 10);
-	RenderMesh(meshList[House_Floor], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(25, 2.5, 230);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(10, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 2.5, 230);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(10, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(24.25, 2.5, 227.5);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(6.5, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(22.5, 2.5, 232.5);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(10, 5, 10);
-	RenderMesh(meshList[House_Walls], true);
-	modelStack.PopMatrix();
 	//UI OVERLAY
 	//vision vignette
 	if (flashlight)
