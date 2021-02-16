@@ -1103,6 +1103,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	//UI OVERLAY
+
 	//Vision vignette
 	
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 2, 2);

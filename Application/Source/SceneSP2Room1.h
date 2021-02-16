@@ -33,11 +33,12 @@ public:
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
+		GEO_TOPHALFWALL,
+		GEO_WALL,
 
 		//ground mesh
 		Ground_Mesh,
-		House_Floor,
-		House_Walls,
+
 
 		//objs
 		Colliderbox,
@@ -95,7 +96,6 @@ public:
 	};
 
 private:
-
 	struct Item
 	{
 
@@ -115,13 +115,12 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 	
+
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-
-
 
 	bool flashlight;
 	bool Fpressed, Freleased;
