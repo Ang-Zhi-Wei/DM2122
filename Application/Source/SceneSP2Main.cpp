@@ -19,6 +19,9 @@ void SceneSP2Main::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
+	SpeakPhase = 0;
+	SpeakTimer = 0;
+	ObjectivePhase = 0;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -188,9 +191,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
-	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
-	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
-	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
 	//building
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
@@ -217,6 +217,23 @@ void SceneSP2Main::Init()
 	meshList[GEO_LAMP]->textureID = LoadTGA("Assigment2Images//metal.tga");
 	meshList[GEO_LAMP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	//paths and deco
+	meshList[GEO_CENTRE] = MeshBuilder::GenerateCircle("centre", 1, 1, 1);
+	meshList[GEO_CENTRE]->textureID = LoadTGA("Image//PathTexture.tga");
+	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
+	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
+	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
+	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
+	meshList[Fountain] = MeshBuilder::GenerateOBJ("Building", "OBJ//fountain.obj");
+	meshList[Fountain]->textureID = LoadTGA("Image//fountain.tga");
+	meshList[Fountain]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	//truck
+	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
+	meshList[GEO_TRUCK]->textureID = LoadTGA("Image//Silver.tga");
+	meshList[GEO_TRUCK]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -350,7 +367,7 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Update(double dt)
 {
-	//camera dot blink logic
+	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
 		camBlinkOn = true;
@@ -372,6 +389,31 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOnSec = 0;
 	}
 
+	//speech phase case statements
+	int SPEECH_LENGTH_SHORT = 3;
+	int SPEECH_LENGTH_MEDIUM = 5;
+	int SPEECH_LENGTH_LONG = 8;
+	switch (SpeakPhase)
+	{
+		case 0:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakPhase++;
+				SpeakTimer = 0;
+			}
+			break;
+		case 1:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakPhase++;
+				SpeakTimer = 0;
+			}
+			break;
+		case 2:
+			ObjectivePhase++;
+			SpeakTimer = 0;
+			break;
+	}
 
 	//key input
 	if (Application::IsKeyPressed('1')) {
@@ -1019,6 +1061,13 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 	
+	//vehicle
+	modelStack.PushMatrix();
+	modelStack.Translate(30, 4, 320);
+	modelStack.Rotate(-20,0, 1,0);
+	modelStack.Scale(8, 8, 8);
+	RenderMesh(meshList[GEO_TRUCK], true);
+	modelStack.PopMatrix();
 
 	//UI OVERLAY
 	//vision vignette
@@ -1049,8 +1098,33 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
 	
 
+
+
+	//speeches
+	switch (SpeakPhase)
+	{
+	case 0:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 5);
+		break;
+	case 1:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Time to investigate this place", Color(1, 1, 0), 4, 10, 5);
+		break;
+	case 2:
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 10, 5);
+		break;
+	}
+
+
 	//objectives screen
-	RenderTextOnScreen(meshList[GEO_TEXT],"Objectives:", Color(0, 1, 0), 4, 1, 10);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 4, 1, 10);
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Investigate the area", Color(1, 1, 0), 2, 1, 9);
+		break;
+	}
+
 
 
 	/*std::ostringstream test1;

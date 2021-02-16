@@ -23,6 +23,11 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+
+	int SpeakPhase;
+	double SpeakTimer;
+	int ObjectivePhase;
+
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -53,15 +58,22 @@ public:
 		GEO_FOUNTAIN,
 		Ruins,
 		locker,
+
 		GEO_LAMP,
+
+		GEO_TRUCK,
+
 		//colliderbox 
 		Colliderbox,
+		Fountain,
 
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision, camcorder
 		GEO_BAR, //stamina
 
+		//paths
+		GEO_CENTRE,
 		
 		NUM_GEOMETRY,
 	};
