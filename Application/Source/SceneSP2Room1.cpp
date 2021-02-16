@@ -26,7 +26,7 @@ void SceneSP2Room1::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 0, 270), Vector3(0, 0, 250), Vector3(0, 1,
+	camera.Init(Vector3(0, 5, 270), Vector3(0, 0, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -120,26 +120,28 @@ void SceneSP2Room1::Init()
 	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, White);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Assigment2Images//purpleWalls.tga");
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
+	meshList[GEO_FRONT]->textureID = LoadTGA("Nighnt//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Assigment2Images//purpleWalls.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Nighnt//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Assigment2Images//purpleWalls.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Nighnt//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Assigment2Images//purpleWalls.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Nighnt//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Nighnt//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Nighnt//bottom.tga");
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
-	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
+	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Imagens//GroundMesh.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
-	//building
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//environment.obj");
-	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//housetexture.tga");
-	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	
+	//House layout
+	meshList[House_Floor] = MeshBuilder::GenerateQuad("Floor", 1, 1, White);
+	meshList[House_Floor]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
+	meshList[House_Walls] = MeshBuilder::GenerateQuad("Walls", 1, 1, White);
+	meshList[House_Walls] -> textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -201,12 +203,8 @@ void SceneSP2Room1::Init()
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
-	//ruins
-	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
-	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
-	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//vignette
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
@@ -326,6 +324,160 @@ void SceneSP2Room1::Render()
 	//skybox
 	RenderSkybox();
 
+	modelStack.PushMatrix();
+	
+	//House layout
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 250);
+	modelStack.Scale(20, 5, 50);
+	RenderMesh(meshList[House_Floor], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 7.5, 250);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 5, 50);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 7.5, 250);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(20, 5, 50);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+	//living room
+	modelStack.PushMatrix();
+	modelStack.Translate(7.5, 0, 215);
+	modelStack.Scale(20, 5, 20);
+	RenderMesh(meshList[House_Floor], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(15, 7.5, 215);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 7.5, 215);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(20, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(5.5, 7.5, 207.5);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(16, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 7.5, 222.5);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(15, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	
+	//Side room?
+	modelStack.PushMatrix();
+	modelStack.Translate(21, 0, 200 );
+	modelStack.Scale(15, 5, 10);
+	RenderMesh(meshList[House_Floor], true);
+	modelStack.PopMatrix();
+
+	//Right wall
+	modelStack.PushMatrix();
+	modelStack.Translate(26, 7.5, 200);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	//Left wall
+	modelStack.PushMatrix();
+	modelStack.Translate(16, 7.5, 200);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(20, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	//Back wall
+	modelStack.PushMatrix();
+	modelStack.Translate(21, 7.5, 197.5);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(15, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(24.75, 7.5, 202.5);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(7.5, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+
+
+
+	//Third room hall
+	modelStack.PushMatrix();
+	modelStack.Translate(19.25, 0, 215);
+	modelStack.Scale(3.5, 5, 20);
+	RenderMesh(meshList[House_Floor], true);
+	modelStack.PopMatrix();
+
+	//Left wall from doorway
+	modelStack.PushMatrix();
+	modelStack.Translate(20, 2.5, 215);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(10, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	//Right wall from Doorway
+	modelStack.PushMatrix();
+	modelStack.Translate(18.5, 2.5, 215);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(10, 5, 20);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+	//Third room
+	modelStack.PushMatrix();
+	modelStack.Translate(22.5, 0, 230);
+	modelStack.Scale(10, 5, 10);
+	RenderMesh(meshList[House_Floor], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 2.5, 230);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(10, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(20, 2.5, 230);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(10, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(24.25, 2.5, 227.5);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(6.5, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(22.5, 2.5, 232.5);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(10, 5, 10);
+	RenderMesh(meshList[House_Walls], true);
+	modelStack.PopMatrix();
 	//UI OVERLAY
 	//vision vignette
 	if (flashlight)
@@ -353,6 +505,11 @@ void SceneSP2Room1::Render()
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
+
+	//Coordinates
+	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 }
 
 void SceneSP2Room1::Exit()

@@ -332,10 +332,17 @@ void SceneSP2Main::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
+
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+
+
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
 
 
@@ -362,6 +369,9 @@ void SceneSP2Main::Init()
 	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
+	//loadtga should only call when necessary
+	switchtga1 = false;
+	switchtga2 = false;
 }
 
 void SceneSP2Main::Update(double dt)
@@ -372,6 +382,7 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
+		switchtga1 = true;
 	}
 	if (camBlinkOn)
 	{
@@ -386,6 +397,7 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
+		switchtga1 = true;
 	}
 
 	//speech phase case statements
@@ -437,23 +449,10 @@ void SceneSP2Main::Update(double dt)
 		if (Qpressed)
 		{
 			Qreleased = true;
+			
 		}
 		Qpressed = false;
 	}
-	/*if (Application::IsKeyPressed('F') &&!Fpressed)
-	{
-		Fpressed = true;
-		Freleased = false;
-	}
-	else
-	{
-		if (Application::IsKeyPressed('F')&&Fpressed )
-		{	
-			Freleased = true;
-			Fpressed = false;
-		}
-		
-	}*/
 	if (Application::IsKeyPressed('F'))
 	{
 		Fpressed = true;
@@ -475,6 +474,7 @@ void SceneSP2Main::Update(double dt)
 				Lockerlist[i].Sethidden(false);
 				camera.teleport(temp);
 				glEnable(GL_CULL_FACE);
+				inLocker = false;
 			}
 		}
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
@@ -483,7 +483,7 @@ void SceneSP2Main::Update(double dt)
 				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
-			
+				inLocker = true;
 			}
 		}
 	
@@ -497,8 +497,7 @@ void SceneSP2Main::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
-
-
+	
 	//toggle flashlight on/off
 	if (Qreleased)
 	{
@@ -508,13 +507,16 @@ void SceneSP2Main::Update(double dt)
 		if (flashlight)
 		{
 			light[1].power = 2;
+			switchtga2 = true;
 		}
 		else
 		{
 			light[1].power = 0;
+			switchtga2 = true;
 		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
+
 	//ghost
 	
 	switch (ghost.state)
@@ -563,7 +565,39 @@ void SceneSP2Main::Update(double dt)
 		break;
 
 	}
-	
+	//vision vignette
+	if (flashlight)
+	{
+		if (switchtga2 == true) {
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+			switchtga2 = false;
+		}
+	}
+	else
+	{
+		if (switchtga2 == true) {
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			switchtga2 = false;
+		}
+
+	}
+	//camcorder
+	if (camBlinkOn)
+	{
+		if (switchtga1) {
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+			switchtga1 = false;
+		}
+
+
+	}
+	else if (camBlinkOff)
+	{
+		if (switchtga1) {
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+			switchtga1 = false;
+		}
+	}
 	
 }
 
@@ -1069,29 +1103,11 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	//UI OVERLAY
-	//vision vignette
-	if (flashlight)
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga"); 
-	}
-	else
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-	}
+	//Vision vignette
+	
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-
 	//camcorder
-	if (camBlinkOn)
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga");
-		RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	}
-	else if(camBlinkOff)
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder2.tga");
-		RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	}
-
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	

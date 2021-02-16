@@ -33,7 +33,7 @@ Mesh* MeshBuilder::Generatering(const std::string& meshName, float lengthX, floa
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = 74;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 //generate a hemisphere
@@ -62,7 +62,7 @@ Mesh* MeshBuilder::Generatehemisphere(const std::string& meshName, float lengthX
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = 740;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 //generate a sphere
@@ -106,7 +106,7 @@ Mesh* MeshBuilder::Generatesphere(const std::string& meshName, float lengthX, fl
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = count;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 //generate torus
@@ -149,7 +149,7 @@ Mesh* MeshBuilder::GenerateTorus(const std::string& meshName, unsigned numStack,
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = indexsize;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 //generate a cylinder
@@ -208,7 +208,7 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string& meshName, float lengthX, 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = index;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 //generate a cone
@@ -252,7 +252,7 @@ Mesh* MeshBuilder::GenerateCone(const std::string& meshName, float lengthX, floa
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = index;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 Mesh* MeshBuilder::GenerateHalfCube(const std::string& meshName, float lengthX, float lengthY, float lengthZ, int color)
@@ -300,7 +300,7 @@ Mesh* MeshBuilder::GenerateHalfCube(const std::string& meshName, float lengthX, 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);
 	mesh->mode = Mesh::DRAW_TRIANGLES;
-	mesh->indexSize = 24;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 Mesh* MeshBuilder::GenerateOBJ(const std::string& meshName, const std::string& file_path)
@@ -475,7 +475,7 @@ Mesh* MeshBuilder::GenerateCircle(const std::string& meshName, float lengthX, fl
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = 74;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 Mesh* MeshBuilder::GenerateSemiCircle(const std::string& meshName, float lengthX, float lengthY, float lengthZ, int color)
@@ -498,7 +498,7 @@ Mesh* MeshBuilder::GenerateSemiCircle(const std::string& meshName, float lengthX
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);;
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-	mesh->indexSize = 38;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 /******************************************************************************/
@@ -579,7 +579,7 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, float lengthX, floa
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);
 	mesh->mode = Mesh::DRAW_TRIANGLES;
-	mesh->indexSize = 6;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 
@@ -636,7 +636,7 @@ Mesh* MeshBuilder::GenerateQuadRepeat(const std::string& meshName, float lengthX
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);
 	mesh->mode = Mesh::DRAW_TRIANGLES;
-	mesh->indexSize = 6;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 
@@ -716,7 +716,7 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, float lengthX=1, fl
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size()*sizeof(GLuint),
 		&index_buffer_data[0], GL_STATIC_DRAW);
 	mesh->mode = Mesh::DRAW_TRIANGLES;
-	mesh->indexSize = 36;
+	mesh->indexSize = index_buffer_data.size();
 	return mesh;
 }
 
@@ -911,7 +911,7 @@ Mesh* MeshBuilder::GenerateCubeT(const std::string& meshName, float lengthX, flo
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 
 	mesh->mode = Mesh::DRAW_TRIANGLES;
-	mesh->indexSize = 36;
+	mesh->indexSize = index_buffer_data.size();
 
 	return mesh;
 }

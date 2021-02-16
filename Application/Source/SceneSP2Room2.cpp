@@ -253,7 +253,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	//UI
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
 
@@ -487,7 +487,7 @@ void SceneSP2Room2::Render()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//stamina
-	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	
 
 	/*std::ostringstream test1;
