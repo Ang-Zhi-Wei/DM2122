@@ -336,9 +336,9 @@ void SceneSP2Main::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 40, 30, 0);
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 40, 30, 0);
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
 
