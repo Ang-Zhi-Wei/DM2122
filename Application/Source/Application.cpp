@@ -26,6 +26,7 @@
 #include "Assigment1.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
+#include "SceneSP2Room2.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -82,9 +83,9 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
-	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
+	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
 	//Create a window and create its OpenGL context
-	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
+	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
 	//megumin
 	//m_window = glfwCreateWindow(1440, 1080, "Megumin", NULL, NULL);
 	//If the window couldn't be created
@@ -126,6 +127,11 @@ void Application::Run()
 	case Scene_2:
 		delete scene;
 		scene = new SceneSP2Room1();
+		scene->Init();
+		break;
+	case Scene_3:
+		delete scene;
+		scene = new SceneSP2Room2();
 		scene->Init();
 		break;
 	}

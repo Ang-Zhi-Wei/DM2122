@@ -716,3 +716,199 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, float lengthX=1, fl
 	mesh->indexSize = 36;
 	return mesh;
 }
+
+Mesh* MeshBuilder::GenerateCubeT(const std::string& meshName, float lengthX, float lengthY, float lengthZ, float texStart, float texEnd, Color col)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<unsigned> index_buffer_data;
+	v.color = col;
+
+	lengthX = lengthX / 2;
+	lengthY = lengthY / 2;
+	lengthZ = lengthZ / 2;
+
+	//front face-okay				
+	v.pos.Set(lengthX, -1 * lengthY, lengthZ); //4 
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, lengthZ); //2
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(lengthX, -1 * lengthY, lengthZ); //4 
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, -1 * lengthY, lengthZ); //3
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+	//back face	- okay
+	v.pos.Set(-1 * lengthX, lengthY, -1 * lengthZ); //5
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, -1 * lengthZ); //6
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);// 8
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-1 * lengthX, -1 * lengthY, -1 * lengthZ); //7
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, -1 * lengthZ); //5
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);//8
+	v.normal.Set(0, 0, -1);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+
+	//right face	- okay			
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);// 8
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, -1 * lengthZ); //6
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, lengthZ); //2
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);// 8
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, lengthZ); //2
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, -1 * lengthY, lengthZ); //4 
+	v.normal.Set(1, 0, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+
+	//left face - okay		
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, -1 * lengthZ); //5
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, -1 * lengthY, -1 * lengthZ); //7
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-1 * lengthX, -1 * lengthY, lengthZ); //3
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, -1 * lengthY, -1 * lengthZ); //7
+	v.normal.Set(-1, 0, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+	//top face				
+	v.pos.Set(lengthX, lengthY, -1 * lengthZ); //6
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, -1 * lengthZ); //5
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(lengthX, lengthY, -1 * lengthZ); //6
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, lengthY, lengthZ); //1
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, lengthY, lengthZ); //2
+	v.normal.Set(0, 1, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+	//bottom face				
+	v.pos.Set(-1 * lengthX, -1 * lengthY, lengthZ); //3
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, -1 * lengthY, -1 * lengthZ); //7
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texStart, texStart); //bottom left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);// 8
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(lengthX, -1 * lengthY, lengthZ); //4 
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texEnd, texEnd); //top right
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-1 * lengthX, -1 * lengthY, lengthZ); //3
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texStart, texEnd); //top left
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(lengthX, -1 * lengthY, -1 * lengthZ);// 8
+	v.normal.Set(0, -1, 0);
+	v.texCoord.Set(texEnd, texStart); //bottom right
+	vertex_buffer_data.push_back(v);
+
+
+
+	for (int i = 0; i < 36; i++)
+	{
+		index_buffer_data.push_back(i);
+	}
+
+	Mesh* mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer); //bind index buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+	mesh->indexSize = 36;
+
+	return mesh;
+}
