@@ -254,6 +254,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
 
@@ -265,7 +266,9 @@ void SceneSP2Room2::Init()
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-
+	//loadtga should only call when necessary
+	switchtga1 = false;
+	switchtga2 = false;
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -306,7 +309,29 @@ void SceneSP2Room2::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
-
+	//camera dot blink logic (not the best, but works)
+	if (camBlinkOff && camBlinkOffSec >= 0.5)
+	{
+		camBlinkOn = true;
+		camBlinkOff = false;
+		camBlinkOffSec = 0;
+		switchtga1 = true;
+	}
+	if (camBlinkOn)
+	{
+		camBlinkOnSec += dt;
+	}
+	if (camBlinkOff)
+	{
+		camBlinkOffSec += dt;
+	}
+	if (camBlinkOn && camBlinkOnSec >= 0.5)
+	{
+		camBlinkOff = true;
+		camBlinkOn = false;
+		camBlinkOnSec = 0;
+		switchtga1 = true;
+	}
 	//toggle flashlight on/off
 	if (Qreleased)
 	{
@@ -316,10 +341,12 @@ void SceneSP2Room2::Update(double dt)
 		if (flashlight)
 		{
 			light[1].power = 2;
+			switchtga2 = true;
 		}
 		else
 		{
 			light[1].power = 0;
+			switchtga2 = true;
 		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
@@ -372,7 +399,40 @@ void SceneSP2Room2::Update(double dt)
 
 	}
 	
-	
+	//vision vignette
+	if (flashlight)
+	{
+		if (switchtga2 == true) {
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+			switchtga2 = false;
+		}
+	}
+	else
+	{
+		if (switchtga2 == true) {
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			switchtga2 = false;
+		}
+	}
+	//camcorder
+	if (camBlinkOn)
+	{
+		if (switchtga1) {
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+			switchtga1 = false;
+		}
+
+
+	}
+	else if (camBlinkOff)
+	{
+		if (switchtga1) {
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+			switchtga1 = false;
+		}
+	}
+
+
 	
 }
 
