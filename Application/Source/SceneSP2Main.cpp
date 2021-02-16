@@ -219,15 +219,11 @@ void SceneSP2Main::Init()
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//paths and deco
-	meshList[GEO_CENTRE] = MeshBuilder::GenerateCircle("centre", 1, 1, 1);
-	meshList[GEO_CENTRE]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
-	meshList[Fountain] = MeshBuilder::GenerateOBJ("Building", "OBJ//fountain.obj");
-	meshList[Fountain]->textureID = LoadTGA("Image//fountain.tga");
-	meshList[Fountain]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	
 
 	//truck
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
@@ -336,10 +332,18 @@ void SceneSP2Main::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
+
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+
+
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
+	
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+
 
 
 	//init update stuff
@@ -1108,7 +1112,9 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	
 
-
+	modelStack.PushMatrix();
+	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
+	modelStack.PopMatrix();
 
 	//speeches
 	switch (SpeakPhase)
