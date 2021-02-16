@@ -113,7 +113,7 @@ void SceneSP2Main::Init()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID,
 		"textColor");
 	Mtx44 projection;
-	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 1000.f);
+	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
 	glUseProgram(m_programID);
 	//mesh
@@ -681,43 +681,43 @@ void SceneSP2Main::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 1.0f+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 2.0f+camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -1.0f+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -2.0f+camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-1.5f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0+camera.position.x,-3.0f+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 1.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 2.0f+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
