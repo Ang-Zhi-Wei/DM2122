@@ -17,6 +17,9 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
+	camBlinkOn = true;
+	camBlinkOff = false;
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -231,7 +234,29 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Update(double dt)
 {
-	
+	//camera dot blink logic
+	if (camBlinkOff && camBlinkOffSec >= 0.5)
+	{
+		camBlinkOn = true;
+		camBlinkOff = false;
+		camBlinkOffSec = 0;
+	}
+	if (camBlinkOn)
+	{
+		camBlinkOnSec += dt;
+	}
+	if (camBlinkOff)
+	{
+		camBlinkOffSec += dt;
+	}
+	if (camBlinkOn && camBlinkOnSec >= 0.5)
+	{
+		camBlinkOff = true;
+		camBlinkOn = false;
+		camBlinkOnSec = 0;
+	}
+
+
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -267,6 +292,7 @@ void SceneSP2Main::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
+
 
 	//toggle flashlight on/off
 	if (Qreleased)
@@ -658,13 +684,27 @@ void SceneSP2Main::Render()
 	}
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+
+	if (camBlinkOn)
+	{
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga");
+		RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	}
+	else if(camBlinkOff)
+	{
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder2.tga");
+		RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	}
+
 	//stamina
 	if (camera.playerStamina < 10)
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
 	}
+
+	//objectives screen
+	RenderTextOnScreen(meshList[GEO_TEXT],"Objectives:", Color(0, 1, 0), 4, 1, 10);
+
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
