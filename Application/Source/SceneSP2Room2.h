@@ -39,6 +39,9 @@ public:
 		GEO_TOPHALFWALL,
 		GEO_WALL,
 		GEO_QUAD,
+		GEO_TABLE,
+		GEO_LONGTABLE,
+		GEO_CHAIR,
 
 		//colliderbox 
 		Colliderbox,
@@ -229,11 +232,12 @@ private:
 							
 	Wall lounge_walls[3]; //top, left, right
 	Wall classroom_walls[2]; //top, wall
-
+	Wall classroom_tables[20];
+	Wall classroom_chairs[20];
 
 	const int wall_count = 11;
 	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], &school_walls[1], &school_walls[2], &school_walls[3], &school_walls[4], &school_walls[5],
-					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1],
+					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]
 						/*&school_door[0], &school_door[3],&school_door[1], &school_door[2],&classroom_door[0], &lounge_door[0],&classroom_door[3],&lounge_door[3],
 	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
 
@@ -243,6 +247,7 @@ private:
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
+	
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);

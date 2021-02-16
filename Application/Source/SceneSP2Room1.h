@@ -36,10 +36,10 @@ public:
 
 		//ground mesh
 		Ground_Mesh,
+		House_Floor,
+		House_Walls,
 
 		//objs
-		GEO_BUILDING,
-		Ruins,
 		Colliderbox,
 
 		//UI tings
