@@ -213,6 +213,7 @@
     <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\SceneUi.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

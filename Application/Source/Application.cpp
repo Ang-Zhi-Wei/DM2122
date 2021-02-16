@@ -10,20 +10,6 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
-#include "SceneUi.h"
-#include "SceneText.h"
-#include "SceneModel.h"
-#include "Sceneskybox.h"
-#include "SceneTexture.h"
-#include "SceneLight2.h"
-#include "SceneLight.h"
-#include "Scene5.h"
-#include "Scene4.h"
-#include "Scene3.h"
-#include "Scene2.h"
-#include "Scene1.h"
-#include "Assigment2.h"
-#include "Assigment1.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
@@ -112,12 +98,12 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_1;
+	scenetype = Scene_2;
 }
 
 void Application::Run()
 {
-	Scene* scene = new SceneSP2Main;
+	Scene* scene = new SceneSP2Room1;
 	//Main Loop
 	//Scene Manager
 	switch (scenetype) {
