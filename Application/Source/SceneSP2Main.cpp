@@ -226,7 +226,13 @@ void SceneSP2Main::Init()
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
-	
+	//Locker test
+	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
+	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
+	//list of lockers
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 
@@ -283,7 +289,20 @@ void SceneSP2Main::Update(double dt)
 		}
 		Qpressed = false;
 	}
+	if (Application::IsKeyPressed('F') && !Fpressed)
+	{
+		Fpressed = true;
+		Freleased = false;
+	}
+	else
+	{
+		if (Fpressed &&!Freleased)
+		{
+			Freleased = true;
+			Fpressed = false;
+		}
 
+	}
 	//fps
 	fps = 1.f / dt;
 	//camera
@@ -359,7 +378,15 @@ void SceneSP2Main::Update(double dt)
 
 	}
 	
-	
+	//Locker
+	for (int i = 0; i < Lockerlist.size(); i++) {
+
+		if (Lockerlist[i].status(camera.position, -1*camera.view, Freleased)) {
+			std::cout << "hidden" << std::endl;
+			camera.position = (Lockerlist[i].getpos().x, 0, Lockerlist[i].getpos().z);
+			glDisable(GL_CULL_FACE);
+		}
+	}
 	
 }
 
@@ -670,7 +697,15 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
-
+	//lockers
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Scale(0.2, 0.2, 0.2);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
+	
 
 	//UI OVERLAY
 	//vision vignette
