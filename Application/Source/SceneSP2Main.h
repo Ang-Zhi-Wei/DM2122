@@ -37,10 +37,17 @@ public:
 
 		//ground mesh
 		Ground_Mesh,
+		GEO_PATH,
+
+		//models
+		GEO_WATER,
+		GEO_SPAWN,
 
 		//objs
 		GEO_BUILDING,
 		GEO_ROAD,
+		GEO_TREES,
+		GEO_FOUNTAIN,
 		Ruins,
 		//colliderbox 
 		Colliderbox,
