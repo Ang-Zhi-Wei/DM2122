@@ -26,6 +26,7 @@
 #include "Assigment1.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
+#include "SceneSP2Room2.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -126,6 +127,11 @@ void Application::Run()
 	case Scene_2:
 		delete scene;
 		scene = new SceneSP2Room1();
+		scene->Init();
+		break;
+	case Scene_3:
+		delete scene;
+		scene = new SceneSP2Room2();
 		scene->Init();
 		break;
 	}
