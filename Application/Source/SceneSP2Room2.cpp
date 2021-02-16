@@ -256,9 +256,8 @@ void SceneSP2Room2::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-
-
-
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 
 	//meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
 	//list of colliders
@@ -534,18 +533,9 @@ void SceneSP2Room2::Render()
 
 	//UI OVERLAY
 	//vision vignette
-	if (flashlight)
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga"); 
-	}
-	else
-	{
-		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-	}
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	
