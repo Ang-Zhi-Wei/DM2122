@@ -336,7 +336,7 @@ void SceneSP2Main::Init()
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
 
@@ -1094,7 +1094,6 @@ void SceneSP2Main::Render()
 	}
 
 	//stamina
-	
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
 	
 
