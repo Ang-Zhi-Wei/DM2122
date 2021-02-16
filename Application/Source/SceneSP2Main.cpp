@@ -718,8 +718,8 @@ void SceneSP2Main::Render()
 		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	}
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camcorder
 
+	//camcorder
 	if (camBlinkOn)
 	{
 		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga");
