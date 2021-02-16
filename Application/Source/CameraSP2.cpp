@@ -223,7 +223,7 @@ void CameraSP2::teleport(Vector3 position)
 	rawTarget.z += distance.z;
 	this->position.x += distance.x;
 	this->position.z += distance.z;
-	target = rawTarget+viewTarget;
+	target = rawTarget + viewTarget;
 }
 
 
