@@ -71,6 +71,7 @@ public:
 		GEO_TEXT,
 		GEO_OVERLAY, //vision, camcorder
 		GEO_BAR, //stamina
+		GEO_STAMINA,
 
 		//paths
 		GEO_CENTRE,
