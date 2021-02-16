@@ -42,7 +42,9 @@ public:
 
 		//models
 		GEO_WATER,
+		GEO_LIGHTBULB,
 		GEO_SPAWN,
+
 
 		//objs
 		GEO_BUILDING,
@@ -51,6 +53,7 @@ public:
 		GEO_FOUNTAIN,
 		Ruins,
 		locker,
+		GEO_LAMP,
 		//colliderbox 
 		Colliderbox,
 
@@ -101,6 +104,32 @@ public:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
+		//light 2
+
+		U_LIGHT2_POSITION,
+		U_LIGHT2_COLOR,
+		U_LIGHT2_POWER,
+		U_LIGHT2_KC,
+		U_LIGHT2_KL,
+		U_LIGHT2_KQ,
+		U_LIGHT2_TYPE,
+		U_LIGHT2_SPOTDIRECTION,
+		U_LIGHT2_COSCUTOFF,
+		U_LIGHT2_COSINNER,
+		U_LIGHT2_EXPONENT,
+
+		//light 3
+		U_LIGHT3_POSITION,
+		U_LIGHT3_COLOR,
+		U_LIGHT3_POWER,
+		U_LIGHT3_KC,
+		U_LIGHT3_KL,
+		U_LIGHT3_KQ,
+		U_LIGHT3_TYPE,
+		U_LIGHT3_SPOTDIRECTION,
+		U_LIGHT3_COSCUTOFF,
+		U_LIGHT3_COSINNER,
+		U_LIGHT3_EXPONENT,
 		
 		U_TOTAL,
 
@@ -116,7 +145,7 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[4];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
