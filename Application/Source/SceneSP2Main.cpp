@@ -113,7 +113,7 @@ void SceneSP2Main::Init()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID,
 		"textColor");
 	Mtx44 projection;
-	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 1000.f);
+	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
 	glUseProgram(m_programID);
 	//mesh
@@ -171,7 +171,7 @@ void SceneSP2Main::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 3, 270);
 	light[1].color.Set(White);
-	light[1].power = 5;
+	light[1].power = 2;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -204,8 +204,11 @@ void SceneSP2Main::Init()
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//vignette
+	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 40, 30, 0);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
@@ -222,7 +225,7 @@ void SceneSP2Main::Init()
 	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
-	camera.SetBounds(-300, 300, -300, 300);
+	camera.SetBounds(-415, 415, -365, 360);
 
 }
 
@@ -256,6 +259,10 @@ void SceneSP2Main::Update(double dt)
 		Qpressed = false;
 	}
 
+	//fps
+	fps = 1.f / dt;
+	//camera
+	camera.Update(dt);
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -269,7 +276,7 @@ void SceneSP2Main::Update(double dt)
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 5;
+			light[1].power = 2;
 		}
 		else
 		{
@@ -277,11 +284,55 @@ void SceneSP2Main::Update(double dt)
 		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
+	//ghost
 	
-	//fps
-	fps = 1.f / dt;
-	//camera
-	camera.Update(dt);
+	switch (ghost.state)
+	{
+	case Ghost::NORMAL:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 20)
+		{
+			ghost.state = Ghost::CHASING;
+			ghost.speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 3 && inLocker)
+		{
+			ghost.state = Ghost::WAITING;
+			ghost.waitTime = 5;
+		}
+		else if (ghost.distance <= 1)
+		{
+			//TBC
+			//end game condition met, either that or HP - 1
+		}
+		break;
+	case Ghost::WAITING:
+		ghost.waitTime -= dt;
+		if (ghost.waitTime <= 0)
+		{
+			ghost.state = Ghost::SPEEDRUN;
+			ghost.speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost.facing = (ghost.pos - camera.position).Normalized();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance > 300 || !inLocker)
+		{
+			ghost.state = Ghost::NORMAL;
+			ghost.speed = 5;
+		}
+		break;
+
+	}
+	
 	
 	
 }
@@ -609,13 +660,18 @@ void SceneSP2Main::Render()
 	//camcorder
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//camcorder.tga"); 
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//stamina
+	if (camera.playerStamina < 10)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
+	}
 
-	std::ostringstream test1;
+	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
 	test3 << "light[1]spotdirec: " << light[1].spotDirection;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
 	//std::ostringstream test2;
 	//test2 << "camera view: " << camera.view;
 	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
@@ -635,43 +691,43 @@ void SceneSP2Main::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 1.0f+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 2.0f+camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -1.0f+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -2.0f+camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-1.5f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0+camera.position.x,-3.0f+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 1.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0+camera.position.x, 2.0f+camera.position.y, 0+camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
@@ -811,7 +867,7 @@ void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 
 }
 
-void SceneSP2Main::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void SceneSP2Main::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;

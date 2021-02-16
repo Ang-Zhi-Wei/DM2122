@@ -17,26 +17,26 @@ public:
 	Vector3 defaultUp;
 	Vector3 defaultview;
 	Vector3 rawTarget, viewTarget;
+
 	std::vector<ColliderBox>Checker;
+
 	double mousePosX, mousePosY;
 	double offsetX, offsetY;
-	Vector3 forwardVector;
-	void setchecker(std::vector<ColliderBox>Checker);
-    float yaw;
+	double playerStamina, cooldown;
+	
+   
 	float boundX1;
 	float boundX2;
 	float boundZ1;
 	float boundZ2;
-	//Values for axe
-	float AxeYaw;
-	Vector3 AxePosition;
-	Vector3 Skullposition;
-	bool collisionstatus;
+	
+	
 	CameraSP2();
 	~CameraSP2();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
 	virtual void Reset();
+	void setchecker(std::vector<ColliderBox>Checker);
 	void SetBounds(float X1, float X2, float Z1, float Z2);
 };
 
