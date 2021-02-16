@@ -70,7 +70,7 @@ public:
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
-		GEO_OVERLAY2,//Camcorder
+		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
 
