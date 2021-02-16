@@ -588,6 +588,9 @@ Mesh* MeshBuilder::GenerateQuad2(const std::string& meshName, float lengthX, flo
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
+	lengthX = lengthX / 2;
+	lengthY = lengthY / 2;
+
 	v.pos.Set(-1 * lengthX, lengthY, 0); v.color.Set(color); v.normal.Set(0, 0, 1); v.texCoord.Set(0, 1); vertex_buffer_data.push_back(v);
 	v.pos.Set(-1 * lengthX,-1 * lengthY,0); v.color.Set(color); v.normal.Set(0, 0, 1); v.texCoord.Set(0, 0); vertex_buffer_data.push_back(v);
 	v.pos.Set(lengthX, lengthY, 0); v.color.Set(color); v.normal.Set(0, 0, 1); v.texCoord.Set(1, 1); vertex_buffer_data.push_back(v);
