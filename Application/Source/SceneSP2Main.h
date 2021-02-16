@@ -12,6 +12,7 @@
 #include "Utility.h"
 #include "ColliderBox.h"
 #include <vector>
+#include "Locker.h"
 class SceneSP2Main : public Scene
 {
 public:
@@ -42,6 +43,7 @@ public:
 		GEO_BUILDING,
 		GEO_ROAD,
 		Ruins,
+		locker,
 		//colliderbox 
 		Colliderbox,
 
@@ -114,7 +116,6 @@ private:
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
-
 	struct Item
 	{
 
@@ -220,6 +221,7 @@ private:
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
+	std::vector<Locker>Lockerlist;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
