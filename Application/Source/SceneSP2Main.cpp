@@ -333,14 +333,13 @@ void SceneSP2Main::Init()
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
 
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("visions", 80, 60, 0);
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 
-
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
 	
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 
@@ -1105,10 +1104,9 @@ void SceneSP2Main::Render()
 	//UI OVERLAY
 
 	//Vision vignette
-	
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 2, 2);
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 2, 2);
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	
