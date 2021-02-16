@@ -339,10 +339,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 
 
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+
 
 
 
@@ -576,7 +576,7 @@ void SceneSP2Main::Update(double dt)
 	else
 	{
 		if (switchtga2 == true) {
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//VISIONOFF.tga");
 			switchtga2 = false;
 		}
 
@@ -1107,14 +1107,11 @@ void SceneSP2Main::Render()
 	
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 2, 2);
 	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 2, 2);
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
-	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	
-
-	modelStack.PushMatrix();
 	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
-	modelStack.PopMatrix();
 
 	//speeches
 	switch (SpeakPhase)
