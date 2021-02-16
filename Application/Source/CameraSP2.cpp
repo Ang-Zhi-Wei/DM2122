@@ -7,6 +7,7 @@ void CameraSP2::setchecker(std::vector<ColliderBox>Checker)
 	this->Checker = Checker;
 }
 
+
 CameraSP2::CameraSP2()
 {
 }
@@ -89,7 +90,6 @@ void CameraSP2::Update(double dt)
 	up = defaultUp;
 	right = view.Cross(up).Normalized();
 	up = right.Cross(view).Normalized();
-
 	if (Application::IsKeyPressed('W'))
 	{
 		
@@ -197,6 +197,16 @@ void CameraSP2::SetBounds(float X1, float X2, float Z1, float Z2)
 	boundX2 = X2;
 	boundZ1 = Z1;
 	boundZ2 = Z2;
+}
+
+void CameraSP2::teleport(Vector3 position)
+{
+	Vector3 distance = position-this->position;
+	rawTarget.x += distance.x;
+	rawTarget.z += distance.z;
+	this->position.x += distance.x;
+	this->position.z += distance.z;
+	target = rawTarget+viewTarget;
 }
 
 

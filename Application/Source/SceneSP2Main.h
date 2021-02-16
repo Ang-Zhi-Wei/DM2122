@@ -101,7 +101,7 @@ public:
 
 private:
 
-
+	int lockernum;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -218,11 +218,10 @@ private:
 	bool inLocker;
 
 	Ghost ghost;
-
+	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
-
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

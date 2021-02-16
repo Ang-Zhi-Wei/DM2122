@@ -40,8 +40,17 @@ bool Locker::status(Vector3 Point,Vector3 cameraview,bool fpressed)
 	else {
 		condition2 = false;
 	}
-	std::cout << condition1 << condition2 << condition3 << std::endl;
 	Position.y -= tempy;
 	return(condition1 && condition2 && condition3);
+}
+
+void Locker::Sethidden(bool hidden)
+{
+	this->hidden = hidden;
+}
+
+bool Locker::gethidden()
+{
+	return hidden;
 }
 
