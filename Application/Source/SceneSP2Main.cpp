@@ -346,7 +346,6 @@ void SceneSP2Main::Init()
 	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-
 }
 
 void SceneSP2Main::Update(double dt)
@@ -400,20 +399,55 @@ void SceneSP2Main::Update(double dt)
 		}
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F') && !Fpressed)
+	/*if (Application::IsKeyPressed('F') &&!Fpressed)
 	{
 		Fpressed = true;
 		Freleased = false;
 	}
 	else
 	{
-		if (Fpressed &&!Freleased)
-		{
+		if (Application::IsKeyPressed('F')&&Fpressed )
+		{	
 			Freleased = true;
 			Fpressed = false;
 		}
-
+		
+	}*/
+	if (Application::IsKeyPressed('F'))
+	{
+		Fpressed = true;
+		Freleased = false;
 	}
+	else
+	{
+		if (Fpressed)
+		{
+			Freleased = true;
+		}
+		Fpressed = false;
+	}
+	//Locker
+
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		if (Lockerlist[i].gethidden() == true) {
+			if (Fpressed) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(temp);
+				glEnable(GL_CULL_FACE);
+			}
+		}
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
+			if (Lockerlist[i].gethidden() == false) {
+				Lockerlist[i].Sethidden(true);
+				temp.Set(camera.position.x, camera.position.y, camera.position.z);
+				camera.teleport(Lockerlist[i].getpos());
+				glDisable(GL_CULL_FACE);//To see the inside of the locker
+			
+			}
+		}
+	
+	}
+
 	//fps
 	fps = 1.f / dt;
 	//camera
@@ -489,15 +523,6 @@ void SceneSP2Main::Update(double dt)
 
 	}
 	
-	//Locker
-	for (int i = 0; i < Lockerlist.size(); i++) {
-
-		if (Lockerlist[i].status(camera.position, -1*camera.view, Freleased)) {
-			std::cout << "hidden" << std::endl;
-			camera.position = (Lockerlist[i].getpos().x, 0, Lockerlist[i].getpos().z);
-			glDisable(GL_CULL_FACE);
-		}
-	}
 	
 }
 
