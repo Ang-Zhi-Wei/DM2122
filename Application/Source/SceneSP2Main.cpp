@@ -29,7 +29,7 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, 270), Vector3(0, 5, 250), Vector3(0, 1,
+	camera.Init(Vector3(0, 20, 270), Vector3(0, 20, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -84,6 +84,55 @@ void SceneSP2Main::Init()
 		"lights[1].kL");
 	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID,
 		"lights[1].kQ");
+	//light 2
+	m_parameters[U_LIGHT2_TYPE] =
+		glGetUniformLocation(m_programID, "lights[2].type");
+	m_parameters[U_LIGHT2_SPOTDIRECTION] =
+		glGetUniformLocation(m_programID, "lights[2].spotDirection");
+	m_parameters[U_LIGHT2_COSCUTOFF] =
+		glGetUniformLocation(m_programID, "lights[2].cosCutoff");
+	m_parameters[U_LIGHT2_COSINNER] =
+		glGetUniformLocation(m_programID, "lights[2].cosInner");
+	m_parameters[U_LIGHT2_EXPONENT] =
+		glGetUniformLocation(m_programID, "lights[2].exponent");
+	m_parameters[U_LIGHT2_POSITION] =
+		glGetUniformLocation(m_programID,
+			"lights[2].position_cameraspace");
+	m_parameters[U_LIGHT2_COLOR] =
+		glGetUniformLocation(m_programID, "lights[2].color");
+	m_parameters[U_LIGHT2_POWER] =
+		glGetUniformLocation(m_programID, "lights[2].power");
+	m_parameters[U_LIGHT2_KC] = glGetUniformLocation(m_programID,
+		"lights[2].kC");
+	m_parameters[U_LIGHT2_KL] = glGetUniformLocation(m_programID,
+		"lights[2].kL");
+	m_parameters[U_LIGHT2_KQ] = glGetUniformLocation(m_programID,
+		"lights[2].kQ");
+
+	//light 3
+	m_parameters[U_LIGHT3_TYPE] =
+		glGetUniformLocation(m_programID, "lights[3].type");
+	m_parameters[U_LIGHT3_SPOTDIRECTION] =
+		glGetUniformLocation(m_programID, "lights[3].spotDirection");
+	m_parameters[U_LIGHT3_COSCUTOFF] =
+		glGetUniformLocation(m_programID, "lights[3].cosCutoff");
+	m_parameters[U_LIGHT3_COSINNER] =
+		glGetUniformLocation(m_programID, "lights[3].cosInner");
+	m_parameters[U_LIGHT3_EXPONENT] =
+		glGetUniformLocation(m_programID, "lights[3].exponent");
+	m_parameters[U_LIGHT3_POSITION] =
+		glGetUniformLocation(m_programID,
+			"lights[3].position_cameraspace");
+	m_parameters[U_LIGHT3_COLOR] =
+		glGetUniformLocation(m_programID, "lights[3].color");
+	m_parameters[U_LIGHT3_POWER] =
+		glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID,
+		"lights[3].kC");
+	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID,
+		"lights[3].kL");
+	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID,
+		"lights[3].kQ");
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -120,7 +169,11 @@ void SceneSP2Main::Init()
 	projectionStack.LoadMatrix(projection);
 	glUseProgram(m_programID);
 	//mesh
-	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, White);
+	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, Yellow);
+	meshList[GEO_LIGHTBULB] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, Yellow);
+	meshList[GEO_LIGHTBULB]->material.kDiffuse.Set(0.6f, 0.6f, 0.6f);
+	meshList[GEO_LIGHTBULB]->material.kSpecular.Set(0.3f, 0.3f, 0.3f);
+	meshList[GEO_LIGHTBULB]->material.kShininess = 1.f;
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
@@ -145,6 +198,24 @@ void SceneSP2Main::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Building", "OBJ//road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Assigment2Images//road.tga");
 	meshList[GEO_ROAD]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_TREES] = MeshBuilder::GenerateOBJ("Building", "OBJ//pine2.obj");
+	meshList[GEO_TREES]->textureID = LoadTGA("Assigment2Images//pine2.tga");
+	meshList[GEO_TREES]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_FOUNTAIN] = MeshBuilder::GenerateOBJ("Building", "OBJ//fountain.obj");
+	meshList[GEO_FOUNTAIN]->textureID = LoadTGA("Assigment2Images//fountaintexture.tga");
+	meshList[GEO_FOUNTAIN]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_WATER] = MeshBuilder::Generatesphere("Building",30,30,30,5);
+	meshList[GEO_WATER]->textureID = LoadTGA("Assigment2Images//water.tga");
+	meshList[GEO_WATER]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_SPAWN] = MeshBuilder::Generatesphere("spawn", 30, 30, 30,5);
+	meshList[GEO_SPAWN]->textureID = LoadTGA("Assigment2Images//cement.tga");
+	meshList[GEO_SPAWN]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_PATH] = MeshBuilder::GenerateQuad("spawn", 1,1, White);
+	meshList[GEO_PATH]->textureID = LoadTGA("Assigment2Images//pavement.tga");
+	meshList[GEO_PATH]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Building", "OBJ//lamppost.obj");
+	meshList[GEO_LAMP]->textureID = LoadTGA("Assigment2Images//metal.tga");
+	meshList[GEO_LAMP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -172,7 +243,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	//light 1
 	light[1].type = Light::LIGHT_SPOT;
-	light[1].position.Set(0, 3, 270);
+	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
 	light[1].power = 2;
 	light[1].kC = 1.f;
@@ -182,8 +253,7 @@ void SceneSP2Main::Init()
 	light[1].cosInner = cos(Math::DegreeToRadian(1));
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, -1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,
-		&light[1].color.r);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,&light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
 	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
@@ -193,6 +263,47 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	
+	light[2].type = Light::LIGHT_SPOT;
+	light[2].position.Set(40, 30, -34);
+	light[2].color.Set(Yellow);
+	light[2].power = 2;
+	light[2].kC = 1.f;
+	light[2].kL = 0.01f;
+	light[2].kQ = 0.001f;
+	light[2].cosCutoff = cos(Math::DegreeToRadian(35));
+	light[2].cosInner = cos(Math::DegreeToRadian(20));
+	light[2].exponent = 3.f;
+	light[2].spotDirection.Set(0.f, 1.f, 0.f);
+	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1,&light[2].color.r);
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
+	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
+	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
+	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
+	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
+	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
+
+	light[3].type = Light::LIGHT_SPOT;
+	light[3].position.Set(-40, 30, -34);
+	light[3].color.Set(Yellow);
+	light[3].power = 2;
+	light[3].kC = 1.f;
+	light[3].kL = 0.01f;
+	light[3].kQ = 0.001f;
+	light[3].cosCutoff = cos(Math::DegreeToRadian(35));
+	light[3].cosInner = cos(Math::DegreeToRadian(20));
+	light[3].exponent = 3.f;
+	light[3].spotDirection.Set(0.f, 1.f, 0.f);
+	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
+	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
+	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
+	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
+	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
+	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
 	
 
 	//Set Material locations
@@ -201,7 +312,7 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
 	//ruins
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
@@ -235,7 +346,6 @@ void SceneSP2Main::Init()
 	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-
 }
 
 void SceneSP2Main::Update(double dt)
@@ -289,20 +399,55 @@ void SceneSP2Main::Update(double dt)
 		}
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F') && !Fpressed)
+	/*if (Application::IsKeyPressed('F') &&!Fpressed)
 	{
 		Fpressed = true;
 		Freleased = false;
 	}
 	else
 	{
-		if (Fpressed &&!Freleased)
-		{
+		if (Application::IsKeyPressed('F')&&Fpressed )
+		{	
 			Freleased = true;
 			Fpressed = false;
 		}
-
+		
+	}*/
+	if (Application::IsKeyPressed('F'))
+	{
+		Fpressed = true;
+		Freleased = false;
 	}
+	else
+	{
+		if (Fpressed)
+		{
+			Freleased = true;
+		}
+		Fpressed = false;
+	}
+	//Locker
+
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		if (Lockerlist[i].gethidden() == true) {
+			if (Fpressed) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(temp);
+				glEnable(GL_CULL_FACE);
+			}
+		}
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
+			if (Lockerlist[i].gethidden() == false) {
+				Lockerlist[i].Sethidden(true);
+				temp.Set(camera.position.x, camera.position.y, camera.position.z);
+				camera.teleport(Lockerlist[i].getpos());
+				glDisable(GL_CULL_FACE);//To see the inside of the locker
+			
+			}
+		}
+	
+	}
+
 	//fps
 	fps = 1.f / dt;
 	//camera
@@ -378,15 +523,6 @@ void SceneSP2Main::Update(double dt)
 
 	}
 	
-	//Locker
-	for (int i = 0; i < Lockerlist.size(); i++) {
-
-		if (Lockerlist[i].status(camera.position, -1*camera.view, Freleased)) {
-			std::cout << "hidden" << std::endl;
-			camera.position = (Lockerlist[i].getpos().x, 0, Lockerlist[i].getpos().z);
-			glDisable(GL_CULL_FACE);
-		}
-	}
 	
 }
 
@@ -405,6 +541,7 @@ void SceneSP2Main::Render()
 		modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
 		&MVP.a[0]);
+
 	//light
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -445,9 +582,61 @@ void SceneSP2Main::Render()
 
 	}
 
+	if (light[2].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[2].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
+		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[2].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT2_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else if (light[2].type == Light::LIGHT_POINT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
+		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 
+	}
+
+	if (light[3].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[3].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else if (light[3].type == Light::LIGHT_POINT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+
+	}
+
+	
 	//skybox
 	RenderSkybox();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(light[2].position.x, light[2].position.y, light[2].position.z);
+	modelStack.Scale(1, 1, 1);
+	RenderMesh(meshList[LightSphere], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(light[3].position.x, light[3].position.y, light[3].position.z);
+	modelStack.Scale(1, 1, 1);
+	RenderMesh(meshList[LightSphere], false);
+	modelStack.PopMatrix();
 
 	//ground Mesh
 	modelStack.PushMatrix();
@@ -470,36 +659,28 @@ void SceneSP2Main::Render()
 
 	//front
 	modelStack.PushMatrix();
-	modelStack.Translate(-520, 91, -480);
+	modelStack.Translate(-520, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 90);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-340, 91, -480);
+	modelStack.Translate(-340, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 90);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-160, 91, -480);
+	modelStack.Translate(-160, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-10, 91, -480);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(30, 93, 80);
-	RenderMesh(meshList[GEO_BUILDING], true);
-	modelStack.PopMatrix();
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(160, 91, -480);
+	modelStack.Translate(-10, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -507,14 +688,22 @@ void SceneSP2Main::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(330, 91, -480);
+	modelStack.Translate(160, 85, -480);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(30, 93, 80);
+	RenderMesh(meshList[GEO_BUILDING], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(330, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(490, 91, -480);
+	modelStack.Translate(490, 85, -480);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -525,7 +714,7 @@ void SceneSP2Main::Render()
 	//left
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91, -340);
+	modelStack.Translate(-550, 85, -340);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -533,7 +722,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91, -170);
+	modelStack.Translate(-550, 85, -170);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -541,7 +730,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91, 0);
+	modelStack.Translate(-550, 85, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -549,7 +738,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91,170);
+	modelStack.Translate(-550, 85,170);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -557,7 +746,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91, 330);
+	modelStack.Translate(-550, 85, 330);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -565,7 +754,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 91, 500);
+	modelStack.Translate(-550, 85, 500);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -578,7 +767,7 @@ void SceneSP2Main::Render()
 	//right
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, -390);
+	modelStack.Translate(550, 85, -390);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -586,28 +775,28 @@ void SceneSP2Main::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, -220);
+	modelStack.Translate(550, 85, -220);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, -50);
+	modelStack.Translate(550, 85, -50);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, 120);
+	modelStack.Translate(550, 85, 120);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, 270);
+	modelStack.Translate(550, 85, 270);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -615,7 +804,7 @@ void SceneSP2Main::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(550, 91, 450);
+	modelStack.Translate(550, 85, 450);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -628,42 +817,42 @@ void SceneSP2Main::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-400, 91, 550);
+	modelStack.Translate(-400, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-230, 91, 550);
+	modelStack.Translate(-230, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-60, 91, 550);
+	modelStack.Translate(-60, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(110, 91, 550);
+	modelStack.Translate(110, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(290, 91, 550);
+	modelStack.Translate(290, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(450, 91, 550);
+	modelStack.Translate(450, 85, 550);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
@@ -696,6 +885,130 @@ void SceneSP2Main::Render()
 	modelStack.Scale(35, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
+
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-120, 5, -100);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_TREES], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(120, 5, 100);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_TREES], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-120, 5, 100);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_TREES], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(120, 5, -100);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_TREES], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, -4, -35);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-50, -4, -35);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-45, -4, -130);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(45, -4, -130);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-45, -4, 130);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(45, -4, 130);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_LAMP], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.18, 0.18, 0.18);
+	RenderMesh(meshList[GEO_FOUNTAIN], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0,-1, 0);
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(15, 1, 15);
+	RenderMesh(meshList[GEO_WATER], true);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -4, 0);
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(50, 1, 50);
+	RenderMesh(meshList[GEO_SPAWN], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 6, 0);
+	modelStack.Scale(330, 20, 50);
+	RenderMesh(meshList[GEO_PATH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(180, 6, 0);
+	modelStack.Scale(330, 20, 50);
+	RenderMesh(meshList[GEO_PATH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 6, 120);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(330, 20, 50);
+	RenderMesh(meshList[GEO_PATH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 6, -120);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(330, 20, 50);
+	RenderMesh(meshList[GEO_PATH], true);
+	modelStack.PopMatrix();
+
+
 
 	//lockers
 	for (int i = 0; i < Lockerlist.size(); i++) {
