@@ -212,7 +212,7 @@ private:
 				{
 					dir *= -1;
 				}
-				rotateY += dir * 200 * dt;
+				rotateY +=dir * 200 * dt;
 			}
 			else
 			{

@@ -49,7 +49,8 @@ public:
 
 		//UI tings
 		GEO_TEXT,
-		GEO_OVERLAY, //vision, camcorder
+		GEO_OVERLAY, //vision
+		GEO_OVERLAY2,//Camcorder
 		GEO_BAR, //stamina
 
 		
@@ -204,7 +205,7 @@ private:
 				{
 					dir *= -1;
 				}
-				rotateY += dir * 200 * dt;
+				rotateY += float(dir * 200 * dt);
 			}
 			else
 			{
@@ -219,6 +220,8 @@ private:
 
 	bool camBlinkOn;
 	bool camBlinkOff;
+	bool switchtga1;
+	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
