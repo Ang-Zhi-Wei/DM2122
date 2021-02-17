@@ -19,9 +19,12 @@ void SceneSP2Main::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
-	SpeakPhase = 0;
+	SpeakPhase = 1;
 	SpeakTimer = 0;
+	Interact_Num = 0;
 	ObjectivePhase = 0;
+	canTalk_man = true;
+	rotate_Man = 90;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -230,6 +233,11 @@ void SceneSP2Main::Init()
 	meshList[GEO_TRUCK]->textureID = LoadTGA("Image//Silver.tga");
 	meshList[GEO_TRUCK]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
+	//Mysterious man
+	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
+	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
+	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -331,8 +339,8 @@ void SceneSP2Main::Init()
 	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
 	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//UI
 
+	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
@@ -341,9 +349,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	
-
-
-
 
 	//init update stuff
 	LSPEED = 10.F;
@@ -399,19 +404,39 @@ void SceneSP2Main::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
+	//interaction hitbox checker
+	if (campos_x > -1 && campos_x < 1 && campos_z> 26 && campos_z < 30 && canTalk_man)
+	{
+		Interact_Num = 1;
+		static bool ButtonState2 = false;
+		if (!ButtonState2 && Application::IsKeyPressed('F'))
+		{
+			ButtonState2 = true;
+		}
+		else if (ButtonState2 && !Application::IsKeyPressed('F'))
+		{
+			ButtonState2 = false;
+			std::cout << " F BUTTON UP" << std::endl;
+			SpeakPhase = 3;
+		}
+	}
+	else
+	{
+		Interact_Num = 0;
+	}
+
 	//speech phase case statements
-	int SPEECH_LENGTH_SHORT = 3;
-	int SPEECH_LENGTH_MEDIUM = 5;
-	int SPEECH_LENGTH_LONG = 8;
+	double SPEECH_LENGTH_FAST = 2;
+	double SPEECH_LENGTH_SHORT = 3;
+	double SPEECH_LENGTH_MEDIUM = 5;
+	double SPEECH_LENGTH_LONG = 8;
 	switch (SpeakPhase)
 	{
+		//default
 		case 0:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakPhase++;
-				SpeakTimer = 0;
-			}
-			break;
+			SpeakTimer = 0;
+
+		//starting phase
 		case 1:
 			SpeakTimer += dt;
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
@@ -420,8 +445,90 @@ void SceneSP2Main::Update(double dt)
 			}
 			break;
 		case 2:
-			ObjectivePhase = 1;
-			SpeakTimer = 0;
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				ObjectivePhase = 1;
+				SpeakTimer = 0;
+				SpeakPhase = 0;
+			}
+			break;
+
+		//talking to man part
+		case 3:
+			camera.can_move = false;
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakPhase++;
+				SpeakTimer = 0;
+			}
+			break;
+		case 4:
+			//man turns around
+			rotate_Man = -90;
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 5:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 6:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 7:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 8:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_FAST) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 9:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_FAST) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 10:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_FAST) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		case 11:
+			SpeakTimer += dt;
+			if (SpeakTimer > SPEECH_LENGTH_FAST) {
+				SpeakTimer = 0;
+				SpeakPhase++;
+			}
+			break;
+		//end of talking to man
+		case 12:
+			SpeakTimer += dt;
+			rotate_Man = 90;
+			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+				SpeakTimer = 0;
+				camera.can_move = true;
+				SpeakPhase = 0;
+			}
 			break;
 	}
 
@@ -517,7 +624,6 @@ void SceneSP2Main::Update(double dt)
 	}
 
 	//ghost
-	
 	switch (ghost.state)
 	{
 	case Ghost::NORMAL:
@@ -1068,6 +1174,14 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();
 
+	//Mysterious man(npc)
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 20);
+	modelStack.Rotate(rotate_Man, 0, 1, 0);
+	modelStack.Scale(2.8, 2.8, 2.8);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+
 	//UI OVERLAY
 
 	//Vision vignette
@@ -1082,17 +1196,48 @@ void SceneSP2Main::Render()
 	//speeches
 	switch (SpeakPhase)
 	{
+	//default
 	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 5);
-		break;
-	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(1, 1, 0), 4, 10, 5);
-		break;
-	case 2:
 		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 10, 5);
 		break;
+	//starting phase
+	case 1:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 2:
+		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 3:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Um...Excuse me sir?", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 4:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Ah, Hello! I didn't notice you were behind me.", Color(0, 0, 0), 4, 10, 1.8);
+		break;
+	case 5:
+		RenderTextOnScreen(meshList[GEO_TEXT], "I didn't know people still come to this place...", Color(0, 0, 0), 4, 10, 1.8);
+		break;
+	case 6:
+		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about strange occurences happening around here. Is that true sir?", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 7:
+		RenderTextOnScreen(meshList[GEO_TEXT], "...", Color(0, 0, 0), 4, 10, 1.8);
+		break;
+	case 8:
+		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0, 0, 0), 4, 10, 1.8);
+		break;
+	case 9:
+		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 10:
+		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0, 0, 0), 4, 10, 1.8);
+		break;
+	case 11:
+		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(1, 1, 0), 4, 10, 1.8);
+		break;
+	case 12:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
+		break;
 	}
-
 
 	//objectives screen
 	RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 4, 1, 10);
@@ -1107,7 +1252,25 @@ void SceneSP2Main::Render()
 		break;
 	}
 
+	//interaction sentences
+	switch (Interact_Num)
+	{
+	case 0:
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 1, 9);
+		break;
+	case 1:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Talk to man", Color(1, 1, 0), 4, 22, 5);
+		break;
+	}
 
+	//camera position
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
+
+	//debug info
+	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(campos_x)+", "+ std::to_string(campos_y) + ", " + std::to_string(campos_z), Color(0, 1, 0), 4, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(SpeakTimer), Color(0, 1, 0), 4, 0, 5);
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
