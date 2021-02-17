@@ -227,6 +227,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Building", "OBJ//lamppost.obj");
 	meshList[GEO_LAMP]->textureID = LoadTGA("Assigment2Images//metal.tga");
 	meshList[GEO_LAMP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BENCH] = MeshBuilder::GenerateOBJ("Bench", "OBJ//ParkBench.obj");
+	meshList[GEO_BENCH]->textureID = LoadTGA("Assigment2Images//benchtexture.tga");
+	meshList[GEO_BENCH]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//paths and deco
@@ -1313,7 +1316,6 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
-
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 
 	//render chatbox
