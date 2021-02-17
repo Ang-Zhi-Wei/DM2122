@@ -619,7 +619,6 @@ void SceneSP2Main::Update(double dt)
 		Fpressed = false;
 	}
 	//Locker
-
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
@@ -638,7 +637,6 @@ void SceneSP2Main::Update(double dt)
 				inLocker = true;
 			}
 		}
-
 	}
 
 	//fps
@@ -1152,7 +1150,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -1, 0);

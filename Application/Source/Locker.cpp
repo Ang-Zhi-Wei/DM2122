@@ -4,6 +4,7 @@ Locker::Locker()
 {
 	Position = (0, 0, 0);
 	hidden = false;
+	yaw = 0;
 }
 
 void Locker::setpos(Vector3 Position)
@@ -52,5 +53,15 @@ void Locker::Sethidden(bool hidden)
 bool Locker::gethidden()
 {
 	return hidden;
+}
+
+void Locker::setyaw(float yaw)
+{
+	this->yaw = yaw;
+}
+
+float Locker::getyaw()
+{
+	return yaw;
 }
 
