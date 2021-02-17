@@ -1237,7 +1237,7 @@ void SceneSP2Main::Render()
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
 	}
-
+	//man
 	//speeches
 	switch (SpeakPhase)
 	{
