@@ -58,6 +58,7 @@ public:
 		GEO_FOUNTAIN,
 		GEO_BENCH,
 		locker,
+		GEO_MYSTERIOUSMAN,
 
 		GEO_LAMP,
 
@@ -80,6 +81,7 @@ public:
 		GEO_BATTERY,
 		GEO_SELECT,
 		GEO_ITEMIMAGE,
+		GEO_ITEMDISPLAY,
 
 		//paths
 		GEO_CENTRE,
@@ -151,7 +153,8 @@ public:
 		U_LIGHT3_COSCUTOFF,
 		U_LIGHT3_COSINNER,
 		U_LIGHT3_EXPONENT,
-		
+	
+
 		U_TOTAL,
 
 	};
@@ -159,6 +162,10 @@ public:
 private:
 
 	int lockernum;
+	float rotate_Man;
+	bool is_talking;
+
+
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -307,11 +314,18 @@ private:
 	bool flashlight;
 	float flashlight_lifetime;
 	bool inLocker;
+	bool canTalk_man;
 
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	int Interact_Num;
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
 
 	Ghost ghost;
 	Inventory inventory;
