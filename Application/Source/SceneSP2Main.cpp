@@ -347,6 +347,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
 	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
 	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
+	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -628,13 +630,16 @@ void SceneSP2Main::Update(double dt)
 	}
 	if (flashlight)
 	{
-		if (flashlight_lifetime >= 0)
+		if (flashlight_lifetime > 0)
 		{
 			flashlight_lifetime -= dt;
 		}
 		else
 		{
 			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
 
@@ -647,6 +652,7 @@ void SceneSP2Main::Update(double dt)
 	}
 	if (inventory.open)
 	{
+		camera.can_move = false;
 		if (Areleased)
 		{
 			inventory.selected--;

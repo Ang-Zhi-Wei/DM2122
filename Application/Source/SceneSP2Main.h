@@ -80,6 +80,7 @@ public:
 		GEO_BATTERY,
 		GEO_SELECT,
 		GEO_ITEMIMAGE,
+		GEO_ITEMDISPLAY,
 
 		//paths
 		GEO_CENTRE,
