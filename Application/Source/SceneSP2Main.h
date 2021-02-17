@@ -56,16 +56,15 @@ public:
 		GEO_ROAD,
 		GEO_TREES,
 		GEO_FOUNTAIN,
-		Ruins,
 		locker,
 
 		GEO_LAMP,
 
 		GEO_TRUCK,
-
+		Fountain,
 		//colliderbox 
 		Colliderbox,
-		Fountain,
+		
 
 		//UI tings
 		GEO_TEXT,
@@ -271,8 +270,6 @@ private:
 
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
