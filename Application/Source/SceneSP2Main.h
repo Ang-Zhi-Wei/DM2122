@@ -56,6 +56,7 @@ public:
 		GEO_ROAD,
 		GEO_TREES,
 		GEO_FOUNTAIN,
+		GEO_BENCH,
 		locker,
 
 		GEO_LAMP,
@@ -73,6 +74,8 @@ public:
 		GEO_BAR, //stamina
 		GEO_STAMINA,
 		GEO_CHATBOX,
+		GEO_SIDEBOX,
+		
 
 		//paths
 		GEO_CENTRE,
@@ -165,6 +168,7 @@ private:
 	float fps;
 	bool Fpressed, Freleased;
 	bool showChatbox;
+	bool showSideBox;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	struct Item

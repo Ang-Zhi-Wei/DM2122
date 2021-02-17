@@ -20,6 +20,7 @@ void SceneSP2Main::Init()
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
+	showSideBox = true;
 	SpeakPhase = 0;
 	SpeakTimer = 0;
 	ObjectivePhase = 0;
@@ -33,7 +34,7 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, 270), Vector3(0, 5, 250), Vector3(0, 1,
+	camera.Init(Vector3(0, 15, 270), Vector3(0, 15, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -217,6 +218,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Building", "OBJ//lamppost.obj");
 	meshList[GEO_LAMP]->textureID = LoadTGA("Assigment2Images//metal.tga");
 	meshList[GEO_LAMP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BENCH] = MeshBuilder::GenerateOBJ("Building", "OBJ//ParkBench.obj");
+	meshList[GEO_BENCH]->textureID = LoadTGA("Assigment2Images//benchtexture.tga");
+	meshList[GEO_BENCH]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//paths and deco
@@ -338,6 +343,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
 
 
@@ -349,6 +356,7 @@ void SceneSP2Main::Init()
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	//colliders
+
 	//tree colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(10, 20, 10);
@@ -441,7 +449,6 @@ void SceneSP2Main::Update(double dt)
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 				SpeakPhase++;
 				SpeakTimer = 0;
-				showChatbox = false;
 			}
 			break;
 		case 1:
@@ -719,15 +726,21 @@ void SceneSP2Main::Render()
 	modelStack.Scale(900, 1, 900);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
+
 	//destroyed small building
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -4, -230);
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[Ruins], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
+=======
+	//Any one Collider,must make sure correct Colliderlist is entered;
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
+>>>>>>> 45a959a10d9768e497d9b1e4cc14a4630d6df4fe
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -1036,11 +1049,67 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-40, 5, -80);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-40, 5, -170);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(40, 5, -80);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(40, 5, -170);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	//
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-40, 5, 80);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-40, 5, 170);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(40, 5, 80);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(40, 5, 170);
+	modelStack.Rotate(180,0,1,0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_BENCH], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
 	modelStack.PopMatrix();
+
+
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0,-1, 0);
@@ -1083,7 +1152,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_PATH], true);
 	modelStack.PopMatrix();
 
-
+	
 
 	//lockers
 	for (int i = 0; i < Lockerlist.size(); i++) {
@@ -1131,25 +1200,29 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 2:
-		if (showChatbox == true) {
-			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
-		}
 		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 40, 5);
 		break;
 	}
 
 
 	//objectives screen
-	RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 4, 1, 10);
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10, 35, 1, 1.5);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 3.5, 1, 10.1);
+	}
 	//objectives
 	switch (ObjectivePhase)
 	{
 	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 1, 9);
-		break;
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 0.8, 7.9);
+			break;
+		}
 	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Investigate the area", Color(1, 1, 0), 3, 3, 12);
-		break;
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Investigate the area", Color(1, 1, 0), 3, 1.5, 10.3);
+			break;
+		}
 	}
 
 
