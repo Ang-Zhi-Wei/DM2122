@@ -326,11 +326,6 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
-
-	//ruins
-	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
-	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
-	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
 
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
@@ -351,12 +346,22 @@ void SceneSP2Main::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
-	//collidertest
+	//colliders
+	//trees
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(42, 20, 97);
-	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	Colliderlist[0].setlength(10, 20, 10);
+	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(10, 20, 10);
+	Colliderlist[1].Setposition(Vector3(120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(10, 20, 10);
+	Colliderlist[2].Setposition(Vector3(-120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(10, 20, 10);
+	Colliderlist[3].Setposition(Vector3(120, 5, -100));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[1].getxlength(), Colliderlist[1].getylength(), Colliderlist[1].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -364,8 +369,8 @@ void SceneSP2Main::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of lockers
-	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
+	//Lockerlist.push_back(Locker());
+	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 }
@@ -682,15 +687,9 @@ void SceneSP2Main::Render()
 	modelStack.Scale(900, 1, 900);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
-	//destroyed small building
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -4, -230);
-	modelStack.Scale(8, 8, 8);
-	RenderMesh(meshList[Ruins], true);
-	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
+	modelStack.Translate(Colliderlist[1].getPosition().x, Colliderlist[1].getPosition().y, Colliderlist[1].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -931,7 +930,7 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -939,14 +938,14 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-120, 5, 100);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -954,7 +953,7 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(50, -4, -35);
