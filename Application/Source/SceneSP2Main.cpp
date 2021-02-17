@@ -368,9 +368,6 @@ void SceneSP2Main::Init()
 	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
 }
 
 void SceneSP2Main::Update(double dt)

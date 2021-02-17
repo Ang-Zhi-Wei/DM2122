@@ -269,8 +269,6 @@ private:
 
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
