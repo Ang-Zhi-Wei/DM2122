@@ -146,24 +146,26 @@ void SceneSP2Room1::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//terrain
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
+	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga"); //At time of typing this, I haven't sent it yet
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
-
+	
 
 
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Images//Arial.tga");
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
 	light[0].color.Set(White);
-	light[0].power = 1;
+	light[0].power = 0; //Tbc
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -185,8 +187,8 @@ void SceneSP2Room1::Init()
 	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
 	light[1].power = 2;
-	light[1].kC = 1.f;
-	light[1].kL = 0.01f;
+	light[1].kC = 1.0f;
+	light[1].kL = 0.9f;
 	light[1].kQ = 0.001f;
 	light[1].cosCutoff = cos(Math::DegreeToRadian(7));
 	light[1].cosInner = cos(Math::DegreeToRadian(1));
@@ -233,19 +235,55 @@ void SceneSP2Room1::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
-	//collidertest
+	//wall colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(42, 20, 97);
-	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	Colliderlist[0].setlength(1, 20, 100);
+	Colliderlist[0].Setposition(Vector3(-10, 10, 220));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(1, 20, 100);
+	Colliderlist[1].Setposition(Vector3(10, 10, 220));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(1, 20, 75);
+	Colliderlist[2].Setposition(Vector3(-10, 10, 132.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(1, 20, 75);
+	Colliderlist[3].Setposition(Vector3(65, 10, 132.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(70, 20, 1);
+	Colliderlist[4].Setposition(Vector3(30, 10, 170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(70, 20, 1);
+	Colliderlist[5].Setposition(Vector3(25, 10, 95));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(1, 20, 30);
+	Colliderlist[6].Setposition(Vector3(52.5, 10, 80));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(1, 20, 30);
+	Colliderlist[7].Setposition(Vector3(92.5, 10, 80));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(40, 20, 1);
+	Colliderlist[8].Setposition(Vector3(72.5, 10, 65));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(22, 20, 1);
+	Colliderlist[9].Setposition(Vector3(76.5, 10, 95));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(1, 20, 75);
+	Colliderlist[10].Setposition(Vector3(72, 10, 132.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(1, 20, 75);
+	Colliderlist[11].Setposition(Vector3(92.5, 10, 132.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[12].setlength(25, 20, 1);
+	Colliderlist[12].Setposition(Vector3(82.5, 10, 170));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	//list of lockers.vvvvvvvvvvvvvvvvvvvvvvvvvvvbbbbbbbbbbbbbbbbbbbbbbbb
+	//list of lockers
 	//Lockerlist.push_back(Locker());
 	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
@@ -484,12 +522,11 @@ void SceneSP2Room1::Render()
 	//skybox
 	RenderSkybox();
 
-
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
-	//RenderMesh(meshList[Colliderbox], false);
-	//modelStack.PopMatrix();
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();*/
 
 
 
@@ -508,6 +545,23 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
+	
+	//Left wall
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10, 10, 220);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 100);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+	//right wall
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 10, 220);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 100);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
 
 	//Living room
 	modelStack.PushMatrix();
@@ -515,7 +569,39 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(75, 1, 75);
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
+
+	//Right wall
+	modelStack.PushMatrix();
+	modelStack.Translate(-10, 10, 132.5);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 75);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
+	//Left wall
+	modelStack.PushMatrix();
+	modelStack.Translate(65, 10, 132.5);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 75);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
 	
+	//Back wall
+	modelStack.PushMatrix();
+	modelStack.Translate(30, 10, 170);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(70, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
+	//Front wall
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 10, 95);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(70, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
 	//Connecting room
 	modelStack.PushMatrix();
 	modelStack.Translate(72.5, 0, 80);
@@ -523,14 +609,73 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
 
+	//Left wall
+	modelStack.PushMatrix();
+	modelStack.Translate(52.5, 10, 80);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 30);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(92.5, 10, 80);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 30);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+	
+	//Front wall
+	modelStack.PushMatrix();
+	modelStack.Translate(72.5, 10, 65);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(40, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+	
+	//Back wall
+	modelStack.PushMatrix();
+	modelStack.Translate(76.5, 10, 95);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(22, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
+
+
 	//Hall 2
 	modelStack.PushMatrix();
 	modelStack.Translate(82.5, 0, 132.5);
 	modelStack.Scale(20, 1, 75);
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(72, 10, 132.5);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 75);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
 
-	//Floor Start
+	modelStack.PushMatrix();
+	modelStack.Translate(92.5, 10, 132.5);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(20, 1, 75);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
+	modelStack.PushMatrix();
+	modelStack.Translate(82.5, 10, 170);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Scale(25, 1, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(27.5, 20, 132.5);
+	modelStack.Scale(300, 1, 300);
+	RenderMesh(meshList[GEO_CEILING], true);
+	modelStack.PopMatrix();
 	//UI OVERLAY
 
 	//Vision vignette
