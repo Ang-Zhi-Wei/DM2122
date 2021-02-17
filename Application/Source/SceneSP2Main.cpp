@@ -719,14 +719,8 @@ void SceneSP2Main::Render()
 	modelStack.Scale(900, 1, 900);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
-	//destroyed small building
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -4, -230);
-	modelStack.Scale(8, 8, 8);
-	RenderMesh(meshList[Ruins], true);
-	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
