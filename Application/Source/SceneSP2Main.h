@@ -58,6 +58,7 @@ public:
 		GEO_FOUNTAIN,
 		GEO_BENCH,
 		locker,
+		GEO_MYSTERIOUSMAN,
 
 		GEO_LAMP,
 
@@ -151,6 +152,8 @@ public:
 		U_LIGHT3_COSCUTOFF,
 		U_LIGHT3_COSINNER,
 		U_LIGHT3_EXPONENT,
+
+
 		
 		U_TOTAL,
 
@@ -166,9 +169,10 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[4];
+	Light light[5];
 	CameraSP2 camera;
 	float LSPEED;
+	float rotate_Man;
 	float fps;
 	bool Fpressed, Freleased;
 	bool showChatbox;
@@ -313,6 +317,14 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+
+	int Interact_Num;
+	bool canTalk_man;
+
 	Ghost ghost;
 	Inventory inventory;
 	Vector3 temp;
@@ -324,6 +336,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderBuilding();
 };
 
 #endif
