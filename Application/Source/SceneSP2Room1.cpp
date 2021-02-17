@@ -20,7 +20,8 @@ void SceneSP2Room1::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
-
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -257,7 +258,7 @@ void SceneSP2Room1::Init()
 void SceneSP2Room1::Update(double dt)
 {
 	//camera dot blink logic (not the best, but works)
-	if (camBlinkOff && camBlinkOff >= 0.5)
+	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
 		camBlinkOn = true;
 		camBlinkOff = false;
