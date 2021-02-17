@@ -379,9 +379,16 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[9].setlength(5, 20, 5);
 	Colliderlist[9].Setposition(Vector3(45, -4, 130));
-
+	//fountain collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(33, 20, 30);
+	Colliderlist[10].Setposition(Vector3(0, -3, 0));
+	//truck collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(42, 20, 28);
+	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[4].getxlength(), Colliderlist[4].getylength(), Colliderlist[4].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -708,10 +715,10 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[4].getPosition().x, Colliderlist[4].getPosition().y, Colliderlist[4].getPosition().z);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 
 	//front
