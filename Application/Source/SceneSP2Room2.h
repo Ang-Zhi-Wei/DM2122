@@ -45,6 +45,9 @@ public:
 
 		//colliderbox 
 		Colliderbox,
+		
+		//locker
+		locker,
 
 		//UI tings
 		GEO_TEXT,
@@ -248,8 +251,8 @@ private:
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
-	
-
+	std::vector<Locker>Lockerlist;
+	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

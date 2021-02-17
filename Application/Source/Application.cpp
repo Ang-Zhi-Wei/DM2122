@@ -68,7 +68,11 @@ void Application::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
+
+	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
+
 	//FullScreen
+
 	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);

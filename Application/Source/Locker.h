@@ -11,8 +11,11 @@ public:
 	bool status(Vector3 Point,Vector3 cameraview,bool fpressed);
 	void Sethidden(bool hidden);
 	bool gethidden();
+	void setyaw(float yaw);
+	float getyaw();
 private:
 	Vector3 Position;
+	float yaw;
 	bool hidden;
 };
 
