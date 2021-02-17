@@ -6,6 +6,7 @@
 #include "LoadTGA.h"
 #include <sstream>
 
+
 SceneSP2Room1::SceneSP2Room1()
 {
 }
@@ -17,6 +18,10 @@ SceneSP2Room1::~SceneSP2Room1()
 
 void SceneSP2Room1::Init()
 {
+	camBlinkOn = true;
+	camBlinkOff = false;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -26,7 +31,7 @@ void SceneSP2Room1::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, 270), Vector3(0, 0, 250), Vector3(0, 1,
+	camera.Init(Vector3(0, 5, 270), Vector3(0, 5, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -81,6 +86,7 @@ void SceneSP2Room1::Init()
 		"lights[1].kL");
 	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID,
 		"lights[1].kQ");
+
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -113,43 +119,51 @@ void SceneSP2Room1::Init()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID,
 		"textColor");
 	Mtx44 projection;
-	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 1000.f);
+	projection.SetToPerspective(46.f, 4.f / 3.f, 0.1f, 2000.f);
 	projectionStack.LoadMatrix(projection);
 	glUseProgram(m_programID);
 	//mesh
-	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, White);
+	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, Yellow);
+
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Nighnt//front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Nightn//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Nighnt//back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Nightn//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Nighnt//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Nightn//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Nighnt//right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Nightn//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Nighnt//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Nightn//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Nighnt//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Nightn//bottom.tga");
+
+	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	//paths and deco
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
-	meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Imagens//GroundMesh.tga");
-	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
-	
-	//House layout
+	//terrain
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Assigment2Images//stoneWalls.tga");
+	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
+
+
+
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
 	//light 0
-	light[0].type = Light::LIGHT_DIRECTIONAL;
-	light[0].position.Set(0, 20, 0);
+	light[0].type = Light::LIGHT_POINT;
+	light[0].position.Set(0, 7, 270);
 	light[0].color.Set(White);
-	light[0].power = 0.2;
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -157,7 +171,7 @@ void SceneSP2Room1::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1,&light[0].color.r);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
 	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
 	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
@@ -167,19 +181,18 @@ void SceneSP2Room1::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	//light 1
-	light[1].type = Light::LIGHT_POINT;
-	light[1].position.Set(7.75,0.5 , -175);
+	light[1].type = Light::LIGHT_SPOT;
+	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
-	light[1].power = 1;
+	light[1].power = 2;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].cosCutoff = cos(Math::DegreeToRadian(7));
+	light[1].cosInner = cos(Math::DegreeToRadian(1));
 	light[1].exponent = 3.f;
-	light[1].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,
-		&light[1].color.r);
+	light[1].spotDirection.Set(0.f, -1.f, 0.f);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
 	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
@@ -188,12 +201,8 @@ void SceneSP2Room1::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-	
-	//Set Material locations
-	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
-		m_parameters[U_MATERIAL_DIFFUSE],
-		m_parameters[U_MATERIAL_SPECULAR],
-		m_parameters[U_MATERIAL_SHININESS]);
+
+
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -201,10 +210,23 @@ void SceneSP2Room1::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
-	//vignette
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
+
+	//UI
+
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+
+
+
+
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
@@ -212,17 +234,54 @@ void SceneSP2Room1::Init()
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	//collidertest
-	Ruincollider.setlength(42, 20, 97);
-	Ruincollider.Setposition(Vector3(0, 5, -227));
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Ruincollider.getxlength(), Ruincollider.getylength(), Ruincollider.getzlength());
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(42, 20, 97);
+	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	//colliderbox for checking any collider(just one)
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	//list of colliders
+	camera.setchecker(Colliderlist);
+	//Locker test
+	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
+	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
+	//list of lockers.vvvvvvvvvvvvvvvvvvvvvvvvvvvbbbbbbbbbbbbbbbbbbbbbbbb
+	//Lockerlist.push_back(Locker());
+	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
-	camera.SetBounds(-300, 300, -300, 300);
-	bool switchtga1;
+	camera.SetBounds(-415, 415, -365, 360);
+	//loadtga should only call when necessary
+	switchtga1 = false;
+	switchtga2 = false;
 }
 
 void SceneSP2Room1::Update(double dt)
 {
-	
+	//camera dot blink logic (not the best, but works)
+	if (camBlinkOff && camBlinkOffSec >= 0.5)
+	{
+		camBlinkOn = true;
+		camBlinkOff = false;
+		camBlinkOffSec = 0;
+		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	}
+	if (camBlinkOn)
+	{
+		camBlinkOnSec += dt;
+	}
+	if (camBlinkOff)
+	{
+		camBlinkOffSec += dt;
+	}
+	if (camBlinkOn && camBlinkOnSec >= 0.5)
+	{
+		camBlinkOff = true;
+		camBlinkOn = false;
+		camBlinkOnSec = 0;
+		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+	}
+
+
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -246,23 +305,123 @@ void SceneSP2Room1::Update(double dt)
 		if (Qpressed)
 		{
 			Qreleased = true;
+
 		}
 		Qpressed = false;
 	}
-
-
-	if (Qreleased)
+	if (Application::IsKeyPressed('F'))
 	{
-		flashlight = !flashlight;
-		Qreleased = false;
+		Fpressed = true;
+		Freleased = false;
 	}
-	
+	else
+	{
+		if (Fpressed)
+		{
+			Freleased = true;
+		}
+		Fpressed = false;
+	}
+	//Locker
+
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		if (Lockerlist[i].gethidden() == true) {
+			if (Fpressed) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(temp);
+				glEnable(GL_CULL_FACE);
+				inLocker = false;
+			}
+		}
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
+			if (Lockerlist[i].gethidden() == false) {
+				Lockerlist[i].Sethidden(true);
+				temp.Set(camera.position.x, camera.position.y, camera.position.z);
+				camera.teleport(Lockerlist[i].getpos());
+				glDisable(GL_CULL_FACE);//To see the inside of the locker
+				inLocker = true;
+			}
+		}
+
+	}
+
 	//fps
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
-	
-	
+	//light
+	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
+	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
+	light[1].spotDirection = -1 * camera.view;
+
+	//toggle flashlight on/off
+	if (Qreleased)
+	{
+		flashlight = !flashlight;
+		Qreleased = false;
+		//updates if flashlight status changes
+		if (flashlight)
+		{
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
+		else
+		{
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+		}
+		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+
+	//ghost
+
+	switch (ghost.state)
+	{
+	case Ghost::NORMAL:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 20)
+		{
+			ghost.state = Ghost::CHASING;
+			ghost.speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost.facing = (camera.position - ghost.pos).Normalized();
+		ghost.distance = (camera.position - ghost.pos).Length();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance <= 3 && inLocker)
+		{
+			ghost.state = Ghost::WAITING;
+			ghost.waitTime = 5;
+		}
+		else if (ghost.distance <= 1)
+		{
+			//TBC
+			//end game condition met, either that or HP - 1
+		}
+		break;
+	case Ghost::WAITING:
+		ghost.waitTime -= dt;
+		if (ghost.waitTime <= 0)
+		{
+			ghost.state = Ghost::SPEEDRUN;
+			ghost.speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost.facing = (ghost.pos - camera.position).Normalized();
+		ghost.UpdateMovement(dt);
+		if (ghost.distance > 300 || !inLocker)
+		{
+			ghost.state = Ghost::NORMAL;
+			ghost.speed = 5;
+		}
+		break;
+
+	}
+
 }
 
 void SceneSP2Room1::Render()
@@ -280,6 +439,7 @@ void SceneSP2Room1::Render()
 		modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
 		&MVP.a[0]);
+
 	//light
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -324,42 +484,52 @@ void SceneSP2Room1::Render()
 	//skybox
 	RenderSkybox();
 
-	//House layout
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 250);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(100, 1, 20);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
 
+	//Any one Collider,must make sure correct Colliderlist is entered;
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
+	//RenderMesh(meshList[Colliderbox], false);
+	//modelStack.PopMatrix();
+
+
+
+	//lockers
+	//for (int i = 0; i < Lockerlist.size(); i++) {
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+	//	modelStack.Scale(0.2, 0.2, 0.2);
+	//	RenderMesh(meshList[locker], true);
+	//	modelStack.PopMatrix();
+	//}
+
+	//Floor Start
 	//UI OVERLAY
-	//vision vignette
-	//UI OVERLAY
+
 	//Vision vignette
-
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
-	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - camera.playerStamina * 0.5), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 
-	//std::ostringstream test1;
-	//test1 << "camera view target: " << camera.viewTarget;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	//std::ostringstream test3;
-	//test3 << "camera target: " << camera.target;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+
+
+
+
+
+	/*std::ostringstream test1;
+	test1 << "camera view: " << camera.view;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	std::ostringstream test3;
+	test3 << "light[1]spotdirec: " << light[1].spotDirection;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
 	//std::ostringstream test2;
 	//test2 << "camera view: " << camera.view;
 	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
-
-	//Coordinates
-	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 }
 
 void SceneSP2Room1::Exit()
@@ -373,48 +543,58 @@ void SceneSP2Room1::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 1.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, 2.0f + camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -1.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, -2.0f + camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-1.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-1.5f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, -3.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 1.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 2.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
 
 
+
+//void SceneSP2Room1::RenderDeadTree(int x, int z,float rotate)
+//{
+//	modelStack.PushMatrix();
+//	modelStack.Translate(x, -5, z);
+//	modelStack.Rotate(rotate, 0, 0, 1);
+//	modelStack.Scale(5, 5, 5);
+//	RenderMesh(meshList[Deadtrees], true);
+//	modelStack.PopMatrix();
+//}
 
 void SceneSP2Room1::RenderMesh(Mesh* mesh, bool enableLight)
 {
@@ -539,7 +719,7 @@ void SceneSP2Room1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 
 }
 
-void SceneSP2Room1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void SceneSP2Room1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
@@ -559,7 +739,3 @@ void SceneSP2Room1::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int 
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-
-
-
-

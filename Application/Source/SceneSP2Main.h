@@ -56,16 +56,16 @@ public:
 		GEO_ROAD,
 		GEO_TREES,
 		GEO_FOUNTAIN,
-		Ruins,
+		GEO_BENCH,
 		locker,
 
 		GEO_LAMP,
 
 		GEO_TRUCK,
-
+		Fountain,
 		//colliderbox 
 		Colliderbox,
-		Fountain,
+		
 
 		//UI tings
 		GEO_TEXT,
@@ -73,6 +73,9 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
+		
 		GEO_INVENTORY,
 		GEO_BATTERY,
 		GEO_SELECT,
@@ -168,6 +171,8 @@ private:
 	float LSPEED;
 	float fps;
 	bool Fpressed, Freleased;
+	bool showChatbox;
+	bool showSideBox;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	bool Apressed, Areleased;
