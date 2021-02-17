@@ -30,6 +30,8 @@ public:
 	float boundX2;
 	float boundZ1;
 	float boundZ2;
+
+	bool can_move;
 	
 	
 	CameraSP2();

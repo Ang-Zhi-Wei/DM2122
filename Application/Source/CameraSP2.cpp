@@ -35,6 +35,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	boundZ2 = 300;
 	playerStamina = 10;
 	cooldown = 1;
+	can_move = true;
 }
 
 void CameraSP2::Update(double dt)
@@ -84,7 +85,126 @@ void CameraSP2::Update(double dt)
 	up = defaultUp;
 	right = view.Cross(up).Normalized();
 	up = right.Cross(view).Normalized();
-	if (Application::IsKeyPressed('W'))
+
+	if (can_move)
+	{
+		if (Application::IsKeyPressed('W'))
+		{
+			if (Application::IsKeyPressed(160) && playerStamina > 0)
+			{
+				CAMERA_SPEED += 20;
+				playerStamina -= 5 * dt;
+				cooldown = 1;
+			}
+			position.x += view.x * CAMERA_SPEED * dt;
+			position.z += view.z * CAMERA_SPEED * dt;
+			rawTarget.x += view.x * CAMERA_SPEED * dt;
+			rawTarget.z += view.z * CAMERA_SPEED * dt;
+			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+				position.x -= view.x * CAMERA_SPEED * dt;
+				position.z -= view.z * CAMERA_SPEED * dt;
+				rawTarget.x -= view.x * CAMERA_SPEED * dt;
+				rawTarget.z -= view.z * CAMERA_SPEED * dt;
+			}
+			for (int i = 0; i < Checker.size(); i++) {
+				if (Checker[i].iscollide(position)) {
+					position.x -= view.x * CAMERA_SPEED * dt;
+					position.z -= view.z * CAMERA_SPEED * dt;
+					rawTarget.x -= view.x * CAMERA_SPEED * dt;
+					rawTarget.z -= view.z * CAMERA_SPEED * dt;
+				}
+			}
+
+			target = rawTarget + viewTarget;
+		}
+		if (Application::IsKeyPressed('A'))
+		{
+			if (Application::IsKeyPressed(160) && playerStamina > 0)
+			{
+				CAMERA_SPEED += 20;
+				playerStamina -= 5 * dt;
+				cooldown = 1;
+			}
+			position.x -= right.x * CAMERA_SPEED * dt;
+			position.z -= right.z * CAMERA_SPEED * dt;
+			rawTarget.x -= right.x * CAMERA_SPEED * dt;
+			rawTarget.z -= right.z * CAMERA_SPEED * dt;
+			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+				position.x += right.x * CAMERA_SPEED * dt;
+				position.z += right.z * CAMERA_SPEED * dt;
+				rawTarget.x += right.x * CAMERA_SPEED * dt;
+				rawTarget.z += right.z * CAMERA_SPEED * dt;
+			}
+			for (int i = 0; i < Checker.size(); i++) {
+				if (Checker[i].iscollide(position)) {
+					position.x += right.x * CAMERA_SPEED * dt;
+					position.z += right.z * CAMERA_SPEED * dt;
+					rawTarget.x += right.x * CAMERA_SPEED * dt;
+					rawTarget.z += right.z * CAMERA_SPEED * dt;
+				}
+			}
+			target = rawTarget + viewTarget;
+		}
+		if (Application::IsKeyPressed('S'))
+		{
+			if (Application::IsKeyPressed(160) && playerStamina > 0)
+			{
+				CAMERA_SPEED += 20;
+				playerStamina -= 5 * dt;
+				cooldown = 1;
+			}
+			position.x -= view.x * CAMERA_SPEED * dt;
+			position.z -= view.z * CAMERA_SPEED * dt;
+			rawTarget.x -= view.x * CAMERA_SPEED * dt;
+			rawTarget.z -= view.z * CAMERA_SPEED * dt;
+			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+				position.x += view.x * CAMERA_SPEED * dt;
+				position.z += view.z * CAMERA_SPEED * dt;
+				rawTarget.x += view.x * CAMERA_SPEED * dt;
+				rawTarget.z += view.z * CAMERA_SPEED * dt;
+			}
+			for (int i = 0; i < Checker.size(); i++) {
+				if (Checker[i].iscollide(position)) {
+					position.x += view.x * CAMERA_SPEED * dt;
+					position.z += view.z * CAMERA_SPEED * dt;
+					rawTarget.x += view.x * CAMERA_SPEED * dt;
+					rawTarget.z += view.z * CAMERA_SPEED * dt;
+				}
+			}
+			target = rawTarget + viewTarget;
+		}
+		if (Application::IsKeyPressed('D'))
+		{
+			if (Application::IsKeyPressed(160) && playerStamina > 0)
+			{
+				CAMERA_SPEED += 20;
+				playerStamina -= 5 * dt;
+				cooldown = 1;
+			}
+			position.x += right.x * CAMERA_SPEED * dt;
+			position.z += right.z * CAMERA_SPEED * dt;
+			rawTarget.x += right.x * CAMERA_SPEED * dt;
+			rawTarget.z += right.z * CAMERA_SPEED * dt;
+			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
+				position.x -= right.x * CAMERA_SPEED * dt;
+				position.z -= right.z * CAMERA_SPEED * dt;
+				rawTarget.x -= right.x * CAMERA_SPEED * dt;
+				rawTarget.z -= right.z * CAMERA_SPEED * dt;
+			}
+			for (int i = 0; i < Checker.size(); i++) {
+				if (Checker[i].iscollide(position)) {
+					position.x -= right.x * CAMERA_SPEED * dt;
+					position.z -= right.z * CAMERA_SPEED * dt;
+					rawTarget.x -= right.x * CAMERA_SPEED * dt;
+					rawTarget.z -= right.z * CAMERA_SPEED * dt;
+				}
+			}
+			target = rawTarget + viewTarget;
+		}
+	}
+
+
+	/*if (Application::IsKeyPressed('W'))
 	{
 		if (Application::IsKeyPressed(160) && playerStamina > 0)
 		{
@@ -196,7 +316,7 @@ void CameraSP2::Update(double dt)
 			}
 		}
 		target = rawTarget + viewTarget;
-	}
+	}*/
 
 	
 }
