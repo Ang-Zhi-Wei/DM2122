@@ -342,13 +342,6 @@ void SceneSP2Main::Init()
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
 
-	//ruins
-	/*meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
-	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
-	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);*/
-
-	//UI
-
 
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
@@ -1206,7 +1199,6 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
-	//
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 5, 80);
