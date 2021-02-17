@@ -73,6 +73,10 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_INVENTORY,
+		GEO_BATTERY,
+		GEO_SELECT,
+		GEO_ITEMIMAGE,
 
 		//paths
 		GEO_CENTRE,
@@ -166,15 +170,46 @@ private:
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
+	bool Apressed, Areleased;
+	bool Dpressed, Dreleased;
+	bool Rpressed, Rreleased;
 	struct Item
 	{
+		enum ITEM_TYPE
+		{
+			BATTERY,
+			ITEM2,
+			ITEM3
+		};
+		Vector3 pos;
+		const char* image;
+		ITEM_TYPE name;
+		std::string description;
 
+		Item(Vector3 pos, ITEM_TYPE name, const char* image, std::string description)
+		{
+			this->pos = pos;
+			this->name = name;
+			this->image = image;
+			this->description = description;
+		}
 	};
 
 	struct Inventory
 	{
-		Item* selected;
-		Item* inventory[10];
+		int selected;
+		Item* items[8];
+		bool open;
+
+		Inventory()
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				items[i] = nullptr;
+			}
+			open = false;
+			selected = 0;
+		}
 	};
 
 	struct Ghost
@@ -265,20 +300,21 @@ private:
 
 	//game related vars
 	bool flashlight;
+	float flashlight_lifetime;
 	bool inLocker;
 
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
 	Ghost ghost;
+	Inventory inventory;
 	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	void UseItem(int itemtype);
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

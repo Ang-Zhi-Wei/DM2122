@@ -335,11 +335,17 @@ void SceneSP2Main::Init()
 
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
+	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
+	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
+	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
+	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
+	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	
 
 
@@ -348,9 +354,14 @@ void SceneSP2Main::Init()
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
+	flashlight_lifetime = 90;
+	inLocker = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 	//collidertest
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(42, 20, 97);
@@ -368,9 +379,7 @@ void SceneSP2Main::Init()
 	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
+	
 }
 
 void SceneSP2Main::Update(double dt)
@@ -465,8 +474,64 @@ void SceneSP2Main::Update(double dt)
 		}
 		Fpressed = false;
 	}
-	//Locker
+	if (Application::IsKeyPressed('E'))
+	{
+		Epressed = true;
+		Ereleased = false;
+	}
+	else
+	{
+		if (Epressed)
+		{
+			Ereleased = true;
+		}
+		Epressed = false;
+	}
+	if (Application::IsKeyPressed('A'))
+	{
+		Apressed = true;
+		Areleased = false;
+	}
+	else
+	{
+		if (Apressed)
+		{
+			Areleased = true;
 
+		}
+		Apressed = false;
+	}
+	if (Application::IsKeyPressed('D'))
+	{
+		Dpressed = true;
+		Dreleased = false;
+	}
+	else
+	{
+		if (Dpressed)
+		{
+			Dreleased = true;
+
+		}
+		Dpressed = false;
+	}
+	if (Application::IsKeyPressed('R'))
+	{
+		Rpressed = true;
+		Rreleased = false;
+	}
+	else
+	{
+		if (Rpressed)
+		{
+			Rreleased = true;
+
+		}
+		Rpressed = false;
+	}
+
+
+	//Locker
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
@@ -500,24 +565,65 @@ void SceneSP2Main::Update(double dt)
 	//toggle flashlight on/off
 	if (Qreleased)
 	{
-		flashlight = !flashlight;
 		Qreleased = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+		}
+	}
 
-	//ghost
+
+	//inventory
+	if (Ereleased)
+	{
+		inventory.open = !inventory.open;
+		Ereleased = false;
+	}
+	if (inventory.open)
+	{
+		if (Areleased)
+		{
+			inventory.selected--;
+			if (inventory.selected == -1)
+			{
+				inventory.selected = 7;
+			}
+			Areleased = false;
+		}
+		else if (Dreleased)
+		{
+			inventory.selected++;
+			inventory.selected %= 8;
+			Dreleased = false;
+		}
+		else if (Rreleased)
+		{
+			UseItem(inventory.items[inventory.selected]->name);
+		}
+	}
 	
+	//ghost
 	switch (ghost.state)
 	{
 	case Ghost::NORMAL:
@@ -584,85 +690,86 @@ void SceneSP2Main::Render()
 		&MVP.a[0]);
 
 	//light
-	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{
-		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if (light[0].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else if (light[0].type == Light::LIGHT_POINT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+		if (light[0].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
+		}
+		else if (light[0].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+			glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+		}
+		else if (light[0].type == Light::LIGHT_POINT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+			glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 
-	}
-	if (light[1].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if (light[1].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else if (light[1].type == Light::LIGHT_POINT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+		}
+		if (light[1].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
+		}
+		else if (light[1].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+			glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+		}
+		else if (light[1].type == Light::LIGHT_POINT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+			glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 
-	}
+		}
 
-	if (light[2].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if (light[2].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * light[2].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT2_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else if (light[2].type == Light::LIGHT_POINT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
+		if (light[2].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace.x);
+		}
+		else if (light[2].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
+			glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[2].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT2_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+		}
+		else if (light[2].type == Light::LIGHT_POINT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
+			glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 
-	}
+		}
 
-	if (light[3].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if (light[3].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
-		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else if (light[3].type == Light::LIGHT_POINT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
-		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+		if (light[3].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
+		}
+		else if (light[3].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+			glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+		}
+		else if (light[3].type == Light::LIGHT_POINT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+			glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
 
+		}
 	}
-
 	
 	//skybox
 	RenderSkybox();
@@ -1074,11 +1181,18 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina
+	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
-	
+	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
-
+	//battery bar
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	//inventory
+	if (inventory.open)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory.selected * 4, 7.9, 4, 4);
+	}
 	//speeches
 	switch (SpeakPhase)
 	{
@@ -1115,9 +1229,9 @@ void SceneSP2Main::Render()
 	std::ostringstream test3;
 	test3 << "light[1]spotdirec: " << light[1].spotDirection;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
-	//std::ostringstream test2;
-	//test2 << "camera view: " << camera.view;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	/*std::ostringstream test2;
+	test2 << "selected: " << inventory.selected;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -1128,6 +1242,23 @@ void SceneSP2Main::Exit()
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
+}
+
+void SceneSP2Main::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+		if (flashlight_lifetime < 20)
+		{
+			flashlight_lifetime = 90;
+			delete inventory.items[inventory.selected];
+			inventory.items[inventory.selected] = nullptr;
+		} //else warning message?
+		break;
+	case Item::ITEM2:
+		break;
+	}
 }
 
 void SceneSP2Main::RenderSkybox()
