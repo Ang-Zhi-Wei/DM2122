@@ -72,6 +72,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_CHATBOX,
 
 		//paths
 		GEO_CENTRE,
@@ -163,6 +164,7 @@ private:
 	float LSPEED;
 	float fps;
 	bool Fpressed, Freleased;
+	bool showChatbox;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	struct Item

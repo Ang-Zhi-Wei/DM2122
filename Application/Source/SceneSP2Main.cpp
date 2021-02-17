@@ -19,6 +19,7 @@ void SceneSP2Main::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
+	showChatbox = true;
 	SpeakPhase = 0;
 	SpeakTimer = 0;
 	ObjectivePhase = 0;
@@ -335,7 +336,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 
 
 
@@ -439,13 +441,16 @@ void SceneSP2Main::Update(double dt)
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 				SpeakPhase++;
 				SpeakTimer = 0;
+				showChatbox = false;
 			}
 			break;
 		case 1:
 			SpeakTimer += dt;
+			showChatbox = true;
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 				SpeakPhase++;
 				SpeakTimer = 0;
+				showChatbox = false;
 			}
 			break;
 		case 2:
@@ -714,9 +719,15 @@ void SceneSP2Main::Render()
 	modelStack.Scale(900, 1, 900);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
+	//destroyed small building
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -4, -230);
+	modelStack.Scale(8, 8, 8);
+	RenderMesh(meshList[Ruins], true);
+	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -1102,17 +1113,28 @@ void SceneSP2Main::Render()
 	
 	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
 
+	
+
 	//speeches
 	switch (SpeakPhase)
 	{
 	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 2:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 40, 5);
 		break;
 	}
 
