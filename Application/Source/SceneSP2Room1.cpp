@@ -501,6 +501,34 @@ void SceneSP2Room1::Render()
 	//	modelStack.PopMatrix();
 	//}
 
+	//Hall 1
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 220);
+	modelStack.Scale(20, 1, 100);
+	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Living room
+	modelStack.PushMatrix();
+	modelStack.Translate(27.5, 0, 132.5);
+	modelStack.Scale(75, 1, 75);
+	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+	
+	//Connecting room
+	modelStack.PushMatrix();
+	modelStack.Translate(72.5, 0, 80);
+	modelStack.Scale(40, 1, 30);
+	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Hall 2
+	modelStack.PushMatrix();
+	modelStack.Translate(82.5, 0, 132.5);
+	modelStack.Scale(20, 1, 75);
+	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
 	//Floor Start
 	//UI OVERLAY
 
@@ -513,6 +541,9 @@ void SceneSP2Room1::Render()
 
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 
+	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 
 
 
