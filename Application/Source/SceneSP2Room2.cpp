@@ -238,7 +238,15 @@ void SceneSP2Room2::Init()
 	classroom_walls[1].lengthy = 50;
 	classroom_walls[0].lengthy = 25;
 	lounge_walls[0].lengthy = 25;
-
+	//list of lockers
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(48, 0, -30));
+	Lockerlist.push_back(Locker());
+	Lockerlist[1].setpos(Vector3(170, 0, -2));
+	Lockerlist[1].setyaw(-90);
+	Lockerlist.push_back(Locker());
+	Lockerlist[2].setpos(Vector3(-70, 0, -198));
+	Lockerlist[2].setyaw(90);
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(school_walls[1].lengthx, school_walls[1].lengthy, school_walls[1].lengthz);
@@ -264,8 +272,18 @@ void SceneSP2Room2::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz);
 	Colliderlist[7].Setposition(Vector3(lounge_walls[2].mid.x, lounge_walls[2].mid.y, lounge_walls[2].mid.z));
+	//Locker colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(3.9,10,4.3);
+	Colliderlist[8].Setposition(Lockerlist[0].getpos());
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(4.3, 10, 3.9);
+	Colliderlist[9].Setposition(Lockerlist[1].getpos());
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(4.3, 10, 3.9);
+	Colliderlist[10].Setposition(Lockerlist[2].getpos());
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[10].getxlength(), Colliderlist[10].getylength(), Colliderlist[10].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -279,8 +297,10 @@ void SceneSP2Room2::Init()
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
-
-	
+	//Locker mesh
+	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
+	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	
@@ -291,6 +311,7 @@ void SceneSP2Room2::Init()
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
+	
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -322,7 +343,19 @@ void SceneSP2Room2::Update(double dt)
 		}
 		Qpressed = false;
 	}
-
+	if (Application::IsKeyPressed('F'))
+	{
+		Fpressed = true;
+		Freleased = false;
+	}
+	else
+	{
+		if (Fpressed)
+		{
+			Freleased = true;
+		}
+		Fpressed = false;
+	}
 	//fps
 	fps = 1.f / dt;
 	//camera
@@ -420,10 +453,28 @@ void SceneSP2Room2::Update(double dt)
 		break;
 
 	}
+	//Locker
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		if (Lockerlist[i].gethidden() == true) {
+			if (Fpressed) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(temp);
+				glEnable(GL_CULL_FACE);
+				inLocker = false;
+			}
+		}
+		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
+			if (Lockerlist[i].gethidden() == false) {
+				Lockerlist[i].Sethidden(true);
+				temp.Set(camera.position.x, camera.position.y, camera.position.z);
+				camera.teleport(Lockerlist[i].getpos());
+				glDisable(GL_CULL_FACE);//To see the inside of the locker
+				inLocker = true;
+			}
+		}
+	}
+
 	
-
-
-
 	
 }
 
@@ -482,14 +533,24 @@ void SceneSP2Room2::Render()
 
 	}
 	//colliderbox for checking
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
-	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Colliderlist[10].getPosition().x, Colliderlist[10].getPosition().y, Colliderlist[10].getPosition().z);
+	//RenderMesh(meshList[Colliderbox], false);
+	//modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();
 	
+	//lockers
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2, 0.2, 0.2);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
+
 	for (int i = 0; i < 3; i++)
 	{
 		modelStack.PushMatrix();
