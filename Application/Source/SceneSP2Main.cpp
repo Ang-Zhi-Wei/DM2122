@@ -346,7 +346,14 @@ void SceneSP2Main::Init()
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
 	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
-	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE0] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE1] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE2] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE3] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE4] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE5] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE6] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	
@@ -355,6 +362,14 @@ void SceneSP2Main::Init()
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
 
@@ -425,10 +440,17 @@ void SceneSP2Main::Init()
 	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
+
+
+	test.Set((0, 0, 0), Item::ITEM2);
+	test2.Set((0, 0, 0), Item::BATTERY);
+	PickUpItem(&test);
+	PickUpItem(&test2);
 }
 
 void SceneSP2Main::Update(double dt)
 {
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -603,6 +625,7 @@ void SceneSP2Main::Update(double dt)
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -669,9 +692,10 @@ void SceneSP2Main::Update(double dt)
 		}
 		else if (Rreleased)
 		{
-			UseItem(inventory.items[inventory.selected]->name);
+			UseItem(inventory.items[inventory.selected]->type);
 		}
 	}
+
 	
 	//ghost
 	switch (ghost.state)
@@ -1300,7 +1324,23 @@ void SceneSP2Main::Render()
 	if (inventory.open)
 	{
 		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+		
+		for (int i = 0; i < 8; i++)
+		{
+			if (inventory.items[i] != nullptr)
+			{
+				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+			} 
+		}
+		
 		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory.selected * 4, 7.9, 4, 4);
+		if (inventory.items[inventory.selected] != nullptr)
+		{
+			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8);
+		}
+		
 	}
 	//speeches
 	switch (SpeakPhase)
@@ -1380,6 +1420,20 @@ void SceneSP2Main::UseItem(int itemname)
 		break;
 	case Item::ITEM2:
 		break;
+	}
+}
+
+void SceneSP2Main::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory.items[i] == nullptr)
+		{
+			inventory.items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			break;
+		}
 	}
 }
 

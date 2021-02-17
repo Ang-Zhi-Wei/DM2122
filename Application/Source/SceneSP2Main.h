@@ -79,8 +79,16 @@ public:
 		GEO_INVENTORY,
 		GEO_BATTERY,
 		GEO_SELECT,
-		GEO_ITEMIMAGE,
+		
 		GEO_ITEMDISPLAY,
+		GEO_ITEMIMAGE0,
+		GEO_ITEMIMAGE1,
+		GEO_ITEMIMAGE2,
+		GEO_ITEMIMAGE3,
+		GEO_ITEMIMAGE4,
+		GEO_ITEMIMAGE5,
+		GEO_ITEMIMAGE6,
+		GEO_ITEMIMAGE7,
 
 		//paths
 		GEO_CENTRE,
@@ -189,15 +197,28 @@ private:
 		};
 		Vector3 pos;
 		const char* image;
-		ITEM_TYPE name;
+		ITEM_TYPE type;
+		std::string name;
 		std::string description;
 
-		Item(Vector3 pos, ITEM_TYPE name, const char* image, std::string description)
+		void Set(Vector3 pos, ITEM_TYPE type)
 		{
 			this->pos = pos;
-			this->name = name;
-			this->image = image;
-			this->description = description;
+			this->type = type;
+			switch (type)
+			{
+			case BATTERY:
+				this->name = "Battery";
+				this->description = "Use to refill flashlight batteries aaaaaa idk";
+				this->image = "Image//fountaintexture.tga";
+				//set image and description
+				break;
+			case ITEM2:
+				this->name = "AAAAAAA";
+				this->description = "TESTESTTESTETSESTESTESTETST>--|-o";
+				this->image = "Image//man1.tga";
+				break;
+			}
 		}
 	};
 
@@ -209,7 +230,7 @@ private:
 
 		Inventory()
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 8; i++)
 			{
 				items[i] = nullptr;
 			}
@@ -314,12 +335,18 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
+
 	Ghost ghost;
 	Inventory inventory;
+	Item test; //cr8 item here, set in Init
+	Item test2;
+	//Item* all_items[2] = { &test, &test2 };
 	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	Mesh* itemImage[8];
+	void PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
 	void UseItem(int itemtype);
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
