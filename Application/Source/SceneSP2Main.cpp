@@ -476,11 +476,15 @@ void SceneSP2Main::Init()
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 
-
-	test.Set((0, 0, 0), Item::ITEM2);
-	test2.Set((0, 0, 0), Item::BATTERY);
+	//test examples for item
+	test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
+	test2.Set("Battery", (0, 0, 0), Item::BATTERY);
+	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	PickUpItem(&test2); //to be called only in one frame.
 	PickUpItem(&test);
 	PickUpItem(&test2);
+	PickUpItem(&test2);
+
 }
 
 void SceneSP2Main::Update(double dt)
@@ -824,6 +828,7 @@ void SceneSP2Main::Update(double dt)
 	}
 	if (inventory.open)
 	{
+		camera.can_move = false;
 		if (Areleased)
 		{
 			inventory.selected--;
@@ -841,7 +846,12 @@ void SceneSP2Main::Update(double dt)
 		}
 		else if (Rreleased)
 		{
-			UseItem(inventory.items[inventory.selected]->type);
+			if (inventory.items[inventory.selected] != nullptr)
+			{
+				UseItem(inventory.items[inventory.selected]->type);
+			}
+			//else warning that no item selected?
+			Rreleased = false;
 		}
 	}
 
@@ -1285,7 +1295,7 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
 	if (inventory.open)
 	{
@@ -1295,7 +1305,13 @@ void SceneSP2Main::Render()
 		{
 			if (inventory.items[i] != nullptr)
 			{
+				//item icon in inventory
 				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+				//number of item if more than 1
+				if (inventory.items[i]->count > 1)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory.items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
+				}
 			} 
 		}
 		
@@ -1428,27 +1444,48 @@ void SceneSP2Main::UseItem(int itemname)
 		if (flashlight_lifetime < 20)
 		{
 			flashlight_lifetime = 90;
-			delete inventory.items[inventory.selected];
-			inventory.items[inventory.selected] = nullptr;
-		} //else warning message?
+
+			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+			if (inventory.items[inventory.selected]->count > 1)
+			{
+				inventory.items[inventory.selected]->count--;
+			}
+			else
+			{
+				inventory.items[inventory.selected] = nullptr; 
+			}
+		} 
+		//else warning message?
 		break;
 	case Item::ITEM2:
 		break;
 	}
 }
 
-void SceneSP2Main::PickUpItem(Item* item)
+bool SceneSP2Main::PickUpItem(Item* item)
 {
 	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory.items[i] != nullptr)
+		{
+			if (inventory.items[i]->name == item->name)
+			{
+				inventory.items[i]->count++;
+				return true;
+			}
+		}
+	}
 	for (int i = 0; i < 8; i++)
 	{
 		if (inventory.items[i] == nullptr)
 		{
 			inventory.items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			break;
+			return false;
 		}
 	}
+	return false;
 }
 
 void SceneSP2Main::RenderSkybox()

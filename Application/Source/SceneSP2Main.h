@@ -198,27 +198,32 @@ private:
 			BATTERY,
 			ITEM2,
 			ITEM3
+			//add more depending on whta u need, don forget set in Set function
 		};
-		Vector3 pos;
-		const char* image;
-		ITEM_TYPE type;
-		std::string name;
-		std::string description;
+		//Vector3 pos; //only if u plan to reuse struct for rendering
+		const char* image; //image of item in inventory
+		int count;
+		ITEM_TYPE type; //type of item (for reusability e.g 100 batteries; easier setting)
+		std::string name;  //Name that shows up in item display; can also be used to differentiate btw objects of same type but different, eg both keys but unlock diff doors, type = key but name different
+		std::string description; //Short description of item that shows up in item display
 
-		void Set(Vector3 pos, ITEM_TYPE type)
+		Item()
 		{
-			this->pos = pos;
+			count = 1;
+		}
+		void Set(std::string name, Vector3 pos, ITEM_TYPE type)
+		{
+			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
 			this->type = type;
+			this->name = name;
 			switch (type)
 			{
 			case BATTERY:
-				this->name = "Battery";
 				this->description = "Use to refill flashlight batteries aaaaaa idk";
 				this->image = "Image//fountaintexture.tga";
 				//set image and description
 				break;
 			case ITEM2:
-				this->name = "AAAAAAA";
 				this->description = "TESTESTTESTETSESTESTESTETST>--|-o";
 				this->image = "Image//man1.tga";
 				break;
@@ -372,17 +377,17 @@ private:
 
 	Ghost ghost;
 	Inventory inventory;
-	Item test; //cr8 item here, set in Init
+	Item test;
 	Item test2;
-	//Item* all_items[2] = { &test, &test2 };
+
 	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
-	Mesh* itemImage[8];
-	void PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
 	std::vector<trap>traplist;
-	void UseItem(int itemtype);
+	Mesh* itemImage[8];
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
