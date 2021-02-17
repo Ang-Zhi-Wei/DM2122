@@ -17,7 +17,7 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
-	
+
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
@@ -185,7 +185,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_LIGHTBULB]->material.kShininess = 1.f;
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
 	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
@@ -210,13 +210,13 @@ void SceneSP2Main::Init()
 	meshList[GEO_FOUNTAIN] = MeshBuilder::GenerateOBJ("Building", "OBJ//fountain.obj");
 	meshList[GEO_FOUNTAIN]->textureID = LoadTGA("Assigment2Images//fountaintexture.tga");
 	meshList[GEO_FOUNTAIN]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_WATER] = MeshBuilder::Generatesphere("Building",30,30,30,5);
+	meshList[GEO_WATER] = MeshBuilder::Generatesphere("Building", 30, 30, 30, 5);
 	meshList[GEO_WATER]->textureID = LoadTGA("Assigment2Images//water.tga");
 	meshList[GEO_WATER]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_SPAWN] = MeshBuilder::Generatesphere("spawn", 30, 30, 30,5);
+	meshList[GEO_SPAWN] = MeshBuilder::Generatesphere("spawn", 30, 30, 30, 5);
 	meshList[GEO_SPAWN]->textureID = LoadTGA("Assigment2Images//cement.tga");
 	meshList[GEO_SPAWN]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_PATH] = MeshBuilder::GenerateQuad("spawn", 1,1, White);
+	meshList[GEO_PATH] = MeshBuilder::GenerateQuad("spawn", 1, 1, White);
 	meshList[GEO_PATH]->textureID = LoadTGA("Assigment2Images//pavement.tga");
 	meshList[GEO_PATH]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Building", "OBJ//lamppost.obj");
@@ -236,8 +236,8 @@ void SceneSP2Main::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
-	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
-	
+	meshList[Ground_Mesh]->material.kAmbient.Set(0, 0.20, 0.13);
+
 
 	//truck
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
@@ -259,7 +259,7 @@ void SceneSP2Main::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1,&light[0].color.r);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
 	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
 	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
@@ -280,7 +280,7 @@ void SceneSP2Main::Init()
 	light[1].cosInner = cos(Math::DegreeToRadian(1));
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, -1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,&light[1].color.r);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
 	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
@@ -289,7 +289,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-	
+
 	light[2].type = Light::LIGHT_SPOT;
 	light[2].position.Set(40, 30, -34);
 	light[2].color.Set(Yellow);
@@ -301,7 +301,7 @@ void SceneSP2Main::Init()
 	light[2].cosInner = cos(Math::DegreeToRadian(20));
 	light[2].exponent = 3.f;
 	light[2].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1,&light[2].color.r);
+	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
 	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
@@ -331,7 +331,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
 	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
-	
+
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -355,7 +355,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
 	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
 	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
-	
+
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -510,7 +510,7 @@ void SceneSP2Main::Update(double dt)
 			SpeakPhase = 0;
 		}
 		break;
-	
+
 
 		//talking to man part
 	case 3:
@@ -618,7 +618,7 @@ void SceneSP2Main::Update(double dt)
 		if (Qpressed)
 		{
 			Qreleased = true;
-			
+
 		}
 		Qpressed = false;
 	}
@@ -711,7 +711,7 @@ void SceneSP2Main::Update(double dt)
 				inLocker = true;
 			}
 		}
-	
+
 	}
 
 	//fps
@@ -722,7 +722,7 @@ void SceneSP2Main::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
-	
+
 	//toggle flashlight on/off
 	if (Qreleased)
 	{
@@ -783,7 +783,7 @@ void SceneSP2Main::Update(double dt)
 			UseItem(inventory.items[inventory.selected]->name);
 		}
 	}
-	
+
 	//ghost
 	switch (ghost.state)
 	{
@@ -835,7 +835,7 @@ void SceneSP2Main::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
-	
+
 }
 
 void SceneSP2Main::Render()
@@ -935,7 +935,7 @@ void SceneSP2Main::Render()
 
 		}
 	}
-	
+
 	//skybox
 	RenderSkybox();
 
@@ -1028,7 +1028,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
-	
+
 
 	//left
 
@@ -1057,7 +1057,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 85,170);
+	modelStack.Translate(-550, 85, 170);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -1080,7 +1080,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
-	
+
 
 
 	//right
@@ -1131,7 +1131,7 @@ void SceneSP2Main::Render()
 
 
 
-	
+
 	//back
 
 
@@ -1328,7 +1328,7 @@ void SceneSP2Main::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 5, 170);
-	modelStack.Rotate(180,0,1,0);
+	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
@@ -1339,7 +1339,7 @@ void SceneSP2Main::Render()
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 20);
 	modelStack.Rotate(rotate_Man, 0, 1, 0);
@@ -1349,7 +1349,7 @@ void SceneSP2Main::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0,-1, 0);
+	modelStack.Translate(0, -1, 0);
 	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(15, 1, 15);
 	RenderMesh(meshList[GEO_WATER], true);
@@ -1389,7 +1389,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_PATH], true);
 	modelStack.PopMatrix();
 
-	
+
 
 	//lockers
 	for (int i = 0; i < Lockerlist.size(); i++) {
@@ -1399,11 +1399,11 @@ void SceneSP2Main::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	
+
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, 320);
-	modelStack.Rotate(-20,0, 1,0);
+	modelStack.Rotate(-20, 0, 1, 0);
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();
@@ -1417,7 +1417,7 @@ void SceneSP2Main::Render()
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
@@ -1443,7 +1443,7 @@ void SceneSP2Main::Render()
 	case 2:
 		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 1), 4, 10, 1.8);
 		break;
-		
+
 		//talking to man
 	case 3:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Um...Excuse me sir?", Color(0, 0, 1), 4, 10, 1.8);
@@ -1476,8 +1476,8 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	}
-	
-	
+
+
 
 	//interaction sentences
 	switch (Interact_Num)
@@ -1559,41 +1559,41 @@ void SceneSP2Main::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, 2.0f + camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, -2.0f + camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-3.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, -3.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 2.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 2.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
