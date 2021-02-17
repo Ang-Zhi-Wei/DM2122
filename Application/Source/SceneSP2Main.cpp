@@ -447,6 +447,8 @@ void SceneSP2Main::Init()
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
+
+
 	//Locker test
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
@@ -617,7 +619,16 @@ void SceneSP2Main::Update(double dt)
 		}
 		break;
 	}
-
+	//trap detection
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+			case trap::beartrap:
+				if (traplist[i].nearby(camera.position)) {
+					//some effects for beartrap
+				}
+				break;
+		}
+	}
 
 
 	//key input
@@ -989,6 +1000,17 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
 
+	//trap rendering
+	//trap detection
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			//render beartrap
+			break;
+		}
+	}
+
+	//colliderbox to check collider 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[19].getPosition().x, Colliderlist[19].getPosition().y, Colliderlist[19].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
