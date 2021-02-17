@@ -75,6 +75,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_CHATBOX,
 
 		//paths
 		GEO_CENTRE,
@@ -269,6 +270,7 @@ private:
 	//game related vars
 	bool flashlight;
 	bool inLocker;
+	bool showChatbox;
 
 	bool camBlinkOn;
 	bool camBlinkOff;

@@ -98,7 +98,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_2;
+	scenetype = Scene_1;
 }
 
 void Application::Run()

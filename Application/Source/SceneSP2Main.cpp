@@ -19,7 +19,11 @@ void SceneSP2Main::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
+
 	SpeakPhase = 1;
+
+	showChatbox = true;
+
 	SpeakTimer = 0;
 	Interact_Num = 0;
 	ObjectivePhase = 0;
@@ -182,7 +186,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_LIGHTBULB]->material.kShininess = 1.f;
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
 	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
@@ -207,13 +211,13 @@ void SceneSP2Main::Init()
 	meshList[GEO_FOUNTAIN] = MeshBuilder::GenerateOBJ("Building", "OBJ//fountain.obj");
 	meshList[GEO_FOUNTAIN]->textureID = LoadTGA("Assigment2Images//fountaintexture.tga");
 	meshList[GEO_FOUNTAIN]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_WATER] = MeshBuilder::Generatesphere("Building",30,30,30,5);
+	meshList[GEO_WATER] = MeshBuilder::Generatesphere("Building", 30, 30, 30, 5);
 	meshList[GEO_WATER]->textureID = LoadTGA("Assigment2Images//water.tga");
 	meshList[GEO_WATER]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_SPAWN] = MeshBuilder::Generatesphere("spawn", 30, 30, 30,5);
+	meshList[GEO_SPAWN] = MeshBuilder::Generatesphere("spawn", 30, 30, 30, 5);
 	meshList[GEO_SPAWN]->textureID = LoadTGA("Assigment2Images//cement.tga");
 	meshList[GEO_SPAWN]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_PATH] = MeshBuilder::GenerateQuad("spawn", 1,1, White);
+	meshList[GEO_PATH] = MeshBuilder::GenerateQuad("spawn", 1, 1, White);
 	meshList[GEO_PATH]->textureID = LoadTGA("Assigment2Images//pavement.tga");
 	meshList[GEO_PATH]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Building", "OBJ//lamppost.obj");
@@ -225,8 +229,8 @@ void SceneSP2Main::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
-	meshList[Ground_Mesh]->material.kAmbient.Set(0,0.20,0.13);
-	
+	meshList[Ground_Mesh]->material.kAmbient.Set(0, 0.20, 0.13);
+
 
 	//truck
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
@@ -253,7 +257,7 @@ void SceneSP2Main::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1,&light[0].color.r);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
 	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
 	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
@@ -274,7 +278,7 @@ void SceneSP2Main::Init()
 	light[1].cosInner = cos(Math::DegreeToRadian(1));
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, -1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,&light[1].color.r);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
 	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
@@ -283,7 +287,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
-	
+
 	light[2].type = Light::LIGHT_SPOT;
 	light[2].position.Set(40, 30, -34);
 	light[2].color.Set(Yellow);
@@ -295,7 +299,7 @@ void SceneSP2Main::Init()
 	light[2].cosInner = cos(Math::DegreeToRadian(20));
 	light[2].exponent = 3.f;
 	light[2].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1,&light[2].color.r);
+	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
 	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
@@ -325,7 +329,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
 	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
-	
+
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -335,10 +339,14 @@ void SceneSP2Main::Init()
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
+
 	//ruins
-	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
+	/*meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
 	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
-	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);*/
+
+	//UI
+
 
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
@@ -348,7 +356,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 
 	//init update stuff
 	LSPEED = 10.F;
@@ -356,12 +365,49 @@ void SceneSP2Main::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
-	//collidertest
+	//colliders
+	//tree colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(42, 20, 97);
-	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	Colliderlist[0].setlength(10, 20, 10);
+	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(10, 20, 10);
+	Colliderlist[1].Setposition(Vector3(120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(10, 20, 10);
+	Colliderlist[2].Setposition(Vector3(-120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(10, 20, 10);
+	Colliderlist[3].Setposition(Vector3(120, 5, -100));
+	//lamp colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(5, 20, 5);
+	Colliderlist[4].Setposition(Vector3(50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(5, 20, 5);
+	Colliderlist[5].Setposition(Vector3(-50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(5, 20, 5);
+	Colliderlist[6].Setposition(Vector3(-45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(5, 20, 5);
+	Colliderlist[7].Setposition(Vector3(45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(5, 20, 5);
+	Colliderlist[8].Setposition(Vector3(-45, -4, 130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(5, 20, 5);
+	Colliderlist[9].Setposition(Vector3(45, -4, 130));
+	//fountain collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(33, 20, 30);
+	Colliderlist[10].Setposition(Vector3(0, -3, 0));
+	//truck collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(42, 20, 28);
+	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -369,13 +415,10 @@ void SceneSP2Main::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of lockers
-	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
+	//Lockerlist.push_back(Locker());
+	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
 }
 
 void SceneSP2Main::Update(double dt)
@@ -433,103 +476,106 @@ void SceneSP2Main::Update(double dt)
 	switch (SpeakPhase)
 	{
 		//default
-		case 0:
-			SpeakTimer = 0;
+	case 0:
+		SpeakTimer = 0;
+		showChatbox = false;
 
 		//starting phase
-		case 1:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakPhase++;
-				SpeakTimer = 0;
-			}
-			break;
-		case 2:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				ObjectivePhase = 1;
-				SpeakTimer = 0;
-				SpeakPhase = 0;
-			}
-			break;
+	case 1:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakPhase++;
+			SpeakTimer = 0;
+		}
+		break;
+	case 2:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			ObjectivePhase = 1;
+			SpeakTimer = 0;
+			SpeakPhase = 0;
+		}
+		break;
 
 		//talking to man part
-		case 3:
-			camera.can_move = false;
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakPhase++;
-				SpeakTimer = 0;
-			}
-			break;
-		case 4:
-			//man turns around
-			rotate_Man = -90;
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 5:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 6:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 7:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 8:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_FAST) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 9:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_FAST) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 10:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_FAST) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
-		case 11:
-			SpeakTimer += dt;
-			if (SpeakTimer > SPEECH_LENGTH_FAST) {
-				SpeakTimer = 0;
-				SpeakPhase++;
-			}
-			break;
+	case 3:
+		showChatbox = true;
+		camera.can_move = false;
+		canTalk_man = false;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakPhase++;
+			SpeakTimer = 0;
+		}
+		break;
+	case 4:
+		//man turns around
+		rotate_Man = -90;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 5:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 6:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 7:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 8:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 9:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 10:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 11:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
 		//end of talking to man
-		case 12:
-			SpeakTimer += dt;
-			rotate_Man = 90;
-			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-				SpeakTimer = 0;
-				camera.can_move = true;
-				SpeakPhase = 0;
-			}
-			break;
+	case 12:
+		SpeakTimer += dt;
+		rotate_Man = 90;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			camera.can_move = true;
+			SpeakPhase = 0;
+		}
+		break;
 	}
 
 	//key input
@@ -555,7 +601,7 @@ void SceneSP2Main::Update(double dt)
 		if (Qpressed)
 		{
 			Qreleased = true;
-			
+
 		}
 		Qpressed = false;
 	}
@@ -592,7 +638,7 @@ void SceneSP2Main::Update(double dt)
 				inLocker = true;
 			}
 		}
-	
+
 	}
 
 	//fps
@@ -603,7 +649,7 @@ void SceneSP2Main::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
-	
+
 	//toggle flashlight on/off
 	if (Qreleased)
 	{
@@ -670,7 +716,7 @@ void SceneSP2Main::Update(double dt)
 		break;
 
 	}
-	
+
 }
 
 void SceneSP2Main::Render()
@@ -769,7 +815,7 @@ void SceneSP2Main::Render()
 
 	}
 
-	
+
 	//skybox
 	RenderSkybox();
 
@@ -788,20 +834,14 @@ void SceneSP2Main::Render()
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
-	modelStack.Scale(900, 1, 900);
+	modelStack.Scale(1500, 1, 1500);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
-	//destroyed small building
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -4, -230);
-	modelStack.Scale(8, 8, 8);
-	RenderMesh(meshList[Ruins], true);
-	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 
 	//front
@@ -856,7 +896,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
-	
+
 
 	//left
 
@@ -885,7 +925,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-550, 85,170);
+	modelStack.Translate(-550, 85, 170);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 93, 80);
@@ -899,8 +939,8 @@ void SceneSP2Main::Render()
 	modelStack.Scale(30, 93, 80);
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
+	modelStack.PushMatrix()
+		;
 	modelStack.Translate(-550, 85, 500);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
@@ -908,7 +948,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_BUILDING], true);
 	modelStack.PopMatrix();
 
-	
+
 
 
 	//right
@@ -959,7 +999,7 @@ void SceneSP2Main::Render()
 
 
 
-	
+
 	//back
 
 
@@ -1040,7 +1080,7 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -1048,14 +1088,14 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-120, 5, 100);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -1063,27 +1103,27 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(50, -4, -35);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-50, -4, -35);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, -130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -1091,13 +1131,13 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, 130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -1105,7 +1145,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -1115,7 +1155,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0,-1, 0);
+	modelStack.Translate(0, -1, 0);
 	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(15, 1, 15);
 	RenderMesh(meshList[GEO_WATER], true);
@@ -1165,11 +1205,11 @@ void SceneSP2Main::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	
+
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, 320);
-	modelStack.Rotate(-20,0, 1,0);
+	modelStack.Rotate(-20, 0, 1, 0);
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();
@@ -1190,25 +1230,32 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
-	
-	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
+
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+
+	//render chatbox
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+	}
 
 	//speeches
 	switch (SpeakPhase)
 	{
-	//default
+		//default
 	case 0:
+
 		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 10, 5);
 		break;
-	//starting phase
+		//starting phase
 	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(0, 0, 1), 4, 10, 1.8);
 		break;
 	case 2:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 1), 4, 10, 1.8);
 		break;
+		//talking to man
 	case 3:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Um...Excuse me sir?", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Um...Excuse me sir?", Color(0, 0, 1), 4, 10, 1.8);
 		break;
 	case 4:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Ah, Hello! I didn't notice you were behind me.", Color(0, 0, 0), 4, 10, 1.8);
@@ -1217,7 +1264,7 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "I didn't know people still come to this place...", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 6:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about strange occurences happening around here. Is that true sir?", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about this place. Are they true sir?", Color(0, 0, 1), 4, 10, 1.8);
 		break;
 	case 7:
 		RenderTextOnScreen(meshList[GEO_TEXT], "...", Color(0, 0, 0), 4, 10, 1.8);
@@ -1226,17 +1273,16 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(0, 0, 1), 4, 10, 1.8);
 		break;
 	case 10:
 		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 11:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(1, 1, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(0, 0, 1), 4, 10, 1.8);
 		break;
 	case 12:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
-		break;
 	}
 
 	//objectives screen
@@ -1269,8 +1315,8 @@ void SceneSP2Main::Render()
 	campos_z = camera.position.z;
 
 	//debug info
-	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(campos_x)+", "+ std::to_string(campos_y) + ", " + std::to_string(campos_z), Color(0, 1, 0), 4, 0, 6);
-	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(SpeakTimer), Color(0, 1, 0), 4, 0, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(campos_x)+", "+ std::to_string(campos_y) + ", " + std::to_string(campos_z), Color(0, 1, 0), 4, 0, 6);
+	//RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(SpeakTimer), Color(0, 1, 0), 4, 0, 5);
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
@@ -1297,41 +1343,41 @@ void SceneSP2Main::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, 2.0f + camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, -2.0f + camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-3.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, -3.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 2.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 2.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
