@@ -170,9 +170,9 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-	bool Fpressed, Freleased;
 	bool showChatbox;
 	bool showSideBox;
+	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	bool Apressed, Areleased;

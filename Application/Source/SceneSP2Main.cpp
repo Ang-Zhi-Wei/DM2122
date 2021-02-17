@@ -1293,7 +1293,7 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
 	if (inventory.open)
 	{
