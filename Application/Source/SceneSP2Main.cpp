@@ -17,6 +17,7 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
+	//initialise camera blink 
 	camBlinkOn = true;
 	camBlinkOff = false;
 
