@@ -13,7 +13,6 @@
 #include "ColliderBox.h"
 #include <vector>
 #include "Locker.h"
-#include <string>
 class SceneSP2Main : public Scene
 {
 public:
@@ -57,17 +56,16 @@ public:
 		GEO_ROAD,
 		GEO_TREES,
 		GEO_FOUNTAIN,
-		Ruins,
+		GEO_BENCH,
 		locker,
+
 		GEO_LAMP,
+
 		GEO_TRUCK,
-
-		//npc objs
-		GEO_MYSTERIOUSMAN,
-
+		Fountain,
 		//colliderbox 
 		Colliderbox,
-		Fountain,
+		
 
 		//UI tings
 		GEO_TEXT,
@@ -76,6 +74,12 @@ public:
 		GEO_BAR, //stamina
 		GEO_STAMINA,
 		GEO_CHATBOX,
+		GEO_SIDEBOX,
+		
+		GEO_INVENTORY,
+		GEO_BATTERY,
+		GEO_SELECT,
+		GEO_ITEMIMAGE,
 
 		//paths
 		GEO_CENTRE,
@@ -155,7 +159,6 @@ public:
 private:
 
 	int lockernum;
-	float rotate_Man;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -167,18 +170,51 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	bool showChatbox;
+	bool showSideBox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
+	bool Apressed, Areleased;
+	bool Dpressed, Dreleased;
+	bool Rpressed, Rreleased;
 	struct Item
 	{
+		enum ITEM_TYPE
+		{
+			BATTERY,
+			ITEM2,
+			ITEM3
+		};
+		Vector3 pos;
+		const char* image;
+		ITEM_TYPE name;
+		std::string description;
 
+		Item(Vector3 pos, ITEM_TYPE name, const char* image, std::string description)
+		{
+			this->pos = pos;
+			this->name = name;
+			this->image = image;
+			this->description = description;
+		}
 	};
 
 	struct Inventory
 	{
-		Item* selected;
-		Item* inventory[10];
+		int selected;
+		Item* items[8];
+		bool open;
+
+		Inventory()
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				items[i] = nullptr;
+			}
+			open = false;
+			selected = 0;
+		}
 	};
 
 	struct Ghost
@@ -269,28 +305,21 @@ private:
 
 	//game related vars
 	bool flashlight;
+	float flashlight_lifetime;
 	bool inLocker;
-	bool showChatbox;
 
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
-	float campos_x;
-	float campos_y;
-	float campos_z;
-
-	int Interact_Num;
-	bool canTalk_man;
-
 	Ghost ghost;
+	Inventory inventory;
 	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	void UseItem(int itemtype);
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
