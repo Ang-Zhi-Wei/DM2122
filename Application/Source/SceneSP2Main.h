@@ -58,6 +58,7 @@ public:
 		GEO_FOUNTAIN,
 		GEO_BENCH,
 		locker,
+		GEO_MYSTERIOUSMAN,
 
 		GEO_LAMP,
 
@@ -169,6 +170,7 @@ private:
 	Light light[4];
 	CameraSP2 camera;
 	float LSPEED;
+	float rotate_Man;
 	float fps;
 	bool Fpressed, Freleased;
 	bool showChatbox;
@@ -312,6 +314,14 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+
+	int Interact_Num;
+	bool canTalk_man;
 
 	Ghost ghost;
 	Inventory inventory;
