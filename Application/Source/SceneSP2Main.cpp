@@ -338,8 +338,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
-
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	
 
 
@@ -575,7 +575,7 @@ void SceneSP2Main::Update(double dt)
 	else
 	{
 		if (switchtga2 == true) {
-			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 			switchtga2 = false;
 		}
 
