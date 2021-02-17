@@ -35,6 +35,7 @@ public:
 		GEO_BACK,
 		GEO_TOPHALFWALL,
 		GEO_WALL,
+		GEO_CEILING,
 		GEO_FLOOR,
 
 		//ground mesh
