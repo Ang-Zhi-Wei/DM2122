@@ -420,31 +420,31 @@ void SceneSP2Main::Init()
 	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
 	//bench colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(20, 20, 40);
+	Colliderlist[12].setlength(10, 20, 25);
 	Colliderlist[12].Setposition(Vector3(-40, 5, -80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(20, 20, 40);
+	Colliderlist[13].setlength(10, 20, 25);
 	Colliderlist[13].Setposition(Vector3(-40, 5, -170));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(20, 20, 40);
+	Colliderlist[14].setlength(10, 20, 25);
 	Colliderlist[14].Setposition(Vector3(40, 5, -80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(20, 20, 40);
+	Colliderlist[15].setlength(10, 20, 25);
 	Colliderlist[15].Setposition(Vector3(40, 5, -170));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(20, 20, 40);
+	Colliderlist[16].setlength(10, 20, 25);
 	Colliderlist[16].Setposition(Vector3(-40, 5, 80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(20, 20, 40);
+	Colliderlist[17].setlength(10, 20, 25);
 	Colliderlist[17].Setposition(Vector3(-40, 5, 170));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(20, 20, 40);
+	Colliderlist[18].setlength(10, 20, 25);
 	Colliderlist[18].Setposition(Vector3(40, 5, 80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(20, 20, 40);
+	Colliderlist[19].setlength(10, 20, 25);
 	Colliderlist[19].Setposition(Vector3(40, 5, 170));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -990,7 +990,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
+	modelStack.Translate(Colliderlist[19].getPosition().x, Colliderlist[19].getPosition().y, Colliderlist[19].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
