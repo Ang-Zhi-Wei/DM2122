@@ -152,6 +152,8 @@ public:
 		U_LIGHT3_COSCUTOFF,
 		U_LIGHT3_COSINNER,
 		U_LIGHT3_EXPONENT,
+
+
 		
 		U_TOTAL,
 
@@ -167,7 +169,7 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[4];
+	Light light[5];
 	CameraSP2 camera;
 	float LSPEED;
 	float rotate_Man;
@@ -334,6 +336,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderBuilding();
 };
 
 #endif
