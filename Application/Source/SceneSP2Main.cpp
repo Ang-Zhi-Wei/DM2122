@@ -577,7 +577,6 @@ void SceneSP2Main::Update(double dt)
 		Rpressed = false;
 	}
 
-
 	//Locker
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
@@ -597,7 +596,7 @@ void SceneSP2Main::Update(double dt)
 				inLocker = true;
 			}
 		}
-	
+
 	}
 
 	//fps
@@ -850,14 +849,11 @@ void SceneSP2Main::Render()
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[Ruins], true);
 	modelStack.PopMatrix();*/
+	
+	
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
-=======
-	//Any one Collider,must make sure correct Colliderlist is entered;
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
->>>>>>> 45a959a10d9768e497d9b1e4cc14a4630d6df4fe
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -1224,7 +1220,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 
