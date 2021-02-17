@@ -146,13 +146,13 @@ void SceneSP2Room1::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//terrain
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//StoneWalls.tga");
+	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//StoneWalls.tga");
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_CEILING]->textureID = LoadTGA("Assigment2Images//CementWalls.tga");
+	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Assigment2Images//ConcreteFloor.tga"); //At time of typing this, I haven't sent it yet
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga"); //At time of typing this, I haven't sent it yet
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	
 
@@ -160,7 +160,7 @@ void SceneSP2Room1::Init()
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Images//Arial.tga");
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
