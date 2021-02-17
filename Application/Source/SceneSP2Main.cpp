@@ -19,6 +19,7 @@ void SceneSP2Main::Init()
 {
 	camBlinkOn = true;
 	camBlinkOff = false;
+	showChatbox = true;
 	SpeakPhase = 0;
 	SpeakTimer = 0;
 	ObjectivePhase = 0;
@@ -326,11 +327,6 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
-
-	//ruins
-	meshList[Ruins] = MeshBuilder::GenerateOBJ("Ruins", "OBJ//Ruin.obj");
-	meshList[Ruins]->textureID = LoadTGA("Assigment2Images//RuinTexture.tga");
-	meshList[Ruins]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//UI
 
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
@@ -340,7 +336,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 
 
 
@@ -351,12 +348,49 @@ void SceneSP2Main::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
-	//collidertest
+	//colliders
+	//tree colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(42, 20, 97);
-	Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	Colliderlist[0].setlength(10, 20, 10);
+	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(10, 20, 10);
+	Colliderlist[1].Setposition(Vector3(120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(10, 20, 10);
+	Colliderlist[2].Setposition(Vector3(-120, 5, 100));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(10, 20, 10);
+	Colliderlist[3].Setposition(Vector3(120, 5, -100));
+	//lamp colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(5, 20, 5);
+	Colliderlist[4].Setposition(Vector3(50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(5, 20, 5);
+	Colliderlist[5].Setposition(Vector3(-50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(5, 20, 5);
+	Colliderlist[6].Setposition(Vector3(-45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(5, 20, 5);
+	Colliderlist[7].Setposition(Vector3(45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(5, 20, 5);
+	Colliderlist[8].Setposition(Vector3(-45, -4, 130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(5, 20, 5);
+	Colliderlist[9].Setposition(Vector3(45, -4, 130));
+	//fountain collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(33, 20, 30);
+	Colliderlist[10].Setposition(Vector3(0, -3, 0));
+	//truck collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(42, 20, 28);
+	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -364,13 +398,10 @@ void SceneSP2Main::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of lockers
-	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(0, -4.5, 0));
+	//Lockerlist.push_back(Locker());
+	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
 }
 
 void SceneSP2Main::Update(double dt)
@@ -410,13 +441,16 @@ void SceneSP2Main::Update(double dt)
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 				SpeakPhase++;
 				SpeakTimer = 0;
+				showChatbox = false;
 			}
 			break;
 		case 1:
 			SpeakTimer += dt;
+			showChatbox = true;
 			if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 				SpeakPhase++;
 				SpeakTimer = 0;
+				showChatbox = false;
 			}
 			break;
 		case 2:
@@ -682,20 +716,14 @@ void SceneSP2Main::Render()
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
-	modelStack.Scale(900, 1, 900);
+	modelStack.Scale(1500, 1, 1500);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
-	//destroyed small building
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -4, -230);
-	modelStack.Scale(8, 8, 8);
-	RenderMesh(meshList[Ruins], true);
-	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 
 	//front
@@ -934,7 +962,7 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -942,14 +970,14 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-120, 5, 100);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -957,27 +985,27 @@ void SceneSP2Main::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(50, -4, -35);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-50, -4, -35);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, -130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -985,13 +1013,13 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, 130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -999,7 +1027,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -1079,17 +1107,28 @@ void SceneSP2Main::Render()
 	
 	RenderMeshOnScreen(meshList[GEO_STAMINA],6, 52, 2, 2);
 
+	
+
 	//speeches
 	switch (SpeakPhase)
 	{
 	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 2:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 10, 5);
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 4, 40, 5);
 		break;
 	}
 

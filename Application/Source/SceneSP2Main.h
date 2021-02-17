@@ -56,16 +56,15 @@ public:
 		GEO_ROAD,
 		GEO_TREES,
 		GEO_FOUNTAIN,
-		Ruins,
 		locker,
 
 		GEO_LAMP,
 
 		GEO_TRUCK,
-
+		Fountain,
 		//colliderbox 
 		Colliderbox,
-		Fountain,
+		
 
 		//UI tings
 		GEO_TEXT,
@@ -73,6 +72,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_CHATBOX,
 
 		//paths
 		GEO_CENTRE,
@@ -164,6 +164,7 @@ private:
 	float LSPEED;
 	float fps;
 	bool Fpressed, Freleased;
+	bool showChatbox;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	struct Item
@@ -269,8 +270,6 @@ private:
 
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
