@@ -347,7 +347,7 @@ void SceneSP2Main::Init()
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	//colliders
-	//trees
+	//tree colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(10, 20, 10);
 	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
@@ -360,8 +360,28 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[3].setlength(10, 20, 10);
 	Colliderlist[3].Setposition(Vector3(120, 5, -100));
+	//lamp colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(5, 20, 5);
+	Colliderlist[4].Setposition(Vector3(50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(5, 20, 5);
+	Colliderlist[5].Setposition(Vector3(-50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(5, 20, 5);
+	Colliderlist[6].Setposition(Vector3(-45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(5, 20, 5);
+	Colliderlist[7].Setposition(Vector3(45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(5, 20, 5);
+	Colliderlist[8].Setposition(Vector3(-45, -4, 130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(5, 20, 5);
+	Colliderlist[9].Setposition(Vector3(45, -4, 130));
+
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[1].getxlength(), Colliderlist[1].getylength(), Colliderlist[1].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[4].getxlength(), Colliderlist[4].getylength(), Colliderlist[4].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker test
@@ -689,7 +709,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[1].getPosition().x, Colliderlist[1].getPosition().y, Colliderlist[1].getPosition().z);
+	modelStack.Translate(Colliderlist[4].getPosition().x, Colliderlist[4].getPosition().y, Colliderlist[4].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -960,20 +980,20 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-50, -4, -35);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, -130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -981,13 +1001,13 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-45, -4, 130);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	modelStack.PushMatrix();
@@ -995,7 +1015,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_LAMP], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
