@@ -17,11 +17,13 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
+	//initialise camera blink 
 	camBlinkOn = true;
 	camBlinkOff = false;
 
 	SpeakPhase = 1;
 
+	//initialise chatbox
 	showChatbox = true;
 
 	SpeakTimer = 0;
