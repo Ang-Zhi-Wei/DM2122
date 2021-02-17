@@ -35,6 +35,7 @@ public:
 		GEO_BACK,
 		GEO_TOPHALFWALL,
 		GEO_WALL,
+		GEO_FLOOR,
 
 		//ground mesh
 		Ground_Mesh,
@@ -42,12 +43,14 @@ public:
 
 		//objs
 		Colliderbox,
+		locker,
 
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2,//Camcorder
 		GEO_BAR, //stamina
+		GEO_STAMINA,
 		
 		NUM_GEOMETRY,
 	};
@@ -107,6 +110,93 @@ private:
 		Item* inventory[10];
 	};
 
+
+	struct Ghost
+	{
+		enum GHOST_STATE
+		{
+			NORMAL,
+			CHASING,
+			WAITING,
+			SPEEDRUN
+		};
+		int state;
+		Vector3 pos;
+		Vector3 facing; //ghost direction
+		float speed; //TBC normal - 5, chasing - 25, speedrunning away - 50; //player is 20 normal and 40 sprinting
+		float distance;
+		float waitTime;
+		float rotateY;
+
+		Ghost()
+		{
+			speed = 5;
+			pos = (0, 0, 0); //TBC
+			rotateY = 0;
+			state = NORMAL;
+			waitTime = 5;
+		}
+
+		void UpdateMovement(double dt)
+		{
+			float newangle = Math::RadianToDegree(atan(facing.x / facing.z)); //facing is vector that player/char shud be facing
+																				//newangle is angle of rotation for playerr/char based on the vector
+
+			//since tan inverse returns basic angle, gotta set the angle myself
+			if (newangle == 0 && facing.z < 0)
+			{
+				newangle = 180;
+			}
+			else if (newangle < 0 && facing.x >= 0 && facing.z <= 0)
+			{
+				newangle = newangle + 180;
+			}
+			else if (newangle > 0 && facing.x <= 0 && facing.z <= 0)
+			{
+				newangle = newangle - 180;
+			}
+
+			//if angle exceeds one cycle, bring it back to within 0 to 360 cycle
+			if (rotateY > 360)
+			{
+				rotateY -= 360;
+			}
+			if (rotateY < 0)
+			{
+				rotateY += 360;
+			}
+			if (newangle > 360)
+			{
+				newangle -= 360;
+			}
+			if (newangle < 0)
+			{
+				newangle += 360;
+			}
+
+			//int/float offset for checking
+			if (abs(newangle - rotateY) < 5)
+			{
+				rotateY = newangle;
+			}
+
+			//update rotate angle(in render) to face/turn towards direction player is walking in
+			int dir = (newangle - rotateY) / abs(newangle - rotateY);
+			if ((int)rotateY != newangle)
+			{
+				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
+				{
+					dir *= -1;
+				}
+				rotateY += float(dir * 200 * dt);
+			}
+			else
+			{
+				pos += facing * speed * dt;
+			}
+		}
+	};
+
 	void RenderSkybox();
 	//void RenderMegumin();
 	//void RenderDeadTree(int x, int z,float rotate);
@@ -121,18 +211,27 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	bool camBlinkOn;
+	bool camBlinkOff;
+	bool switchtga1;
+	bool switchtga2;
+	double camBlinkOnSec;
+	double camBlinkOffSec;
+	bool inLocker;
+	Ghost ghost;
 
 	bool flashlight;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 
-	ColliderBox Ruincollider;
-
+	std::vector<ColliderBox>Colliderlist;
+	std::vector<Locker>Lockerlist;
+	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
+	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 };
 
 #endif

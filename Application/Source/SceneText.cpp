@@ -15,6 +15,7 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
+
 	// Init VBO here
 	glClearColor(0.529f, 0.808f, 0.922f, 0.0f);
 	glEnable(GL_DEPTH_TEST);

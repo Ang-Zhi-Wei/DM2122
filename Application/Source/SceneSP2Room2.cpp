@@ -239,12 +239,33 @@ void SceneSP2Room2::Init()
 	classroom_walls[0].lengthy = 25;
 	lounge_walls[0].lengthy = 25;
 
-	////collidertest
-	//Colliderlist.push_back(ColliderBox());
-	//Colliderlist[0].setlength(42, 20, 97);
-	//Colliderlist[0].Setposition(Vector3(0, 5, -227));
+	//wall colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(school_walls[1].lengthx, school_walls[1].lengthy, school_walls[1].lengthz);
+	Colliderlist[0].Setposition(Vector3(school_walls[1].mid.x, school_walls[1].mid.y, school_walls[1].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(school_walls[2].lengthx, school_walls[2].lengthy, school_walls[2].lengthz);
+	Colliderlist[1].Setposition(Vector3(school_walls[2].mid.x, school_walls[2].mid.y, school_walls[2].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(school_walls[3].lengthx, school_walls[3].lengthy, school_walls[3].lengthz);
+	Colliderlist[2].Setposition(Vector3(school_walls[3].mid.x, school_walls[3].mid.y, school_walls[3].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(school_walls[4].lengthx, school_walls[4].lengthy, school_walls[4].lengthz);
+	Colliderlist[3].Setposition(Vector3(school_walls[4].mid.x, school_walls[4].mid.y, school_walls[4].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(school_walls[5].lengthx, school_walls[5].lengthy, school_walls[5].lengthz);
+	Colliderlist[4].Setposition(Vector3(school_walls[5].mid.x, school_walls[5].mid.y, school_walls[5].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(classroom_walls[1].lengthx,classroom_walls[1].lengthy,classroom_walls[1].lengthz);
+	Colliderlist[5].Setposition(Vector3(classroom_walls[1].mid.x,classroom_walls[1].mid.y,classroom_walls[1].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(lounge_walls[1].lengthx,lounge_walls[1].lengthy,lounge_walls[1].lengthz);
+	Colliderlist[6].Setposition(Vector3(lounge_walls[1].mid.x,lounge_walls[1].mid.y,lounge_walls[1].mid.z));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz);
+	Colliderlist[7].Setposition(Vector3(lounge_walls[2].mid.x, lounge_walls[2].mid.y, lounge_walls[2].mid.z));
 	//colliderbox for checking any collider(just one)
-
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -259,15 +280,17 @@ void SceneSP2Room2::Init()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 
-	//meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
+	//camblink
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	camBlinkOn = false;
+	camBlinkOff = true;
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -314,7 +337,7 @@ void SceneSP2Room2::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		switchtga1 = true;
+		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -329,7 +352,7 @@ void SceneSP2Room2::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		switchtga1 = true;
+		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
 	if (Qreleased)
@@ -340,12 +363,12 @@ void SceneSP2Room2::Update(double dt)
 		if (flashlight)
 		{
 			light[1].power = 2;
-			switchtga2 = true;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 		}
 		else
 		{
 			light[1].power = 0;
-			switchtga2 = true;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
@@ -398,38 +421,7 @@ void SceneSP2Room2::Update(double dt)
 
 	}
 	
-	//vision vignette
-	if (flashlight)
-	{
-		if (switchtga2 == true) {
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-			switchtga2 = false;
-		}
-	}
-	else
-	{
-		if (switchtga2 == true) {
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-			switchtga2 = false;
-		}
-	}
-	//camcorder
-	if (camBlinkOn)
-	{
-		if (switchtga1) {
-			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
-			switchtga1 = false;
-		}
 
-
-	}
-	else if (camBlinkOff)
-	{
-		if (switchtga1) {
-			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
-			switchtga1 = false;
-		}
-	}
 
 
 	
@@ -489,7 +481,11 @@ void SceneSP2Room2::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 
 	}
-
+	//colliderbox for checking
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
