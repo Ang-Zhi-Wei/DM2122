@@ -13,6 +13,7 @@
 #include "ColliderBox.h"
 #include <vector>
 #include "Locker.h"
+#include <string>
 class SceneSP2Main : public Scene
 {
 public:
@@ -58,10 +59,11 @@ public:
 		GEO_FOUNTAIN,
 		Ruins,
 		locker,
-
 		GEO_LAMP,
-
 		GEO_TRUCK,
+
+		//npc objs
+		GEO_MYSTERIOUSMAN,
 
 		//colliderbox 
 		Colliderbox,
@@ -152,6 +154,7 @@ public:
 private:
 
 	int lockernum;
+	float rotate_Man;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -273,6 +276,13 @@ private:
 	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+
+	int Interact_Num;
+	bool canTalk_man;
 
 	Ghost ghost;
 	Vector3 temp;
