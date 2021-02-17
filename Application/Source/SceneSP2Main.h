@@ -156,6 +156,7 @@ private:
 
 	int lockernum;
 	float rotate_Man;
+	bool is_talking;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;

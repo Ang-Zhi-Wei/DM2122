@@ -30,6 +30,8 @@ void SceneSP2Main::Init()
 	canTalk_man = true;
 	rotate_Man = 90;
 
+	is_talking = false;
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -468,6 +470,12 @@ void SceneSP2Main::Update(double dt)
 		Interact_Num = 0;
 	}
 
+	//check if player is talking (stop cam from moving)
+	if (is_talking)
+		camera.can_move = false;
+	else
+		camera.can_move = true;
+
 	//speech phase case statements
 	double SPEECH_LENGTH_FAST = 2;
 	double SPEECH_LENGTH_SHORT = 3;
@@ -500,7 +508,7 @@ void SceneSP2Main::Update(double dt)
 		//talking to man part
 	case 3:
 		showChatbox = true;
-		camera.can_move = false;
+		is_talking = true;
 		canTalk_man = false;
 		SpeakTimer += dt;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
@@ -572,7 +580,7 @@ void SceneSP2Main::Update(double dt)
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
-			camera.can_move = true;
+			is_talking = false;
 			SpeakPhase = 0;
 		}
 		break;
@@ -1224,6 +1232,8 @@ void SceneSP2Main::Render()
 
 	//UI OVERLAY
 
+	bool test;
+
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
@@ -1283,6 +1293,7 @@ void SceneSP2Main::Render()
 		break;
 	case 12:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
+		break;
 	}
 
 	//objectives screen
