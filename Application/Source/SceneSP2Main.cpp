@@ -23,6 +23,7 @@ void SceneSP2Main::Init()
 
 	SpeakPhase = 1;
 
+	//initialise chatbox
 	showChatbox = true;
 
 	SpeakTimer = 0;
