@@ -283,9 +283,7 @@ void SceneSP2Room1::Init()
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	//list of lockers
-	//Lockerlist.push_back(Locker());
-	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
+	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 	//trap mesh
@@ -549,13 +547,13 @@ void SceneSP2Room1::Render()
 
 
 	//lockers
-	//for (int i = 0; i < Lockerlist.size(); i++) {
-	//	modelStack.PushMatrix();
-	//	modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-	//	modelStack.Scale(0.2, 0.2, 0.2);
-	//	RenderMesh(meshList[locker], true);
-	//	modelStack.PopMatrix();
-	//}
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Scale(0.2, 0.2, 0.2);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	//trap rendering
 	for (int i = 0; i < traplist.size(); i++) {
 		switch (traplist[i].TRAPTYPE) {
