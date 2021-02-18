@@ -198,7 +198,7 @@ private:
 			BATTERY,
 			ITEM2,
 			ITEM3
-			//add more depending on whta u need, don forget set in Set function
+			//add more depending on what u need, don forget set in Set function
 		};
 		//Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
