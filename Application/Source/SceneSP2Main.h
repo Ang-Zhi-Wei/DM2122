@@ -217,9 +217,9 @@ private:
 	float LSPEED;
 	float rotate_Man;
 	float fps;
-	bool Fpressed, Freleased;
 	bool showChatbox;
 	bool showSideBox;
+	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	bool Apressed, Areleased;

@@ -42,7 +42,8 @@ public:
 		GEO_TABLE,
 		GEO_LONGTABLE,
 		GEO_CHAIR,
-		GEO_DOOR,
+		GEO_LEFTDOOR,
+		GEO_RIGHTDOOR,
 
 		//colliderbox 
 		Colliderbox,
@@ -130,7 +131,9 @@ private:
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
-
+	bool Apressed, Areleased;
+	bool Dpressed, Dreleased;
+	bool Rpressed, Rreleased;
 	struct Wall
 	{
 		Vector3 mid;
@@ -138,8 +141,12 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 1;
+			lengthx = lengthz = 0.5;
 		}
+	};
+	struct Door : Wall
+	{
+		float rotateY;
 	};
 
 	struct Item
@@ -264,6 +271,7 @@ private:
 
 	//game related vars
 	bool flashlight;
+	float flashlight_lifetime;
 	bool inLocker;
 
 	Wall school_walls[6];  //0 front top, 1 front left, 2 front right, 3 back, 4 left, 5 right
@@ -279,14 +287,16 @@ private:
 						/*&school_door[0], &school_door[3],&school_door[1], &school_door[2],&classroom_door[0], &lounge_door[0],&classroom_door[3],&lounge_door[3],
 	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
 
-	Wall school_door[2];
-	Wall classroom_door[2];
-	Wall lounge_door[2];
-	Wall* all_doors[6] = { &school_door[0],&school_door[1],
-							&classroom_door[0],&classroom_door[1],
-							&lounge_door[0],&lounge_door[1]};
+	Door school_door[2];
+	Door classroom_door[2];
+	Door lounge_door[2];
+	Door* all_doors[6] = { &school_door[0], &school_door[1], 
+							&lounge_door[1], &classroom_door[0],
+							&classroom_door[1],&lounge_door[0]};
 
 	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	bool interact;
+	std::string interact_message;
 
 	Ghost ghost;
 
