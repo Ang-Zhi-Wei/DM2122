@@ -47,8 +47,7 @@ void SceneSP2Main::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-	Application::hidemousecursor();
+	
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -1333,7 +1332,8 @@ void SceneSP2Main::Update(double dt)
 void SceneSP2Main::Render()
 {
 
-
+	//hide cursor
+	Application::hidemousecursor(true);
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -1518,10 +1518,10 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 
