@@ -322,6 +322,8 @@ void SceneSP2Room1::Init()
 
 void SceneSP2Room1::Update(double dt)
 {
+	// mouse cursor show / hide
+	Application::hidemousecursor(true);
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -607,8 +609,7 @@ void SceneSP2Room1::Update(double dt)
 void SceneSP2Room1::Render()
 {
 
-	//hide cursor
-	Application::hidemousecursor(true);
+
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();

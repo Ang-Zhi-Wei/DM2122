@@ -325,7 +325,8 @@ void SceneSP2Room2::Init()
 
 void SceneSP2Room2::Update(double dt)
 {
-	
+	//mouse cursor show/hide
+	Application::hidemousecursor(true);
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -505,8 +506,7 @@ void SceneSP2Room2::Update(double dt)
 void SceneSP2Room2::Render()
 {
 
-	//hide cursor
-	Application::hidemousecursor(true);
+	
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
