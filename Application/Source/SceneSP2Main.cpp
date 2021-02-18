@@ -526,7 +526,6 @@ void SceneSP2Main::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
-	//collidertest
 	//colliders
 
 	//lamp colliders
@@ -554,7 +553,7 @@ void SceneSP2Main::Init()
 	Colliderlist[6].Setposition(Vector3(0, -3, 0));
 	//truck collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(42, 20, 28);
+	Colliderlist[7].setlength(50, 20, 20);
 	Colliderlist[7].Setposition(Vector3(35, 4, 322.5));
 	//bench colliders
 	Colliderlist.push_back(ColliderBox());
@@ -867,7 +866,7 @@ void SceneSP2Main::Init()
 	Colliderlist[108].setlength(1, 20, 35);
 	Colliderlist[108].Setposition(Vector3(25, -4, 275));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[108].getxlength(), Colliderlist[108].getylength(), Colliderlist[108].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1519,10 +1518,10 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[108].getPosition().x, Colliderlist[108].getPosition().y, Colliderlist[108].getPosition().z);
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	RenderBuilding();
 
@@ -1790,7 +1789,6 @@ void SceneSP2Main::Render()
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 6, 320);
-	modelStack.Rotate(-20, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();//Added collider

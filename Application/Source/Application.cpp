@@ -20,7 +20,7 @@ const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 //Define an error callback
 //starting menu
-int Application::scenetype = Scene_4;
+int Application::scenetype = Scene_1;
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
