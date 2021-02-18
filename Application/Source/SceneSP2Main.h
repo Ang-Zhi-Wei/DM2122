@@ -57,6 +57,7 @@ public:
 		GEO_TREES,
 		GEO_TABLE,
 		GEO_ARCH,
+		GEO_GATE,
 		GEO_FENCE,
 		GEO_FOUNTAIN,
 		GEO_BENCH,
@@ -79,6 +80,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_SWING,
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
@@ -423,6 +425,8 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderBuilding();
 	void RenderFence();
+	void RenderTables();
+	void RenderTrees();
 };
 
 #endif
