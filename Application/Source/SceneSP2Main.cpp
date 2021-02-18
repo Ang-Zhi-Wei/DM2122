@@ -662,7 +662,6 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[43].setlength(52, 50, 10);
 	Colliderlist[43].Setposition(Vector3(308, -7, -295));
-	//@collider
 	//left/right fence
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[44].setlength(10, 50, 52);
@@ -1389,11 +1388,10 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[44].getPosition().x, Colliderlist[44].getPosition().y, Colliderlist[44].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 
