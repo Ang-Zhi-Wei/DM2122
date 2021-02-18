@@ -42,6 +42,7 @@ public:
 		GEO_TABLE,
 		GEO_LONGTABLE,
 		GEO_CHAIR,
+		GEO_DOOR,
 
 		//colliderbox 
 		Colliderbox,
@@ -103,6 +104,13 @@ public:
 		U_TOTAL,
 
 	};
+	enum DOOR_STATE
+	{
+		OPEN,
+		CLOSED,
+		OPENING,
+		CLOSING
+	};
 
 private:
 
@@ -112,6 +120,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
+
 	
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
@@ -252,6 +261,7 @@ private:
 			return(distance.Length() < 3);
 		}
 	};
+
 	//game related vars
 	bool flashlight;
 	bool inLocker;
@@ -269,7 +279,14 @@ private:
 						/*&school_door[0], &school_door[3],&school_door[1], &school_door[2],&classroom_door[0], &lounge_door[0],&classroom_door[3],&lounge_door[3],
 	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
 
+	Wall school_door[2];
+	Wall classroom_door[4];
+	Wall lounge_door[4];
+	Wall* all_doors[12] = { &school_door[0],&school_door[1], &school_door[2], &school_door[3],
+							&classroom_door[0],&classroom_door[1],&classroom_door[2],&classroom_door[3],
+							&lounge_door[0],&lounge_door[1], &lounge_door[2], &lounge_door[3]};
 
+	DOOR_STATE DS_school, DS_classroom, DS_lounge;
 
 	Ghost ghost;
 

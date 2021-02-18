@@ -311,6 +311,8 @@ void SceneSP2Room2::Init()
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
+	//door state
+	DS_classroom = DS_lounge = DS_school = CLOSED;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
