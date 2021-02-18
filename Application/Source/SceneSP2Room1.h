@@ -41,11 +41,10 @@ public:
 		//ground mesh
 		Ground_Mesh,
 
-
 		//objs
 		Colliderbox,
 		locker,
-
+		GEO_BEARTRAP,
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
@@ -197,7 +196,29 @@ private:
 			}
 		}
 	};
-
+	struct trap {
+		enum traptype {
+			beartrap,
+		};
+		int TRAPTYPE;
+		Vector3 TrapPosition;
+		trap() {
+			TRAPTYPE = beartrap;
+			TrapPosition = (0, 0, 0);
+		}
+		trap(int TRAPTYPE, Vector3 TrapPosition) {
+			this->TRAPTYPE = TRAPTYPE;
+			this->TrapPosition = TrapPosition;
+		}
+		bool nearby(Vector3 CameraPosition) {
+			//calculating based on xz plane
+			CameraPosition.y = 0;
+			Vector3 temp = TrapPosition;
+			temp.y = 0;
+			Vector3 distance = temp - CameraPosition;
+			return(distance.Length() < 3);
+		}
+	};
 	void RenderSkybox();
 	//void RenderMegumin();
 	//void RenderDeadTree(int x, int z,float rotate);
@@ -214,8 +235,6 @@ private:
 	float fps;
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
@@ -228,6 +247,7 @@ private:
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	std::vector<trap>traplist;
 	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
