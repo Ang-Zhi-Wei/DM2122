@@ -547,113 +547,7 @@ void SceneSP2Main::Update(double dt)
 	double SPEECH_LENGTH_SHORT = 3;
 	double SPEECH_LENGTH_MEDIUM = 5;
 	double SPEECH_LENGTH_LONG = 8;
-	switch (SpeakPhase)
-	{
-		//default
-	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-
-		break;
-		//starting phase
-	case 1:
-		showChatbox = true;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakPhase++;
-			SpeakTimer = 0;
-		}
-		break;
-	case 2:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			ObjectivePhase = 1;
-			SpeakTimer = 0;
-			SpeakPhase = 0;
-		}
-		break;
-
-
-		//talking to man part
-	case 3:
-		camera.can_move = false;
-		canTalk_man = false;
-		showChatbox = true;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakPhase++;
-			SpeakTimer = 0;
-		}
-		break;
-	case 4:
-		//man turns around
-		rotate_Man = -90;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 5:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 6:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 7:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 8:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 9:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 10:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 11:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-
-	case 12:
-		SpeakTimer += dt;
-		rotate_Man = 90;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			camera.can_move = true;
-			SpeakPhase = 0;
-		}
-		break;
-	}
+	
 	//trap detection
 	bool detected = false;
 	for (int i = 0; i < traplist.size(); i++) {
@@ -798,6 +692,113 @@ void SceneSP2Main::Update(double dt)
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
+	switch (SpeakPhase)
+	{
+		//default
+	case 0:
+		showChatbox = false;
+		SpeakTimer = 0;
+
+		break;
+		//starting phase
+	case 1:
+		showChatbox = true;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakPhase++;
+			SpeakTimer = 0;
+		}
+		break;
+	case 2:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			ObjectivePhase = 1;
+			SpeakTimer = 0;
+			SpeakPhase = 0;
+		}
+		break;
+
+
+		//talking to man part
+	case 3:
+		camera.can_move = false;
+		canTalk_man = false;
+		showChatbox = true;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakPhase++;
+			SpeakTimer = 0;
+		}
+		break;
+	case 4:
+		//man turns around
+		rotate_Man = -90;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 5:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 6:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 7:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 8:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 9:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 10:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+	case 11:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+		break;
+
+	case 12:
+		SpeakTimer += dt;
+		rotate_Man = 90;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			camera.can_move = true;
+			SpeakPhase = 0;
+		}
+		break;
+	}
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
