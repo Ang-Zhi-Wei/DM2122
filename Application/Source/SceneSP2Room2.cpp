@@ -26,7 +26,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, 0), Vector3(0, 5, 20), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 5, -5), Vector3(0, 5, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -158,7 +158,7 @@ void SceneSP2Room2::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 3, 270);
 	light[1].color.Set(White);
-	light[1].power = 2;
+	light[1].power = 2; 
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -239,6 +239,14 @@ void SceneSP2Room2::Init()
 	lounge_walls[0].lengthy = 15;
 
 
+
+
+	school_door[0].mid.Set(-2.5, 5, 0);
+	school_door[1].mid.Set(2.5, 5, 0);
+	lounge_door[0].mid.Set(-10, 5, -47.5);
+	lounge_door[1].mid.Set(-10, 5, -52.5);
+	classroom_door[0].mid.Set(10, 5, -97.5);
+	classroom_door[1].mid.Set(10, 5, -92.5);
 	school_door[0].lengthx = 5;
 	school_door[1].lengthx = 5;
 	lounge_door[0].lengthz = 5;

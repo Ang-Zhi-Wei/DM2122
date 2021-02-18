@@ -19,8 +19,6 @@ const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 
-//starting menu(just change back to scene_4 when done)
-int Application::scenetype = Scene_3;
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -54,6 +52,7 @@ void resize_callback(GLFWwindow* window, int w, int h)
 	Application::m_height = h;
 	glViewport(0, 0, w, h);
 }
+
 void Application::Init()
 {
 	glfwSetWindowSizeCallback(m_window, resize_callback);
@@ -106,48 +105,29 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+
 }
 
+
+//starting menu(just change back to scene_4 when done)
+int Application::scenetype = Scene_Menu;
+Scene* Application::sceneMain = new SceneSP2Main;
+Scene* Application::scene1 = new SceneSP2Room1;
+Scene* Application::scene2 = new SceneSP2Room2;
+Scene* Application::sceneMenu = new SceneSP2Menu;
+Scene* Application::scene = sceneMenu;
 void Application::Run()
 {
 	//initiallise all the scenes here
-	Scene* scene = new SceneSP2Main;
-	Scene* scene2 = new SceneSP2Room1;
-	Scene* scene3 = new SceneSP2Room2;
-	Scene* scene4 = new SceneSP2Menu;
 	scene->Init();
-	scene2->Init();
-	scene3->Init();
-	scene4->Init();
-	
-	
-	
 
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		//Scene Manager
-		switch (scenetype) {
-		case Scene_1:
-			scene->Update(m_timer.getElapsedTime());
-			scene->Render();
-			break;
-		case Scene_2:
-			scene2->Update(m_timer.getElapsedTime());
-			scene2->Render();
-			break;
-		case Scene_3:
-			scene3->Update(m_timer.getElapsedTime());
-			scene3->Render();
-			break;
-		case Scene_4:
-			scene4->Update(m_timer.getElapsedTime());
-			scene4->Render();
-			break;
-		}
-		
+		scene->Update(m_timer.getElapsedTime());
+		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -155,10 +135,10 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
-	delete scene;
+	delete scene1;
 	delete scene2;
-	delete scene3;
-	delete scene4;
+	delete sceneMain;
+	delete sceneMenu;
 }
 unsigned Application::m_width;
 unsigned Application::m_height;
@@ -201,8 +181,31 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
+	switch (scenetype)
+	{
+	case Scene_Main:
+		scene->Exit();
+		scene = sceneMain;
+		scene->Init();
+		break;
+	case Scene_Menu:
+		scene->Exit();
+		scene = sceneMenu;
+		scene->Init();
+		break;
+	case Scene_1:
+		scene->Exit();
+		scene = scene1;
+		scene->Init();
+		break;
+	case Scene_2:
+		scene->Exit();
+		scene = scene2;
+		scene->Init();
+		break;
+	}
+	
 }
-
 
 
 

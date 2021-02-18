@@ -1942,6 +1942,7 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
+	
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
