@@ -239,12 +239,12 @@ void SceneSP2Room2::Init()
 	lounge_walls[0].lengthy = 15;
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(48, 0, -30));
+	Lockerlist[0].setpos(Vector3(8, 0, -30));
 	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(170, 0, -2));
+	Lockerlist[1].setpos(Vector3(50, 0, -2.1));
 	Lockerlist[1].setyaw(-90);
 	Lockerlist.push_back(Locker());
-	Lockerlist[2].setpos(Vector3(-70, 0, -198));
+	Lockerlist[2].setpos(Vector3(-70, 0, -98));
 	Lockerlist[2].setyaw(90);
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
