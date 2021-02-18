@@ -729,7 +729,6 @@ void SceneSP2Main::Init()
 	Colliderlist[63].setlength(10, 50, 52);
 	Colliderlist[63].Setposition(Vector3(335, -7, -35));
 	//Tree colliders
-	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[64].setlength(10, 20, 10);
 	Colliderlist[64].Setposition(Vector3(60, 5, 280));
@@ -835,8 +834,34 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[98].setlength(10, 20, 10);
 	Colliderlist[98].Setposition(Vector3(-310, 5, 50));
+	//Bench colliders
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[99].setlength(25, 20, 10);
+	Colliderlist[99].Setposition(Vector3(110, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[100].setlength(25, 20, 10);
+	Colliderlist[100].Setposition(Vector3(170, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[101].setlength(25, 20, 10);
+	Colliderlist[101].Setposition(Vector3(110, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[102].setlength(25, 20, 10);
+	Colliderlist[102].Setposition(Vector3(170, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[103].setlength(25, 20, 10);
+	Colliderlist[103].Setposition(Vector3(-110, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[104].setlength(25, 20, 10);
+	Colliderlist[104].Setposition(Vector3(-170, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[105].setlength(25, 20, 10);
+	Colliderlist[105].Setposition(Vector3(-110, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[106].setlength(25, 20, 10);
+	Colliderlist[106].Setposition(Vector3(-170, 2, -30));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[64].getxlength(), Colliderlist[64].getylength(), Colliderlist[64].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[99].getxlength(), Colliderlist[99].getylength(), Colliderlist[99].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1490,7 +1515,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[64].getPosition().x, Colliderlist[64].getPosition().y, Colliderlist[64].getPosition().z);
+	modelStack.Translate(Colliderlist[99].getPosition().x, Colliderlist[99].getPosition().y, Colliderlist[99].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -1572,27 +1597,27 @@ void SceneSP2Main::Render()
 	modelStack.Translate(-40, 1, -80);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, -170);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -170);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
 
@@ -1600,57 +1625,56 @@ void SceneSP2Main::Render()
 	modelStack.Translate(-40, 1, 80);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, 170);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 170);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
-
 	modelStack.PushMatrix();
 	modelStack.Translate(110, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(170, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(110, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(170, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
 
@@ -1659,35 +1683,35 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-110, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	RenderFence();
@@ -1764,7 +1788,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(-20, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TRUCK], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//UI OVERLAY
 
