@@ -489,7 +489,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//trap test
+	//trap list(need at least one trap or sprinting will be buggy,can be hidden)
 	traplist.push_back(trap(trap::beartrap, Vector3(0, -3.3, 200)));
 
 	

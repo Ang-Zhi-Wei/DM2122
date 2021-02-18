@@ -292,6 +292,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	//trap list(need at least one trap or sprinting will be buggy,can be hidden)
+	traplist.push_back(trap(trap::beartrap, Vector3(1000000, 1000000, 1000000)));
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -320,7 +322,23 @@ void SceneSP2Room1::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
-
+	//trap detection
+	bool detected = false;
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			if (traplist[i].nearby(camera.position)) {
+				detected = true;
+			}
+			if (detected) {
+				camera.CAMERA_SPEED = 3;//slowed
+			}
+			else {
+				camera.CAMERA_SPEED = 20;//default
+			}
+			break;
+		}
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -539,6 +557,17 @@ void SceneSP2Room1::Render()
 	//	RenderMesh(meshList[locker], true);
 	//	modelStack.PopMatrix();
 	//}
+	//trap rendering
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			modelStack.PushMatrix();
+			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			RenderMesh(meshList[GEO_BEARTRAP], true);
+			modelStack.PopMatrix();
+			break;
+		}
+	}
 
 	//Hall 1
 	modelStack.PushMatrix();
