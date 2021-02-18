@@ -55,6 +55,9 @@ public:
 		GEO_BUILDING,
 		GEO_ROAD,
 		GEO_TREES,
+		GEO_TABLE,
+		GEO_ARCH,
+		GEO_FENCE,
 		GEO_FOUNTAIN,
 		GEO_BENCH,
 		locker,
@@ -67,6 +70,8 @@ public:
 		//colliderbox 
 		Colliderbox,
 		
+		//Traps
+		GEO_BEARTRAP,
 
 		//UI tings
 		GEO_TEXT,
@@ -74,6 +79,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		
@@ -162,7 +168,31 @@ public:
 		U_LIGHT3_COSINNER,
 		U_LIGHT3_EXPONENT,
 
+		//light 4
+		U_LIGHT4_POSITION,
+		U_LIGHT4_COLOR,
+		U_LIGHT4_POWER,
+		U_LIGHT4_KC,
+		U_LIGHT4_KL,
+		U_LIGHT4_KQ,
+		U_LIGHT4_TYPE,
+		U_LIGHT4_SPOTDIRECTION,
+		U_LIGHT4_COSCUTOFF,
+		U_LIGHT4_COSINNER,
+		U_LIGHT4_EXPONENT,
 
+		//light 5
+		U_LIGHT5_POSITION,
+		U_LIGHT5_COLOR,
+		U_LIGHT5_POWER,
+		U_LIGHT5_KC,
+		U_LIGHT5_KL,
+		U_LIGHT5_KQ,
+		U_LIGHT5_TYPE,
+		U_LIGHT5_SPOTDIRECTION,
+		U_LIGHT5_COSCUTOFF,
+		U_LIGHT5_COSINNER,
+		U_LIGHT5_EXPONENT,
 		
 		U_TOTAL,
 
@@ -178,7 +208,7 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[5];
+	Light light[6];
 	CameraSP2 camera;
 	float LSPEED;
 	float rotate_Man;
@@ -354,7 +384,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 1);
+			return(distance.Length() < 3);
 		}
 	};
 	//game related vars
@@ -366,7 +396,6 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-
 
 	float campos_x;
 	float campos_y;
@@ -393,6 +422,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderBuilding();
+	void RenderFence();
 };
 
 #endif

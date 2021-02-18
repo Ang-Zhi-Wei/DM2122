@@ -289,14 +289,14 @@ void SceneSP2Room1::Init()
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	//list of lockers
-	//Lockerlist.push_back(Locker());
-	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
+	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
-	//loadtga should only call when necessary
-	switchtga1 = false;
-	switchtga2 = false;
+	//trap mesh
+	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
+	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
+	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	//trap list
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -325,7 +325,23 @@ void SceneSP2Room1::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
-
+	//trap detection
+	bool detected = false;
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			if (traplist[i].nearby(camera.position)) {
+				detected = true;
+				if (detected) {
+					camera.Setslow(true);
+				}
+				else {
+					camera.Setslow(false);
+				}
+			}
+			break;
+		}
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -559,13 +575,24 @@ void SceneSP2Room1::Render()
 
 
 	//lockers
-	//for (int i = 0; i < Lockerlist.size(); i++) {
-	//	modelStack.PushMatrix();
-	//	modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-	//	modelStack.Scale(0.2, 0.2, 0.2);
-	//	RenderMesh(meshList[locker], true);
-	//	modelStack.PopMatrix();
-	//}
+	for (int i = 0; i < Lockerlist.size(); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Scale(0.2, 0.2, 0.2);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
+	//trap rendering
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			modelStack.PushMatrix();
+			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			RenderMesh(meshList[GEO_BEARTRAP], true);
+			modelStack.PopMatrix();
+			break;
+		}
+	}
 
 	//Hall 1
 	modelStack.PushMatrix();
