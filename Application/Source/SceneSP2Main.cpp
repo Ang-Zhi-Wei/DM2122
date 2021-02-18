@@ -696,6 +696,42 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[55].setlength(10, 50, 52);
 	Colliderlist[55].Setposition(Vector3(-335, -7, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[56].setlength(10, 50, 52);
+	Colliderlist[56].Setposition(Vector3(335, -7, 271));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[57].setlength(10, 50, 52);
+	Colliderlist[57].Setposition(Vector3(335, -7, 225));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[58].setlength(10, 50, 52);
+	Colliderlist[58].Setposition(Vector3(335, -7, 178));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[59].setlength(10, 50, 52);
+	Colliderlist[59].Setposition(Vector3(335, -7, 127));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[60].setlength(10, 50, 52);
+	Colliderlist[60].Setposition(Vector3(335, -7, 75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[61].setlength(10, 50, 52);
+	Colliderlist[61].Setposition(Vector3(335, -7, 35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[62].setlength(10, 50, 52);
+	Colliderlist[62].Setposition(Vector3(335, -7, -271));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[63].setlength(10, 50, 52);
+	Colliderlist[63].Setposition(Vector3(335, -7, -225));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[64].setlength(10, 50, 52);
+	Colliderlist[64].Setposition(Vector3(335, -7, -178));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[65].setlength(10, 50, 52);
+	Colliderlist[65].Setposition(Vector3(335, -7, -127));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[66].setlength(10, 50, 52);
+	Colliderlist[66].Setposition(Vector3(335, -7, -75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[67].setlength(10, 50, 52);
+	Colliderlist[67].Setposition(Vector3(335, -7, -35));
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[44].getxlength(), Colliderlist[44].getylength(), Colliderlist[44].getzlength());
 	//list of colliders
@@ -2424,92 +2460,91 @@ void SceneSP2Main::RenderFence()
 	RenderMesh(meshList[GEO_FENCE], true);
 	modelStack.PopMatrix();//Added collider
 
-	//@Fence
+	
 	//right left
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 271);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 225);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 178);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 127);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 75);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, 35);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2.6, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
 	//right right
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -271);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -225);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -178);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -127);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -75);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(4.5, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -35);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2.6, 4.5, 4.5);
 	RenderMesh(meshList[GEO_FENCE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	
 	//back 
