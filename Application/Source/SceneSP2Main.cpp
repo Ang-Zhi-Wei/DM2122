@@ -1925,15 +1925,6 @@ void SceneSP2Main::RenderSkybox()
 
 
 
-//void SceneSP2Main::RenderDeadTree(int x, int z,float rotate)
-//{
-//	modelStack.PushMatrix();
-//	modelStack.Translate(x, -5, z);
-//	modelStack.Rotate(rotate, 0, 0, 1);
-//	modelStack.Scale(5, 5, 5);
-//	RenderMesh(meshList[Deadtrees], true);
-//	modelStack.PopMatrix();
-//}
 
 void SceneSP2Main::RenderMesh(Mesh* mesh, bool enableLight)
 {
