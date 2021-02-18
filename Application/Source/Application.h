@@ -23,6 +23,7 @@ public:
 	static unsigned m_height;
 	void setscene(int scenenum);
 	int scenetype;
+
 private:
 	//Declare a window object
 	StopWatch m_timer;
