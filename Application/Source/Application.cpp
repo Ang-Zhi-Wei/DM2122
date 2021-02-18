@@ -10,6 +10,7 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
+#include "SceneSP2Menu.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
@@ -102,7 +103,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_1;
+	scenetype = Scene_4;
 }
 
 void Application::Run()
@@ -122,6 +123,11 @@ void Application::Run()
 	case Scene_3:
 		delete scene;
 		scene = new SceneSP2Room2();
+		scene->Init();
+		break;
+	case Scene_4:
+		delete scene;
+		scene = new SceneSP2Menu();
 		scene->Init();
 		break;
 	}

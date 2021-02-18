@@ -41,17 +41,19 @@ public:
 		//ground mesh
 		Ground_Mesh,
 
-
 		//objs
 		Colliderbox,
 		locker,
-
+		GEO_BEARTRAP,
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2,//Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+
+		//Jumpscares
+		GEO_JUMPSCARE1,	
 		
 		NUM_GEOMETRY,
 	};
@@ -197,7 +199,29 @@ private:
 			}
 		}
 	};
-
+	struct trap {
+		enum traptype {
+			beartrap,
+		};
+		int TRAPTYPE;
+		Vector3 TrapPosition;
+		trap() {
+			TRAPTYPE = beartrap;
+			TrapPosition = (0, 0, 0);
+		}
+		trap(int TRAPTYPE, Vector3 TrapPosition) {
+			this->TRAPTYPE = TRAPTYPE;
+			this->TrapPosition = TrapPosition;
+		}
+		bool nearby(Vector3 CameraPosition) {
+			//calculating based on xz plane
+			CameraPosition.y = 0;
+			Vector3 temp = TrapPosition;
+			temp.y = 0;
+			Vector3 distance = temp - CameraPosition;
+			return(distance.Length() < 3);
+		}
+	};
 	void RenderSkybox();
 	//void RenderMegumin();
 	//void RenderDeadTree(int x, int z,float rotate);
@@ -210,16 +234,23 @@ private:
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 	CameraSP2 camera;
+	
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool switchtga1;
-	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+	double jumpscareTimer;
 	bool inLocker;
 	Ghost ghost;
+
+	//Jumpscare stuff
+	int jumpscareEntrance1;
+	double jumpscareTimer1;
+	double jumpscareTimerReset1;
+	bool jumpscareActive1;
+	bool jumpscareTimerActive1;
 
 	bool flashlight;
 	bool Fpressed, Freleased;
@@ -228,6 +259,7 @@ private:
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	std::vector<trap>traplist;
 	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);

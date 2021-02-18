@@ -171,6 +171,7 @@
     <ClCompile Include="Source\SceneModel.cpp" />
     <ClCompile Include="Source\Sceneskybox.cpp" />
     <ClCompile Include="Source\SceneSP2Main.cpp" />
+    <ClCompile Include="Source\SceneSP2Menu.cpp" />
     <ClCompile Include="Source\SceneSP2Room1.cpp" />
     <ClCompile Include="Source\SceneSP2Room2.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Source\SceneModel.h" />
     <ClInclude Include="Source\Sceneskybox.h" />
     <ClInclude Include="Source\SceneSP2Main.h" />
+    <ClInclude Include="Source\SceneSP2Menu.h" />
     <ClInclude Include="Source\SceneSP2Room1.h" />
     <ClInclude Include="Source\SceneSP2Room2.h" />
     <ClInclude Include="Source\SceneText.h" />
