@@ -249,7 +249,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 3);
+			return(distance.Length() < 2);
 		}
 	};
 	//game related vars
