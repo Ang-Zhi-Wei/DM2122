@@ -280,11 +280,11 @@ private:
 	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
 
 	Wall school_door[2];
-	Wall classroom_door[4];
-	Wall lounge_door[4];
-	Wall* all_doors[12] = { &school_door[0],&school_door[1], &school_door[2], &school_door[3],
-							&classroom_door[0],&classroom_door[1],&classroom_door[2],&classroom_door[3],
-							&lounge_door[0],&lounge_door[1], &lounge_door[2], &lounge_door[3]};
+	Wall classroom_door[2];
+	Wall lounge_door[2];
+	Wall* all_doors[6] = { &school_door[0],&school_door[1],
+							&classroom_door[0],&classroom_door[1],
+							&lounge_door[0],&lounge_door[1]};
 
 	DOOR_STATE DS_school, DS_classroom, DS_lounge;
 

@@ -237,6 +237,21 @@ void SceneSP2Room2::Init()
 	classroom_walls[1].lengthy = 25;
 	classroom_walls[0].lengthy = 15;
 	lounge_walls[0].lengthy = 15;
+
+
+	school_door[0].lengthx = 5;
+	school_door[1].lengthx = 5;
+	lounge_door[0].lengthz = 5;
+	lounge_door[1].lengthz = 5;
+	classroom_door[0].lengthz = 5;
+	classroom_door[1].lengthz = 5;
+	for (int i = 0; i < 6; i++)
+	{
+		all_doors[i]->lengthy = 10;
+	}
+	
+
+
 	//list of lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(48, 0, -30));
@@ -291,6 +306,8 @@ void SceneSP2Room2::Init()
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
+	meshList[GEO_DOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
+	meshList[GEO_DOOR]->textureID = LoadTGA("Image//door.tga");
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
@@ -587,7 +604,7 @@ void SceneSP2Room2::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-
+	//all walls
 	for (int i = 0; i < 3; i++)
 	{
 		modelStack.PushMatrix();
@@ -604,7 +621,15 @@ void SceneSP2Room2::Render()
 		RenderMesh(meshList[GEO_WALL], true);
 		modelStack.PopMatrix();
 	}
-
+	//all doors
+	for (int i = 0; i < 6; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(all_doors[i]->mid.x, all_doors[i]->mid.y, all_doors[i]->mid.z);
+		modelStack.Scale(all_doors[i]->lengthx, all_doors[i]->lengthy, all_doors[i]->lengthz);
+		RenderMesh(meshList[GEO_DOOR], true);
+		modelStack.PopMatrix();
+	}
 	//school floor
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -50);
