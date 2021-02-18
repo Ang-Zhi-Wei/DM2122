@@ -354,13 +354,30 @@ void SceneSP2Main::Init()
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
 	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
-	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
-
+	meshList[GEO_ITEMIMAGE0] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE1] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE2] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE3] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE4] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE5] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE6] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
+	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
 
@@ -458,10 +475,21 @@ void SceneSP2Main::Init()
 	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
+
+	//test examples for item
+	test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
+	test2.Set("Battery", (0, 0, 0), Item::BATTERY);
+	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	PickUpItem(&test2); //to be called only in one frame.
+	PickUpItem(&test);
+	PickUpItem(&test2);
+	PickUpItem(&test2);
+
 }
 
 void SceneSP2Main::Update(double dt)
 {
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -754,6 +782,7 @@ void SceneSP2Main::Update(double dt)
 	fps = 1.f / dt;
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -799,6 +828,7 @@ void SceneSP2Main::Update(double dt)
 	}
 	if (inventory.open)
 	{
+		camera.can_move = false;
 		if (Areleased)
 		{
 			inventory.selected--;
@@ -816,7 +846,12 @@ void SceneSP2Main::Update(double dt)
 		}
 		else if (Rreleased)
 		{
-			UseItem(inventory.items[inventory.selected]->name);
+			if (inventory.items[inventory.selected] != nullptr)
+			{
+				UseItem(inventory.items[inventory.selected]->type);
+			}
+			//else warning that no item selected?
+			Rreleased = false;
 		}
 	}
 
@@ -1260,12 +1295,34 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
 	if (inventory.open)
 	{
 		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+		
+		for (int i = 0; i < 8; i++)
+		{
+			if (inventory.items[i] != nullptr)
+			{
+				//item icon in inventory
+				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+				//number of item if more than 1
+				if (inventory.items[i]->count > 1)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory.items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
+				}
+			} 
+		}
+		
 		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory.selected * 4, 7.9, 4, 4);
+		if (inventory.items[inventory.selected] != nullptr)
+		{
+			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8);
+		}
+		
 	}
 
 	if (showChatbox == true) {
@@ -1387,13 +1444,48 @@ void SceneSP2Main::UseItem(int itemname)
 		if (flashlight_lifetime < 20)
 		{
 			flashlight_lifetime = 90;
-			delete inventory.items[inventory.selected];
-			inventory.items[inventory.selected] = nullptr;
-		} //else warning message?
+
+			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+			if (inventory.items[inventory.selected]->count > 1)
+			{
+				inventory.items[inventory.selected]->count--;
+			}
+			else
+			{
+				inventory.items[inventory.selected] = nullptr; 
+			}
+		} 
+		//else warning message?
 		break;
 	case Item::ITEM2:
 		break;
 	}
+}
+
+bool SceneSP2Main::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory.items[i] != nullptr)
+		{
+			if (inventory.items[i]->name == item->name)
+			{
+				inventory.items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory.items[i] == nullptr)
+		{
+			inventory.items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return false;
+		}
+	}
+	return false;
 }
 
 void SceneSP2Main::RenderSkybox()
