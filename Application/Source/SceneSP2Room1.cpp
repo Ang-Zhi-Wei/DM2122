@@ -160,7 +160,7 @@ void SceneSP2Room1::Init()
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Images//Arial.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2images//Arial.tga");
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -224,17 +224,23 @@ void SceneSP2Room1::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare", 80, 60, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//WhiteTest.tga");
 
 
 
 
 	//init update stuff
 	LSPEED = 10.F;
+	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
+	jumpscareEntrance1 = 0;
+	
 	flashlight = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+	jumpscareActive1 = false;
+	jumpscareTimerActive1 = false;
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(1, 20, 100);
@@ -460,6 +466,28 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
+	//Jumpscare, Living room
+	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 10)) && ((camera.position.z >= 170) && (camera.position.z < 270)))
+	{
+		jumpscareTimerActive1 = true;
+	}
+	else
+		jumpscareTimerActive1 = false;
+
+	if (jumpscareTimerActive1 == true)
+		jumpscareTimer1 -= dt;
+	
+	if ((jumpscareTimer1 <= jumpscareTimerReset1 - 0.2)&&(jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	{
+		jumpscareActive1 = false;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = true;
+		jumpscareTimer1 = jumpscareTimerReset1;
+		jumpscareEntrance1 = 1;
+	}
+	
 }
 
 void SceneSP2Room1::Render()
@@ -687,9 +715,16 @@ void SceneSP2Room1::Render()
 
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 
+
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+	}
+
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3,20, 5);
 
 
 

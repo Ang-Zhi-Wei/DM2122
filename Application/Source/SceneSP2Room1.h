@@ -52,6 +52,9 @@ public:
 		GEO_OVERLAY2,//Camcorder
 		GEO_BAR, //stamina
 		GEO_STAMINA,
+
+		//Jumpscares
+		GEO_JUMPSCARE1,	
 		
 		NUM_GEOMETRY,
 	};
@@ -210,6 +213,7 @@ private:
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 	CameraSP2 camera;
+	
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
@@ -218,8 +222,16 @@ private:
 	bool switchtga2;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+	double jumpscareTimer;
 	bool inLocker;
 	Ghost ghost;
+
+	//Jumpscare stuff
+	int jumpscareEntrance1;
+	double jumpscareTimer1;
+	double jumpscareTimerReset1;
+	bool jumpscareActive1;
+	bool jumpscareTimerActive1;
 
 	bool flashlight;
 	bool Fpressed, Freleased;
