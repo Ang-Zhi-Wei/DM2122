@@ -67,6 +67,8 @@ public:
 		//colliderbox 
 		Colliderbox,
 		
+		//Traps
+		GEO_BEARTRAP,
 
 		//UI tings
 		GEO_TEXT,
@@ -354,7 +356,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 1);
+			return(distance.Length() < 3);
 		}
 	};
 	//game related vars
@@ -366,7 +368,6 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-
 
 	float campos_x;
 	float campos_y;

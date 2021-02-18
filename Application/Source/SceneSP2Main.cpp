@@ -485,6 +485,14 @@ void SceneSP2Main::Init()
 	PickUpItem(&test2);
 	PickUpItem(&test2);
 
+	//trap mesh
+	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
+	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
+	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	//trap test
+	traplist.push_back(trap(trap::beartrap, Vector3(0, -3.3, 200)));
+
+	
 }
 
 void SceneSP2Main::Update(double dt)
@@ -648,11 +656,18 @@ void SceneSP2Main::Update(double dt)
 		break;
 	}
 	//trap detection
+	bool detected = false;
 	for (int i = 0; i < traplist.size(); i++) {
 		switch (traplist[i].TRAPTYPE) {
 			case trap::beartrap:
 				if (traplist[i].nearby(camera.position)) {
-					//some effects for beartrap
+					detected = true;
+				}
+				if (detected) {
+					camera.CAMERA_SPEED = 3;//slowed
+				}
+				else {
+					camera.CAMERA_SPEED = 20;//default
 				}
 				break;
 		}
@@ -1036,11 +1051,13 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	//trap rendering
-	//trap detection
 	for (int i = 0; i < traplist.size(); i++) {
 		switch (traplist[i].TRAPTYPE) {
 		case trap::beartrap:
-			//render beartrap
+			modelStack.PushMatrix();
+			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			RenderMesh(meshList[GEO_BEARTRAP], true);
+			modelStack.PopMatrix();
 			break;
 		}
 	}

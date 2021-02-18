@@ -30,13 +30,13 @@ public:
 	float boundX2;
 	float boundZ1;
 	float boundZ2;
-
+	float CAMERA_SPEED;
 	bool can_move;
-	
 	
 	CameraSP2();
 	~CameraSP2();
 	
+
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
 	virtual void Reset();
