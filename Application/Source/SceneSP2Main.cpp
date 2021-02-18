@@ -496,8 +496,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
-	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("breathing", 1.5, 1, White);
-	meshList[GEO_LIVES]->textureID = LoadTGA("Image//lungicon.tga");
+	meshList[GEO_LUNGS] = MeshBuilder::GenerateQuad2("breathing", 1.5, 1, White);
+	meshList[GEO_LUNGS]->textureID = LoadTGA("Image//lungicon.tga");
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
