@@ -38,8 +38,12 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
+
+	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 9, 0));
+
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
 		0));
+
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -1346,56 +1350,56 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-40, 2, -80);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(-40, 1, -80);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-40, 2, -170);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(-40, 1, -170);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(40, 2, -80);
+	modelStack.Translate(40, 1, -80);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(40, 2, -170);
+	modelStack.Translate(40, 1, -170);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	//
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-40, 2, 80);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(-40, 1, 80);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-40, 2, 170);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(-40, 1, 170);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(40, 2, 80);
+	modelStack.Translate(40, 1, 80);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(40, 2, 170);
+	modelStack.Translate(40, 1, 170);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
@@ -1472,7 +1476,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 20);
 	modelStack.Rotate(rotate_Man, 0, 1, 0);
-	modelStack.Scale(4, 4, 4);
+	modelStack.Scale(4.2, 4.2, 4.2);
 	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
 	modelStack.PopMatrix();
 
@@ -1531,9 +1535,9 @@ void SceneSP2Main::Render()
 
 	//vehicle
 	modelStack.PushMatrix();
-	modelStack.Translate(30, 4, 320);
+	modelStack.Translate(30, 6, 320);
 	modelStack.Rotate(-20, 0, 1, 0);
-	modelStack.Scale(8, 8, 8);
+	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();
 
