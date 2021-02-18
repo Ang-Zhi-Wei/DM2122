@@ -105,6 +105,11 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+
+
+	//start in menu
+	scenetype = Scene_4;
+
 }
 
 void Application::Run()
@@ -132,7 +137,8 @@ void Application::Run()
 		scene->Init();
 		break;
 	}
-	
+
+
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))

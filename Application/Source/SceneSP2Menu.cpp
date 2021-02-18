@@ -363,6 +363,7 @@ void SceneSP2Menu::Update(double dt)
 		if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
 		{
 			std::cout << "S Hit!" << std::endl;
+			Application::setscene(Scene_1);
 			menuScreen = false;
 		}
 		else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12)
