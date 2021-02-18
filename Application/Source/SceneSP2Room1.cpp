@@ -232,15 +232,37 @@ void SceneSP2Room1::Init()
 
 	//init update stuff
 	LSPEED = 10.F;
-	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
-	jumpscareEntrance1 = 0;
-	
+
+
 	flashlight = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+
+	//jumpscare
+	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
+	jumpscareEntrance1 = 0;
 	jumpscareActive1 = false;
 	jumpscareTimerActive1 = false;
+
+	//Jumpscare 2
+	jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
+	jumpscareEntrance2 = 0;
+	jumpscareActive2 = false;
+	jumpscareTimerActive2 = false;
+
+	//Jumpscare 3
+	jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
+	jumpscareEntrance3 = 0;
+	jumpscareActive3 = false;
+	jumpscareTimerActive3 = false;
+
+	//Jumpscare 4
+	jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
+	jumpscareEntrance4 = 0;
+	jumpscareActive4 = false;
+	jumpscareTimerActive4 = false;
+
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(1, 20, 100);
@@ -482,14 +504,16 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	//Jumpscare, Living room
-	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 10)) && ((camera.position.z >= 170) && (camera.position.z < 270)))
+	//Jumpscare, Entrance hallway
+	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 10)) && ((camera.position.z >= 170) && (camera.position.z <= 280)))
 	{
 		jumpscareTimerActive1 = true;
 	}
 	else
+	{
 		jumpscareTimerActive1 = false;
-
+		jumpscareActive1 = false;
+	}
 	if (jumpscareTimerActive1 == true)
 		jumpscareTimer1 -= dt;
 	
@@ -502,6 +526,81 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1;
 		jumpscareEntrance1 = 1;
+	}
+
+	//Jumpscare, living room
+	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
+	{
+		jumpscareTimerActive2 = true;
+	}
+	else
+	{
+		jumpscareTimerActive2 = false;
+		jumpscareActive2 = false;
+	}
+	if (jumpscareTimerActive2 == true)
+		jumpscareTimer2 -= dt;
+
+	if ((jumpscareTimer2 <= jumpscareTimerReset2 - 0.2) && (jumpscareTimer2 >= 1) && (jumpscareEntrance2 == 1))
+	{
+		jumpscareActive2 = false;
+	}
+	if (jumpscareTimer2 <= 0)
+	{
+		jumpscareActive2 = true;
+		jumpscareTimer2 = jumpscareTimerReset2;
+		jumpscareEntrance2 = 1;
+	}
+
+
+
+	//Jumpscare, Connecting room
+	if ((camera.position.y >= 0) && ((camera.position.x >= 50) && (camera.position.x <= 95)) && ((camera.position.z >= 65) && (camera.position.z <= 95)))
+	{
+		jumpscareTimerActive3 = true;
+	}
+	else
+	{
+		jumpscareTimerActive3 = false;
+		jumpscareActive3 = false;
+	}
+	if (jumpscareTimerActive3 == true)
+		jumpscareTimer3 -= dt;
+
+	if ((jumpscareTimer3 <= jumpscareTimerReset3 - 0.2) && (jumpscareTimer3 >= 1) && (jumpscareEntrance3 == 1))
+	{
+		jumpscareActive3 = false;
+	}
+	if (jumpscareTimer3 <= 0)
+	{
+		jumpscareActive3 = true;
+		jumpscareTimer3 = jumpscareTimerReset3;
+		jumpscareEntrance3 = 1;
+	}
+
+
+	//Jumpscare, Final room
+	if ((camera.position.y >= 0) && ((camera.position.x >= 70)&& (camera.position.x <= 95)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
+	{
+		jumpscareTimerActive4 = true;
+	}
+	else
+	{
+		jumpscareTimerActive4 = false;
+		jumpscareActive4 = false;
+	}
+	if (jumpscareTimerActive4 == true)
+		jumpscareTimer4 -= dt;
+
+	if ((jumpscareTimer4 <= jumpscareTimerReset4 - 0.2) && (jumpscareTimer4 >= 1) && (jumpscareEntrance4 == 1))
+	{
+		jumpscareActive4 = false;
+	}
+	if (jumpscareTimer4 <= 0)
+	{
+		jumpscareActive4 = true;
+		jumpscareTimer4 = jumpscareTimerReset4;
+		jumpscareEntrance4 = 1;
 	}
 	
 }
@@ -748,12 +847,28 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
 	}
 
+	if (jumpscareActive2 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+	}
+
+	if (jumpscareActive3 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+	}
+
+	if (jumpscareActive4 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+	}
+
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3,20, 5);
-
-
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
 
 
 	/*std::ostringstream test1;

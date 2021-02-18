@@ -83,6 +83,7 @@ public:
 		GEO_STAMINA,
 		GEO_SWING,
 		GEO_LIVES,
+		GEO_LUNGS,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		
