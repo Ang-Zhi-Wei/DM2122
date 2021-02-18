@@ -50,7 +50,7 @@ void SceneSP2Main::Init()
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
 	//hide cursor
-	Application::hidemousecursor();
+	Application::hidemousecursor(true);
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
