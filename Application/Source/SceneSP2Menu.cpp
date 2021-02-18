@@ -1,4 +1,4 @@
-#include "SceneSP2Main.h"
+#include "SceneSP2Menu.h"
 #include "GL\glew.h"
 #include <stdlib.h>
 #include <time.h>
@@ -6,28 +6,18 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-SceneSP2Main::SceneSP2Main()
+SceneSP2Menu::SceneSP2Menu()
 {
 }
 
-SceneSP2Main::~SceneSP2Main()
+SceneSP2Menu::~SceneSP2Menu()
 {
 }
 
 
-void SceneSP2Main::Init()
+void SceneSP2Menu::Init()
 {
-
-	camBlinkOn = true;
-	camBlinkOff = false;
-	showChatbox = true;
-	showSideBox = true;
-	SpeakPhase = 1;
-	SpeakTimer = 0;
-	Interact_Num = 0;
-	canTalk_man = true;
 	rotate_Man = 90;
-	ObjectivePhase = 0;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -42,8 +32,8 @@ void SceneSP2Main::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-	Application::hidemousecursor();
+
+
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -338,285 +328,44 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
+
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 	//UI
 
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
-	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
-	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
-	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
-	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
-	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
-	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
-	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
-	meshList[GEO_ITEMIMAGE] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
-
-	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
-	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
-	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
-	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
-
-
-
-
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
-	flashlight_lifetime = 90;
-	inLocker = false;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
-	//collidertest
-	//colliders
-
-	//tree colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(10, 20, 10);
-	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(10, 20, 10);
-	Colliderlist[1].Setposition(Vector3(120, 5, 100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(10, 20, 10);
-	Colliderlist[2].Setposition(Vector3(-120, 5, 100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(10, 20, 10);
-	Colliderlist[3].Setposition(Vector3(120, 5, -100));
-	//lamp colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(5, 20, 5);
-	Colliderlist[4].Setposition(Vector3(50, -4, -35));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(5, 20, 5);
-	Colliderlist[5].Setposition(Vector3(-50, -4, -35));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(5, 20, 5);
-	Colliderlist[6].Setposition(Vector3(-45, -4, -130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(5, 20, 5);
-	Colliderlist[7].Setposition(Vector3(45, -4, -130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(5, 20, 5);
-	Colliderlist[8].Setposition(Vector3(-45, -4, 130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(5, 20, 5);
-	Colliderlist[9].Setposition(Vector3(45, -4, 130));
-	//fountain collider
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(33, 20, 30);
-	Colliderlist[10].Setposition(Vector3(0, -3, 0));
-	//truck collider
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(42, 20, 28);
-	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
-	//bench colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(10, 20, 25);
-	Colliderlist[12].Setposition(Vector3(-40, 5, -80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(10, 20, 25);
-	Colliderlist[13].Setposition(Vector3(-40, 5, -170));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(10, 20, 25);
-	Colliderlist[14].Setposition(Vector3(40, 5, -80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(10, 20, 25);
-	Colliderlist[15].Setposition(Vector3(40, 5, -170));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(10, 20, 25);
-	Colliderlist[16].Setposition(Vector3(-40, 5, 80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(10, 20, 25);
-	Colliderlist[17].Setposition(Vector3(-40, 5, 170));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(10, 20, 25);
-	Colliderlist[18].Setposition(Vector3(40, 5, 80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(10, 20, 25);
-	Colliderlist[19].Setposition(Vector3(40, 5, 170));
-	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
-	//list of colliders
-	camera.setchecker(Colliderlist);
-	//Locker test
-	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	//list of lockers
-	//Lockerlist.push_back(Locker());
-	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
-	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
 }
 
-void SceneSP2Main::Update(double dt)
+void SceneSP2Menu::Update(double dt)
 {
-	//camera dot blink logic (not the best, but works)
-	if (camBlinkOff && camBlinkOffSec >= 0.5)
-	{
-		camBlinkOn = true;
-		camBlinkOff = false;
-		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
-	}
-	if (camBlinkOn)
-	{
-		camBlinkOnSec += dt;
-	}
-	if (camBlinkOff)
-	{
-		camBlinkOffSec += dt;
-	}
-	if (camBlinkOn && camBlinkOnSec >= 0.5)
-	{
-		camBlinkOff = true;
-		camBlinkOn = false;
-		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
-	}
+	float BUTTON_LEFT = 55.5;
+	float BUTTON_RIGHT = 70.5;
+	float BUTTON_TOP = 43;
+	float BUTTON_BOTTOM = 33;
 
-	//interaction hitbox checker
-	if (campos_x > -1 && campos_x < 1 && campos_z> 26 && campos_z < 30 && canTalk_man)
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
 	{
-		Interact_Num = 1;
-		static bool ButtonState2 = false;
-		if (!ButtonState2 && Application::IsKeyPressed('F'))
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		double x, y;
+		Application::GetCursorPos(&x, &y);
+		double w = Application::GetWindowWidth();
+		double h = Application::GetWindowHeight();
+		float posX = x / w * 80;
+		float posY = (1.f - y / h) * 60;
+		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+		//check for start
+		if (posX > BUTTON_LEFT && posX < BUTTON_RIGHT && posY > BUTTON_BOTTOM && posY < BUTTON_TOP)
 		{
-			ButtonState2 = true;
-		}
-		else if (ButtonState2 && !Application::IsKeyPressed('F'))
-		{
-			ButtonState2 = false;
-			std::cout << " F BUTTON UP" << std::endl;
-			SpeakPhase = 3;
+			std::cout << "B Hit!" << std::endl;
 		}
 	}
-	else
+	else if (bLButtonState && !Application::IsMousePressed(0))
 	{
-		Interact_Num = 0;
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
 	}
-
-	//speech phase case statements
-	double SPEECH_LENGTH_FAST = 2;
-	double SPEECH_LENGTH_SHORT = 3;
-	double SPEECH_LENGTH_MEDIUM = 5;
-	double SPEECH_LENGTH_LONG = 8;
-	switch (SpeakPhase)
-	{
-		//default
-	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-
-		break;
-		//starting phase
-	case 1:
-		showChatbox = true;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakPhase++;
-			SpeakTimer = 0;
-		}
-		break;
-	case 2:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			ObjectivePhase = 1;
-			SpeakTimer = 0;
-			SpeakPhase = 0;
-		}
-		break;
-
-
-		//talking to man part
-	case 3:
-		camera.can_move = false;
-		canTalk_man = false;
-		showChatbox = true;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakPhase++;
-			SpeakTimer = 0;
-		}
-		break;
-	case 4:
-		//man turns around
-		rotate_Man = -90;
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 5:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 6:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 7:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 8:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 9:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 10:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-	case 11:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
-			SpeakTimer = 0;
-			SpeakPhase++;
-		}
-		break;
-
-	case 12:
-		SpeakTimer += dt;
-		rotate_Man = 90;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			camera.can_move = true;
-			SpeakPhase = 0;
-		}
-		break;
-	}
-
 
 
 	//key input
@@ -632,112 +381,7 @@ void SceneSP2Main::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
-	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
-		Qpressed = false;
-	}
-	if (Application::IsKeyPressed('F'))
-	{
-		Fpressed = true;
-		Freleased = false;
-	}
-	else
-	{
-		if (Fpressed)
-		{
-			Freleased = true;
-		}
-		Fpressed = false;
-	}
-	if (Application::IsKeyPressed('E'))
-	{
-		Epressed = true;
-		Ereleased = false;
-	}
-	else
-	{
-		if (Epressed)
-		{
-			Ereleased = true;
-		}
-		Epressed = false;
-	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Apressed = true;
-		Areleased = false;
-	}
-	else
-	{
-		if (Apressed)
-		{
-			Areleased = true;
-
-		}
-		Apressed = false;
-	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Dpressed = true;
-		Dreleased = false;
-	}
-	else
-	{
-		if (Dpressed)
-		{
-			Dreleased = true;
-
-		}
-		Dpressed = false;
-	}
-	if (Application::IsKeyPressed('R'))
-	{
-		Rpressed = true;
-		Rreleased = false;
-	}
-	else
-	{
-		if (Rpressed)
-		{
-			Rreleased = true;
-
-		}
-		Rpressed = false;
-	}
-
-
-	//Locker
-	for (int i = 0; i < Lockerlist.size(); i++) {
-		if (Lockerlist[i].gethidden() == true) {
-			if (Fpressed) {
-				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
-				glEnable(GL_CULL_FACE);
-				inLocker = false;
-			}
-		}
-		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
-			if (Lockerlist[i].gethidden() == false) {
-				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
-				camera.teleport(Lockerlist[i].getpos());
-				glDisable(GL_CULL_FACE);//To see the inside of the locker
-				inLocker = true;
-			}
-		}
-
-	}
-
+	
 	//fps
 	fps = 1.f / dt;
 	//camera
@@ -747,125 +391,10 @@ void SceneSP2Main::Update(double dt)
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
 
-	//toggle flashlight on/off
-	if (Qreleased)
-	{
-		Qreleased = false;
-		//updates if flashlight status changes
-		if (flashlight)
-		{
-			flashlight = false;
-			light[1].power = 0;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
-		}
-		else if (flashlight_lifetime > 0)
-		{
-			flashlight = true;
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
-	}
-	if (flashlight)
-	{
-		if (flashlight_lifetime >= 0)
-		{
-			flashlight_lifetime -= dt;
-		}
-		else
-		{
-			flashlight = false;
-		}
-	}
-
-
-	//inventory
-	if (Ereleased)
-	{
-		inventory.open = !inventory.open;
-		Ereleased = false;
-	}
-	if (inventory.open)
-	{
-		if (Areleased)
-		{
-			inventory.selected--;
-			if (inventory.selected == -1)
-			{
-				inventory.selected = 7;
-			}
-			Areleased = false;
-		}
-		else if (Dreleased)
-		{
-			inventory.selected++;
-			inventory.selected %= 8;
-			Dreleased = false;
-		}
-		else if (Rreleased)
-		{
-			UseItem(inventory.items[inventory.selected]->name);
-		}
-	}
-
-	//ghost
-	switch (ghost.state)
-	{
-	case Ghost::NORMAL:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 20)
-		{
-			ghost.state = Ghost::CHASING;
-			ghost.speed = 25;
-		}
-		break;
-	case Ghost::CHASING:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 3 && inLocker)
-		{
-			ghost.state = Ghost::WAITING;
-			ghost.waitTime = 5;
-		}
-		else if (ghost.distance <= 1)
-		{
-			//TBC
-			//end game condition met, either that or HP - 1
-		}
-		break;
-	case Ghost::WAITING:
-		ghost.waitTime -= dt;
-		if (ghost.waitTime <= 0)
-		{
-			ghost.state = Ghost::SPEEDRUN;
-			ghost.speed = 50;
-		}
-		break;
-	case Ghost::SPEEDRUN:
-		ghost.facing = (ghost.pos - camera.position).Normalized();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance > 300 || !inLocker)
-		{
-			ghost.state = Ghost::NORMAL;
-			ghost.speed = 5;
-		}
-		break;
-
-	}
-
-	campos_x = camera.position.x;
-	campos_y = camera.position.y;
-	campos_z = camera.position.z;
-
 }
 
-void SceneSP2Main::Render()
+void SceneSP2Menu::Render()
 {
-
-
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -1209,15 +738,6 @@ void SceneSP2Main::Render()
 
 
 
-	//lockers
-	for (int i = 0; i < Lockerlist.size(); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Scale(0.2, 0.2, 0.2);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
-
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 6, 320);
@@ -1227,111 +747,6 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	//UI OVERLAY
-
-	//Vision vignette
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 9 - (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
-	//inventory
-	if (inventory.open)
-	{
-		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
-		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory.selected * 4, 7.9, 4, 4);
-	}
-
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40, 10, 2, 0.7);
-	}
-	//speeches
-	switch (SpeakPhase)
-	{
-	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-		//starting phase
-	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Look's like this is the place...", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-	case 2:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-
-		//talking to man
-	case 3:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Um...Excuse me sir?", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-	case 4:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Ah, Hello! I didn't notice you were behind me.", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	case 5:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I didn't know people still come to this place...", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	case 6:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about this place. Are they true sir?", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-	case 7:
-		RenderTextOnScreen(meshList[GEO_TEXT], "...", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	case 8:
-		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-	case 10:
-		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	case 11:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(0, 0, 1), 4, 10, 1.8);
-		break;
-	case 12:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
-		break;
-	}
-
-
-
-	//interaction sentences
-	switch (Interact_Num)
-	{
-	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 1, 9);
-		break;
-	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Talk to man", Color(1, 1, 0), 4, 22, 5);
-		break;
-	}
-
-	//camera position
-	campos_x = camera.position.x;
-	campos_y = camera.position.y;
-	campos_z = camera.position.z;
-
-	//objectives screen
-	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10, 35, 1, 1.2);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 3.5, 1, 10.1);
-	}
-	//objectives
-	switch (ObjectivePhase)
-	{
-	case 0:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 0.8, 7.9);
-			break;
-		}
-	case 1:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Investigate the area", Color(1, 1, 0), 3, 1.2, 10.3);
-			break;
-		}
-	}
 
 
 
@@ -1349,31 +764,15 @@ void SceneSP2Main::Render()
 	//std::cout << camera.position.z << std::endl;
 }
 
-void SceneSP2Main::Exit()
+void SceneSP2Menu::Exit()
 {
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
 
-void SceneSP2Main::UseItem(int itemname)
-{
-	switch (itemname)
-	{
-	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
-			delete inventory.items[inventory.selected];
-			inventory.items[inventory.selected] = nullptr;
-		} //else warning message?
-		break;
-	case Item::ITEM2:
-		break;
-	}
-}
 
-void SceneSP2Main::RenderSkybox()
+void SceneSP2Menu::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
@@ -1430,7 +829,7 @@ void SceneSP2Main::RenderSkybox()
 //	modelStack.PopMatrix();
 //}
 
-void SceneSP2Main::RenderMesh(Mesh* mesh, bool enableLight)
+void SceneSP2Menu::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	MVP = projectionStack.Top() * viewStack.Top() *
@@ -1480,7 +879,7 @@ void SceneSP2Main::RenderMesh(Mesh* mesh, bool enableLight)
 	}
 }
 
-void SceneSP2Main::RenderText(Mesh* mesh, std::string text, Color color)
+void SceneSP2Menu::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -1508,7 +907,7 @@ void SceneSP2Main::RenderText(Mesh* mesh, std::string text, Color color)
 
 }
 
-void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneSP2Menu::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -1553,7 +952,7 @@ void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 
 }
 
-void SceneSP2Main::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
+void SceneSP2Menu::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
@@ -1574,7 +973,7 @@ void SceneSP2Main::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex,
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneSP2Main::RenderBuilding()
+void SceneSP2Menu::RenderBuilding()
 {
 	//front
 	modelStack.PushMatrix();

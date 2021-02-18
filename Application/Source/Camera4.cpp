@@ -35,7 +35,7 @@ void Camera4::Update(double dt)
 	static const float CAMERA_SPEED = 0.5f;
 	static const float ZOOM_SPEED = 20.f;
 	static const float rotational_speed = 45.0f;
-	if (Application::IsKeyPressed('W'))
+	/*if (Application::IsKeyPressed('W'))
 	{
 		position += view * CAMERA_SPEED;
 		target += view * CAMERA_SPEED;
@@ -72,7 +72,7 @@ void Camera4::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 
-	}
+	}*/
 	view = (target - position).Normalized();
 	right = view.Cross(up);
 	up = defaultUp = right.Cross(view).Normalized();
