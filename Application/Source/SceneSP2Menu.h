@@ -19,14 +19,14 @@ public:
 	SceneSP2Menu();
 	~SceneSP2Menu();
 
+	bool quit;
+	bool menuScreen;
+
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
 
-	int SpeakPhase;
-	double SpeakTimer;
-	int ObjectivePhase;
 
 	enum GEOMETRY_TYPE
 	{
@@ -58,7 +58,6 @@ public:
 		GEO_FOUNTAIN,
 		GEO_BENCH,
 		locker,
-		GEO_MYSTERIOUSMAN,
 
 		GEO_LAMP,
 
@@ -67,6 +66,8 @@ public:
 
 		//UI tings
 		GEO_TEXT,
+		GEO_GAMETITLE,
+		GEO_BUTTONBAR,
 
 		//paths
 		GEO_CENTRE,
@@ -148,6 +149,7 @@ public:
 private:
 
 	int lockernum;
+	int ButtonNum;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -160,6 +162,10 @@ private:
 	float LSPEED;
 	float rotate_Man;
 	float fps;
+
+	//mouse positions
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	Vector3 temp;
 	void RenderSkybox();

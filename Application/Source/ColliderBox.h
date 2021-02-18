@@ -16,4 +16,5 @@ private:
 	double ylength;
 	double zlength;
 	Vector3 Position;
+	
 };

@@ -17,7 +17,9 @@ SceneSP2Menu::~SceneSP2Menu()
 
 void SceneSP2Menu::Init()
 {
-	rotate_Man = 90;
+	ButtonNum = 0;
+	menuScreen = true;
+	quit = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -214,11 +216,6 @@ void SceneSP2Menu::Init()
 	meshList[GEO_BENCH] = MeshBuilder::GenerateOBJ("Building", "OBJ//ParkBench.obj");
 	meshList[GEO_BENCH]->textureID = LoadTGA("Assigment2Images//benchtexture.tga");
 	meshList[GEO_BENCH]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//Mysterious man
-	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
-	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
-	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35, 0.35, 0.35);
-
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//paths and deco
@@ -226,7 +223,6 @@ void SceneSP2Menu::Init()
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0, 0.20, 0.13);
-
 
 	//truck
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
@@ -236,6 +232,11 @@ void SceneSP2Menu::Init()
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
+
+	//menu screen items
+	meshList[GEO_GAMETITLE] = MeshBuilder::GenerateQuad2("title", 1, 1, White);
+	meshList[GEO_BUTTONBAR] = MeshBuilder::GenerateQuad2("bar", 1, 1, (0.75, 0.75, 0.75));
+
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -338,27 +339,41 @@ void SceneSP2Menu::Init()
 
 void SceneSP2Menu::Update(double dt)
 {
-	float BUTTON_LEFT = 55.5;
-	float BUTTON_RIGHT = 70.5;
-	float BUTTON_TOP = 43;
-	float BUTTON_BOTTOM = 33;
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+
+	//check for button coords
+	if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
+		ButtonNum = 0;
+	else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12)
+		ButtonNum = 1;
+	else if (MposX > 1.5 && MposX < 12 && MposY >12.6 && MposY < 13)
+		ButtonNum = 2;
+	//----------------------
 
 	static bool bLButtonState = false;
 	if (!bLButtonState && Application::IsMousePressed(0))
 	{
 		bLButtonState = true;
 		std::cout << "LBUTTON DOWN" << std::endl;
-		double x, y;
-		Application::GetCursorPos(&x, &y);
-		//double w = Application::GetWindowWidth();
-		//double h = Application::GetWindowHeight();
-		double posX = x / 80;
-		double posY = y / 60;
-		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
 		//check for start
-		if (posX > BUTTON_LEFT && posX < BUTTON_RIGHT && posY > BUTTON_BOTTOM && posY < BUTTON_TOP)
+		if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
 		{
-			std::cout << "B Hit!" << std::endl;
+			std::cout << "S Hit!" << std::endl;
+			Application::setscene(Scene_1);
+			menuScreen = false;
+		}
+		else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12)
+		{
+			std::cout << "C Hit!" << std::endl;
+		}
+		else if (MposX > 1.5 && MposX < 12 && MposY >12.6 && MposY < 13)
+		{
+			std::cout << "Q Hit!" << std::endl;
+			quit = true;
 		}
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -390,6 +405,9 @@ void SceneSP2Menu::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
+
+
+	
 
 }
 
@@ -687,13 +705,6 @@ void SceneSP2Menu::Render()
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -3, 20);
-	modelStack.Rotate(rotate_Man, 0, 1, 0);
-	modelStack.Scale(4.2, 4.2, 4.2);
-	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
-	modelStack.PopMatrix();
-
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -1, 0);
@@ -746,7 +757,25 @@ void SceneSP2Menu::Render()
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();
 
-	//UI OVERLAY
+	//button bar
+	switch (ButtonNum)
+	{
+	case 0:
+		RenderMeshOnScreen(meshList[GEO_BUTTONBAR], 25, 22.5, 40, 2.5);
+		break;
+	case 1:
+		RenderMeshOnScreen(meshList[GEO_BUTTONBAR], 25, 19.5, 40, 2.5);
+		break;
+	case 2:
+		RenderMeshOnScreen(meshList[GEO_BUTTONBAR], 25, 16.5, 40, 2.5);
+		break;
+	}
+
+	//MENU SCREEN
+	RenderMeshOnScreen(meshList[GEO_GAMETITLE], 25, 30, 40, 8);
+	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", White, 3, 4, 7);
+	RenderTextOnScreen(meshList[GEO_TEXT], "CREDITS", White, 3, 4, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], "QUIT", White, 3, 4, 5);
 
 
 
