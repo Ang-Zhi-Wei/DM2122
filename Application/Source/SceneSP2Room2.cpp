@@ -254,12 +254,12 @@ void SceneSP2Room2::Init()
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(48, 0, -30));
+	Lockerlist[0].setpos(Vector3(8, 0, -30));
 	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(170, 0, -2));
+	Lockerlist[1].setpos(Vector3(50, 0, -2.1));
 	Lockerlist[1].setyaw(-90);
 	Lockerlist.push_back(Locker());
-	Lockerlist[2].setpos(Vector3(-70, 0, -198));
+	Lockerlist[2].setpos(Vector3(-70, 0, -98));
 	Lockerlist[2].setyaw(90);
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
@@ -335,10 +335,10 @@ void SceneSP2Room2::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(-55, 0, -64)));
-	traplist.push_back(trap(trap::beartrap, Vector3(75, 0, -124)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-10, 0, -46)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-134, 0, -144)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-57, 0, -10)));
+	traplist.push_back(trap(trap::beartrap, Vector3(100, 0, -55)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-15, 0, -40)));
+	traplist.push_back(trap(trap::beartrap, Vector3(5, 0, -70)));
 	
 }
 
@@ -510,15 +510,16 @@ void SceneSP2Room2::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-				if (detected) {
-					camera.Setslow(true);
-				}
-				else {
-					camera.Setslow(false);
-				}
+				
 			}
 			break;
 		}
+	}
+	if (detected) {
+		camera.Setslow(true);
+	}
+	else {
+		camera.Setslow(false);
 	}
 }
 
@@ -590,6 +591,7 @@ void SceneSP2Room2::Render()
 		case trap::beartrap:
 			modelStack.PushMatrix();
 			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			modelStack.Scale(0.5, 0.5, 0.5);
 			RenderMesh(meshList[GEO_BEARTRAP], true);
 			modelStack.PopMatrix();
 			break;
