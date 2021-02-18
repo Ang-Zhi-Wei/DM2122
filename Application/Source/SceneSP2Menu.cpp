@@ -350,10 +350,10 @@ void SceneSP2Menu::Update(double dt)
 		std::cout << "LBUTTON DOWN" << std::endl;
 		double x, y;
 		Application::GetCursorPos(&x, &y);
-		double w = Application::GetWindowWidth();
-		double h = Application::GetWindowHeight();
-		float posX = x / w * 80;
-		float posY = (1.f - y / h) * 60;
+		//double w = Application::GetWindowWidth();
+		//double h = Application::GetWindowHeight();
+		double posX = x / 80;
+		double posY = y / 60;
 		std::cout << "posX:" << posX << " , posY:" << posY << std::endl;
 		//check for start
 		if (posX > BUTTON_LEFT && posX < BUTTON_RIGHT && posY > BUTTON_BOTTOM && posY < BUTTON_TOP)
