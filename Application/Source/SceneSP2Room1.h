@@ -252,6 +252,12 @@ private:
 	bool jumpscareActive1;
 	bool jumpscareTimerActive1;
 
+	int jumpscareEntrance2;
+	double jumpscareTimer2;
+	double jumpscareTimerReset2;
+	bool jumpscareActive2;
+	bool jumpscareTimerActive2;
+
 	bool flashlight;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
