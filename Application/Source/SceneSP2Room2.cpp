@@ -195,48 +195,48 @@ void SceneSP2Room2::Init()
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	//walls
-	school_walls[0].mid.Set(0, 37.5, 0); 
-	school_walls[1].mid.Set(-140, 25, 0);
-	school_walls[2].mid.Set(140, 25, 0); 
-	school_walls[3].mid.Set(0, 25, -200); //back
-	school_walls[4].mid.Set(-250, 25, -100);
-	school_walls[5].mid.Set(250, 25, -100);
+	school_walls[0].mid.Set(0, 17.5, 0); 
+	school_walls[1].mid.Set(-57.5, 12.5, 0);
+	school_walls[2].mid.Set(57.5, 12.5, 0); 
+	school_walls[3].mid.Set(0, 12.5, -100); //back
+	school_walls[4].mid.Set(-110, 12.5, -50);
+	school_walls[5].mid.Set(110, 12.5, -50);
 	
-	school_walls[1].lengthx = 220;
-	school_walls[2].lengthx = 220;
-	school_walls[4].lengthz = school_walls[5].lengthz = 200;
+	school_walls[1].lengthx = 105;
+	school_walls[2].lengthx = 105;
+	school_walls[4].lengthz = school_walls[5].lengthz = 100;
 	//school_walls[0].lengthz = school_walls[1].lengthz = school_walls[2].lengthz = school_walls[3].lengthz = school_walls[4].lengthx = school_walls[5].lengthx = 1;
-	school_walls[0].lengthx = 60;
-	school_walls[3].lengthx = 500;
+	school_walls[0].lengthx = 10;
+	school_walls[3].lengthx = 220;
 
 	for (int i = 1; i < 6; i++)
 	{
-		school_walls[i].lengthy = 50;
+		school_walls[i].lengthy = 25;
 	}
-	school_walls[0].lengthy = 25;
+	school_walls[0].lengthy = 15;
 
 
-	lounge_walls[0].mid.Set(-50, 37.5, -100);
-	lounge_walls[1].mid.Set(-50, 25, -35);
-	lounge_walls[2].mid.Set(-50, 25, -165);
-	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 70;
+	lounge_walls[0].mid.Set(-10, 17.5, -50);
+	lounge_walls[1].mid.Set(-10, 12.5, -22.5);
+	lounge_walls[2].mid.Set(-10, 12.5, -77.5);
+	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 45;
 	//lounge_walls[1].lengthx = lounge_walls[2].lengthx = 1;
-	lounge_walls[0].lengthz = 60;
+	lounge_walls[0].lengthz = 10;
 	//lounge_walls[0].lengthx = 1;
 
-	classroom_walls[0].mid.Set(50, 37.5, -170);
-	classroom_walls[1].mid.Set(50, 25, -70);
-	classroom_walls[1].lengthz = 140;
+	classroom_walls[0].mid.Set(10, 17.5, -95);
+	classroom_walls[1].mid.Set(10, 12.5, -45);
+	classroom_walls[1].lengthz = 90;
 	//classroom_walls[1].lengthx = classroom_walls[2].lengthx = 1;
-	classroom_walls[0].lengthz = 60;
+	classroom_walls[0].lengthz = 10;
 	//classroom_walls[0].lengthx = 1;
 	for (int i = 1; i < 3; i++)
 	{
-		lounge_walls[i].lengthy = 50;
+		lounge_walls[i].lengthy = 25;
 	}
-	classroom_walls[1].lengthy = 50;
-	classroom_walls[0].lengthy = 25;
-	lounge_walls[0].lengthy = 25;
+	classroom_walls[1].lengthy = 25;
+	classroom_walls[0].lengthy = 15;
+	lounge_walls[0].lengthy = 15;
 	//list of lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(48, 0, -30));
@@ -604,18 +604,16 @@ void SceneSP2Room2::Render()
 	}
 
 	//school floor
-
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -100);
-	modelStack.Scale(500, 1, 200);
+	modelStack.Translate(0, 0, -50);
+	modelStack.Scale(220, 1, 100);
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//school ceiling
-	//meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolceiling.tga");
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 50, -100);
-	modelStack.Scale(500, 1, 200);
+	modelStack.Translate(0, 25, -50);
+	modelStack.Scale(220, 1, 100);
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
