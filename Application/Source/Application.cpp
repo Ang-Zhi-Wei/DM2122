@@ -19,7 +19,7 @@ const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 //Define an error callback
-//starting menu
+//starting menu(just change back to scene_4 when done)
 int Application::scenetype = Scene_4;
 static void error_callback(int error, const char* description)
 {
@@ -109,6 +109,7 @@ void Application::Init()
 
 void Application::Run()
 {
+	//initiallise all the scenes here
 	Scene* scene = new SceneSP2Main;
 	Scene* scene2 = new SceneSP2Room1;
 	Scene* scene3 = new SceneSP2Room2;
@@ -118,7 +119,7 @@ void Application::Run()
 	scene3->Init();
 	scene4->Init();
 	//Main Loop
-	//Scene Manager
+	
 	
 
 
@@ -126,6 +127,7 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+		//Scene Manager
 		switch (scenetype) {
 		case Scene_1:
 			scene->Update(m_timer.getElapsedTime());
