@@ -10,6 +10,7 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
+#include "SceneSP2Menu.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
@@ -69,14 +70,14 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 
-	//FullScreen(use when everything finish)
+	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
+
+	//FullScreen
+
 	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
-	//Windowed mode
-	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
-
-
 	//Create a window and create its OpenGL context
-	//This one is just my assigment 1 window
+	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
+	//megumin
 	//m_window = glfwCreateWindow(1440, 1080, "Megumin", NULL, NULL);
 	//If the window couldn't be created
 	if (!m_window)
@@ -102,7 +103,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_1;
+	scenetype = Scene_4;
 }
 
 void Application::Run()
@@ -122,6 +123,11 @@ void Application::Run()
 	case Scene_3:
 		delete scene;
 		scene = new SceneSP2Room2();
+		scene->Init();
+		break;
+	case Scene_4:
+		delete scene;
+		scene = new SceneSP2Menu();
 		scene->Init();
 		break;
 	}
