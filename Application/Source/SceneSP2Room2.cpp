@@ -30,8 +30,7 @@ void SceneSP2Room2::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-	Application::hidemousecursor();
+	
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -506,7 +505,8 @@ void SceneSP2Room2::Update(double dt)
 void SceneSP2Room2::Render()
 {
 
-
+	//hide cursor
+	Application::hidemousecursor(true);
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();

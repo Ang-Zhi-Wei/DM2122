@@ -16,7 +16,7 @@ public:
 	static bool IsMousePressed(unsigned short key);
 	static void GetCursorPos(double* xpos, double* ypos);
 	static void SetCursorPos(double xpos, double ypos);
-	static void hidemousecursor(void);
+	static void hidemousecursor(bool hide);
 	static int GetWindowWidth();
 	static int GetWindowHeight();
 	static unsigned m_width;

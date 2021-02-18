@@ -19,6 +19,8 @@ const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 //Define an error callback
+//starting menu
+int Application::scenetype = Scene_4;
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
@@ -103,41 +105,46 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_1;
 }
 
 void Application::Run()
 {
-	Scene* scene = new SceneSP2Main;//don't change here
+	Scene* scene = new SceneSP2Main;
+	Scene* scene2 = new SceneSP2Room1;
+	Scene* scene3 = new SceneSP2Room2;
+	Scene* scene4 = new SceneSP2Menu;
+	scene->Init();
+	scene2->Init();
+	scene3->Init();
+	scene4->Init();
 	//Main Loop
 	//Scene Manager
-	switch (scenetype) {
-	case Scene_1:
-		scene->Init();
-		break;
-	case Scene_2:
-		delete scene;
-		scene = new SceneSP2Room1();
-		scene->Init();
-		break;
-	case Scene_3:
-		delete scene;
-		scene = new SceneSP2Room2();
-		scene->Init();
-		break;
-	case Scene_4:
-		delete scene;
-		scene = new SceneSP2Menu();
-		scene->Init();
-		break;
-	}
 	
+
+
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		scene->Update(m_timer.getElapsedTime());
-		scene->Render();
+		switch (scenetype) {
+		case Scene_1:
+			scene->Update(m_timer.getElapsedTime());
+			scene->Render();
+			break;
+		case Scene_2:
+			scene2->Update(m_timer.getElapsedTime());
+			scene2->Render();
+			break;
+		case Scene_3:
+			scene3->Update(m_timer.getElapsedTime());
+			scene3->Render();
+			break;
+		case Scene_4:
+			scene4->Update(m_timer.getElapsedTime());
+			scene4->Render();
+			break;
+		}
+		
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -146,6 +153,9 @@ void Application::Run()
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
 	delete scene;
+	delete scene2;
+	delete scene3;
+	delete scene4;
 }
 unsigned Application::m_width;
 unsigned Application::m_height;
@@ -163,9 +173,15 @@ void Application::SetCursorPos(double xpos, double ypos)
 	glfwSetCursorPos(m_window, xpos, ypos);
 }
 
-void Application::hidemousecursor(void)
+void Application::hidemousecursor(bool hide)
 {
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	if (hide) {
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+	else {
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	
 }
 
 
@@ -183,6 +199,9 @@ void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
 }
+
+
+
 
 
 void Application::Exit()
