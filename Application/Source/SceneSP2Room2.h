@@ -280,12 +280,11 @@ private:
 	Wall classroom_walls[2]; //top, wall
 	Wall classroom_tables[20];
 	Wall classroom_chairs[20];
+	Wall lounge_table;
 
 	const int wall_count = 11;
 	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], &school_walls[1], &school_walls[2], &school_walls[3], &school_walls[4], &school_walls[5],
-					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]
-						/*&school_door[0], &school_door[3],&school_door[1], &school_door[2],&classroom_door[0], &lounge_door[0],&classroom_door[3],&lounge_door[3],
-	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
+					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]};
 
 	Door school_door[2];
 	Door classroom_door[2];
@@ -293,6 +292,8 @@ private:
 	Door* all_doors[6] = { &school_door[0], &school_door[1], 
 							&lounge_door[1], &classroom_door[0],
 							&classroom_door[1],&lounge_door[0]};
+
+	
 
 	DOOR_STATE DS_school, DS_classroom, DS_lounge;
 	bool interact;

@@ -199,6 +199,7 @@ void SceneSP2Room2::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+
 	//walls
 	school_walls[0].mid.Set(0, 17.5, 0); 
 	school_walls[1].mid.Set(-57.5, 12.5, 0);
@@ -210,7 +211,6 @@ void SceneSP2Room2::Init()
 	school_walls[1].lengthx = 105;
 	school_walls[2].lengthx = 105;
 	school_walls[4].lengthz = school_walls[5].lengthz = 100;
-	//school_walls[0].lengthz = school_walls[1].lengthz = school_walls[2].lengthz = school_walls[3].lengthz = school_walls[4].lengthx = school_walls[5].lengthx = 1;
 	school_walls[0].lengthx = 10;
 	school_walls[3].lengthx = 220;
 
@@ -225,16 +225,12 @@ void SceneSP2Room2::Init()
 	lounge_walls[1].mid.Set(-10, 12.5, -22.5);
 	lounge_walls[2].mid.Set(-10, 12.5, -77.5);
 	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 45;
-	//lounge_walls[1].lengthx = lounge_walls[2].lengthx = 1;
 	lounge_walls[0].lengthz = 10;
-	//lounge_walls[0].lengthx = 1;
 
 	classroom_walls[0].mid.Set(10, 17.5, -95);
 	classroom_walls[1].mid.Set(10, 12.5, -45);
 	classroom_walls[1].lengthz = 90;
-	//classroom_walls[1].lengthx = classroom_walls[2].lengthx = 1;
 	classroom_walls[0].lengthz = 10;
-	//classroom_walls[0].lengthx = 1;
 	for (int i = 1; i < 3; i++)
 	{
 		lounge_walls[i].lengthy = 25;
@@ -245,7 +241,7 @@ void SceneSP2Room2::Init()
 
 
 
-
+	//doors
 	school_door[0].mid.Set(-2.5, 5, 0);
 	school_door[1].mid.Set(2.5, 5, 0);
 	lounge_door[0].mid.Set(-10, 5, -47.5);
@@ -265,6 +261,25 @@ void SceneSP2Room2::Init()
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
 	
+	//chairs/table
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			classroom_tables[row * 5 + col].mid.Set(40 + row * 15, 3, -80 + (col * 15));
+			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
+			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
+			//lengthy unset
+			classroom_chairs[row * 5 + col].mid.Set(40 + row * 15 + 5, 3, -80 + (col * 15));
+			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
+			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
+			//lengthy unset
+		}
+	}
+	lounge_table.mid.Set(-105, 2.5, -30); //y value estimated
+	lounge_table.lengthx = 10; //not sure since obj
+	lounge_table.lengthz = 20; //not sure since obj
+	//lengthy unset
 
 
 	//list of lockers
@@ -325,6 +340,13 @@ void SceneSP2Room2::Init()
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
+	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("chair", "OBJ//schoolChair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//greywood.tga");
+	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//Table.obj");
+	meshList[GEO_TABLE]->textureID = LoadTGA("Image//greywood.tga");
+	meshList[GEO_LONGTABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//LongTable.obj");
+	meshList[GEO_LONGTABLE]->textureID = LoadTGA("Image//darkwood.tga");
+	
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
@@ -854,6 +876,23 @@ void SceneSP2Room2::Render()
 		RenderMesh(meshList[GEO_WALL], true);
 		modelStack.PopMatrix();
 	}
+	//tables and chairs in classroom
+	for (int i = 0; i < 20; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(classroom_tables[i].mid.x, classroom_tables[i].mid.y, classroom_tables[i].mid.z);
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Scale(0.025, 0.025, 0.05);
+		RenderMesh(meshList[GEO_TABLE], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(classroom_chairs[i].mid.x, classroom_chairs[i].mid.y, classroom_chairs[i].mid.z);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[GEO_CHAIR], true);
+		modelStack.PopMatrix();
+	}
 
 	//all doors
 	//schoolleft
@@ -865,7 +904,6 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
-
 	//school right
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[1].mid.x, school_door[1].mid.y, school_door[1].mid.z);
@@ -875,7 +913,6 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
-
 	//loungeright
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_door[1].mid.x, lounge_door[1].mid.y, lounge_door[1].mid.z);
@@ -885,7 +922,6 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
-
 	//classroomleft
 	modelStack.PushMatrix();
 	modelStack.Translate(classroom_door[0].mid.x, classroom_door[0].mid.y, classroom_door[0].mid.z);
@@ -895,7 +931,6 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(classroom_door[0].lengthx, classroom_door[0].lengthy, classroom_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
-
 	//classroom right
 	modelStack.PushMatrix();
 	modelStack.Translate(classroom_door[1].mid.x, classroom_door[1].mid.y, classroom_door[1].mid.z);
@@ -914,8 +949,6 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
-	
-
 	//school floor
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -50);
@@ -930,7 +963,14 @@ void SceneSP2Room2::Render()
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
-	
+	//longtable in faculty lounge
+	modelStack.PushMatrix();
+	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
+	modelStack.Scale(0.1, 0.1, 0.1);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	RenderMesh(meshList[GEO_LONGTABLE], true);
+	modelStack.PopMatrix();
 	
 	
 
