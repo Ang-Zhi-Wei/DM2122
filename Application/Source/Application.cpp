@@ -18,9 +18,10 @@ GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
-//Define an error callback
+
 //starting menu(just change back to scene_4 when done)
 int Application::scenetype = Scene_4;
+//Define an error callback
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
