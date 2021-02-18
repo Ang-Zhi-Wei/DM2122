@@ -287,6 +287,7 @@ void SceneSP2Room2::Init()
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
+	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
@@ -604,7 +605,7 @@ void SceneSP2Room2::Render()
 	}
 
 	//school floor
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -100);
 	modelStack.Scale(500, 1, 200);
