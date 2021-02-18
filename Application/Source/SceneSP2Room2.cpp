@@ -287,6 +287,7 @@ void SceneSP2Room2::Init()
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
+	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
@@ -311,6 +312,15 @@ void SceneSP2Room2::Init()
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
+	//trap mesh
+	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
+	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
+	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	//trap list
+	traplist.push_back(trap(trap::beartrap, Vector3(-55, 0, -64)));
+	traplist.push_back(trap(trap::beartrap, Vector3(75, 0, -124)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-10, 0, -46)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-134, 0, -144)));
 	
 }
 
@@ -474,8 +484,23 @@ void SceneSP2Room2::Update(double dt)
 		}
 	}
 
-	
-	
+	//trap detection
+	bool detected = false;
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			if (traplist[i].nearby(camera.position)) {
+				detected = true;
+				if (detected) {
+					camera.Setslow(true);
+				}
+				else {
+					camera.Setslow(false);
+				}
+			}
+			break;
+		}
+	}
 }
 
 void SceneSP2Room2::Render()
@@ -540,7 +565,17 @@ void SceneSP2Room2::Render()
 
 	//skybox
 	//RenderSkybox();
-	
+	//trap rendering
+	for (int i = 0; i < traplist.size(); i++) {
+		switch (traplist[i].TRAPTYPE) {
+		case trap::beartrap:
+			modelStack.PushMatrix();
+			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			RenderMesh(meshList[GEO_BEARTRAP], true);
+			modelStack.PopMatrix();
+			break;
+		}
+	}
 	//lockers
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		modelStack.PushMatrix();
@@ -569,7 +604,7 @@ void SceneSP2Room2::Render()
 	}
 
 	//school floor
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -100);
 	modelStack.Scale(500, 1, 200);

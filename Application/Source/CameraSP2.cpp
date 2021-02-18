@@ -36,12 +36,16 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	playerStamina = 10;
 	cooldown = 1;
 	can_move = true;
+	slowed = false;
 }
 
 void CameraSP2::Update(double dt)
 {
 	float CAMERA_SPEED = 20.f;
-	static const float ZOOM_SPEED = 20.f;
+	if (slowed) {
+		CAMERA_SPEED = 3;
+	}
+	//static const float ZOOM_SPEED = 20.f;
 	//static const float rotational_speed = 45.0f;
 	
 	//shift to sprint
@@ -345,6 +349,12 @@ void CameraSP2::teleport(Vector3 position)
 	this->position.z += distance.z;
 	target = rawTarget + viewTarget;
 }
+
+void CameraSP2::Setslow(bool slow)
+{
+	slowed = slow;
+}
+
 
 
 

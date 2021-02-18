@@ -70,6 +70,8 @@ public:
 		//colliderbox 
 		Colliderbox,
 		
+		//Traps
+		GEO_BEARTRAP,
 
 		//UI tings
 		GEO_TEXT,
@@ -84,7 +86,16 @@ public:
 		GEO_INVENTORY,
 		GEO_BATTERY,
 		GEO_SELECT,
-		GEO_ITEMIMAGE,
+		
+		GEO_ITEMDISPLAY,
+		GEO_ITEMIMAGE0,
+		GEO_ITEMIMAGE1,
+		GEO_ITEMIMAGE2,
+		GEO_ITEMIMAGE3,
+		GEO_ITEMIMAGE4,
+		GEO_ITEMIMAGE5,
+		GEO_ITEMIMAGE6,
+		GEO_ITEMIMAGE7,
 
 		//paths
 		GEO_CENTRE,
@@ -217,18 +228,36 @@ private:
 			BATTERY,
 			ITEM2,
 			ITEM3
+			//add more depending on whta u need, don forget set in Set function
 		};
-		Vector3 pos;
-		const char* image;
-		ITEM_TYPE name;
-		std::string description;
+		//Vector3 pos; //only if u plan to reuse struct for rendering
+		const char* image; //image of item in inventory
+		int count;
+		ITEM_TYPE type; //type of item (for reusability e.g 100 batteries; easier setting)
+		std::string name;  //Name that shows up in item display; can also be used to differentiate btw objects of same type but different, eg both keys but unlock diff doors, type = key but name different
+		std::string description; //Short description of item that shows up in item display
 
-		Item(Vector3 pos, ITEM_TYPE name, const char* image, std::string description)
+		Item()
 		{
-			this->pos = pos;
+			count = 1;
+		}
+		void Set(std::string name, Vector3 pos, ITEM_TYPE type)
+		{
+			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
+			this->type = type;
 			this->name = name;
-			this->image = image;
-			this->description = description;
+			switch (type)
+			{
+			case BATTERY:
+				this->description = "Use to refill flashlight batteries aaaaaa idk";
+				this->image = "Image//fountaintexture.tga";
+				//set image and description
+				break;
+			case ITEM2:
+				this->description = "TESTESTTESTETSESTESTESTETST>--|-o";
+				this->image = "Image//man1.tga";
+				break;
+			}
 		}
 	};
 
@@ -240,7 +269,7 @@ private:
 
 		Inventory()
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 8; i++)
 			{
 				items[i] = nullptr;
 			}
@@ -335,6 +364,29 @@ private:
 		}
 	};
 
+	struct trap {
+		enum traptype {
+			beartrap,
+		};
+		int TRAPTYPE;
+		Vector3 TrapPosition;
+		trap() {
+			TRAPTYPE = beartrap;
+			TrapPosition = (0, 0, 0);
+		}
+		trap(int TRAPTYPE, Vector3 TrapPosition) {
+			this->TRAPTYPE = TRAPTYPE;
+			this->TrapPosition = TrapPosition;
+		}
+		bool nearby(Vector3 CameraPosition) {
+			//calculating based on xz plane
+			CameraPosition.y = 0;
+			Vector3 temp = TrapPosition;
+			temp.y = 0;
+			Vector3 distance = temp - CameraPosition;
+			return(distance.Length() < 3);
+		}
+	};
 	//game related vars
 	bool flashlight;
 	float flashlight_lifetime;
@@ -345,7 +397,6 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 
-
 	float campos_x;
 	float campos_y;
 	float campos_z;
@@ -355,11 +406,17 @@ private:
 
 	Ghost ghost;
 	Inventory inventory;
+	Item test;
+	Item test2;
+
 	Vector3 temp;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
-	void UseItem(int itemtype);
+	std::vector<trap>traplist;
+	Mesh* itemImage[8];
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

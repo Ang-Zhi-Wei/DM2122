@@ -72,11 +72,13 @@ void Application::Init()
 	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
 
 	//FullScreen
+	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
+	//Windowed mode
+	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
 
-	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
+
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
-	//megumin
+	//This one is just my assigment 1 window
 	//m_window = glfwCreateWindow(1440, 1080, "Megumin", NULL, NULL);
 	//If the window couldn't be created
 	if (!m_window)
@@ -102,7 +104,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-	scenetype = Scene_1;
+	scenetype = Scene_2;
 }
 
 void Application::Run()

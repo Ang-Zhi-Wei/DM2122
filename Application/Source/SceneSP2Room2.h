@@ -55,6 +55,8 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 
+		//trap
+		GEO_BEARTRAP,
 		
 		NUM_GEOMETRY,
 	};
@@ -227,7 +229,29 @@ private:
 			}
 		}
 	};
-
+	struct trap {
+		enum traptype {
+			beartrap,
+		};
+		int TRAPTYPE;
+		Vector3 TrapPosition;
+		trap() {
+			TRAPTYPE = beartrap;
+			TrapPosition = (0, 0, 0);
+		}
+		trap(int TRAPTYPE, Vector3 TrapPosition) {
+			this->TRAPTYPE = TRAPTYPE;
+			this->TrapPosition = TrapPosition;
+		}
+		bool nearby(Vector3 CameraPosition) {
+			//calculating based on xz plane
+			CameraPosition.y = 0;
+			Vector3 temp = TrapPosition;
+			temp.y = 0;
+			Vector3 distance = temp - CameraPosition;
+			return(distance.Length() < 3);
+		}
+	};
 	//game related vars
 	bool flashlight;
 	bool inLocker;
@@ -252,6 +276,7 @@ private:
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
+	std::vector<trap>traplist;
 	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
