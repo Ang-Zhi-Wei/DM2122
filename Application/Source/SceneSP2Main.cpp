@@ -835,7 +835,6 @@ void SceneSP2Main::Init()
 	Colliderlist[98].setlength(10, 20, 10);
 	Colliderlist[98].Setposition(Vector3(-310, 5, 50));
 	//Bench colliders
-	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[99].setlength(25, 20, 10);
 	Colliderlist[99].Setposition(Vector3(110, 2, 30));
@@ -860,8 +859,13 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[106].setlength(25, 20, 10);
 	Colliderlist[106].Setposition(Vector3(-170, 2, -30));
+	//Gate collider
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[107].setlength(12, 20, 35);
+	Colliderlist[107].Setposition(Vector3(-20, -4, 275));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[99].getxlength(), Colliderlist[99].getylength(), Colliderlist[99].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[107].getxlength(), Colliderlist[107].getylength(), Colliderlist[107].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1515,7 +1519,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[99].getPosition().x, Colliderlist[99].getPosition().y, Colliderlist[99].getPosition().z);
+	modelStack.Translate(Colliderlist[107].getPosition().x, Colliderlist[107].getPosition().y, Colliderlist[107].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -2412,17 +2416,17 @@ void SceneSP2Main::RenderFence()
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_ARCH], true);
 	modelStack.PopMatrix();*/
-
+	//@Gate
 	modelStack.PushMatrix();
-	modelStack.Translate(-20, -4, 275);
-	modelStack.Rotate(70, 0, 1, 0);
+	modelStack.Translate(-25, -4, 275);
+	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_GATE], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(20, -4, 275);
-	modelStack.Rotate(-70, 0, 1, 0);
+	modelStack.Translate(25, -4, 275);
+	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_GATE], true);
 	modelStack.PopMatrix();
