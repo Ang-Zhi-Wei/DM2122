@@ -19,6 +19,7 @@ const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 //Define an error callback
+int Application::scenetype = Scene_1;
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
@@ -103,10 +104,6 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-
-	//start in menu
-	scenetype = Scene_4;
-
 }
 
 void Application::Run()
@@ -134,8 +131,7 @@ void Application::Run()
 		scene->Init();
 		break;
 	}
-
-
+	
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -183,7 +179,7 @@ int Application::GetWindowHeight()
 	return m_height;
 }
 
-void Application::setscene(int scenenum)
+void Application::setscene(static int scenenum)
 {
 	scenetype = scenenum;
 }
