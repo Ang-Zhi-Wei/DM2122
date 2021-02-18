@@ -288,9 +288,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("Building", "OBJ//gate.obj");
 	meshList[GEO_GATE]->textureID = LoadTGA("Assigment2Images//metalgate.tga");
 	meshList[GEO_GATE]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	meshList[GEO_SWING] = MeshBuilder::GenerateOBJ("Building", "OBJ//Swing.obj");
-	//meshList[GEO_SWING]->textureID = LoadTGA("Assigment2Images//swingtexture.tga");
-	meshList[GEO_SWING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//Mysterious man
 	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
@@ -477,6 +474,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
+	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
@@ -498,6 +496,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("breathing", 1.5, 1, White);
+	meshList[GEO_LIVES]->textureID = LoadTGA("Image//lungicon.tga");
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -1656,12 +1656,6 @@ void SceneSP2Main::Render()
 	RenderTables();
 
 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(-130, 8, 210);
-	modelStack.Rotate(270, 1, 0, 0);
-	modelStack.Scale(0.15, 0.15, 0.15);
-	RenderMesh(meshList[GEO_SWING], true);
-	modelStack.PopMatrix();*/
 
 	//lockers
 	for (int i = 0; i < Lockerlist.size(); i++) {
@@ -1690,6 +1684,8 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//breathing icon
+
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
