@@ -292,8 +292,7 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//trap list(need at least one trap or sprinting will be buggy,can be hidden)
-	traplist.push_back(trap(trap::beartrap, Vector3(1000000, 1000000, 1000000)));
+	//trap list
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -329,12 +328,12 @@ void SceneSP2Room1::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-			}
-			if (detected) {
-				camera.CAMERA_SPEED = 3;//slowed
-			}
-			else {
-				camera.CAMERA_SPEED = 20;//default
+				if (detected) {
+					camera.Setslow(true);
+				}
+				else {
+					camera.Setslow(false);
+				}
 			}
 			break;
 		}

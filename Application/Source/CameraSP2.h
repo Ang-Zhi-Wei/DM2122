@@ -30,9 +30,8 @@ public:
 	float boundX2;
 	float boundZ1;
 	float boundZ2;
-	float CAMERA_SPEED;
 	bool can_move;
-	
+	bool slowed;
 	CameraSP2();
 	~CameraSP2();
 	
@@ -43,6 +42,7 @@ public:
 	void setchecker(std::vector<ColliderBox>Checker);
 	void SetBounds(float X1, float X2, float Z1, float Z2);
 	void teleport(Vector3 position);
+	void Setslow(bool slow);
 };
 
 #endif
