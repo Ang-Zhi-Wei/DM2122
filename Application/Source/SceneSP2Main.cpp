@@ -1207,6 +1207,7 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
+	
 	if (Qpressed)
 	{
 		Qpressed = false;
@@ -1223,6 +1224,7 @@ void SceneSP2Main::Update(double dt)
 			light[1].power = 2;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 		}
+		
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
 	if (flashlight)
@@ -1234,6 +1236,9 @@ void SceneSP2Main::Update(double dt)
 		else
 		{
 			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
 
