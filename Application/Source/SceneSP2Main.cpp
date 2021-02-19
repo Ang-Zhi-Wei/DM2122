@@ -40,7 +40,6 @@ void SceneSP2Main::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
 
-	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 9, 0));
 
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
 		0));
@@ -886,11 +885,12 @@ void SceneSP2Main::Init()
 	//test examples for item
 	/*test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
 	test2.Set("Battery", (0, 0, 0), Item::BATTERY);*/
-	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	PickUpItem(&test2); //to be called only in one frame.
-	PickUpItem(&test);
-	PickUpItem(&test2);
-	PickUpItem(&test2);
+	//PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	//PickUpItem(&test2); //to be called only in one frame.
+	//PickUpItem(&test);
+	//PickUpItem(&test2);
+	//PickUpItem(&test2);
+
 
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");

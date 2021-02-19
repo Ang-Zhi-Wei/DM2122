@@ -151,9 +151,10 @@ void SceneSP2Room1::Init()
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga"); //At time of typing this, I haven't sent it yet
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
-	
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
+	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 
 
 
