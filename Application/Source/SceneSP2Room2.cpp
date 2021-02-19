@@ -1027,9 +1027,6 @@ void SceneSP2Room2::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is scene 2", Color(1, 1, 0), 4, 22, 5);
-	modelStack.PopMatrix();
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
