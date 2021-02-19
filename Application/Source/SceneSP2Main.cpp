@@ -859,8 +859,13 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[108].setlength(1, 20, 35);
 	Colliderlist[108].Setposition(Vector3(25, -4, 275));
+	//Table collider same position add 1.5
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[109].setlength(28, 20, 23);
+	Colliderlist[109].Setposition(Vector3(130, 8, 211.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[109].getxlength(), Colliderlist[109].getylength(), Colliderlist[109].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1618,10 +1623,11 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	//@collider
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[109].getPosition().x, Colliderlist[109].getPosition().y, Colliderlist[109].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	RenderBuilding();
 
@@ -2065,9 +2071,6 @@ void SceneSP2Main::Render()
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost.state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-	////checking
-	//std::cout << camera.position.x << std::endl;
-	//std::cout << camera.position.z << std::endl;
 }
 
 void SceneSP2Main::Exit()
@@ -2940,9 +2943,10 @@ void SceneSP2Main::RenderFence()
 
 void SceneSP2Main::RenderTables()
 {
+	//@tables
 	modelStack.PushMatrix();
 	modelStack.Translate(130, 8, 210);
-	//modelStack.Rotate(-90, 1, 0, 0);
+	//modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(0.2, 0.3, 0.2);
 	RenderMesh(meshList[GEO_TABLE], true);
 	modelStack.PopMatrix();
