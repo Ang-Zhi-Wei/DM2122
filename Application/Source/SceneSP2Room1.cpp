@@ -127,17 +127,17 @@ void SceneSP2Room1::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Nightn//front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Nightn//back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Nightn//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Night//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Nightn//right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Nightn//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Nightn//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
 
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
@@ -151,10 +151,10 @@ void SceneSP2Room1::Init()
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga"); //At time of typing this, I haven't sent it yet
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
-	
-
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
+	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 
 
 	//Text
@@ -234,6 +234,7 @@ void SceneSP2Room1::Init()
 
 
 	flashlight = true;
+	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -261,7 +262,11 @@ void SceneSP2Room1::Init()
 	jumpscareEntrance4 = 0;
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
-
+	//lockers
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(-8, 0, 120));
+	Lockerlist.push_back(Locker());
+	Lockerlist[1].setpos(Vector3(90.5, 0, 145));
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(1, 20, 100);
@@ -302,15 +307,22 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(25, 20, 1);
 	Colliderlist[12].Setposition(Vector3(82.5, 10, 170));
+	//Locker colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[13].setlength(3.9, 10, 4.3);
+	Colliderlist[13].Setposition(Lockerlist[0].getpos());
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(3.9, 10, 4.3);
+	Colliderlist[14].Setposition(Lockerlist[1].getpos());
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
-	//Locker test
+	//Locker Mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	
+
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 	//trap mesh
@@ -318,6 +330,9 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
+	traplist.push_back(trap(trap::beartrap, Vector3(-7, 0.5, 150)));
+	traplist.push_back(trap(trap::beartrap, Vector3(64, 0.5, 90))); 
+	traplist.push_back(trap(trap::beartrap, Vector3(80, 0.5, 130)));
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -462,6 +477,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	//Locker
 
+
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
@@ -493,22 +509,39 @@ void SceneSP2Room1::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+
+	if (Qpressed)
 	{
-		flashlight = !flashlight;
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
+
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+		}
 	}
 
 	//ghost
@@ -573,16 +606,28 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive1 == true)
 		jumpscareTimer1 -= dt;
 	
-	if ((jumpscareTimer1 <= jumpscareTimerReset1 - 0.2)&&(jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	if ((jumpscareTimer1 >= 0.5) && (jumpscareTimer1 <= jumpscareTimerReset1 - 0.2))
 	{
 		jumpscareActive1 = false;
 	}
 	if (jumpscareTimer1 <= 0)
 	{
+
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1;
-		jumpscareEntrance1 = 1;
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + 5;
 	}
+
+	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	{
+		jumpscareActive1 = true;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = true;
+		jumpscareTimer1 = jumpscareTimerReset1= rand() % 5 + 5;
+
+		jumpscareEntrance1 = 1;
+	}*/
 
 	//Jumpscare, living room
 	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
@@ -597,15 +642,15 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive2 == true)
 		jumpscareTimer2 -= dt;
 
-	if ((jumpscareTimer2 <= jumpscareTimerReset2 - 0.2) && (jumpscareTimer2 >= 1) && (jumpscareEntrance2 == 1))
+	if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
 	{
 		jumpscareActive2 = false;
 	}
 	if (jumpscareTimer2 <= 0)
 	{
+
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2;
-		jumpscareEntrance2 = 1;
+		jumpscareTimer2 = jumpscareTimerReset2 = rand() % 5 + 5;
 	}
 
 
@@ -622,17 +667,17 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimerActive3 == true)
 		jumpscareTimer3 -= dt;
-
-	if ((jumpscareTimer3 <= jumpscareTimerReset3 - 0.2) && (jumpscareTimer3 >= 1) && (jumpscareEntrance3 == 1))
+	if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
 	{
 		jumpscareActive3 = false;
 	}
 	if (jumpscareTimer3 <= 0)
 	{
+
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3;
-		jumpscareEntrance3 = 1;
+		jumpscareTimer3 = jumpscareTimerReset3 = rand() % 5 + 5;
 	}
+
 
 
 	//Jumpscare, Final room
@@ -648,17 +693,17 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive4 == true)
 		jumpscareTimer4 -= dt;
 
-	if ((jumpscareTimer4 <= jumpscareTimerReset4 - 0.2) && (jumpscareTimer4 >= 1) && (jumpscareEntrance4 == 1))
+	if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
 	{
 		jumpscareActive4 = false;
 	}
 	if (jumpscareTimer4 <= 0)
 	{
+
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4;
-		jumpscareEntrance4 = 1;
+		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + 5;
 	}
-	
+
 }
 
 void SceneSP2Room1::PauseUpdate(double dt)
@@ -748,6 +793,7 @@ void SceneSP2Room1::Render()
 		case trap::beartrap:
 			modelStack.PushMatrix();
 			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			modelStack.Scale(0.5, 0.5, 0.5);
 			RenderMesh(meshList[GEO_BEARTRAP], true);
 			modelStack.PopMatrix();
 			break;
@@ -761,6 +807,20 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
 	
+	//door
+	modelStack.PushMatrix();
+	modelStack.Translate(-7.5, 5, 170);
+	modelStack.Scale(5,10,1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//wall on door
+	modelStack.PushMatrix();
+	modelStack.Translate(-7.5, 15, 170);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
+	modelStack.PopMatrix();
+
 	//Left wall
 
 	modelStack.PushMatrix();
@@ -783,6 +843,20 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(27.5, 0, 132.5);
 	modelStack.Scale(75, 1, 75);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Door
+	modelStack.PushMatrix();
+	modelStack.Translate(62.5, 5, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//Door wall
+	modelStack.PushMatrix();
+	modelStack.Translate(62.5, 15, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
 	//Right wall
@@ -822,6 +896,20 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(72.5, 0, 80);
 	modelStack.Scale(40, 1, 30);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Door
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 5, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//Doorwall
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 15, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
 	//Left wall

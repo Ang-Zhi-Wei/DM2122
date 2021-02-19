@@ -15,7 +15,7 @@
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
-
+#include "time.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -65,7 +65,7 @@ void Application::Init()
 	{
 		exit(EXIT_FAILURE);
 	}
-
+	srand(time(NULL));
 	//Set the GLFW window creation hints - these are optional
 	glfwWindowHint(GLFW_SAMPLES, 4); //Request 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //Request a specific OpenGL version
@@ -111,21 +111,15 @@ void Application::Init()
 }
 
 
-//starting menu(just change back to scene_4 when done)
 
-//initialise functions
-bool Application::isquit = false;
-bool Application::ispaused = false;
-
-//initialise scenes
-int Application::scenetype = Scene_Menu;
+//starting menu(just change back to scene_Menu when done)
+int Application::scenetype = Scene_1;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
-Scene* Application::scene = sceneMain;
-
+Scene* Application::scene = scene1;
 void Application::Run()
 {
 	scene->Init();
@@ -133,16 +127,9 @@ void Application::Run()
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && isquit==false)
+	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		//scene update
-		if(!ispaused)
-			scene->Update(m_timer.getElapsedTime());
-
-		//pause screen update
-		if(ispaused)
-			scene->PauseUpdate(m_timer.getElapsedTime());
-
+		scene->Update(m_timer.getElapsedTime());
 		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
@@ -228,15 +215,6 @@ void Application::setscene(int scenenum)
 	
 }
 
-void Application::quit(static bool quit)
-{
-	isquit = quit;
-}
-
-void Application::pause(static bool pause)
-{
-	ispaused = pause;
-}
 
 
 
