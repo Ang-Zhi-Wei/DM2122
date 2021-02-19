@@ -378,32 +378,87 @@ void SceneSP2Room1::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
+	if (!Application::IsKeyPressed('Q'))
 	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
+		Qreleased = true;
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F'))
+	else
 	{
-		Fpressed = true;
-		Freleased = false;
+		if (Qreleased)
+		{
+			Qpressed = true;
+
+		}
+		Qreleased = false;
+	}
+	if (!Application::IsKeyPressed('F'))
+	{
+		Freleased = true;
+		Fpressed = false;
 	}
 	else
 	{
-		if (Fpressed)
+		if (Freleased)
 		{
-			Freleased = true;
+			Fpressed = true;
 		}
-		Fpressed = false;
+		Freleased = false;
+	}
+	if (!Application::IsKeyPressed('E'))
+	{
+		Ereleased = true;
+		Epressed = false;
+	}
+	else
+	{
+		if (Ereleased)
+		{
+			Epressed = true;
+		}
+		Ereleased = false;
+	}
+	if (!Application::IsKeyPressed('A'))
+	{
+		Areleased = true;
+		Apressed = false;
+	}
+	else
+	{
+		if (Areleased)
+		{
+			Apressed = true;
+
+		}
+		Areleased = false;
+	}
+	if (!Application::IsKeyPressed('D'))
+	{
+		Dreleased = true;
+		Dpressed = false;
+	}
+	else
+	{
+		if (Dreleased)
+		{
+			Dpressed = true;
+
+		}
+		Dreleased = false;
+	}
+	if (!Application::IsKeyPressed('R'))
+	{
+		Rreleased = true;
+		Rpressed = false;
+	}
+	else
+	{
+		if (Rreleased)
+		{
+			Rpressed = true;
+
+		}
+		Rreleased = false;
 	}
 	//Locker
 
