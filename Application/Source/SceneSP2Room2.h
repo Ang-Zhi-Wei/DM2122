@@ -196,7 +196,30 @@ public:
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
+		GEO_WARNING1,
+		GEO_WARNING2,
+		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
+		GEO_BREATHINGBAR, // breathing
+		GEO_STAMINA,
+		GEO_PLAYGROUND,
+		GEO_LIVES,
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
+
+		GEO_INVENTORY,
+		GEO_BATTERY,
+		GEO_SELECT,
+
+		GEO_ITEMDISPLAY,
+		GEO_ITEMIMAGE0,
+		GEO_ITEMIMAGE1,
+		GEO_ITEMIMAGE2,
+		GEO_ITEMIMAGE3,
+		GEO_ITEMIMAGE4,
+		GEO_ITEMIMAGE5,
+		GEO_ITEMIMAGE6,
+		GEO_ITEMIMAGE7,
 
 		//trap
 		GEO_BEARTRAP,
@@ -340,16 +363,19 @@ private:
 	DOOR_STATE DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
-
+	Mesh* itemImage[8];
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	bool switchtga1;
 	bool switchtga2;
