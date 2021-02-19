@@ -20,6 +20,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
+	virtual void PauseUpdate(double dt);
 	virtual void Render();
 	virtual void Exit();
 	enum GEOMETRY_TYPE
@@ -50,6 +51,13 @@ public:
 		
 		//locker
 		locker,
+		tire,
+		shelves,
+		garagetable,
+		rustycar,
+		rustychair,
+		barrels,
+		rolldoor,
 
 		//UI tings
 		GEO_TEXT,

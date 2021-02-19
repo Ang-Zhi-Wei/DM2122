@@ -19,7 +19,7 @@ void SceneSP2Menu::Init()
 {
 	ButtonNum = 0;
 	menuScreen = true;
-	quit = false;
+	//quit = false;
 	show_credits = false;
 
 	// Init VBO here
@@ -382,7 +382,7 @@ void SceneSP2Menu::Update(double dt)
 		else if (MposX > 1.5 && MposX < 12 && MposY >12.6 && MposY < 13 && !show_credits)
 		{
 			std::cout << "Q Hit!" << std::endl;
-			quit = true;
+			Application::quit(true);
 		}
 		else if (MposX > 20.2 && MposX < 21.7 && MposY>2.3 && MposY < 3.3 && show_credits)
 		{
@@ -422,6 +422,11 @@ void SceneSP2Menu::Update(double dt)
 
 
 	
+
+}
+
+void SceneSP2Menu::PauseUpdate(double dt)
+{
 
 }
 

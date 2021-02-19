@@ -555,22 +555,39 @@ void SceneSP2Room2::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
+
 	if (Qpressed)
 	{
-		flashlight = !flashlight;
 		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
+
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+		}
 	}
 
 	//INTERACTION CHECKS
@@ -837,6 +854,11 @@ void SceneSP2Room2::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
+}
+
+void SceneSP2Room2::PauseUpdate(double dt)
+{
+	Application::hidemousecursor(false);
 }
 
 void SceneSP2Room2::Render()
