@@ -78,6 +78,7 @@ public:
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
+		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
