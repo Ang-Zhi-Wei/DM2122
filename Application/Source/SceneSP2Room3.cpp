@@ -283,70 +283,10 @@ void SceneSP2Room3::Init()
 
 
 	//list of lockers
-	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(8, 0, -30));
-	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(50, 0, -2.1));
-	Lockerlist[1].setyaw(-90);
-	Lockerlist.push_back(Locker());
-	Lockerlist[2].setpos(Vector3(-70, 0, -98));
-	Lockerlist[2].setyaw(90);
-	//wall colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(school_walls[1].lengthx, school_walls[1].lengthy, school_walls[1].lengthz);
-	Colliderlist[0].Setposition(Vector3(school_walls[1].mid.x, school_walls[1].mid.y, school_walls[1].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(school_walls[2].lengthx, school_walls[2].lengthy, school_walls[2].lengthz);
-	Colliderlist[1].Setposition(Vector3(school_walls[2].mid.x, school_walls[2].mid.y, school_walls[2].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(school_walls[3].lengthx, school_walls[3].lengthy, school_walls[3].lengthz);
-	Colliderlist[2].Setposition(Vector3(school_walls[3].mid.x, school_walls[3].mid.y, school_walls[3].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(school_walls[4].lengthx, school_walls[4].lengthy, school_walls[4].lengthz);
-	Colliderlist[3].Setposition(Vector3(school_walls[4].mid.x, school_walls[4].mid.y, school_walls[4].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(school_walls[5].lengthx, school_walls[5].lengthy, school_walls[5].lengthz);
-	Colliderlist[4].Setposition(Vector3(school_walls[5].mid.x, school_walls[5].mid.y, school_walls[5].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(classroom_walls[1].lengthx,classroom_walls[1].lengthy,classroom_walls[1].lengthz);
-	Colliderlist[5].Setposition(Vector3(classroom_walls[1].mid.x,classroom_walls[1].mid.y,classroom_walls[1].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(lounge_walls[1].lengthx,lounge_walls[1].lengthy,lounge_walls[1].lengthz);
-	Colliderlist[6].Setposition(Vector3(lounge_walls[1].mid.x,lounge_walls[1].mid.y,lounge_walls[1].mid.z));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz);
-	Colliderlist[7].Setposition(Vector3(lounge_walls[2].mid.x, lounge_walls[2].mid.y, lounge_walls[2].mid.z));
-	//Locker colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(3.9,10,4.3);
-	Colliderlist[8].Setposition(Lockerlist[0].getpos());
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(4.3, 10, 3.9);
-	Colliderlist[9].Setposition(Lockerlist[1].getpos());
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(4.3, 10, 3.9);
-	Colliderlist[10].Setposition(Lockerlist[2].getpos());
-	//Door colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(school_door[0].lengthx,school_door[0].lengthy,school_door[0].lengthz);
-	Colliderlist[11].Setposition(school_door[0].mid);
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
-	Colliderlist[12].Setposition(school_door[1].mid);
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(classroom_door[0].lengthx,classroom_door[0].lengthy,classroom_door[0].lengthz);
-	Colliderlist[13].Setposition(classroom_door[0].mid);
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz);
-	Colliderlist[14].Setposition(classroom_door[1].mid);
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(lounge_door[0].lengthx,lounge_door[0].lengthy,lounge_door[0].lengthz);
-	Colliderlist[15].Setposition(lounge_door[0].mid);
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
-	Colliderlist[16].Setposition(lounge_door[1].mid);
+	//colliders
+	
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
+	/*meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());*/
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -377,7 +317,7 @@ void SceneSP2Room3::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
-	camera.setchecker(Colliderlist);
+	/*camera.setchecker(Colliderlist);*/
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
@@ -394,10 +334,6 @@ void SceneSP2Room3::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(-57, 0, -10)));
-	traplist.push_back(trap(trap::beartrap, Vector3(100, 0, -55)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-15, 0, -40)));
-	traplist.push_back(trap(trap::beartrap, Vector3(5, 0, -70)));
 	
 }
 
@@ -612,9 +548,6 @@ void SceneSP2Room3::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_classroom = CLOSING;
-			Colliderlist[13].setactive(true);
-			Colliderlist[14].setactive(true);
-			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
 		{
@@ -624,9 +557,6 @@ void SceneSP2Room3::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = CLOSING;
-				Colliderlist[13].setactive(true);
-				Colliderlist[14].setactive(true);
-				camera.setchecker(Colliderlist);
 
 				
 			}
@@ -641,9 +571,6 @@ void SceneSP2Room3::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = OPENING;
-				Colliderlist[13].setactive(false);
-				Colliderlist[14].setactive(false);
-				camera.setchecker(Colliderlist);
 				
 			}
 		}
@@ -677,9 +604,6 @@ void SceneSP2Room3::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_lounge = CLOSING;
-			Colliderlist[15].setactive(true);
-			Colliderlist[16].setactive(true);
-			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
 		{
@@ -689,9 +613,6 @@ void SceneSP2Room3::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = CLOSING;
-				Colliderlist[15].setactive(true);
-				Colliderlist[16].setactive(true);
-				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -704,9 +625,6 @@ void SceneSP2Room3::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = OPENING;
-				Colliderlist[15].setactive(false);
-				Colliderlist[16].setactive(false);
-				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -872,10 +790,10 @@ void SceneSP2Room3::Render()
 
 	}
 	//colliderbox for checking
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();

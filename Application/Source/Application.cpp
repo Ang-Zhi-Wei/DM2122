@@ -110,7 +110,7 @@ void Application::Init()
 }
 
 
-//starting menu(just change back to scene_4 when done)
+//starting menu(just change back to scene_Menu when done)
 int Application::scenetype = Scene_Menu;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
