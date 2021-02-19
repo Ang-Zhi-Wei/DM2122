@@ -87,7 +87,7 @@ public:
 		Ghost()
 		{
 			speed = 5;
-			pos = (0, 0, 0); //TBC
+			pos = Vector3(0, 0, 0); //TBC
 			rotateY = 0;
 			state = NORMAL;
 			waitTime = 5;
@@ -137,7 +137,7 @@ public:
 			}
 
 			//update rotate angle(in render) to face/turn towards direction player is walking in
-			int dir = (newangle - rotateY) / abs(newangle - rotateY);
+			int dir = int((newangle - rotateY) / abs(newangle - rotateY));
 			if ((int)rotateY != (int)newangle)
 			{
 				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
@@ -148,7 +148,7 @@ public:
 			}
 			else
 			{
-				pos += facing * speed * dt;
+				pos += facing * speed * float(dt);
 			}
 		}
 	};

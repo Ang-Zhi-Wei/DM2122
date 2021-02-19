@@ -144,13 +144,13 @@ void SceneSP2Room1::Init()
 	//paths and deco
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//terrain
-	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
-	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
@@ -350,7 +350,7 @@ void SceneSP2Room1::Init()
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 
 	//Set boundary here
@@ -358,7 +358,7 @@ void SceneSP2Room1::Init()
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
-	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(-7, 0.5, 150)));
 	traplist.push_back(trap(trap::beartrap, Vector3(64, 0.5, 90))); 
@@ -403,7 +403,7 @@ void SceneSP2Room1::Update(double dt)
 
 	//trap detection
 	bool detected = false;
-	for (int i = 0; i < traplist.size(); i++) {
+	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
@@ -538,7 +538,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//fps
-	fps = 1.f / dt;
+	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
 	//light
@@ -571,7 +571,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 		if (flashlight_lifetime >= 0)
 		{
-			flashlight_lifetime -= dt;
+			flashlight_lifetime -= float(dt);
 		}
 		else
 		{
@@ -649,7 +649,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case Ghost::WAITING:
-		ghost->waitTime -= dt;
+		ghost->waitTime -= float(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -777,7 +777,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + 5;
+		jumpscareTimer4 = jumpscareTimerReset4 = double(rand() % 5 + 5);
 	}
 
 }
@@ -856,15 +856,15 @@ void SceneSP2Room1::Render()
 
 
 	//lockers
-	for (int i = 0; i < Lockerlist.size(); i++) {
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
 		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Scale(0.2, 0.2, 0.2);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
 	//trap rendering
-	for (int i = 0; i < traplist.size(); i++) {
+	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
 		case trap::beartrap:
 			modelStack.PushMatrix();
@@ -1088,7 +1088,7 @@ void SceneSP2Room1::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
@@ -1113,7 +1113,7 @@ void SceneSP2Room1::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * 4), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -1439,7 +1439,7 @@ void SceneSP2Room1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 
 	//Change this line inside for loop
 	std::string toPrint;
-	if (text.length() > limit)
+	if (signed(text.length()) > limit)
 	{
 		toPrint = text.substr(0, limit);
 		for (unsigned i = 0; i < toPrint.length(); ++i)

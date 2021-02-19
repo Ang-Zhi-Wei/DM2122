@@ -100,22 +100,22 @@ void CameraSP2::Update(double dt)
 				playerStamina -= 5 * dt;
 				cooldown = 1;
 			}
-			position.x += view.x * CAMERA_SPEED * dt;
-			position.z += view.z * CAMERA_SPEED * dt;
-			rawTarget.x += view.x * CAMERA_SPEED * dt;
-			rawTarget.z += view.z * CAMERA_SPEED * dt;
+			position.x += float(view.x * CAMERA_SPEED * dt);
+			position.z += float(view.z * CAMERA_SPEED * dt);
+			rawTarget.x += float(view.x * CAMERA_SPEED * dt);
+			rawTarget.z += float(view.z * CAMERA_SPEED * dt);
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
-				position.x -= view.x * CAMERA_SPEED * dt;
-				position.z -= view.z * CAMERA_SPEED * dt;
-				rawTarget.x -= view.x * CAMERA_SPEED * dt;
-				rawTarget.z -= view.z * CAMERA_SPEED * dt;
+				position.x -= float(view.x * CAMERA_SPEED * dt);
+				position.z -= float(view.z * CAMERA_SPEED * dt);
+				rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
+				rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
 			}
-			for (int i = 0; i < Checker.size(); i++) {
+			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
-					position.x -= view.x * CAMERA_SPEED * dt;
-					position.z -= view.z * CAMERA_SPEED * dt;
-					rawTarget.x -= view.x * CAMERA_SPEED * dt;
-					rawTarget.z -= view.z * CAMERA_SPEED * dt;
+					position.x -= float(view.x * CAMERA_SPEED * dt);
+					position.z -= float(view.z * CAMERA_SPEED * dt);
+					rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
+					rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
 				}
 			}
 
@@ -129,22 +129,22 @@ void CameraSP2::Update(double dt)
 				playerStamina -= 5 * dt;
 				cooldown = 1;
 			}
-			position.x -= right.x * CAMERA_SPEED * dt;
-			position.z -= right.z * CAMERA_SPEED * dt;
-			rawTarget.x -= right.x * CAMERA_SPEED * dt;
-			rawTarget.z -= right.z * CAMERA_SPEED * dt;
+			position.x -= float(right.x * CAMERA_SPEED * dt);
+			position.z -= float(right.z * CAMERA_SPEED * dt);
+			rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
+			rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
-				position.x += right.x * CAMERA_SPEED * dt;
-				position.z += right.z * CAMERA_SPEED * dt;
-				rawTarget.x += right.x * CAMERA_SPEED * dt;
-				rawTarget.z += right.z * CAMERA_SPEED * dt;
+				position.x += float(right.x * CAMERA_SPEED * dt);
+				position.z += float(right.z * CAMERA_SPEED * dt);
+				rawTarget.x += float(right.x * CAMERA_SPEED * dt);
+				rawTarget.z += float(right.z * CAMERA_SPEED * dt);
 			}
 			for (int i = 0; i < Checker.size(); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive()==true) {
-					position.x += right.x * CAMERA_SPEED * dt;
-					position.z += right.z * CAMERA_SPEED * dt;
-					rawTarget.x += right.x * CAMERA_SPEED * dt;
-					rawTarget.z += right.z * CAMERA_SPEED * dt;
+					position.x += float(right.x * CAMERA_SPEED * dt);
+					position.z += float(right.z * CAMERA_SPEED * dt);
+					rawTarget.x += float(right.x * CAMERA_SPEED * dt);
+					rawTarget.z += float(right.z * CAMERA_SPEED * dt);
 				}
 			}
 			target = rawTarget + viewTarget;
@@ -157,22 +157,22 @@ void CameraSP2::Update(double dt)
 				playerStamina -= 5 * dt;
 				cooldown = 1;
 			}
-			position.x -= view.x * CAMERA_SPEED * dt;
-			position.z -= view.z * CAMERA_SPEED * dt;
-			rawTarget.x -= view.x * CAMERA_SPEED * dt;
-			rawTarget.z -= view.z * CAMERA_SPEED * dt;
+			position.x -= float(view.x * CAMERA_SPEED * dt);
+			position.z -= float(view.z * CAMERA_SPEED * dt);
+			rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
+			rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
-				position.x += view.x * CAMERA_SPEED * dt;
-				position.z += view.z * CAMERA_SPEED * dt;
-				rawTarget.x += view.x * CAMERA_SPEED * dt;
-				rawTarget.z += view.z * CAMERA_SPEED * dt;
+				position.x += float(view.x * CAMERA_SPEED * dt);
+				position.z += float(view.z * CAMERA_SPEED * dt);
+				rawTarget.x += float(view.x * CAMERA_SPEED * dt);
+				rawTarget.z += float(view.z * CAMERA_SPEED * dt);
 			}
-			for (int i = 0; i < Checker.size(); i++) {
+			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
-					position.x += view.x * CAMERA_SPEED * dt;
-					position.z += view.z * CAMERA_SPEED * dt;
-					rawTarget.x += view.x * CAMERA_SPEED * dt;
-					rawTarget.z += view.z * CAMERA_SPEED * dt;
+					position.x += float(view.x * CAMERA_SPEED * dt);
+					position.z += float(view.z * CAMERA_SPEED * dt);
+					rawTarget.x += float(view.x * CAMERA_SPEED * dt);
+					rawTarget.z += float(view.z * CAMERA_SPEED * dt);
 				}
 			}
 			target = rawTarget + viewTarget;
@@ -185,22 +185,22 @@ void CameraSP2::Update(double dt)
 				playerStamina -= 5 * dt;
 				cooldown = 1;
 			}
-			position.x += right.x * CAMERA_SPEED * dt;
-			position.z += right.z * CAMERA_SPEED * dt;
-			rawTarget.x += right.x * CAMERA_SPEED * dt;
-			rawTarget.z += right.z * CAMERA_SPEED * dt;
+			position.x += float(right.x * CAMERA_SPEED * dt);
+			position.z += float(right.z * CAMERA_SPEED * dt);
+			rawTarget.x += float(right.x * CAMERA_SPEED * dt);
+			rawTarget.z += float(right.z * CAMERA_SPEED * dt);
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
-				position.x -= right.x * CAMERA_SPEED * dt;
-				position.z -= right.z * CAMERA_SPEED * dt;
-				rawTarget.x -= right.x * CAMERA_SPEED * dt;
-				rawTarget.z -= right.z * CAMERA_SPEED * dt;
+				position.x -= float(right.x * CAMERA_SPEED * dt);
+				position.z -= float(right.z * CAMERA_SPEED * dt);
+				rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
+				rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
 			}
 			for (int i = 0; i < Checker.size(); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
-					position.x -= right.x * CAMERA_SPEED * dt;
-					position.z -= right.z * CAMERA_SPEED * dt;
-					rawTarget.x -= right.x * CAMERA_SPEED * dt;
-					rawTarget.z -= right.z * CAMERA_SPEED * dt;
+					position.x -= float(right.x * CAMERA_SPEED * dt);
+					position.z -= float(right.z * CAMERA_SPEED * dt);
+					rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
+					rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
 				}
 			}
 			target = rawTarget + viewTarget;

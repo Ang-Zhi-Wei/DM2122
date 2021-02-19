@@ -322,7 +322,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = (0.f, 0.f, 0.f);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;

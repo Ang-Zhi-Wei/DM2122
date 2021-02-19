@@ -97,9 +97,9 @@ struct Color
 {
 	float r, g, b;
 	Color(float r = 1, float g = 1, float b = 1) { Set(r, g, b); }
-	void Set(float r, float g, float b) {
-		this->r = r; this->g = g;
-		this->b = b;
+	void Set(float rvalue, float gvalue, float bvalue) {
+		r = rvalue; g = gvalue;
+		b = bvalue;
 	}
 	void Set(int color) {
 		switch (color) {
