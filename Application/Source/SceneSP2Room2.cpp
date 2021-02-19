@@ -345,6 +345,28 @@ void SceneSP2Room2::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	Colliderlist[16].Setposition(lounge_door[1].mid);
+	//chair colliders
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 17].setlength(classroom_chairs[row * 5 + col].lengthx, classroom_chairs[row * 5 + col].lengthy,
+				classroom_chairs[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 17].Setposition(classroom_chairs[row * 5 + col].mid);
+		}
+	}
+	//table colliders
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 37].setlength(classroom_tables[row * 5 + col].lengthx, classroom_tables[row * 5 + col].lengthy,
+				classroom_tables[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
+		}
+	}
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 
@@ -579,6 +601,7 @@ void SceneSP2Room2::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
+
 	if (Qpressed)
 	{
 		Qpressed = false;
@@ -595,6 +618,7 @@ void SceneSP2Room2::Update(double dt)
 			light[1].power = 2;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 		}
+
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
 	if (flashlight)
@@ -606,6 +630,9 @@ void SceneSP2Room2::Update(double dt)
 		else
 		{
 			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
 
@@ -915,6 +942,11 @@ void SceneSP2Room2::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
+}
+
+void SceneSP2Room2::PauseUpdate(double dt)
+{
+	Application::hidemousecursor(false);
 }
 
 void SceneSP2Room2::Render()

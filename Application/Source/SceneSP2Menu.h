@@ -4,7 +4,6 @@
 #include "Mtx44.h"
 #include "Application.h"
 #include "Camera4.h"
-#include "CameraSP2.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "MatrixStack.h"
@@ -19,11 +18,12 @@ public:
 	SceneSP2Menu();
 	~SceneSP2Menu();
 
-	bool quit;
+	
 	bool menuScreen;
 
 	virtual void Init();
 	virtual void Update(double dt);
+	virtual void PauseUpdate(double dt);
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);

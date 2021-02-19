@@ -460,6 +460,11 @@ void SceneSP2Main::Init()
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
 	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
+
 	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
 	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
@@ -1218,6 +1223,7 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
+	
 	if (Qpressed)
 	{
 		Qpressed = false;
@@ -1234,6 +1240,7 @@ void SceneSP2Main::Update(double dt)
 			light[1].power = 2;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 		}
+		
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
 	if (flashlight)
@@ -1245,6 +1252,9 @@ void SceneSP2Main::Update(double dt)
 		else
 		{
 			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
 
@@ -1335,10 +1345,100 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed('P'))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
+
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
+	}
+
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
 
+}
+
+void SceneSP2Main::PauseUpdate(double dt)
+{
+	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed('P'))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Main::Render()
@@ -1963,8 +2063,9 @@ void SceneSP2Main::Render()
 			break;
 		}
 	}
-
-
+	//pause menu
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
 	test1 << "ghost pos: " << ghost->pos;

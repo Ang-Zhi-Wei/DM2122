@@ -16,6 +16,7 @@
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
 #include "time.h"
+
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -117,14 +118,21 @@ bool Application::s3Init = false;
 bool Application::menuInit = false;
 
 
+//initialise functions
+bool Application::isquit = false;
+bool Application::ispaused = false;
+
+
 //starting menu(just change back to scene_Menu when done)
-int Application::scenetype = Scene_Menu;
+int Application::scenetype = Scene_1;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
 Scene* Application::scene = sceneMenu;
+
+
 void Application::Run()
 {
 	scene->Init();
@@ -132,9 +140,16 @@ void Application::Run()
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && isquit==false)
 	{
-		scene->Update(m_timer.getElapsedTime());
+		//scene update
+		if(!ispaused)
+			scene->Update(m_timer.getElapsedTime());
+
+		//pause screen update
+		if(ispaused)
+			scene->PauseUpdate(m_timer.getElapsedTime());
+
 		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
@@ -252,6 +267,15 @@ void Application::setscene(int scenenum)
 	
 }
 
+void Application::quit(static bool quit)
+{
+	isquit = quit;
+}
+
+void Application::pause(static bool pause)
+{
+	ispaused = pause;
+}
 
 
 
