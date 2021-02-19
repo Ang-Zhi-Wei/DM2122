@@ -14,6 +14,7 @@
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
+#include "SceneSP2Room3.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -114,11 +115,11 @@ int Application::scenetype = Scene_Menu;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
+Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
 Scene* Application::scene = sceneMenu;
 void Application::Run()
 {
-	//initiallise all the scenes here
 	scene->Init();
 
 
@@ -201,6 +202,11 @@ void Application::setscene(int scenenum)
 	case Scene_2:
 		scene->Exit();
 		scene = scene2;
+		scene->Init();
+		break;
+	case Scene_3:
+		scene->Exit();
+		scene = scene3;
 		scene->Init();
 		break;
 	}
