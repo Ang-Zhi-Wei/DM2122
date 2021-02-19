@@ -345,6 +345,28 @@ void SceneSP2Room2::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	Colliderlist[16].Setposition(lounge_door[1].mid);
+	//chair colliders
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 17].setlength(classroom_chairs[row * 5 + col].lengthx, classroom_chairs[row * 5 + col].lengthy,
+				classroom_chairs[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 17].Setposition(classroom_chairs[row * 5 + col].mid);
+		}
+	}
+	//table colliders
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 37].setlength(classroom_tables[row * 5 + col].lengthx, classroom_tables[row * 5 + col].lengthy,
+				classroom_tables[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
+		}
+	}
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 
@@ -533,22 +555,39 @@ void SceneSP2Room2::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
+
 	if (Qpressed)
 	{
-		flashlight = !flashlight;
 		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
+
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+		}
 	}
 
 	//INTERACTION CHECKS
@@ -1027,9 +1066,6 @@ void SceneSP2Room2::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is scene 2", Color(1, 1, 0), 4, 22, 5);
-	modelStack.PopMatrix();
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);

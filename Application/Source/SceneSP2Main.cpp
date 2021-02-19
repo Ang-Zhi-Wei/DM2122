@@ -287,7 +287,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("Building", "OBJ//gate.obj");
 	meshList[GEO_GATE]->textureID = LoadTGA("Assigment2Images//metalgate.tga");
 	meshList[GEO_GATE]->material.kAmbient.Set(0.35, 0.35, 0.35);
-
+	//meshList[GEO_GHOST] = MeshBuilder::GenerateOBJ("ghost", "OBJ//Ghost03.obj");
+	//meshList[GEO_GHOST]->textureID = LoadTGA("Image//ghostskin.tga");
+	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
+	meshList[GEO_SKULL]->material.kAmbient.Set(Gray);
 	//Mysterious man
 	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
 	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
@@ -395,26 +398,7 @@ void SceneSP2Main::Init()
 	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
 	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
 
-	light[3].type = Light::LIGHT_SPOT;
-	light[3].position.Set(40, 30, -34);
-	light[3].color.Set(Yellow);
-	light[3].power = 2;
-	light[3].kC = 1.f;
-	light[3].kL = 0.01f;
-	light[3].kQ = 0.001f;
-	light[3].cosCutoff = cos(Math::DegreeToRadian(35));
-	light[3].cosInner = cos(Math::DegreeToRadian(20));
-	light[3].exponent = 3.f;
-	light[3].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
-	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
-	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
-	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
-	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
-	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
-	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
-	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
+
 
 	//light 4 
 	light[4].type = Light::LIGHT_SPOT;
@@ -485,6 +469,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
+	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -1219,6 +1207,7 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
+	
 	if (Qpressed)
 	{
 		Qpressed = false;
@@ -1235,6 +1224,7 @@ void SceneSP2Main::Update(double dt)
 			light[1].power = 2;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 		}
+		
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
 	if (flashlight)
@@ -1246,6 +1236,9 @@ void SceneSP2Main::Update(double dt)
 		else
 		{
 			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
 
@@ -1289,10 +1282,13 @@ void SceneSP2Main::Update(double dt)
 	switch (ghost.state)
 	{
 	case Ghost::NORMAL:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 20)
+		if (!is_talking)
+		{
+			ghost.facing = (camera.position - ghost.pos).Normalized();
+			ghost.distance = (camera.position - ghost.pos).Length();
+			ghost.UpdateMovement(dt);
+		}
+		if (ghost.distance <= 50)
 		{
 			ghost.state = Ghost::CHASING;
 			ghost.speed = 25;
@@ -1305,7 +1301,7 @@ void SceneSP2Main::Update(double dt)
 		if (ghost.distance <= 3 && inLocker)
 		{
 			ghost.state = Ghost::WAITING;
-			ghost.waitTime = 5;
+			ghost.waitTime = 3;
 		}
 		else if (ghost.distance <= 1)
 		{
@@ -1324,7 +1320,7 @@ void SceneSP2Main::Update(double dt)
 	case Ghost::SPEEDRUN:
 		ghost.facing = (ghost.pos - camera.position).Normalized();
 		ghost.UpdateMovement(dt);
-		if (ghost.distance > 300 || !inLocker)
+		if (ghost.distance > 500 || !inLocker)
 		{
 			ghost.state = Ghost::NORMAL;
 			ghost.speed = 5;
@@ -1477,11 +1473,11 @@ void SceneSP2Main::Render()
 	//skybox
 	RenderSkybox();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[LightSphere], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Translate(light[2].position.x, light[2].position.y, light[2].position.z);
@@ -1533,7 +1529,6 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
-
 
 
 	modelStack.PushMatrix();
@@ -1795,6 +1790,24 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost.pos.x, ghost.pos.y, ghost.pos.z);
+	modelStack.Rotate(ghost.rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2, 4.2, 4.2);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 6, 320);
@@ -1817,7 +1830,15 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
-
+	//warning overlay
+	if (ghost.distance <= 50)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost.distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
@@ -1939,15 +1960,15 @@ void SceneSP2Main::Render()
 
 
 
-	/*std::ostringstream test1;
-	test1 << "camera view: " << camera.view;
+	std::ostringstream test1;
+	test1 << "ghost pos: " << ghost.pos;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "light[1]spotdirec: " << light[1].spotDirection;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
-	/*std::ostringstream test2;
-	test2 << "selected: " << inventory.selected;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
+	test3 << "ghost rotateY: " << ghost.rotateY;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test2;
+	test2 << "ghost state: " << ghost.state;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;

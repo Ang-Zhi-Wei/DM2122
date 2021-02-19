@@ -277,10 +277,24 @@ void SceneSP2Room3::Init()
 
 
 	//list of lockers
-	//colliders
-	
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(48, -0.2, -80));
+	//wall colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(1, 25, 100);
+	Colliderlist[0].Setposition(Vector3(50, 12, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(1, 25, 100);
+	Colliderlist[1].Setposition(Vector3(-50, 12, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(130, 30, 2);
+	Colliderlist[2].Setposition(Vector3(0, 12, -100));
+	//locker collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(3.9, 10, 4.3);
+	Colliderlist[3].Setposition(Lockerlist[0].getpos());
 	//colliderbox for checking any collider(just one)
-	/*meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());*/
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[2].getxlength(), Colliderlist[2].getylength(), Colliderlist[2].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -303,7 +317,7 @@ void SceneSP2Room3::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
-	/*camera.setchecker(Colliderlist);*/
+	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
@@ -320,7 +334,8 @@ void SceneSP2Room3::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	
+	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
 }
 
 void SceneSP2Room3::Update(double dt)
@@ -455,22 +470,39 @@ void SceneSP2Room3::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
+
 	if (Qpressed)
 	{
-		flashlight = !flashlight;
 		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
+
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+			light[1].power = 0;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+		}
 	}
 
 	//INTERACTION CHECKS
@@ -777,7 +809,7 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
+	modelStack.Translate(Colliderlist[2].getPosition().x, Colliderlist[2].getPosition().y, Colliderlist[2].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -812,20 +844,19 @@ void SceneSP2Room3::Render()
 	//schoolleft
 
 
-
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 12, -50);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(25, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-30, 12, -50);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(25, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 12, -100);
@@ -833,7 +864,7 @@ void SceneSP2Room3::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 2, 130);
 	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-25, 12,2);
@@ -849,7 +880,7 @@ void SceneSP2Room3::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 2, 20);
 	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//No collider for now
 
 
 
@@ -928,9 +959,6 @@ void SceneSP2Room3::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is Scene3", Color(1, 1, 0), 4, 22, 5);
-	modelStack.PopMatrix();
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
