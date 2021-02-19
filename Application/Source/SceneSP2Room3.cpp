@@ -26,7 +26,7 @@ void SceneSP2Room3::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, -5), Vector3(0, 5, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -133,6 +133,34 @@ void SceneSP2Room3::Init()
 	
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
+
+	meshList[tire] = MeshBuilder::GenerateOBJ("Building", "OBJ//Tire.obj");
+	meshList[tire]->textureID = LoadTGA("Assigment2Images//metalgate.tga");
+	meshList[tire]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[shelves] = MeshBuilder::GenerateOBJ("Building", "OBJ//shelves.obj");
+	meshList[shelves]->textureID = LoadTGA("Assigment2Images//shelves.tga");
+	meshList[shelves]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[garagetable] = MeshBuilder::GenerateOBJ("Building", "OBJ//garagetable.obj");
+	meshList[garagetable]->textureID = LoadTGA("Assigment2Images//garagetable.tga");
+	meshList[garagetable]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[rustycar] = MeshBuilder::GenerateOBJ("Building", "OBJ//rustycar.obj");
+	meshList[rustycar]->textureID = LoadTGA("Assigment2Images//cartexture.tga");
+	meshList[rustycar]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[rustychair] = MeshBuilder::GenerateOBJ("Building", "OBJ//rustychair.obj");
+	meshList[rustychair]->textureID = LoadTGA("Assigment2Images//foldedchair.tga");
+	meshList[rustychair]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[barrels] = MeshBuilder::GenerateOBJ("Building", "OBJ//barrels.obj");
+	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
+	meshList[barrels]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
+	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
+	//meshList[rolldoor]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -782,25 +810,18 @@ void SceneSP2Room3::Render()
 
 	//all doors
 	//schoolleft
-	modelStack.PushMatrix();
-	modelStack.Translate(school_door[0].mid.x, school_door[0].mid.y, school_door[0].mid.z);
-	modelStack.Translate(-2.5, 0, -0.25);
-	modelStack.Rotate(school_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.25);
-	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
-	RenderMesh(meshList[GEO_LEFTDOOR], true);
-	modelStack.PopMatrix();
+
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(50, 12, -50);
+	modelStack.Translate(30, 12, -50);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(25, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-50, 12, -50);
+	modelStack.Translate(-30, 12, -50);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(25, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -815,12 +836,22 @@ void SceneSP2Room3::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 12,2);
+	modelStack.Translate(-25, 12,2);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(30, 2, 130);
+	modelStack.Scale(30, 2, 20);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 12, 2);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 2, 20);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();
+
+
 
 	//school floor
 	modelStack.PushMatrix();
@@ -837,8 +868,52 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, -35);
+	modelStack.Scale(0.4, 0.4, 0.4);
+	RenderMesh(meshList[tire], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-20, 0, -95);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.08, 0.08, 0.08);
+	RenderMesh(meshList[shelves], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-20, 4, -60);
+	//modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(6,6,6);
+	RenderMesh(meshList[garagetable], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1.5,-50);
+	modelStack.Scale(0.13, 0.13, 0.13);
+	RenderMesh(meshList[rustycar], true);
+	modelStack.PopMatrix();
 	
-	
+	modelStack.PushMatrix();
+	modelStack.Translate(-22, 1.2, -25);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(0.1, 0.1, 0.1);
+	RenderMesh(meshList[rustychair], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 0.8, -30);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.05, 0.05, 0.05);
+	RenderMesh(meshList[barrels], true);
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 0.8, 0);
+	//modelStack.Rotate(90, 0, 1, 0);
+	//modelStack.Scale(0.1, 0.1, 0.1);
+	//RenderMesh(meshList[rolldoor], true);
+	//modelStack.PopMatrix();
 	
 
 	//UI OVERLAY
