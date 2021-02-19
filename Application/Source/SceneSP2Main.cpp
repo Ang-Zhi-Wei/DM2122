@@ -31,6 +31,8 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 
+	
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -50,7 +52,7 @@ void SceneSP2Main::Init()
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
 	//hide cursor
-	Application::hidemousecursor(true);
+
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -242,17 +244,17 @@ void SceneSP2Main::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Night//Front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Night//Back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Night//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Night//Left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//Right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Night//Top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//Bottom.tga");
 	//building
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
@@ -1737,11 +1739,11 @@ void SceneSP2Main::Render()
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
 	// breathing bar
-	RenderMeshOnScreen(meshList[GEO_BREATHINGBAR], 14 - (5 - camera.playerStamina * 0.25), 48, camera.playerStamina * 0.5, 1);
+	//RenderMeshOnScreen(meshList[GEO_BREATHINGBAR], 14 - (5 - camera.playerStamina * 0.25), 48, camera.playerStamina * 0.5, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
-	RenderMeshOnScreen(meshList[GEO_LIVES], 6, 48, 2, 2);
+	//RenderMeshOnScreen(meshList[GEO_LIVES], 6, 48, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
