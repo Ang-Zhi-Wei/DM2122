@@ -57,6 +57,9 @@ public:
 		rustychair,
 		barrels,
 		rolldoor,
+		workbench,
+		wheelbarrow,
+		metalcabinet,
 
 		//UI tings
 		GEO_TEXT,

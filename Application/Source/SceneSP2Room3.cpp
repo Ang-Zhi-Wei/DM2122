@@ -158,6 +158,19 @@ void SceneSP2Room3::Init()
 	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	meshList[barrels]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
+	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
+	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
+	//meshList[workbench]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[wheelbarrow] = MeshBuilder::GenerateOBJ("Building", "OBJ//wheelbarrow.obj");
+	meshList[wheelbarrow]->textureID = LoadTGA("Assigment2Images//wheelbarrow.tga");
+	meshList[wheelbarrow]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[metalcabinet] = MeshBuilder::GenerateOBJ("Building", "OBJ//metalcabinet.obj");
+	meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
+	meshList[metalcabinet]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+
 	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
 	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[rolldoor]->material.kAmbient.Set(0.35, 0.35, 0.35);
@@ -900,7 +913,7 @@ void SceneSP2Room3::Render()
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -35);
+	modelStack.Translate(10, 0, -35);
 	modelStack.Scale(0.4, 0.4, 0.4);
 	RenderMesh(meshList[tire], true);
 	modelStack.PopMatrix();
@@ -939,13 +952,31 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[barrels], true);
 	modelStack.PopMatrix();
 
+
 	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0.8, 0);
+	//modelStack.Translate(25, 0.8, -30);
 	//modelStack.Rotate(90, 0, 1, 0);
-	//modelStack.Scale(0.1, 0.1, 0.1);
-	//RenderMesh(meshList[rolldoor], true);
+	//modelStack.Scale(2, 2, 2);
+	//RenderMesh(meshList[workbench], true);
 	//modelStack.PopMatrix();
-	
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30, 4, -40);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(19, 19, 19);
+	RenderMesh(meshList[wheelbarrow], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, -95);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[metalcabinet], true);
+	modelStack.PopMatrix();
+
+
+
 
 	//UI OVERLAY
 	//vision vignette
