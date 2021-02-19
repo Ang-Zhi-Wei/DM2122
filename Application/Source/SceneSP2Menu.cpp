@@ -398,18 +398,18 @@ void SceneSP2Menu::Update(double dt)
 
 
 	//key input
-	if (Application::IsKeyPressed('1')) {
-		glEnable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed('2')) {
-		glDisable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed('3')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if (Application::IsKeyPressed('4')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	//if (Application::IsKeyPressed('1')) {
+	//	glEnable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed('2')) {
+	//	glDisable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed('3')) {
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//}
+	//else if (Application::IsKeyPressed('4')) {
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//}
 	
 	//fps
 	fps = 1.f / dt;

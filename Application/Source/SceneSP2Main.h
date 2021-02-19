@@ -50,6 +50,7 @@ public:
 		GEO_LIGHTBULB,
 		GEO_SPAWN,
 
+		GEO_GHOST,
 
 		//items to collect
 		GEO_BATT,
@@ -66,7 +67,7 @@ public:
 		GEO_BENCH,
 		locker,
 		GEO_MYSTERIOUSMAN,
-
+		GEO_SKULL,
 		GEO_LAMP,
 
 		GEO_TRUCK,
@@ -81,6 +82,8 @@ public:
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
+		GEO_WARNING1,
+		GEO_WARNING2,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
@@ -359,13 +362,13 @@ private:
 
 			//update rotate angle(in render) to face/turn towards direction player is walking in
 			int dir = (newangle - rotateY) / abs(newangle - rotateY);
-			if ((int)rotateY != newangle)
+			if ((int)rotateY != (int)newangle)
 			{
 				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
 				{
 					dir *= -1;
 				}
-				rotateY += float(dir * 200 * dt);
+				rotateY += float(dir * 20 * dt);
 			}
 			else
 			{

@@ -200,44 +200,10 @@ void SceneSP2Room3::Init()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 
-	//walls
-	school_walls[0].mid.Set(0, 17.5, 0); 
-	school_walls[1].mid.Set(-57.5, 12.5, 0);
-	school_walls[2].mid.Set(57.5, 12.5, 0); 
-	school_walls[3].mid.Set(0, 12.5, -100); //back
-	school_walls[4].mid.Set(-110, 12.5, -50);
-	school_walls[5].mid.Set(110, 12.5, -50);
+
+
+
 	
-	school_walls[1].lengthx = 105;
-	school_walls[2].lengthx = 105;
-	school_walls[4].lengthz = school_walls[5].lengthz = 100;
-	school_walls[0].lengthx = 10;
-	school_walls[3].lengthx = 220;
-
-	for (int i = 1; i < 6; i++)
-	{
-		school_walls[i].lengthy = 25;
-	}
-	school_walls[0].lengthy = 15;
-
-
-	lounge_walls[0].mid.Set(-10, 17.5, -50);
-	lounge_walls[1].mid.Set(-10, 12.5, -22.5);
-	lounge_walls[2].mid.Set(-10, 12.5, -77.5);
-	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 45;
-	lounge_walls[0].lengthz = 10;
-
-	classroom_walls[0].mid.Set(10, 17.5, -95);
-	classroom_walls[1].mid.Set(10, 12.5, -45);
-	classroom_walls[1].lengthz = 90;
-	classroom_walls[0].lengthz = 10;
-	for (int i = 1; i < 3; i++)
-	{
-		lounge_walls[i].lengthy = 25;
-	}
-	classroom_walls[1].lengthy = 25;
-	classroom_walls[0].lengthy = 15;
-	lounge_walls[0].lengthy = 15;
 
 
 
@@ -283,28 +249,34 @@ void SceneSP2Room3::Init()
 
 
 	//list of lockers
-	//colliders
-	
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(48, -0.2, -80));
+	//wall colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(1, 25, 100);
+	Colliderlist[0].Setposition(Vector3(50, 12, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(1, 25, 100);
+	Colliderlist[1].Setposition(Vector3(-50, 12, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(130, 30, 2);
+	Colliderlist[2].Setposition(Vector3(0, 12, -100));
+	//locker collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(3.9, 10, 4.3);
+	Colliderlist[3].Setposition(Lockerlist[0].getpos());
 	//colliderbox for checking any collider(just one)
-	/*meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());*/
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[2].getxlength(), Colliderlist[2].getylength(), Colliderlist[2].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
+	meshList[GEO_QUAD]->textureID = LoadTGA("Assigment2Images//garage.tga");//this one was in render cousing memory leak
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
+	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//garage.tga");
 	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
-	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("chair", "OBJ//schoolChair.obj");
-	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//greywood.tga");
-	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//Table.obj");
-	meshList[GEO_TABLE]->textureID = LoadTGA("Image//greywood.tga");
-	meshList[GEO_LONGTABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//LongTable.obj");
-	meshList[GEO_LONGTABLE]->textureID = LoadTGA("Image//darkwood.tga");
 	
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
@@ -317,7 +289,7 @@ void SceneSP2Room3::Init()
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
-	/*camera.setchecker(Colliderlist);*/
+	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
@@ -334,7 +306,8 @@ void SceneSP2Room3::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	
+	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
 }
 
 void SceneSP2Room3::Update(double dt)
@@ -791,7 +764,7 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
+	modelStack.Translate(Colliderlist[2].getPosition().x, Colliderlist[2].getPosition().y, Colliderlist[2].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -818,40 +791,9 @@ void SceneSP2Room3::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	//all walls
-	for (int i = 0; i < 3; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(all_walls[i]->mid.x, all_walls[i]->mid.y, all_walls[i]->mid.z);
-		modelStack.Scale(all_walls[i]->lengthx, all_walls[i]->lengthy, all_walls[i]->lengthz);
-		RenderMesh(meshList[GEO_TOPHALFWALL], true);
-		modelStack.PopMatrix();
-	}
-	for (int i = 3; i < wall_count; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(all_walls[i]->mid.x, all_walls[i]->mid.y, all_walls[i]->mid.z);
-		modelStack.Scale(all_walls[i]->lengthx, all_walls[i]->lengthy, all_walls[i]->lengthz);
-		RenderMesh(meshList[GEO_WALL], true);
-		modelStack.PopMatrix();
-	}
-	//tables and chairs in classroom
-	for (int i = 0; i < 20; i++)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(classroom_tables[i].mid.x, classroom_tables[i].mid.y, classroom_tables[i].mid.z);
-		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.025, 0.025, 0.05);
-		RenderMesh(meshList[GEO_TABLE], true);
-		modelStack.PopMatrix();
-		modelStack.PushMatrix();
-		modelStack.Translate(classroom_chairs[i].mid.x, classroom_chairs[i].mid.y, classroom_chairs[i].mid.z);
-		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
-		RenderMesh(meshList[GEO_CHAIR], true);
-		modelStack.PopMatrix();
-	}
+	
+	
+
 
 	//all doors
 	//schoolleft
@@ -863,73 +805,53 @@ void SceneSP2Room3::Render()
 	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
-	//school right
+
 	modelStack.PushMatrix();
-	modelStack.Translate(school_door[1].mid.x, school_door[1].mid.y, school_door[1].mid.z);
-	modelStack.Translate(2.5, 0, -0.25);
-	modelStack.Rotate(school_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.25);
-	modelStack.Scale(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
-	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
-	//loungeright
+	modelStack.Translate(50, 12, -50);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(25, 1, 100);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
 	modelStack.PushMatrix();
-	modelStack.Translate(lounge_door[1].mid.x, lounge_door[1].mid.y, lounge_door[1].mid.z);
-	modelStack.Translate(0.25, 0, -2.5);
-	modelStack.Rotate(lounge_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, 2.5);
-	modelStack.Scale(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
-	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
-	//classroomleft
+	modelStack.Translate(-50, 12, -50);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(25, 1, 100);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+	
 	modelStack.PushMatrix();
-	modelStack.Translate(classroom_door[0].mid.x, classroom_door[0].mid.y, classroom_door[0].mid.z);
-	modelStack.Translate(-0.25, 0, -2.5);
-	modelStack.Rotate(classroom_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(0.25, 0, 2.5);
-	modelStack.Scale(classroom_door[0].lengthx, classroom_door[0].lengthy, classroom_door[0].lengthz);
-	RenderMesh(meshList[GEO_LEFTDOOR], true);
-	modelStack.PopMatrix();
-	//classroom right
+	modelStack.Translate(0, 12, -100);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 2, 130);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//Added collider
+
 	modelStack.PushMatrix();
-	modelStack.Translate(classroom_door[1].mid.x, classroom_door[1].mid.y, classroom_door[1].mid.z);
-	modelStack.Translate(-0.25, 0, 2.5);
-	modelStack.Rotate(classroom_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(0.25, 0, -2.5);
-	modelStack.Scale(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz);
-	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
-	//lounge left
-	modelStack.PushMatrix();
-	modelStack.Translate(lounge_door[0].mid.x, lounge_door[0].mid.y, lounge_door[0].mid.z);
-	modelStack.Translate(-0.25, 0, 2.5);
-	modelStack.Rotate(lounge_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(0.25, 0, -2.5);
-	modelStack.Scale(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
-	RenderMesh(meshList[GEO_LEFTDOOR], true);
-	modelStack.PopMatrix();
+	modelStack.Translate(0, 12,2);
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(30, 2, 130);
+	RenderMesh(meshList[GEO_WALL], true);
+	modelStack.PopMatrix();//No collider for now
+
 	//school floor
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -50);
-	modelStack.Scale(220, 1, 100);
+	modelStack.Scale(165, 1, 100);
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//school ceiling
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 25, -50);
-	modelStack.Scale(220, 1, 100);
+	modelStack.Scale(165, 1, 100);
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
-	modelStack.PushMatrix();
-	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
-	modelStack.Scale(0.1, 0.1, 0.1);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(-90, 1, 0, 0);
-	RenderMesh(meshList[GEO_LONGTABLE], true);
-	modelStack.PopMatrix();
+	
 	
 	
 
@@ -945,9 +867,6 @@ void SceneSP2Room3::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is Scene3", Color(1, 1, 0), 4, 22, 5);
-	modelStack.PopMatrix();
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
