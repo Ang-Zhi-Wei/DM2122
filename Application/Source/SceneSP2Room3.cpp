@@ -1,4 +1,4 @@
-#include "SceneSP2Room2.h"
+#include "SceneSP2Room3.h"
 #include "GL\glew.h"
 #include <stdlib.h>
 #include <time.h>
@@ -6,16 +6,16 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-SceneSP2Room2::SceneSP2Room2()
+SceneSP2Room3::SceneSP2Room3()
 {
 }
 
-SceneSP2Room2::~SceneSP2Room2()
+SceneSP2Room3::~SceneSP2Room3()
 {
 }
 
 
-void SceneSP2Room2::Init()
+void SceneSP2Room3::Init()
 {
 	// Init VBO here
 	glClearColor(0., 0., 0., 1.0f);
@@ -401,7 +401,7 @@ void SceneSP2Room2::Init()
 	
 }
 
-void SceneSP2Room2::Update(double dt)
+void SceneSP2Room3::Update(double dt)
 {
 	//mouse cursor show/hide
 	Application::hidemousecursor(true);
@@ -696,7 +696,7 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -20 && camera.position.z <= -45 && camera.position.z >= -55)
+		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
 		{
 			interact = true;
 			interact_message = "Open Door";
@@ -817,7 +817,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 }
 
-void SceneSP2Room2::Render()
+void SceneSP2Room3::Render()
 {
 
 	
@@ -1042,14 +1042,14 @@ void SceneSP2Room2::Render()
 	//std::cout << camera.position.z << std::endl;
 }
 
-void SceneSP2Room2::Exit()
+void SceneSP2Room3::Exit()
 {
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
 
-void SceneSP2Room2::RenderSkybox()
+void SceneSP2Room3::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
@@ -1097,7 +1097,7 @@ void SceneSP2Room2::RenderSkybox()
 
 
 
-void SceneSP2Room2::RenderMesh(Mesh* mesh, bool enableLight)
+void SceneSP2Room3::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	MVP = projectionStack.Top() * viewStack.Top() *
@@ -1147,7 +1147,7 @@ void SceneSP2Room2::RenderMesh(Mesh* mesh, bool enableLight)
 	}
 }
 
-void SceneSP2Room2::RenderText(Mesh* mesh, std::string text, Color color)
+void SceneSP2Room3::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -1175,7 +1175,7 @@ void SceneSP2Room2::RenderText(Mesh* mesh, std::string text, Color color)
 
 }
 
-void SceneSP2Room2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneSP2Room3::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -1220,7 +1220,7 @@ void SceneSP2Room2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 
 }
 
-void SceneSP2Room2::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
+void SceneSP2Room3::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
