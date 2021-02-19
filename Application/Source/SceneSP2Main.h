@@ -3,7 +3,6 @@
 #include "Scene.h"
 #include "Mtx44.h"
 #include "Application.h"
-#include "Camera4.h"
 #include "CameraSP2.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
@@ -21,6 +20,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
+	virtual void PauseUpdate(double dt);
 	virtual void Render();
 	virtual void Exit();
 
@@ -92,6 +92,9 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+
+		//pause
+        GEO_PAUSEMENU,
 		
 		GEO_INVENTORY,
 		GEO_BATTERY,
@@ -231,7 +234,12 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
-
+    
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
+	
+	bool PKeypressed, PKeyreleased;
 	bool is_talking;
 
 	struct Item

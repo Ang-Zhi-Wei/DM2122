@@ -756,6 +756,11 @@ void SceneSP2Room3::Update(double dt)
 	}
 }
 
+void SceneSP2Room3::PauseUpdate(double dt)
+{
+	Application::hidemousecursor(false);
+}
+
 void SceneSP2Room3::Render()
 {
 
