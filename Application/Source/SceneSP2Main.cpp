@@ -28,6 +28,7 @@ void SceneSP2Main::Init()
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
+	is_talking = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -1097,6 +1098,15 @@ void SceneSP2Main::Update(double dt)
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
+
+
+	//check if talking (stops camera)
+	if (is_talking)
+		camera.can_move = false;
+	else
+		camera.can_move = true;
+
+
 	switch (SpeakPhase)
 	{
 		//default
@@ -1126,7 +1136,7 @@ void SceneSP2Main::Update(double dt)
 
 		//talking to man part
 	case 3:
-		camera.can_move = false;
+		is_talking = true;
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
@@ -1199,7 +1209,7 @@ void SceneSP2Main::Update(double dt)
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
-			camera.can_move = true;
+			is_talking = false;
 			SpeakPhase = 0;
 		}
 		break;
