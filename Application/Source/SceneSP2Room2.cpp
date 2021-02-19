@@ -345,6 +345,27 @@ void SceneSP2Room2::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	Colliderlist[16].Setposition(lounge_door[1].mid);
+	//chair colliders
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 17].setlength(classroom_chairs[row * 5 + col].lengthx, classroom_chairs[row * 5 + col].lengthy,
+				classroom_chairs[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 17].Setposition(classroom_chairs[row * 5 + col].mid);
+		}
+	}
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 5; col++)
+		{
+			Colliderlist.push_back(ColliderBox());
+			Colliderlist[(row * 5 + col) + 37].setlength(classroom_tables[row * 5 + col].lengthx, classroom_tables[row * 5 + col].lengthy,
+				classroom_tables[row * 5 + col].lengthz);
+			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
+		}
+	}
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 
