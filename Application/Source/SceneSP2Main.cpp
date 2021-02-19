@@ -1477,11 +1477,11 @@ void SceneSP2Main::Render()
 	//skybox
 	RenderSkybox();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[LightSphere], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Translate(light[2].position.x, light[2].position.y, light[2].position.z);
