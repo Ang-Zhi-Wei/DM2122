@@ -356,6 +356,7 @@ void SceneSP2Room2::Init()
 			Colliderlist[(row * 5 + col) + 17].Setposition(classroom_chairs[row * 5 + col].mid);
 		}
 	}
+	//table colliders
 	for (int row = 0; row < 4; row++)
 	{
 		for (int col = 0; col < 5; col++)
