@@ -22,16 +22,13 @@ void SceneSP2Main::Init()
 	camBlinkOff = false;
 	showChatbox = true;
 	showSideBox = true;
-	canPickUp = false;
-	showText = false;
 	SpeakPhase = 1;
 	SpeakTimer = 0;
 	Interact_Num = 0;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
-
-	
+	is_talking = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -51,8 +48,7 @@ void SceneSP2Main::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-
+	
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -244,17 +240,17 @@ void SceneSP2Main::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Night//Front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
-	meshList[GEO_BACK]->textureID = LoadTGA("Night//Back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", 1, 1, White);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Night//Left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Night//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", 1, 1, White);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//Right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Night//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", 1, 1, White);
-	meshList[GEO_TOP]->textureID = LoadTGA("Night//Top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//Bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
 	//building
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
@@ -292,14 +288,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("Building", "OBJ//gate.obj");
 	meshList[GEO_GATE]->textureID = LoadTGA("Assigment2Images//metalgate.tga");
 	meshList[GEO_GATE]->material.kAmbient.Set(0.35, 0.35, 0.35);
-	//meshList[GEO_PLAYGROUND] = MeshBuilder::GenerateOBJ("Building", "OBJ//playground.obj");
-	////meshList[GEO_SWING]->textureID = LoadTGA("Assigment2Images//metalgate.tga");
-	//meshList[GEO_PLAYGROUND]->material.kAmbient.Set(0.35, 0.35, 0.35);
-
-	//batteries
-	meshList[GEO_BATT] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
-	meshList[GEO_BATT]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
-	meshList[GEO_BATT]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//Mysterious man
 	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
@@ -380,7 +368,6 @@ void SceneSP2Main::Init()
 	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
-	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
 	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
 	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
 	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
@@ -482,16 +469,22 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
-	//UI
 
+	//=============== UI stuff ===================
+	//camcorder
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
+	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
-	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("breathing bar", 1, 1, Red);
+	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
-	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
@@ -507,8 +500,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
-	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
+	meshList[GEO_LUNGS] = MeshBuilder::GenerateQuad2("breathing", 1.5, 1, White);
+	meshList[GEO_LUNGS]->textureID = LoadTGA("Image//lungicon.tga");
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -537,224 +530,347 @@ void SceneSP2Main::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
-	//collidertest
 	//colliders
 
-	//tree colliders
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(10, 20, 10);
-	Colliderlist[0].Setposition(Vector3(-120, 5, -100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(10, 20, 10);
-	Colliderlist[1].Setposition(Vector3(120, 5, 100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(10, 20, 10);
-	Colliderlist[2].Setposition(Vector3(-120, 5, 100));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(10, 20, 10);
-	Colliderlist[3].Setposition(Vector3(120, 5, -100));
 	//lamp colliders
 	Colliderlist.push_back(ColliderBox());
+	Colliderlist[0].setlength(5, 20, 5);
+	Colliderlist[0].Setposition(Vector3(50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[1].setlength(5, 20, 5);
+	Colliderlist[1].Setposition(Vector3(-50, -4, -35));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[2].setlength(5, 20, 5);
+	Colliderlist[2].Setposition(Vector3(-45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(5, 20, 5);
+	Colliderlist[3].Setposition(Vector3(45, -4, -130));
+	Colliderlist.push_back(ColliderBox());
 	Colliderlist[4].setlength(5, 20, 5);
-	Colliderlist[4].Setposition(Vector3(50, -4, -35));
+	Colliderlist[4].Setposition(Vector3(-45, -4, 130));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[5].setlength(5, 20, 5);
-	Colliderlist[5].Setposition(Vector3(-50, -4, -35));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(5, 20, 5);
-	Colliderlist[6].Setposition(Vector3(-45, -4, -130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(5, 20, 5);
-	Colliderlist[7].Setposition(Vector3(45, -4, -130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(5, 20, 5);
-	Colliderlist[8].Setposition(Vector3(-45, -4, 130));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(5, 20, 5);
-	Colliderlist[9].Setposition(Vector3(45, -4, 130));
+	Colliderlist[5].Setposition(Vector3(45, -4, 130));
 	//fountain collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(33, 20, 30);
-	Colliderlist[10].Setposition(Vector3(0, -3, 0));
+	Colliderlist[6].setlength(33, 20, 30);
+	Colliderlist[6].Setposition(Vector3(0, -3, 0));
 	//truck collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(42, 20, 28);
-	Colliderlist[11].Setposition(Vector3(35, 4, 322.5));
+	Colliderlist[7].setlength(50, 20, 20);
+	Colliderlist[7].Setposition(Vector3(35, 4, 322.5));
 	//bench colliders
 	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(10, 20, 25);
+	Colliderlist[8].Setposition(Vector3(-40, 5, -80));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(10, 20, 25);
+	Colliderlist[9].Setposition(Vector3(-40, 5, -170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(10, 20, 25);
+	Colliderlist[10].Setposition(Vector3(40, 5, -80));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(10, 20, 25);
+	Colliderlist[11].Setposition(Vector3(40, 5, -170));
+	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(10, 20, 25);
-	Colliderlist[12].Setposition(Vector3(-40, 5, -80));
+	Colliderlist[12].Setposition(Vector3(-40, 5, 80));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(10, 20, 25);
-	Colliderlist[13].Setposition(Vector3(-40, 5, -170));
+	Colliderlist[13].Setposition(Vector3(-40, 5, 170));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[14].setlength(10, 20, 25);
-	Colliderlist[14].Setposition(Vector3(40, 5, -80));
+	Colliderlist[14].Setposition(Vector3(40, 5, 80));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[15].setlength(10, 20, 25);
-	Colliderlist[15].Setposition(Vector3(40, 5, -170));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(10, 20, 25);
-	Colliderlist[16].Setposition(Vector3(-40, 5, 80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(10, 20, 25);
-	Colliderlist[17].Setposition(Vector3(-40, 5, 170));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(10, 20, 25);
-	Colliderlist[18].Setposition(Vector3(40, 5, 80));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(10, 20, 25);
-	Colliderlist[19].Setposition(Vector3(40, 5, 170));
-	//Fence collider
-	
+	Colliderlist[15].Setposition(Vector3(40, 5, 170));
+	//Fence colliders
 	//Front/Back Fence
 	Colliderlist.push_back(ColliderBox());
+	Colliderlist[16].setlength(52, 50, 10);
+	Colliderlist[16].Setposition(Vector3(-50, -7, 295));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[17].setlength(52, 50, 10);
+	Colliderlist[17].Setposition(Vector3(-102, -7, 295));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[18].setlength(52, 50, 10);
+	Colliderlist[18].Setposition(Vector3(-153, -7, 295));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[19].setlength(52, 50, 10);
+	Colliderlist[19].Setposition(Vector3(-205, -7, 295));
+	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(52, 50, 10);
-	Colliderlist[20].Setposition(Vector3(-50, -7, 295));
+	Colliderlist[20].Setposition(Vector3(-257, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[21].setlength(52, 50, 10);
-	Colliderlist[21].Setposition(Vector3(-102, -7, 295));
+	Colliderlist[21].Setposition(Vector3(-308, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[22].setlength(52, 50, 10);
-	Colliderlist[22].Setposition(Vector3(-153, -7, 295));
+	Colliderlist[22].Setposition(Vector3(50, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[23].setlength(52, 50, 10);
-	Colliderlist[23].Setposition(Vector3(-205, -7, 295));
+	Colliderlist[23].Setposition(Vector3(102, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[24].setlength(52, 50, 10);
-	Colliderlist[24].Setposition(Vector3(-257, -7, 295));
+	Colliderlist[24].Setposition(Vector3(153, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[25].setlength(52, 50, 10);
-	Colliderlist[25].Setposition(Vector3(-308, -7, 295));
+	Colliderlist[25].Setposition(Vector3(205, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[26].setlength(52, 50, 10);
-	Colliderlist[26].Setposition(Vector3(50, -7, 295));
+	Colliderlist[26].Setposition(Vector3(257, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[27].setlength(52, 50, 10);
-	Colliderlist[27].Setposition(Vector3(102, -7, 295));
+	Colliderlist[27].Setposition(Vector3(308, -7, 295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[28].setlength(52, 50, 10);
-	Colliderlist[28].Setposition(Vector3(153, -7, 295));
+	Colliderlist[28].Setposition(Vector3(-50, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[29].setlength(52, 50, 10);
-	Colliderlist[29].Setposition(Vector3(205, -7, 295));
+	Colliderlist[29].Setposition(Vector3(-102, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[30].setlength(52, 50, 10);
-	Colliderlist[30].Setposition(Vector3(257, -7, 295));
+	Colliderlist[30].Setposition(Vector3(-153, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[31].setlength(52, 50, 10);
-	Colliderlist[31].Setposition(Vector3(308, -7, 295));
+	Colliderlist[31].Setposition(Vector3(-205, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[32].setlength(52, 50, 10);
-	Colliderlist[32].Setposition(Vector3(-50, -7, -295));
+	Colliderlist[32].Setposition(Vector3(-257, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[33].setlength(52, 50, 10);
-	Colliderlist[33].Setposition(Vector3(-102, -7, -295));
+	Colliderlist[33].Setposition(Vector3(-308, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[34].setlength(52, 50, 10);
-	Colliderlist[34].Setposition(Vector3(-153, -7, -295));
+	Colliderlist[34].Setposition(Vector3(50, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[35].setlength(52, 50, 10);
-	Colliderlist[35].Setposition(Vector3(-205, -7, -295));
+	Colliderlist[35].Setposition(Vector3(102, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[36].setlength(52, 50, 10);
-	Colliderlist[36].Setposition(Vector3(-257, -7, -295));
+	Colliderlist[36].Setposition(Vector3(153, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[37].setlength(52, 50, 10);
-	Colliderlist[37].Setposition(Vector3(-308, -7, -295));
+	Colliderlist[37].Setposition(Vector3(205, -7, -295));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[38].setlength(52, 50, 10);
-	Colliderlist[38].Setposition(Vector3(50, -7, -295));
+	Colliderlist[38].Setposition(Vector3(257, -7, -295));
 	Colliderlist.push_back(ColliderBox());
+	Colliderlist[39].Setposition(Vector3(308, -7, -295));
 	Colliderlist[39].setlength(52, 50, 10);
-	Colliderlist[39].Setposition(Vector3(102, -7, -295));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[40].setlength(52, 50, 10);
-	Colliderlist[40].Setposition(Vector3(153, -7, -295));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[41].setlength(52, 50, 10);
-	Colliderlist[41].Setposition(Vector3(205, -7, -295));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[42].setlength(52, 50, 10);
-	Colliderlist[42].Setposition(Vector3(257, -7, -295));
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[43].setlength(52, 50, 10);
-	Colliderlist[43].Setposition(Vector3(308, -7, -295));
 	//left/right fence
 	Colliderlist.push_back(ColliderBox());
+	Colliderlist[40].setlength(10, 50, 52);
+	Colliderlist[40].Setposition(Vector3(-335, -7, 271));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[41].setlength(10, 50, 52);
+	Colliderlist[41].Setposition(Vector3(-335, -7, 225));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[42].setlength(10, 50, 52);
+	Colliderlist[42].Setposition(Vector3(-335, -7, 178));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[43].setlength(10, 50, 52);
+	Colliderlist[43].Setposition(Vector3(-335, -7, 127));
+	Colliderlist.push_back(ColliderBox());
 	Colliderlist[44].setlength(10, 50, 52);
-	Colliderlist[44].Setposition(Vector3(-335, -7, 271));
+	Colliderlist[44].Setposition(Vector3(-335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[45].setlength(10, 50, 52);
-	Colliderlist[45].Setposition(Vector3(-335, -7, 225));
+	Colliderlist[45].Setposition(Vector3(-335, -7, 35));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[46].setlength(10, 50, 52);
-	Colliderlist[46].Setposition(Vector3(-335, -7, 178));
+	Colliderlist[46].Setposition(Vector3(-335, -7, -271));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[47].setlength(10, 50, 52);
-	Colliderlist[47].Setposition(Vector3(-335, -7, 127));
+	Colliderlist[47].Setposition(Vector3(-335, -7, -225));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[48].setlength(10, 50, 52);
-	Colliderlist[48].Setposition(Vector3(-335, -7, 75));
+	Colliderlist[48].Setposition(Vector3(-335, -7, -178));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[49].setlength(10, 50, 52);
-	Colliderlist[49].Setposition(Vector3(-335, -7, 35));
+	Colliderlist[49].Setposition(Vector3(-335, -7, -127));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[50].setlength(10, 50, 52);
-	Colliderlist[50].Setposition(Vector3(-335, -7, -271));
+	Colliderlist[50].Setposition(Vector3(-335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[51].setlength(10, 50, 52);
-	Colliderlist[51].Setposition(Vector3(-335, -7, -225));
+	Colliderlist[51].Setposition(Vector3(-335, -7, -35));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[52].setlength(10, 50, 52);
-	Colliderlist[52].Setposition(Vector3(-335, -7, -178));
+	Colliderlist[52].Setposition(Vector3(335, -7, 271));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[53].setlength(10, 50, 52);
-	Colliderlist[53].Setposition(Vector3(-335, -7, -127));
+	Colliderlist[53].Setposition(Vector3(335, -7, 225));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[54].setlength(10, 50, 52);
-	Colliderlist[54].Setposition(Vector3(-335, -7, -75));
+	Colliderlist[54].Setposition(Vector3(335, -7, 178));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[55].setlength(10, 50, 52);
-	Colliderlist[55].Setposition(Vector3(-335, -7, -35));
+	Colliderlist[55].Setposition(Vector3(335, -7, 127));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[56].setlength(10, 50, 52);
-	Colliderlist[56].Setposition(Vector3(335, -7, 271));
+	Colliderlist[56].Setposition(Vector3(335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[57].setlength(10, 50, 52);
-	Colliderlist[57].Setposition(Vector3(335, -7, 225));
+	Colliderlist[57].Setposition(Vector3(335, -7, 35));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[58].setlength(10, 50, 52);
-	Colliderlist[58].Setposition(Vector3(335, -7, 178));
+	Colliderlist[58].Setposition(Vector3(335, -7, -271));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[59].setlength(10, 50, 52);
-	Colliderlist[59].Setposition(Vector3(335, -7, 127));
+	Colliderlist[59].Setposition(Vector3(335, -7, -225));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[60].setlength(10, 50, 52);
-	Colliderlist[60].Setposition(Vector3(335, -7, 75));
+	Colliderlist[60].Setposition(Vector3(335, -7, -178));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[61].setlength(10, 50, 52);
-	Colliderlist[61].Setposition(Vector3(335, -7, 35));
+	Colliderlist[61].Setposition(Vector3(335, -7, -127));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[62].setlength(10, 50, 52);
-	Colliderlist[62].Setposition(Vector3(335, -7, -271));
+	Colliderlist[62].Setposition(Vector3(335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[63].setlength(10, 50, 52);
-	Colliderlist[63].Setposition(Vector3(335, -7, -225));
+	Colliderlist[63].Setposition(Vector3(335, -7, -35));
+	//Tree colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[64].setlength(10, 50, 52);
-	Colliderlist[64].Setposition(Vector3(335, -7, -178));
+	Colliderlist[64].setlength(10, 20, 10);
+	Colliderlist[64].Setposition(Vector3(60, 5, 280));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[65].setlength(10, 50, 52);
-	Colliderlist[65].Setposition(Vector3(335, -7, -127));
+	Colliderlist[65].setlength(10, 20, 10);
+	Colliderlist[65].Setposition(Vector3(120, 5, 280));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[66].setlength(10, 50, 52);
-	Colliderlist[66].Setposition(Vector3(335, -7, -75));
+	Colliderlist[66].setlength(10, 20, 10);
+	Colliderlist[66].Setposition(Vector3(180, 5, 280));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[67].setlength(10, 50, 52);
-	Colliderlist[67].Setposition(Vector3(335, -7, -35));
+	Colliderlist[67].setlength(10, 20, 10);
+	Colliderlist[67].Setposition(Vector3(250, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[68].setlength(10, 20, 10);
+	Colliderlist[68].Setposition(Vector3(320, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[69].setlength(10, 20, 10);
+	Colliderlist[69].Setposition(Vector3(-60, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[70].setlength(10, 20, 10);
+	Colliderlist[70].Setposition(Vector3(-120, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[71].setlength(10, 20, 10);
+	Colliderlist[71].Setposition(Vector3(-180, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[72].setlength(10, 20, 10);
+	Colliderlist[72].Setposition(Vector3(-250, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[73].setlength(10, 20, 10);
+	Colliderlist[73].Setposition(Vector3(-320, 5, 280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[74].setlength(10, 20, 10);
+	Colliderlist[74].Setposition(Vector3(60, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[75].setlength(10, 20, 10);
+	Colliderlist[75].Setposition(Vector3(120, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[76].setlength(10, 20, 10);
+	Colliderlist[76].Setposition(Vector3(180, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[77].setlength(10, 20, 10);
+	Colliderlist[77].Setposition(Vector3(250, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[78].setlength(10, 20, 10);
+	Colliderlist[78].Setposition(Vector3(320, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[79].setlength(10, 20, 10);
+	Colliderlist[79].Setposition(Vector3(-60, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[80].setlength(10, 20, 10);
+	Colliderlist[80].Setposition(Vector3(-120, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[81].setlength(10, 20, 10);
+	Colliderlist[81].Setposition(Vector3(-180, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[82].setlength(10, 20, 10);
+	Colliderlist[82].Setposition(Vector3(-250, 5, -280));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[83].setlength(10, 20, 10);
+	Colliderlist[83].Setposition(Vector3(310, 5, -230));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[84].setlength(10, 20, 10);
+	Colliderlist[84].Setposition(Vector3(310, 5, -170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[85].setlength(10, 20, 10);
+	Colliderlist[85].Setposition(Vector3(310, 5, -110));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[86].setlength(10, 20, 10);
+	Colliderlist[86].Setposition(Vector3(310, 5, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[87].setlength(10, 20, 10);
+	Colliderlist[87].Setposition(Vector3(310, 5, 230));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[88].setlength(10, 20, 10);
+	Colliderlist[88].Setposition(Vector3(310, 5, 170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[89].setlength(10, 20, 10);
+	Colliderlist[89].Setposition(Vector3(310, 5, 110));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[90].setlength(10, 20, 10);
+	Colliderlist[90].Setposition(Vector3(310, 5, 50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[91].setlength(10, 20, 10);
+	Colliderlist[91].Setposition(Vector3(-310, 5, -230));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[92].setlength(10, 20, 10);
+	Colliderlist[92].Setposition(Vector3(-310, 5, -170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[93].setlength(10, 20, 10);
+	Colliderlist[93].Setposition(Vector3(-310, 5, -110));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[94].setlength(10, 20, 10);
+	Colliderlist[94].Setposition(Vector3(-310, 5, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[95].setlength(10, 20, 10);
+	Colliderlist[95].Setposition(Vector3(-310, 5, 230));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[96].setlength(10, 20, 10);
+	Colliderlist[96].Setposition(Vector3(-310, 5, 170));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[97].setlength(10, 20, 10);
+	Colliderlist[97].Setposition(Vector3(-310, 5, 110));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[98].setlength(10, 20, 10);
+	Colliderlist[98].Setposition(Vector3(-310, 5, 50));
+	//Bench colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[99].setlength(25, 20, 10);
+	Colliderlist[99].Setposition(Vector3(110, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[100].setlength(25, 20, 10);
+	Colliderlist[100].Setposition(Vector3(170, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[101].setlength(25, 20, 10);
+	Colliderlist[101].Setposition(Vector3(110, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[102].setlength(25, 20, 10);
+	Colliderlist[102].Setposition(Vector3(170, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[103].setlength(25, 20, 10);
+	Colliderlist[103].Setposition(Vector3(-110, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[104].setlength(25, 20, 10);
+	Colliderlist[104].Setposition(Vector3(-170, 2, 30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[105].setlength(25, 20, 10);
+	Colliderlist[105].Setposition(Vector3(-110, 2, -30));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[106].setlength(25, 20, 10);
+	Colliderlist[106].Setposition(Vector3(-170, 2, -30));
+	//Gate collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[107].setlength(1, 20, 35);
+	Colliderlist[107].Setposition(Vector3(-25, -4, 275));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[108].setlength(1, 20, 35);
+	Colliderlist[108].Setposition(Vector3(25, -4, 275));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[44].getxlength(), Colliderlist[44].getylength(), Colliderlist[44].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -770,9 +886,8 @@ void SceneSP2Main::Init()
 	camera.SetBounds(-415, 415, -365, 360);
 
 	//test examples for item
-	test.Set("item2testAAAA", Item::ITEM2);
-	test2.Set("Battery", Item::BATTERY);
-	battery.Set("Battery",Item::BATTERY);
+	test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
+	test2.Set("Battery", (0, 0, 0), Item::BATTERY);
 	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
 	PickUpItem(&test2); //to be called only in one frame.
 	PickUpItem(&test);
@@ -790,14 +905,14 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Update(double dt)
 {
-
+	// mouse cursor show / hide
+	Application::hidemousecursor(true);
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -812,7 +927,6 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
 	//interaction hitbox checker
@@ -849,18 +963,17 @@ void SceneSP2Main::Update(double dt)
 			case trap::beartrap:
 				if (traplist[i].nearby(camera.position)) {
 					detected = true;
-					if (detected) {
-						camera.Setslow(true);
-					}
-					else {
-						camera.Setslow(false);
-					}
-				}
 				
+				}
 				break;
 		}
 	}
-	
+	if (detected) {
+		camera.Setslow(true);
+	}
+	else {
+		camera.Setslow(false);
+	}
 
 	//key input
 	if (Application::IsKeyPressed('1')) {
@@ -875,103 +988,89 @@ void SceneSP2Main::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
+	if (!Application::IsKeyPressed('Q'))
 	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
+		Qreleased = true;
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F'))
-	{
-		Fpressed = true;
-		Freleased = false;
-		if (showText == true)
-		{
-			canPickUp = true;
-			PickUpItem(&battery);
-			showText = false;
-		}
-	}
 	else
 	{
-		if (Fpressed)
+		if (Qreleased)
 		{
-			Freleased = true;
+			Qpressed = true;
+
 		}
+		Qreleased = false;
+	}
+	if (!Application::IsKeyPressed('F'))
+	{
+		Freleased = true;
 		Fpressed = false;
 	}
-	if (Application::IsKeyPressed('E'))
-	{
-		Epressed = true;
-		Ereleased = false;
-	}
 	else
 	{
-		if (Epressed)
+		if (Freleased)
 		{
-			Ereleased = true;
+			Fpressed = true;
 		}
+		Freleased = false;
+	}
+	if (!Application::IsKeyPressed('E'))
+	{
+		Ereleased = true;
 		Epressed = false;
 	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Apressed = true;
-		Areleased = false;
-	}
 	else
 	{
-		if (Apressed)
+		if (Ereleased)
 		{
-			Areleased = true;
-
+			Epressed = true;
 		}
+		Ereleased = false;
+	}
+	if (!Application::IsKeyPressed('A'))
+	{
+		Areleased = true;
 		Apressed = false;
 	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Dpressed = true;
-		Dreleased = false;
-	}
 	else
 	{
-		if (Dpressed)
+		if (Areleased)
 		{
-			Dreleased = true;
+			Apressed = true;
 
 		}
+		Areleased = false;
+	}
+	if (!Application::IsKeyPressed('D'))
+	{
+		Dreleased = true;
 		Dpressed = false;
 	}
-	if (Application::IsKeyPressed('R'))
+	else
 	{
-		Rpressed = true;
-		Rreleased = false;
+		if (Dreleased)
+		{
+			Dpressed = true;
+
+		}
+		Dreleased = false;
+	}
+	if (!Application::IsKeyPressed('R'))
+	{
+		Rreleased = true;
+		Rpressed = false;
 	}
 	else
 	{
-		if (Rpressed)
+		if (Rreleased)
 		{
-			Rreleased = true;
+			Rpressed = true;
 
 		}
-		Rpressed = false;
+		Rreleased = false;
 	}
 
-
-	if (campos_z < 317 && campos_z > 307 && campos_x > -3 && campos_x < 3)
-	{
-		showText = true;
-	}
-	else {
-		showText = false;
-	}
 
 	//Locker
 	for (int i = 0; i < Lockerlist.size(); i++) {
@@ -1000,6 +1099,15 @@ void SceneSP2Main::Update(double dt)
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
+
+
+	//check if talking (stops camera)
+	if (is_talking)
+		camera.can_move = false;
+	else
+		camera.can_move = true;
+
+
 	switch (SpeakPhase)
 	{
 		//default
@@ -1029,7 +1137,7 @@ void SceneSP2Main::Update(double dt)
 
 		//talking to man part
 	case 3:
-		camera.can_move = false;
+		is_talking = true;
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
@@ -1102,7 +1210,7 @@ void SceneSP2Main::Update(double dt)
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
-			camera.can_move = true;
+			is_talking = false;
 			SpeakPhase = 0;
 		}
 		break;
@@ -1113,9 +1221,9 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
@@ -1145,37 +1253,37 @@ void SceneSP2Main::Update(double dt)
 
 
 	//inventory
-	if (Ereleased)
+	if (Epressed)
 	{
 		inventory.open = !inventory.open;
-		Ereleased = false;
+		Epressed = false;
 	}
 	if (inventory.open)
 	{
 		camera.can_move = false;
-		if (Areleased)
+		if (Apressed)
 		{
 			inventory.selected--;
 			if (inventory.selected == -1)
 			{
 				inventory.selected = 7;
 			}
-			Areleased = false;
+			Apressed = false;
 		}
-		else if (Dreleased)
+		else if (Dpressed)
 		{
 			inventory.selected++;
 			inventory.selected %= 8;
-			Dreleased = false;
+			Dpressed = false;
 		}
-		else if (Rreleased)
+		else if (Rpressed)
 		{
 			if (inventory.items[inventory.selected] != nullptr)
 			{
 				UseItem(inventory.items[inventory.selected]->type);
 			}
 			//else warning that no item selected?
-			Rreleased = false;
+			Rpressed = false;
 		}
 	}
 
@@ -1422,24 +1530,8 @@ void SceneSP2Main::Render()
 
 	//colliderbox to check collider 
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[44].getPosition().x, Colliderlist[44].getPosition().y, Colliderlist[44].getPosition().z);
+	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
-
-
-
-	/*modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 61, 50);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	std::stringstream posy;
-	posy.precision(4);
-	posy << "Y:" << campos_y;
-	RenderTextOnScreen(meshList[GEO_TEXT], posy.str(), Color(1, 0, 0), 4, 61, 45);
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
@@ -1520,27 +1612,27 @@ void SceneSP2Main::Render()
 	modelStack.Translate(-40, 1, -80);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, -170);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -170);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
 
@@ -1548,57 +1640,56 @@ void SceneSP2Main::Render()
 	modelStack.Translate(-40, 1, 80);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, 170);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 170);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(1.1, 1.1, 1.1);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
-
 	modelStack.PushMatrix();
 	modelStack.Translate(110, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(170, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(110, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(170, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
 
@@ -1607,56 +1698,42 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-110, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BENCH], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.18, 0.18, 0.18);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	RenderFence();
 
 	RenderTrees();
 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, -3, 0);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.18, 0.18, 0.18);
-	RenderMesh(meshList[GEO_PLAYGROUND], true);
-	modelStack.PopMatrix();*/
 
-	if (canPickUp == false) {
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -3, 300);
-		modelStack.Scale(0.1, 0.1, 0.1);
-		RenderMesh(meshList[GEO_BATT], true);
-		modelStack.PopMatrix();
-	}
-	
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 20);
@@ -1723,48 +1800,29 @@ void SceneSP2Main::Render()
 	//vehicle
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 6, 320);
-	modelStack.Rotate(-20, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TRUCK], true);
-	modelStack.PopMatrix();
-
-
+	modelStack.PopMatrix();//Added collider
 
 	//UI OVERLAY
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
-	// breathing bar
-	//RenderMeshOnScreen(meshList[GEO_BREATHINGBAR], 14 - (5 - camera.playerStamina * 0.25), 48, camera.playerStamina * 0.5, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
-	//RenderMeshOnScreen(meshList[GEO_LIVES], 6, 48, 2, 2);
+
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
-
-	if (showText == true) {
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to interact", Color(0, 1, 0), 4, 20, 5);
-	}
-
-	modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 8);
-	modelStack.PopMatrix();
 	if (inventory.open)
 	{
 		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
@@ -1788,7 +1846,7 @@ void SceneSP2Main::Render()
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
 			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->name, Color(0, 0, 0), 3, 40, 6);
-			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
 		}
 		
 	}
@@ -1863,8 +1921,8 @@ void SceneSP2Main::Render()
 
 	//objectives screen
 	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10, 35, 1, 1.4);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 3.5, 1, 10);
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10, 35, 1, 1.2);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0, 1, 0), 3.5, 1, 10.1);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -1900,6 +1958,7 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
+	
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -2003,15 +2062,6 @@ void SceneSP2Main::RenderSkybox()
 
 
 
-//void SceneSP2Main::RenderDeadTree(int x, int z,float rotate)
-//{
-//	modelStack.PushMatrix();
-//	modelStack.Translate(x, -5, z);
-//	modelStack.Rotate(rotate, 0, 0, 1);
-//	modelStack.Scale(5, 5, 5);
-//	RenderMesh(meshList[Deadtrees], true);
-//	modelStack.PopMatrix();
-//}
 
 void SceneSP2Main::RenderMesh(Mesh* mesh, bool enableLight)
 {
@@ -2125,6 +2175,71 @@ void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
+
+}
+
+void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit)
+{
+	if (!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 200, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+
+	//Change this line inside for loop
+	std::string toPrint;
+	if (text.length() > limit)
+	{
+		toPrint = text.substr(0, limit);
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], text.substr(limit, text.length()), color, size, x, y - 1, limit);
+	}
+	else
+	{
+		toPrint = text;
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+	}
+	
 
 	//Add these code just before glEnable(GL_DEPTH_TEST);
 	projectionStack.PopMatrix();
@@ -2372,17 +2487,16 @@ void SceneSP2Main::RenderFence()
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_ARCH], true);
 	modelStack.PopMatrix();*/
-
 	modelStack.PushMatrix();
-	modelStack.Translate(-20, -4, 275);
-	modelStack.Rotate(70, 0, 1, 0);
+	modelStack.Translate(-25, -4, 275);
+	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_GATE], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(20, -4, 275);
-	modelStack.Rotate(-70, 0, 1, 0);
+	modelStack.Translate(25, -4, 275);
+	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[GEO_GATE], true);
 	modelStack.PopMatrix();
@@ -2834,8 +2948,6 @@ void SceneSP2Main::RenderTables()
 void SceneSP2Main::RenderTrees()
 {
 
-
-
 	modelStack.PushMatrix();
 	modelStack.Translate(60, 5, 280);
 	//modelStack.Rotate(90, 0, 1, 0);
@@ -2872,7 +2984,7 @@ void SceneSP2Main::RenderTrees()
 	modelStack.PopMatrix();//Added collider
 
 	//left trees
-
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(-60, 5, 280);
 	//modelStack.Rotate(90, 0, 1, 0);
@@ -2908,73 +3020,70 @@ void SceneSP2Main::RenderTrees()
 	RenderMesh(meshList[GEO_TREES], true);
 	modelStack.PopMatrix();//Added collider
 
-	//
-
-
 	modelStack.PushMatrix();
 	modelStack.Translate(60, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(120, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(180, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(250, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(320, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//left trees
-
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(-60, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-120, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-250, 5, -280);
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//
 
@@ -3025,7 +3134,7 @@ void SceneSP2Main::RenderTrees()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_TREES], true);
-	modelStack.PopMatrix();//Added collider
+	modelStack.PopMatrix();//Added colliders
 
 	modelStack.PushMatrix();
 	modelStack.Translate(310, 5, 50);
@@ -3035,7 +3144,6 @@ void SceneSP2Main::RenderTrees()
 	modelStack.PopMatrix();//Added collider
 
 	//left
-
 	modelStack.PushMatrix();
 	modelStack.Translate(-310, 5, -230);
 	//modelStack.Rotate(90, 0, 1, 0);
