@@ -30,6 +30,7 @@ private:
 	static int scenetype;
 	static Scene* scene;
 	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3;
+	static bool mainInit, s1Init, s2Init, s3Init, menuInit;
 	
 };
 enum Scenemanager {

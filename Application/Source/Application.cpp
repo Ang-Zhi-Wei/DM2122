@@ -110,6 +110,11 @@ void Application::Init()
 
 }
 
+bool Application::mainInit = false;
+bool Application::s1Init = false;
+bool Application::s2Init = false;
+bool Application::s3Init = false;
+bool Application::menuInit = false;
 
 
 //starting menu(just change back to scene_Menu when done)
@@ -123,7 +128,7 @@ Scene* Application::scene = sceneMenu;
 void Application::Run()
 {
 	scene->Init();
-
+	
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -138,8 +143,14 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
+	sceneMain->Exit();
+	scene1->Exit();
+	scene2->Exit();
+	scene3->Exit();
+	sceneMenu->Exit();
 	delete scene1;
 	delete scene2;
+	delete scene3;
 	delete sceneMain;
 	delete sceneMenu;
 }
@@ -181,35 +192,61 @@ int Application::GetWindowHeight()
 	return m_height;
 }
 
+
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
 	switch (scenetype)
 	{
 	case Scene_Main:
-		scene->Exit();
+		if (!mainInit)
+		{
+			sceneMain->Init();
+			mainInit = true;
+		}
+		else
+		{
+			sceneMain->Set(scene);
+		}
 		scene = sceneMain;
-		scene->Init();
-		break;
+		
+		break; 
 	case Scene_Menu:
-		scene->Exit();
+		if (!menuInit)
+		{
+			sceneMenu->Init();
+			menuInit = true;
+		}
+		sceneMenu->Set(scene);
 		scene = sceneMenu;
-		scene->Init();
 		break;
 	case Scene_1:
-		scene->Exit();
+		if (!s1Init)
+		{
+			scene1->Init();
+			s1Init = true;
+		}
+		scene1->Set(scene);
 		scene = scene1;
-		scene->Init();
 		break;
 	case Scene_2:
-		scene->Exit();
+		if (!s2Init)
+		{
+			scene2->Init();
+			s2Init = true;
+		}
+		scene2->Set(scene);
 		scene = scene2;
-		scene->Init();
 		break;
 	case Scene_3:
-		scene->Exit();
+		if (!s3Init)
+		{
+			scene3->Init();
+			s3Init = true;
+		}
+		scene3->Set(scene);
 		scene = scene3;
-		scene->Init();
+		
 		break;
 	}
 	

@@ -336,6 +336,14 @@ void SceneSP2Room1::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(75, 0.5, 130)));
 }
 
+void SceneSP2Room1::Set(Scene* scene)
+{
+	inventory = scene->inventory;
+	ghost = scene->ghost;
+	flashlight = scene->flashlight;
+	flashlight_lifetime = scene->flashlight_lifetime;
+}
+
 void SceneSP2Room1::Update(double dt)
 {
 	// mouse cursor show / hide
@@ -542,48 +550,48 @@ void SceneSP2Room1::Update(double dt)
 
 	//ghost
 
-	switch (ghost.state)
+	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 20)
+		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 20)
 		{
-			ghost.state = Ghost::CHASING;
-			ghost.speed = 25;
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
 		}
 		break;
 	case Ghost::CHASING:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 3 && inLocker)
+		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 3 && inLocker)
 		{
-			ghost.state = Ghost::WAITING;
-			ghost.waitTime = 5;
+			ghost->state = Ghost::WAITING;
+			ghost->waitTime = 5;
 		}
-		else if (ghost.distance <= 1)
+		else if (ghost->distance <= 1)
 		{
 			//TBC
 			//end game condition met, either that or HP - 1
 		}
 		break;
 	case Ghost::WAITING:
-		ghost.waitTime -= dt;
-		if (ghost.waitTime <= 0)
+		ghost->waitTime -= dt;
+		if (ghost->waitTime <= 0)
 		{
-			ghost.state = Ghost::SPEEDRUN;
-			ghost.speed = 50;
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
 		}
 		break;
 	case Ghost::SPEEDRUN:
-		ghost.facing = (ghost.pos - camera.position).Normalized();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance > 300 || !inLocker)
+		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 300 || !inLocker)
 		{
-			ghost.state = Ghost::NORMAL;
-			ghost.speed = 5;
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
 		}
 		break;
 
