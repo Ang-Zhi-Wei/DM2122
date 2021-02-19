@@ -74,7 +74,10 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 
+	//FullScreen (massive problem,unless the crashing bug is fixed don't use this)
+
 	//FullScreen
+
 	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
@@ -110,13 +113,13 @@ void Application::Init()
 
 
 //starting menu(just change back to scene_Menu when done)
-int Application::scenetype = Scene_3;
+int Application::scenetype = Scene_1;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
-Scene* Application::scene = scene3;
+Scene* Application::scene = scene1;
 void Application::Run()
 {
 	scene->Init();

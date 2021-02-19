@@ -331,8 +331,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(-7, 0.5, 150)));
-	traplist.push_back(trap(trap::beartrap, Vector3(57.5, 0.5, 90)));
-	traplist.push_back(trap(trap::beartrap, Vector3(75, 0.5, 130)));
+	traplist.push_back(trap(trap::beartrap, Vector3(64, 0.5, 90))); 
+	traplist.push_back(trap(trap::beartrap, Vector3(80, 0.5, 130)));
 }
 
 void SceneSP2Room1::Update(double dt)
