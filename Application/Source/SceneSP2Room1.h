@@ -37,6 +37,7 @@ public:
 		GEO_WALL,
 		GEO_CEILING,
 		GEO_FLOOR,
+		GEO_RIGHTDOOR,
 
 		//ground mesh
 		Ground_Mesh,
