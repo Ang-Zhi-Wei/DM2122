@@ -235,6 +235,7 @@ void SceneSP2Room1::Init()
 
 
 	flashlight = true;
+	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -494,22 +495,34 @@ void SceneSP2Room1::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
-		flashlight = !flashlight;
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+		}
 	}
 
 	//ghost
