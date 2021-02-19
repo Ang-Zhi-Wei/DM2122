@@ -220,7 +220,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 3);
+			return(distance.Length() < 2);
 		}
 	};
 	void RenderSkybox();
@@ -272,6 +272,7 @@ private:
 	bool jumpscareTimerActive4;
 
 	bool flashlight;
+	float flashlight_lifetime;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;

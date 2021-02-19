@@ -235,6 +235,7 @@ void SceneSP2Room1::Init()
 
 
 	flashlight = true;
+	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -262,7 +263,11 @@ void SceneSP2Room1::Init()
 	jumpscareEntrance4 = 0;
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
-
+	//lockers
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(-8, 0, 120));
+	Lockerlist.push_back(Locker());
+	Lockerlist[1].setpos(Vector3(90.5, 0, 145));
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(1, 20, 100);
@@ -303,15 +308,22 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(25, 20, 1);
 	Colliderlist[12].Setposition(Vector3(82.5, 10, 170));
+	//Locker colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[13].setlength(3.9, 10, 4.3);
+	Colliderlist[13].Setposition(Lockerlist[0].getpos());
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(3.9, 10, 4.3);
+	Colliderlist[14].Setposition(Lockerlist[1].getpos());
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
-	//Locker test
+	//Locker Mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
-	
+
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 	//trap mesh
@@ -319,6 +331,9 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
+	traplist.push_back(trap(trap::beartrap, Vector3(-7, 0.5, 150)));
+	traplist.push_back(trap(trap::beartrap, Vector3(57.5, 0.5, 90)));
+	traplist.push_back(trap(trap::beartrap, Vector3(75, 0.5, 130)));
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -463,6 +478,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	//Locker
 
+
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
@@ -494,22 +510,34 @@ void SceneSP2Room1::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
-		flashlight = !flashlight;
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
-			light[1].power = 2;
-			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-		}
-		else
-		{
+			flashlight = false;
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
+		else if (flashlight_lifetime > 0)
+		{
+			flashlight = true;
+			light[1].power = 2;
+			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+		}
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	}
+	if (flashlight)
+	{
+		if (flashlight_lifetime >= 0)
+		{
+			flashlight_lifetime -= dt;
+		}
+		else
+		{
+			flashlight = false;
+		}
 	}
 
 	//ghost
@@ -574,16 +602,28 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive1 == true)
 		jumpscareTimer1 -= dt;
 	
-	if ((jumpscareTimer1 <= jumpscareTimerReset1 - 0.2)&&(jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	if ((jumpscareTimer1 >= 0.5) && (jumpscareTimer1 <= jumpscareTimerReset1 - 0.2))
 	{
 		jumpscareActive1 = false;
 	}
 	if (jumpscareTimer1 <= 0)
 	{
+
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1;
-		jumpscareEntrance1 = 1;
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + 5;
 	}
+
+	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	{
+		jumpscareActive1 = true;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = true;
+		jumpscareTimer1 = jumpscareTimerReset1= rand() % 5 + 5;
+
+		jumpscareEntrance1 = 1;
+	}*/
 
 	//Jumpscare, living room
 	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
@@ -598,15 +638,15 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive2 == true)
 		jumpscareTimer2 -= dt;
 
-	if ((jumpscareTimer2 <= jumpscareTimerReset2 - 0.2) && (jumpscareTimer2 >= 1) && (jumpscareEntrance2 == 1))
+	if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
 	{
 		jumpscareActive2 = false;
 	}
 	if (jumpscareTimer2 <= 0)
 	{
+
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2;
-		jumpscareEntrance2 = 1;
+		jumpscareTimer2 = jumpscareTimerReset2 = rand() % 5 + 5;
 	}
 
 
@@ -623,17 +663,17 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimerActive3 == true)
 		jumpscareTimer3 -= dt;
-
-	if ((jumpscareTimer3 <= jumpscareTimerReset3 - 0.2) && (jumpscareTimer3 >= 1) && (jumpscareEntrance3 == 1))
+	if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
 	{
 		jumpscareActive3 = false;
 	}
 	if (jumpscareTimer3 <= 0)
 	{
+
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3;
-		jumpscareEntrance3 = 1;
+		jumpscareTimer3 = jumpscareTimerReset3 = rand() % 5 + 5;
 	}
+
 
 
 	//Jumpscare, Final room
@@ -649,17 +689,17 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive4 == true)
 		jumpscareTimer4 -= dt;
 
-	if ((jumpscareTimer4 <= jumpscareTimerReset4 - 0.2) && (jumpscareTimer4 >= 1) && (jumpscareEntrance4 == 1))
+	if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
 	{
 		jumpscareActive4 = false;
 	}
 	if (jumpscareTimer4 <= 0)
 	{
+
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4;
-		jumpscareEntrance4 = 1;
+		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + 5;
 	}
-	
+
 }
 
 void SceneSP2Room1::Render()
@@ -744,6 +784,7 @@ void SceneSP2Room1::Render()
 		case trap::beartrap:
 			modelStack.PushMatrix();
 			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			modelStack.Scale(0.5, 0.5, 0.5);
 			RenderMesh(meshList[GEO_BEARTRAP], true);
 			modelStack.PopMatrix();
 			break;

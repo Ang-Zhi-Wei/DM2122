@@ -1510,7 +1510,7 @@ void SceneSP2Main::Render()
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
-	modelStack.Scale(900, 1, 900);
+	modelStack.Scale(1500, 1, 1500);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
 
