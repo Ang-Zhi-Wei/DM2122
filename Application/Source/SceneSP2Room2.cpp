@@ -326,8 +326,27 @@ void SceneSP2Room2::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[10].setlength(4.3, 10, 3.9);
 	Colliderlist[10].Setposition(Lockerlist[2].getpos());
+	//Door colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(school_door[0].lengthx,school_door[0].lengthy,school_door[0].lengthz);
+	Colliderlist[11].Setposition(school_door[0].mid);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[12].setlength(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
+	Colliderlist[12].Setposition(school_door[1].mid);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[13].setlength(classroom_door[0].lengthx,classroom_door[0].lengthy,classroom_door[0].lengthz);
+	Colliderlist[13].Setposition(classroom_door[0].mid);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz);
+	Colliderlist[14].Setposition(classroom_door[1].mid);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[15].setlength(lounge_door[0].lengthx,lounge_door[0].lengthy,lounge_door[0].lengthz);
+	Colliderlist[15].Setposition(lounge_door[0].mid);
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
+	Colliderlist[16].Setposition(lounge_door[1].mid);
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[10].getxlength(), Colliderlist[10].getylength(), Colliderlist[10].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[11].getxlength(), Colliderlist[11].getylength(), Colliderlist[11].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -399,87 +418,87 @@ void SceneSP2Room2::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
+	if (!Application::IsKeyPressed('Q'))
 	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
+		Qreleased = true;
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F'))
-	{
-		Fpressed = true;
-		Freleased = false;
-	}
 	else
 	{
-		if (Fpressed)
+		if (Qreleased)
 		{
-			Freleased = true;
+			Qpressed = true;
+
 		}
+		Qreleased = false;
+	}
+	if (!Application::IsKeyPressed('F'))
+	{
+		Freleased = true;
 		Fpressed = false;
 	}
-	if (Application::IsKeyPressed('E'))
-	{
-		Epressed = true;
-		Ereleased = false;
-	}
 	else
 	{
-		if (Epressed)
+		if (Freleased)
 		{
-			Ereleased = true;
+			Fpressed = true;
 		}
+		Freleased = false;
+	}
+	if (!Application::IsKeyPressed('E'))
+	{
+		Ereleased = true;
 		Epressed = false;
 	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Apressed = true;
-		Areleased = false;
-	}
 	else
 	{
-		if (Apressed)
+		if (Ereleased)
 		{
-			Areleased = true;
-
+			Epressed = true;
 		}
+		Ereleased = false;
+	}
+	if (!Application::IsKeyPressed('A'))
+	{
+		Areleased = true;
 		Apressed = false;
 	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Dpressed = true;
-		Dreleased = false;
-	}
 	else
 	{
-		if (Dpressed)
+		if (Areleased)
 		{
-			Dreleased = true;
+			Apressed = true;
 
 		}
+		Areleased = false;
+	}
+	if (!Application::IsKeyPressed('D'))
+	{
+		Dreleased = true;
 		Dpressed = false;
 	}
-	if (Application::IsKeyPressed('R'))
+	else
 	{
-		Rpressed = true;
-		Rreleased = false;
+		if (Dreleased)
+		{
+			Dpressed = true;
+
+		}
+		Dreleased = false;
+	}
+	if (!Application::IsKeyPressed('R'))
+	{
+		Rreleased = true;
+		Rpressed = false;
 	}
 	else
 	{
-		if (Rpressed)
+		if (Rreleased)
 		{
-			Rreleased = true;
+			Rpressed = true;
 
 		}
-		Rpressed = false;
+		Rreleased = false;
 	}
 	//fps
 	fps = 1.f / dt;
@@ -514,10 +533,10 @@ void SceneSP2Room2::Update(double dt)
 		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
 		flashlight = !flashlight;
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
@@ -548,9 +567,9 @@ void SceneSP2Room2::Update(double dt)
 		{
 			interact = true;
 			interact_message = "Exit School";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				Application::setscene(Scene_Main);
 			}
 		}
@@ -560,9 +579,9 @@ void SceneSP2Room2::Update(double dt)
 		{
 			interact = true;
 			interact_message = "Exit School";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				DS_school = OPENING;
 			}
 		}
@@ -593,15 +612,23 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_classroom = CLOSING;
+			Colliderlist[13].setactive(true);
+			Colliderlist[14].setactive(true);
+			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
 		{
 			interact = true;
 			interact_message = "Close Door";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				DS_classroom = CLOSING;
+				Colliderlist[13].setactive(true);
+				Colliderlist[14].setactive(true);
+				camera.setchecker(Colliderlist);
+
+				
 			}
 		}
 		break;
@@ -610,10 +637,14 @@ void SceneSP2Room2::Update(double dt)
 		{
 			interact = true;
 			interact_message = "Open Door";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				DS_classroom = OPENING;
+				Colliderlist[13].setactive(false);
+				Colliderlist[14].setactive(false);
+				camera.setchecker(Colliderlist);
+				
 			}
 		}
 		break;
@@ -629,6 +660,7 @@ void SceneSP2Room2::Update(double dt)
 	case CLOSING:
 		classroom_door[0].rotateY -= 20 * dt;
 		classroom_door[1].rotateY += 20 * dt;
+	
 		if (classroom_door[0].rotateY <= 0)
 		{
 			classroom_door[0].rotateY = 0;
@@ -645,27 +677,36 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_lounge = CLOSING;
+			Colliderlist[15].setactive(true);
+			Colliderlist[16].setactive(true);
+			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
 		{
 			interact = true;
 			interact_message = "Close Door";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				DS_lounge = CLOSING;
+				Colliderlist[15].setactive(true);
+				Colliderlist[16].setactive(true);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
 	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
+		if (camera.position.x <= 5 && camera.position.x >= -20 && camera.position.z <= -45 && camera.position.z >= -55)
 		{
 			interact = true;
 			interact_message = "Open Door";
-			if (Freleased)
+			if (Fpressed)
 			{
-				Freleased = false;
+				Fpressed = false;
 				DS_lounge = OPENING;
+				Colliderlist[15].setactive(false);
+				Colliderlist[16].setactive(false);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -832,7 +873,7 @@ void SceneSP2Room2::Render()
 	}
 	//colliderbox for checking
 	//modelStack.PushMatrix();
-	//modelStack.Translate(Colliderlist[10].getPosition().x, Colliderlist[10].getPosition().y, Colliderlist[10].getPosition().z);
+	//modelStack.Translate(Colliderlist[11].getPosition().x, Colliderlist[11].getPosition().y, Colliderlist[11].getPosition().z);
 	//RenderMesh(meshList[Colliderbox], false);
 	//modelStack.PopMatrix();
 

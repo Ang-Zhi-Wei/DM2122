@@ -275,6 +275,9 @@ private:
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
+	bool Apressed, Areleased;
+	bool Dpressed, Dreleased;
+	bool Rpressed, Rreleased;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

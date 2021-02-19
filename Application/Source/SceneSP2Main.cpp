@@ -40,7 +40,6 @@ void SceneSP2Main::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
 
-	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 9, 0));
 
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
 		0));
@@ -469,10 +468,15 @@ void SceneSP2Main::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
-	//UI
 
+	//=============== UI stuff ===================
+	//camcorder
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
+	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
 	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
@@ -480,7 +484,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
@@ -496,8 +499,6 @@ void SceneSP2Main::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
-	meshList[GEO_LUNGS] = MeshBuilder::GenerateQuad2("breathing", 1.5, 1, White);
-	meshList[GEO_LUNGS]->textureID = LoadTGA("Image//lungicon.tga");
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -882,13 +883,13 @@ void SceneSP2Main::Init()
 	camera.SetBounds(-415, 415, -365, 360);
 
 	//test examples for item
-	test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
-	test2.Set("Battery", (0, 0, 0), Item::BATTERY);
-	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	PickUpItem(&test2); //to be called only in one frame.
-	PickUpItem(&test);
-	PickUpItem(&test2);
-	PickUpItem(&test2);
+	/*test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
+	test2.Set("Battery", (0, 0, 0), Item::BATTERY);*/
+	//PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	//PickUpItem(&test2); //to be called only in one frame.
+	//PickUpItem(&test);
+	//PickUpItem(&test2);
+	//PickUpItem(&test2);
 
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -909,7 +910,6 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -924,7 +924,6 @@ void SceneSP2Main::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
 	//interaction hitbox checker
@@ -986,87 +985,87 @@ void SceneSP2Main::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
+	if (!Application::IsKeyPressed('Q'))
 	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
+		Qreleased = true;
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F'))
-	{
-		Fpressed = true;
-		Freleased = false;
-	}
 	else
 	{
-		if (Fpressed)
+		if (Qreleased)
 		{
-			Freleased = true;
+			Qpressed = true;
+
 		}
+		Qreleased = false;
+	}
+	if (!Application::IsKeyPressed('F'))
+	{
+		Freleased = true;
 		Fpressed = false;
 	}
-	if (Application::IsKeyPressed('E'))
-	{
-		Epressed = true;
-		Ereleased = false;
-	}
 	else
 	{
-		if (Epressed)
+		if (Freleased)
 		{
-			Ereleased = true;
+			Fpressed = true;
 		}
+		Freleased = false;
+	}
+	if (!Application::IsKeyPressed('E'))
+	{
+		Ereleased = true;
 		Epressed = false;
 	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Apressed = true;
-		Areleased = false;
-	}
 	else
 	{
-		if (Apressed)
+		if (Ereleased)
 		{
-			Areleased = true;
-
+			Epressed = true;
 		}
+		Ereleased = false;
+	}
+	if (!Application::IsKeyPressed('A'))
+	{
+		Areleased = true;
 		Apressed = false;
 	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Dpressed = true;
-		Dreleased = false;
-	}
 	else
 	{
-		if (Dpressed)
+		if (Areleased)
 		{
-			Dreleased = true;
+			Apressed = true;
 
 		}
+		Areleased = false;
+	}
+	if (!Application::IsKeyPressed('D'))
+	{
+		Dreleased = true;
 		Dpressed = false;
 	}
-	if (Application::IsKeyPressed('R'))
+	else
 	{
-		Rpressed = true;
-		Rreleased = false;
+		if (Dreleased)
+		{
+			Dpressed = true;
+
+		}
+		Dreleased = false;
+	}
+	if (!Application::IsKeyPressed('R'))
+	{
+		Rreleased = true;
+		Rpressed = false;
 	}
 	else
 	{
-		if (Rpressed)
+		if (Rreleased)
 		{
-			Rreleased = true;
+			Rpressed = true;
 
 		}
-		Rpressed = false;
+		Rreleased = false;
 	}
 
 
@@ -1219,9 +1218,9 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
@@ -1251,37 +1250,37 @@ void SceneSP2Main::Update(double dt)
 
 
 	//inventory
-	if (Ereleased)
+	if (Epressed)
 	{
 		inventory.open = !inventory.open;
-		Ereleased = false;
+		Epressed = false;
 	}
 	if (inventory.open)
 	{
 		camera.can_move = false;
-		if (Areleased)
+		if (Apressed)
 		{
 			inventory.selected--;
 			if (inventory.selected == -1)
 			{
 				inventory.selected = 7;
 			}
-			Areleased = false;
+			Apressed = false;
 		}
-		else if (Dreleased)
+		else if (Dpressed)
 		{
 			inventory.selected++;
 			inventory.selected %= 8;
-			Dreleased = false;
+			Dpressed = false;
 		}
-		else if (Rreleased)
+		else if (Rpressed)
 		{
 			if (inventory.items[inventory.selected] != nullptr)
 			{
 				UseItem(inventory.items[inventory.selected]->type);
 			}
 			//else warning that no item selected?
-			Rreleased = false;
+			Rpressed = false;
 		}
 	}
 
@@ -1806,6 +1805,10 @@ void SceneSP2Main::Render()
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
@@ -2942,8 +2945,6 @@ void SceneSP2Main::RenderTables()
 void SceneSP2Main::RenderTrees()
 {
 
-
-	
 	modelStack.PushMatrix();
 	modelStack.Translate(60, 5, 280);
 	//modelStack.Rotate(90, 0, 1, 0);

@@ -6,6 +6,7 @@ ColliderBox::ColliderBox()
 	xlength = 3;
 	ylength = 3;
 	zlength = 3;
+	active = true;
 }
 
 
@@ -51,4 +52,14 @@ double ColliderBox::getylength()
 double ColliderBox::getzlength()
 {
 	return zlength;
+}
+
+void ColliderBox::setactive(bool active)
+{
+	this->active = active;
+}
+
+bool ColliderBox::getactive()
+{
+	return active;
 }

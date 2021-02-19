@@ -111,7 +111,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.z -= view.z * CAMERA_SPEED * dt;
 			}
 			for (int i = 0; i < Checker.size(); i++) {
-				if (Checker[i].iscollide(position)) {
+				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
 					position.x -= view.x * CAMERA_SPEED * dt;
 					position.z -= view.z * CAMERA_SPEED * dt;
 					rawTarget.x -= view.x * CAMERA_SPEED * dt;
@@ -140,7 +140,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.z += right.z * CAMERA_SPEED * dt;
 			}
 			for (int i = 0; i < Checker.size(); i++) {
-				if (Checker[i].iscollide(position)) {
+				if (Checker[i].iscollide(position) && Checker[i].getactive()==true) {
 					position.x += right.x * CAMERA_SPEED * dt;
 					position.z += right.z * CAMERA_SPEED * dt;
 					rawTarget.x += right.x * CAMERA_SPEED * dt;
@@ -168,7 +168,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.z += view.z * CAMERA_SPEED * dt;
 			}
 			for (int i = 0; i < Checker.size(); i++) {
-				if (Checker[i].iscollide(position)) {
+				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
 					position.x += view.x * CAMERA_SPEED * dt;
 					position.z += view.z * CAMERA_SPEED * dt;
 					rawTarget.x += view.x * CAMERA_SPEED * dt;
@@ -196,7 +196,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.z -= right.z * CAMERA_SPEED * dt;
 			}
 			for (int i = 0; i < Checker.size(); i++) {
-				if (Checker[i].iscollide(position)) {
+				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
 					position.x -= right.x * CAMERA_SPEED * dt;
 					position.z -= right.z * CAMERA_SPEED * dt;
 					rawTarget.x -= right.x * CAMERA_SPEED * dt;

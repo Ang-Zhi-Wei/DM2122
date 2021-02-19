@@ -51,6 +51,9 @@ public:
 		GEO_SPAWN,
 
 
+		//items to collect
+		GEO_BATT,
+
 		//objs
 		GEO_BUILDING,
 		GEO_ROAD,
@@ -78,12 +81,12 @@ public:
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
+		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
-		GEO_SWING,
+		GEO_PLAYGROUND,
 		GEO_LIVES,
-		GEO_LUNGS,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		
@@ -234,8 +237,8 @@ private:
 		{
 			BATTERY,
 			ITEM2,
-			ITEM3
-			//add more depending on what u need, don forget set in Set function
+			ITEM3,
+			//add more depending on whta u need, don forget set in Set function
 		};
 		//Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
@@ -248,7 +251,7 @@ private:
 		{
 			count = 1;
 		}
-		void Set(std::string name, Vector3 pos, ITEM_TYPE type)
+		void Set(std::string name, ITEM_TYPE type)
 		{
 			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
 			this->type = type;
@@ -408,6 +411,9 @@ private:
 	float campos_y;
 	float campos_z;
 
+	bool canPickUp;
+	bool showText;
+
 	int Interact_Num;
 	bool canTalk_man;
 
@@ -415,6 +421,7 @@ private:
 	Inventory inventory;
 	Item test;
 	Item test2;
+	Item battery;
 
 	Vector3 temp;
 	void RenderSkybox();
