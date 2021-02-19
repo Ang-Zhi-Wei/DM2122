@@ -217,9 +217,9 @@ private:
 	float LSPEED;
 	float rotate_Man;
 	float fps;
-	bool Fpressed, Freleased;
 	bool showChatbox;
 	bool showSideBox;
+	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
 	bool Apressed, Areleased;
@@ -427,6 +427,7 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderBuilding();
 	void RenderFence();

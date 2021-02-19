@@ -355,15 +355,15 @@ void SceneSP2Room1::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-				if (detected) {
-					camera.Setslow(true);
-				}
-				else {
-					camera.Setslow(false);
-				}
 			}
 			break;
 		}
+	}
+	if (detected) {
+		camera.Setslow(true);
+	}
+	else {
+		camera.Setslow(false);
 	}
 	//key input
 	if (Application::IsKeyPressed('1')) {

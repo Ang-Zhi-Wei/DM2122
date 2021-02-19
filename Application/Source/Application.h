@@ -2,6 +2,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "Scene.h"
 #include "timer.h"
 
 class Application
@@ -27,13 +28,16 @@ private:
 	//Declare a window object
 	StopWatch m_timer;
 	static int scenetype;
+	static Scene* scene;
+	static Scene* sceneMain, *sceneMenu, *scene1, *scene2;
+	
 };
 enum Scenemanager {
 	Scene_1,
 	Scene_2,
+	Scene_Main,
+	Scene_Menu,
 	Scene_3,
-	Scene_4,
-	Scene_5,
 };
 
 #endif
