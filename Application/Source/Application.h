@@ -2,6 +2,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "Scene.h"
 #include "timer.h"
 
 class Application
@@ -16,7 +17,7 @@ public:
 	static bool IsMousePressed(unsigned short key);
 	static void GetCursorPos(double* xpos, double* ypos);
 	static void SetCursorPos(double xpos, double ypos);
-	static void hidemousecursor(void);
+	static void hidemousecursor(bool hide);
 	static int GetWindowWidth();
 	static int GetWindowHeight();
 	static unsigned m_width;
@@ -27,13 +28,16 @@ private:
 	//Declare a window object
 	StopWatch m_timer;
 	static int scenetype;
+	static Scene* scene;
+	static Scene* sceneMain, *sceneMenu, *scene1, *scene2;
+	
 };
 enum Scenemanager {
 	Scene_1,
 	Scene_2,
+	Scene_Main,
+	Scene_Menu,
 	Scene_3,
-	Scene_4,
-	Scene_5,
 };
 
 #endif

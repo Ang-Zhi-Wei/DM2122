@@ -18,9 +18,8 @@ GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
+
 //Define an error callback
-//starting menu
-int Application::scenetype = Scene_1;
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
@@ -53,6 +52,7 @@ void resize_callback(GLFWwindow* window, int w, int h)
 	Application::m_height = h;
 	glViewport(0, 0, w, h);
 }
+
 void Application::Init()
 {
 	glfwSetWindowSizeCallback(m_window, resize_callback);
@@ -106,40 +106,23 @@ void Application::Init()
 		//return -1;
 	}
 
-
-	//start in menu
-	scenetype = Scene_4;
-
 }
 
+
+//starting menu(just change back to scene_4 when done)
+int Application::scenetype = Scene_Menu;
+Scene* Application::sceneMain = new SceneSP2Main;
+Scene* Application::scene1 = new SceneSP2Room1;
+Scene* Application::scene2 = new SceneSP2Room2;
+Scene* Application::sceneMenu = new SceneSP2Menu;
+Scene* Application::scene = sceneMenu;
 void Application::Run()
 {
-	Scene* scene = new SceneSP2Main;//don't change here
+	//initiallise all the scenes here
+	scene->Init();
+
+
 	//Main Loop
-	//Scene Manager
-	switch (scenetype) {
-	case Scene_1:
-		scene->Init();
-		break;
-	case Scene_2:
-		delete scene;
-		scene = new SceneSP2Room1();
-		scene->Init();
-		break;
-	case Scene_3:
-		delete scene;
-		scene = new SceneSP2Room2();
-		scene->Init();
-		break;
-	case Scene_4:
-		delete scene;
-		scene = new SceneSP2Menu();
-		scene->Init();
-		break;
-	}
-
-
-
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
@@ -152,7 +135,10 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
-	delete scene;
+	delete scene1;
+	delete scene2;
+	delete sceneMain;
+	delete sceneMenu;
 }
 unsigned Application::m_width;
 unsigned Application::m_height;
@@ -170,9 +156,15 @@ void Application::SetCursorPos(double xpos, double ypos)
 	glfwSetCursorPos(m_window, xpos, ypos);
 }
 
-void Application::hidemousecursor(void)
+void Application::hidemousecursor(bool hide)
 {
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	if (hide) {
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+	else {
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	
 }
 
 
@@ -186,10 +178,36 @@ int Application::GetWindowHeight()
 	return m_height;
 }
 
-void Application::setscene(static int scenenum)
+void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
+	switch (scenetype)
+	{
+	case Scene_Main:
+		scene->Exit();
+		scene = sceneMain;
+		scene->Init();
+		break;
+	case Scene_Menu:
+		scene->Exit();
+		scene = sceneMenu;
+		scene->Init();
+		break;
+	case Scene_1:
+		scene->Exit();
+		scene = scene1;
+		scene->Init();
+		break;
+	case Scene_2:
+		scene->Exit();
+		scene = scene2;
+		scene->Init();
+		break;
+	}
+	
 }
+
+
 
 
 void Application::Exit()

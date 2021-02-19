@@ -67,7 +67,9 @@ public:
 		//UI tings
 		GEO_TEXT,
 		GEO_GAMETITLE,
+		GEO_CREDITS,
 		GEO_BUTTONBAR,
+		GEO_CLOSEBUTTON,
 
 		//paths
 		GEO_CENTRE,
@@ -140,16 +142,15 @@ public:
 		U_LIGHT3_COSINNER,
 		U_LIGHT3_EXPONENT,
 
-
-
 		U_TOTAL,
-
 	};
 
 private:
 
 	int lockernum;
 	int ButtonNum;
+
+	bool show_credits;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;

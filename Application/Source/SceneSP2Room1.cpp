@@ -36,8 +36,7 @@ void SceneSP2Room1::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-	Application::hidemousecursor();
+	
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -323,6 +322,8 @@ void SceneSP2Room1::Init()
 
 void SceneSP2Room1::Update(double dt)
 {
+	// mouse cursor show / hide
+	Application::hidemousecursor(true);
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -354,15 +355,15 @@ void SceneSP2Room1::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-				if (detected) {
-					camera.Setslow(true);
-				}
-				else {
-					camera.Setslow(false);
-				}
 			}
 			break;
 		}
+	}
+	if (detected) {
+		camera.Setslow(true);
+	}
+	else {
+		camera.Setslow(false);
 	}
 	//key input
 	if (Application::IsKeyPressed('1')) {

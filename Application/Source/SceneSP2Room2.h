@@ -42,6 +42,8 @@ public:
 		GEO_TABLE,
 		GEO_LONGTABLE,
 		GEO_CHAIR,
+		GEO_LEFTDOOR,
+		GEO_RIGHTDOOR,
 
 		//colliderbox 
 		Colliderbox,
@@ -103,6 +105,13 @@ public:
 		U_TOTAL,
 
 	};
+	enum DOOR_STATE
+	{
+		OPEN,
+		CLOSED,
+		OPENING,
+		CLOSING
+	};
 
 private:
 
@@ -112,6 +121,7 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
+
 	
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
@@ -121,7 +131,9 @@ private:
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
-
+	bool Apressed, Areleased;
+	bool Dpressed, Dreleased;
+	bool Rpressed, Rreleased;
 	struct Wall
 	{
 		Vector3 mid;
@@ -129,8 +141,12 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 1;
+			lengthx = lengthz = 0.5;
 		}
+	};
+	struct Door : Wall
+	{
+		float rotateY;
 	};
 
 	struct Item
@@ -249,11 +265,13 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 3);
+			return(distance.Length() < 2);
 		}
 	};
+
 	//game related vars
 	bool flashlight;
+	float flashlight_lifetime;
 	bool inLocker;
 
 	Wall school_walls[6];  //0 front top, 1 front left, 2 front right, 3 back, 4 left, 5 right
@@ -262,14 +280,24 @@ private:
 	Wall classroom_walls[2]; //top, wall
 	Wall classroom_tables[20];
 	Wall classroom_chairs[20];
+	Wall lounge_table;
 
 	const int wall_count = 11;
 	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], &school_walls[1], &school_walls[2], &school_walls[3], &school_walls[4], &school_walls[5],
-					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]
-						/*&school_door[0], &school_door[3],&school_door[1], &school_door[2],&classroom_door[0], &lounge_door[0],&classroom_door[3],&lounge_door[3],
-	&classroom_door[1],&lounge_door[1],&classroom_door[2],&lounge_door[2]*/ };
+					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]};
 
+	Door school_door[2];
+	Door classroom_door[2];
+	Door lounge_door[2];
+	Door* all_doors[6] = { &school_door[0], &school_door[1], 
+							&lounge_door[1], &classroom_door[0],
+							&classroom_door[1],&lounge_door[0]};
 
+	
+
+	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	bool interact;
+	std::string interact_message;
 
 	Ghost ghost;
 

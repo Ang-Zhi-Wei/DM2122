@@ -28,6 +28,7 @@ void SceneSP2Main::Init()
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
+	is_talking = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -47,8 +48,7 @@ void SceneSP2Main::Init()
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	//hide cursor
-	Application::hidemousecursor();
+	
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -901,7 +901,8 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Update(double dt)
 {
-
+	// mouse cursor show / hide
+	Application::hidemousecursor(true);
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -960,18 +961,17 @@ void SceneSP2Main::Update(double dt)
 			case trap::beartrap:
 				if (traplist[i].nearby(camera.position)) {
 					detected = true;
-					if (detected) {
-						camera.Setslow(true);
-					}
-					else {
-						camera.Setslow(false);
-					}
-				}
 				
+				}
 				break;
 		}
 	}
-	
+	if (detected) {
+		camera.Setslow(true);
+	}
+	else {
+		camera.Setslow(false);
+	}
 
 	//key input
 	if (Application::IsKeyPressed('1')) {
@@ -1097,6 +1097,15 @@ void SceneSP2Main::Update(double dt)
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
+
+
+	//check if talking (stops camera)
+	if (is_talking)
+		camera.can_move = false;
+	else
+		camera.can_move = true;
+
+
 	switch (SpeakPhase)
 	{
 		//default
@@ -1126,7 +1135,7 @@ void SceneSP2Main::Update(double dt)
 
 		//talking to man part
 	case 3:
-		camera.can_move = false;
+		is_talking = true;
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
@@ -1199,7 +1208,7 @@ void SceneSP2Main::Update(double dt)
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
-			camera.can_move = true;
+			is_talking = false;
 			SpeakPhase = 0;
 		}
 		break;
@@ -1518,10 +1527,10 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 
@@ -1831,7 +1840,7 @@ void SceneSP2Main::Render()
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
 			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->name, Color(0, 0, 0), 3, 40, 6);
-			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
 		}
 		
 	}
@@ -1943,6 +1952,7 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
+	
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -2159,6 +2169,71 @@ void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
+
+}
+
+void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit)
+{
+	if (!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 200, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+
+	//Change this line inside for loop
+	std::string toPrint;
+	if (text.length() > limit)
+	{
+		toPrint = text.substr(0, limit);
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], text.substr(limit, text.length()), color, size, x, y - 1, limit);
+	}
+	else
+	{
+		toPrint = text;
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+	}
+	
 
 	//Add these code just before glEnable(GL_DEPTH_TEST);
 	projectionStack.PopMatrix();
