@@ -29,15 +29,18 @@ private:
 	StopWatch m_timer;
 	static int scenetype;
 	static Scene* scene;
-	static Scene* sceneMain, *sceneMenu, *scene1, *scene2;
+	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3;
 	
 };
 enum Scenemanager {
-	Scene_1,
-	Scene_2,
+	
 	Scene_Main,
 	Scene_Menu,
+	Scene_1,
+	Scene_2,
 	Scene_3,
+	Scene_4
+	
 };
 
 #endif
