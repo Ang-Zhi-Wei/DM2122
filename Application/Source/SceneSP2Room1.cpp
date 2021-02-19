@@ -463,6 +463,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	//Locker
 
+
 	for (int i = 0; i < Lockerlist.size(); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
@@ -574,16 +575,28 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive1 == true)
 		jumpscareTimer1 -= dt;
 	
-	if ((jumpscareTimer1 <= jumpscareTimerReset1 - 0.2)&&(jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	if ((jumpscareTimer1 >= 0.5) && (jumpscareTimer1 <= jumpscareTimerReset1 - 0.2))
 	{
 		jumpscareActive1 = false;
 	}
 	if (jumpscareTimer1 <= 0)
 	{
+
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1;
-		jumpscareEntrance1 = 1;
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + 5;
 	}
+
+	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
+	{
+		jumpscareActive1 = true;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = true;
+		jumpscareTimer1 = jumpscareTimerReset1= rand() % 5 + 5;
+
+		jumpscareEntrance1 = 1;
+	}*/
 
 	//Jumpscare, living room
 	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
@@ -598,15 +611,15 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive2 == true)
 		jumpscareTimer2 -= dt;
 
-	if ((jumpscareTimer2 <= jumpscareTimerReset2 - 0.2) && (jumpscareTimer2 >= 1) && (jumpscareEntrance2 == 1))
+	if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
 	{
 		jumpscareActive2 = false;
 	}
 	if (jumpscareTimer2 <= 0)
 	{
+
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2;
-		jumpscareEntrance2 = 1;
+		jumpscareTimer2 = jumpscareTimerReset2 = rand() % 5 + 5;
 	}
 
 
@@ -623,17 +636,17 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimerActive3 == true)
 		jumpscareTimer3 -= dt;
-
-	if ((jumpscareTimer3 <= jumpscareTimerReset3 - 0.2) && (jumpscareTimer3 >= 1) && (jumpscareEntrance3 == 1))
+	if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
 	{
 		jumpscareActive3 = false;
 	}
 	if (jumpscareTimer3 <= 0)
 	{
+
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3;
-		jumpscareEntrance3 = 1;
+		jumpscareTimer3 = jumpscareTimerReset3 = rand() % 5 + 5;
 	}
+
 
 
 	//Jumpscare, Final room
@@ -649,17 +662,17 @@ void SceneSP2Room1::Update(double dt)
 	if (jumpscareTimerActive4 == true)
 		jumpscareTimer4 -= dt;
 
-	if ((jumpscareTimer4 <= jumpscareTimerReset4 - 0.2) && (jumpscareTimer4 >= 1) && (jumpscareEntrance4 == 1))
+	if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
 	{
 		jumpscareActive4 = false;
 	}
 	if (jumpscareTimer4 <= 0)
 	{
+
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4;
-		jumpscareEntrance4 = 1;
+		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + 5;
 	}
-	
+
 }
 
 void SceneSP2Room1::Render()

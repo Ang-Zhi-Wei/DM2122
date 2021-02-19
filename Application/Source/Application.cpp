@@ -15,6 +15,7 @@
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
+#include "time.h"
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -64,7 +65,7 @@ void Application::Init()
 	{
 		exit(EXIT_FAILURE);
 	}
-
+	srand(time(NULL));
 	//Set the GLFW window creation hints - these are optional
 	glfwWindowHint(GLFW_SAMPLES, 4); //Request 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //Request a specific OpenGL version
