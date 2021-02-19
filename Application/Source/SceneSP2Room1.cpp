@@ -157,7 +157,6 @@ void SceneSP2Room1::Init()
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 
 
-
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2images//Arial.tga");
@@ -783,6 +782,20 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
 	
+	//door
+	modelStack.PushMatrix();
+	modelStack.Translate(-7.5, 5, 170);
+	modelStack.Scale(5,10,1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//wall on door
+	modelStack.PushMatrix();
+	modelStack.Translate(-7.5, 15, 170);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
+	modelStack.PopMatrix();
+
 	//Left wall
 
 	modelStack.PushMatrix();
@@ -805,6 +818,20 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(27.5, 0, 132.5);
 	modelStack.Scale(75, 1, 75);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Door
+	modelStack.PushMatrix();
+	modelStack.Translate(62.5, 5, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//Door wall
+	modelStack.PushMatrix();
+	modelStack.Translate(62.5, 15, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
 	//Right wall
@@ -844,6 +871,20 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(72.5, 0, 80);
 	modelStack.Scale(40, 1, 30);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//Door
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 5, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//Doorwall
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 15, 95);
+	modelStack.Scale(5, 10, 1);
+	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
 	//Left wall
