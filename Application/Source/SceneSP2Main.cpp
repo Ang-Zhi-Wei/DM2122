@@ -28,6 +28,7 @@ void SceneSP2Main::Init()
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
+	is_talking = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -985,87 +986,87 @@ void SceneSP2Main::Update(double dt)
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('Q'))
+	if (!Application::IsKeyPressed('Q'))
 	{
-		Qpressed = true;
-		Qreleased = false;
-	}
-	else
-	{
-		if (Qpressed)
-		{
-			Qreleased = true;
-
-		}
+		Qreleased = true;
 		Qpressed = false;
 	}
-	if (Application::IsKeyPressed('F'))
-	{
-		Fpressed = true;
-		Freleased = false;
-	}
 	else
 	{
-		if (Fpressed)
+		if (Qreleased)
 		{
-			Freleased = true;
+			Qpressed = true;
+
 		}
+		Qreleased = false;
+	}
+	if (!Application::IsKeyPressed('F'))
+	{
+		Freleased = true;
 		Fpressed = false;
 	}
-	if (Application::IsKeyPressed('E'))
-	{
-		Epressed = true;
-		Ereleased = false;
-	}
 	else
 	{
-		if (Epressed)
+		if (Freleased)
 		{
-			Ereleased = true;
+			Fpressed = true;
 		}
+		Freleased = false;
+	}
+	if (!Application::IsKeyPressed('E'))
+	{
+		Ereleased = true;
 		Epressed = false;
 	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Apressed = true;
-		Areleased = false;
-	}
 	else
 	{
-		if (Apressed)
+		if (Ereleased)
 		{
-			Areleased = true;
-
+			Epressed = true;
 		}
+		Ereleased = false;
+	}
+	if (!Application::IsKeyPressed('A'))
+	{
+		Areleased = true;
 		Apressed = false;
 	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Dpressed = true;
-		Dreleased = false;
-	}
 	else
 	{
-		if (Dpressed)
+		if (Areleased)
 		{
-			Dreleased = true;
+			Apressed = true;
 
 		}
+		Areleased = false;
+	}
+	if (!Application::IsKeyPressed('D'))
+	{
+		Dreleased = true;
 		Dpressed = false;
 	}
-	if (Application::IsKeyPressed('R'))
+	else
 	{
-		Rpressed = true;
-		Rreleased = false;
+		if (Dreleased)
+		{
+			Dpressed = true;
+
+		}
+		Dreleased = false;
+	}
+	if (!Application::IsKeyPressed('R'))
+	{
+		Rreleased = true;
+		Rpressed = false;
 	}
 	else
 	{
-		if (Rpressed)
+		if (Rreleased)
 		{
-			Rreleased = true;
+			Rpressed = true;
 
 		}
-		Rpressed = false;
+		Rreleased = false;
 	}
 
 
@@ -1096,6 +1097,15 @@ void SceneSP2Main::Update(double dt)
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
+
+
+	//check if talking (stops camera)
+	if (is_talking)
+		camera.can_move = false;
+	else
+		camera.can_move = true;
+
+
 	switch (SpeakPhase)
 	{
 		//default
@@ -1125,7 +1135,7 @@ void SceneSP2Main::Update(double dt)
 
 		//talking to man part
 	case 3:
-		camera.can_move = false;
+		is_talking = true;
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
@@ -1198,7 +1208,7 @@ void SceneSP2Main::Update(double dt)
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
-			camera.can_move = true;
+			is_talking = false;
 			SpeakPhase = 0;
 		}
 		break;
@@ -1209,9 +1219,9 @@ void SceneSP2Main::Update(double dt)
 	light[1].spotDirection = -1 * camera.view;
 
 	//toggle flashlight on/off
-	if (Qreleased)
+	if (Qpressed)
 	{
-		Qreleased = false;
+		Qpressed = false;
 		//updates if flashlight status changes
 		if (flashlight)
 		{
@@ -1241,37 +1251,37 @@ void SceneSP2Main::Update(double dt)
 
 
 	//inventory
-	if (Ereleased)
+	if (Epressed)
 	{
 		inventory.open = !inventory.open;
-		Ereleased = false;
+		Epressed = false;
 	}
 	if (inventory.open)
 	{
 		camera.can_move = false;
-		if (Areleased)
+		if (Apressed)
 		{
 			inventory.selected--;
 			if (inventory.selected == -1)
 			{
 				inventory.selected = 7;
 			}
-			Areleased = false;
+			Apressed = false;
 		}
-		else if (Dreleased)
+		else if (Dpressed)
 		{
 			inventory.selected++;
 			inventory.selected %= 8;
-			Dreleased = false;
+			Dpressed = false;
 		}
-		else if (Rreleased)
+		else if (Rpressed)
 		{
 			if (inventory.items[inventory.selected] != nullptr)
 			{
 				UseItem(inventory.items[inventory.selected]->type);
 			}
 			//else warning that no item selected?
-			Rreleased = false;
+			Rpressed = false;
 		}
 	}
 

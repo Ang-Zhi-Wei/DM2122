@@ -225,6 +225,9 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	bool is_talking;
+
 	struct Item
 	{
 		enum ITEM_TYPE

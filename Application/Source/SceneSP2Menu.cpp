@@ -20,6 +20,7 @@ void SceneSP2Menu::Init()
 	ButtonNum = 0;
 	menuScreen = true;
 	quit = false;
+	show_credits = false;
 
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
@@ -235,7 +236,12 @@ void SceneSP2Menu::Init()
 
 	//menu screen items
 	meshList[GEO_GAMETITLE] = MeshBuilder::GenerateQuad2("title", 1, 1, White);
-	meshList[GEO_BUTTONBAR] = MeshBuilder::GenerateQuad2("bar", 1, 1, (0.75, 0.75, 0.75));
+	meshList[GEO_GAMETITLE]->textureID = LoadTGA("Image//Title.tga");
+	meshList[GEO_BUTTONBAR] = MeshBuilder::GenerateQuad2("bar", 1, 1, Black);
+	meshList[GEO_CREDITS] = MeshBuilder::GenerateQuad2("credits", 1, 1, Black);
+	meshList[GEO_CREDITS]->textureID = LoadTGA("Image//credits.tga");
+	meshList[GEO_CLOSEBUTTON] = MeshBuilder::GenerateQuad2("close", 1, 1, Red);
+	meshList[GEO_CLOSEBUTTON]->textureID = LoadTGA("Image//back.tga");
 
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
@@ -362,20 +368,26 @@ void SceneSP2Menu::Update(double dt)
 		std::cout << "LBUTTON DOWN" << std::endl;
 		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
 		//check for start
-		if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
+		if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11 && !show_credits)
 		{
 			std::cout << "S Hit!" << std::endl;
 			Application::setscene(Scene_Main);
 			menuScreen = false;
 		}
-		else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12)
+		else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12 && !show_credits)
 		{
 			std::cout << "C Hit!" << std::endl;
+			show_credits = true;
 		}
-		else if (MposX > 1.5 && MposX < 12 && MposY >12.6 && MposY < 13)
+		else if (MposX > 1.5 && MposX < 12 && MposY >12.6 && MposY < 13 && !show_credits)
 		{
 			std::cout << "Q Hit!" << std::endl;
 			quit = true;
+		}
+		else if (MposX > 20.2 && MposX < 21.7 && MposY>2.3 && MposY < 3.3 && show_credits)
+		{
+			std::cout << "B Hit!" << std::endl;
+			show_credits = false;
 		}
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))
@@ -779,7 +791,11 @@ void SceneSP2Menu::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "CREDITS", White, 3, 4, 6);
 	RenderTextOnScreen(meshList[GEO_TEXT], "QUIT", White, 3, 4, 5);
 
-
+	if (show_credits)
+	{
+		RenderMeshOnScreen(meshList[GEO_CREDITS], 40, 28, 70, 54);
+		RenderMeshOnScreen(meshList[GEO_CLOSEBUTTON], 70, 50, 5, 3);
+	}
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
