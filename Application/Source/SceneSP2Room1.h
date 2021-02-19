@@ -272,6 +272,7 @@ private:
 	bool jumpscareTimerActive4;
 
 	bool flashlight;
+	float flashlight_lifetime;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;

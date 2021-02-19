@@ -891,6 +891,7 @@ void SceneSP2Main::Init()
 	//PickUpItem(&test2);
 	//PickUpItem(&test2);
 
+
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -1509,7 +1510,7 @@ void SceneSP2Main::Render()
 	//ground Mesh
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 0);
-	modelStack.Scale(900, 1, 900);
+	modelStack.Scale(1500, 1, 1500);
 	RenderMesh(meshList[Ground_Mesh], true);
 	modelStack.PopMatrix();
 
