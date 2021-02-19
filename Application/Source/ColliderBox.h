@@ -11,10 +11,12 @@ public:
 	double getxlength();
 	double getylength();
 	double getzlength();
+	void setactive(bool active);
+	bool getactive();
 private:
 	double xlength;
 	double ylength;
 	double zlength;
 	Vector3 Position;
-	
+	bool active;
 };
