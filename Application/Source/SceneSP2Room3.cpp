@@ -249,7 +249,9 @@ void SceneSP2Room3::Init()
 
 
 	//list of lockers
-	//colliders
+	Lockerlist.push_back(Locker());
+	Lockerlist[0].setpos(Vector3(48, -0.2, -80));
+	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(1, 25, 100);
 	Colliderlist[0].Setposition(Vector3(50, 12, -50));
@@ -259,6 +261,10 @@ void SceneSP2Room3::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[2].setlength(130, 30, 2);
 	Colliderlist[2].Setposition(Vector3(0, 12, -100));
+	//locker collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[3].setlength(3.9, 10, 4.3);
+	Colliderlist[3].Setposition(Lockerlist[0].getpos());
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[2].getxlength(), Colliderlist[2].getylength(), Colliderlist[2].getzlength());
 
@@ -300,7 +306,8 @@ void SceneSP2Room3::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	
+	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
 }
 
 void SceneSP2Room3::Update(double dt)
@@ -756,10 +763,10 @@ void SceneSP2Room3::Render()
 
 	}
 	//colliderbox for checking
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[2].getPosition().x, Colliderlist[2].getPosition().y, Colliderlist[2].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
@@ -860,9 +867,6 @@ void SceneSP2Room3::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	modelStack.PushMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is Scene3", Color(1, 1, 0), 4, 22, 5);
-	modelStack.PopMatrix();
 
 	/*std::ostringstream test1;
 	test1 << "camera view: " << camera.view;
