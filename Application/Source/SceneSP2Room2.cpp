@@ -696,7 +696,7 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
+		if (camera.position.x <= 5 && camera.position.x >= -20 && camera.position.z <= -45 && camera.position.z >= -55)
 		{
 			interact = true;
 			interact_message = "Open Door";
