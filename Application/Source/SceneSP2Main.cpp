@@ -891,6 +891,7 @@ void SceneSP2Main::Init()
 	//PickUpItem(&test2);
 	//PickUpItem(&test2);
 
+
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
