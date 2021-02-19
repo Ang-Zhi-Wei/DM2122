@@ -1277,9 +1277,12 @@ void SceneSP2Main::Update(double dt)
 	switch (ghost.state)
 	{
 	case Ghost::NORMAL:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
+		if (!is_talking)
+		{
+			ghost.facing = (camera.position - ghost.pos).Normalized();
+			ghost.distance = (camera.position - ghost.pos).Length();
+			ghost.UpdateMovement(dt);
+		}
 		if (ghost.distance <= 50)
 		{
 			ghost.state = Ghost::CHASING;
@@ -1293,7 +1296,7 @@ void SceneSP2Main::Update(double dt)
 		if (ghost.distance <= 3 && inLocker)
 		{
 			ghost.state = Ghost::WAITING;
-			ghost.waitTime = 5;
+			ghost.waitTime = 3;
 		}
 		else if (ghost.distance <= 1)
 		{
@@ -1312,7 +1315,7 @@ void SceneSP2Main::Update(double dt)
 	case Ghost::SPEEDRUN:
 		ghost.facing = (ghost.pos - camera.position).Normalized();
 		ghost.UpdateMovement(dt);
-		if (ghost.distance > 300 || !inLocker)
+		if (ghost.distance > 500 || !inLocker)
 		{
 			ghost.state = Ghost::NORMAL;
 			ghost.speed = 5;
