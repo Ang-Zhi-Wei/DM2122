@@ -320,7 +320,9 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(0, 0, 200)));
+	traplist.push_back(trap(trap::beartrap, Vector3(0, 0.5, 150)));
+	traplist.push_back(trap(trap::beartrap, Vector3(57.5, 0.5, 90)));
+	traplist.push_back(trap(trap::beartrap, Vector3(75, 0.5, 130)));
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -771,6 +773,7 @@ void SceneSP2Room1::Render()
 		case trap::beartrap:
 			modelStack.PushMatrix();
 			modelStack.Translate(traplist[i].TrapPosition.x, traplist[i].TrapPosition.y, traplist[i].TrapPosition.z);
+			modelStack.Scale(0.5, 0.5, 0.5);
 			RenderMesh(meshList[GEO_BEARTRAP], true);
 			modelStack.PopMatrix();
 			break;
