@@ -51,6 +51,13 @@ public:
 		
 		//locker
 		locker,
+		tire,
+		shelves,
+		garagetable,
+		rustycar,
+		rustychair,
+		barrels,
+		rolldoor,
 
 		//UI tings
 		GEO_TEXT,
