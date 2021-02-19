@@ -343,6 +343,11 @@ void SceneSP2Menu::Init()
 	LSPEED = 10.F;
 }
 
+void SceneSP2Menu::Set(Scene* scene)
+{
+
+}
+
 void SceneSP2Menu::Update(double dt)
 {
 	//mouse cursor show/hide

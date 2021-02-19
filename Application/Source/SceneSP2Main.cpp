@@ -888,7 +888,8 @@ void SceneSP2Main::Init()
 	//PickUpItem(&test);
 	//PickUpItem(&test2);
 	//PickUpItem(&test2);
-
+	ghost = new Ghost;
+	inventory = new Inventory;
 
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -896,6 +897,16 @@ void SceneSP2Main::Init()
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//trap list
 
+	
+}
+
+
+void SceneSP2Main::Set(Scene* scene)
+{
+	inventory = scene->inventory;
+	ghost = scene->ghost;
+	flashlight = scene->flashlight;
+	flashlight_lifetime = scene->flashlight_lifetime;
 	
 }
 
@@ -1256,32 +1267,32 @@ void SceneSP2Main::Update(double dt)
 	//inventory
 	if (Epressed)
 	{
-		inventory.open = !inventory.open;
+		inventory->open = !inventory->open;
 		Epressed = false;
 	}
-	if (inventory.open)
+	if (inventory->open)
 	{
 		camera.can_move = false;
 		if (Apressed)
 		{
-			inventory.selected--;
-			if (inventory.selected == -1)
+			inventory->selected--;
+			if (inventory->selected == -1)
 			{
-				inventory.selected = 7;
+				inventory->selected = 7;
 			}
 			Apressed = false;
 		}
 		else if (Dpressed)
 		{
-			inventory.selected++;
-			inventory.selected %= 8;
+			inventory->selected++;
+			inventory->selected %= 8;
 			Dpressed = false;
 		}
 		else if (Rpressed)
 		{
-			if (inventory.items[inventory.selected] != nullptr)
+			if (inventory->items[inventory->selected] != nullptr)
 			{
-				UseItem(inventory.items[inventory.selected]->type);
+				UseItem(inventory->items[inventory->selected]->type);
 			}
 			//else warning that no item selected?
 			Rpressed = false;
@@ -1289,51 +1300,51 @@ void SceneSP2Main::Update(double dt)
 	}
 
 	//ghost
-	switch (ghost.state)
+	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
 		if (!is_talking)
 		{
-			ghost.facing = (camera.position - ghost.pos).Normalized();
-			ghost.distance = (camera.position - ghost.pos).Length();
-			ghost.UpdateMovement(dt);
+			ghost->facing = (camera.position - ghost->pos).Normalized();
+			ghost->distance = (camera.position - ghost->pos).Length();
+			ghost->UpdateMovement(dt);
 		}
-		if (ghost.distance <= 50)
+		if (ghost->distance <= 50)
 		{
-			ghost.state = Ghost::CHASING;
-			ghost.speed = 25;
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
 		}
 		break;
 	case Ghost::CHASING:
-		ghost.facing = (camera.position - ghost.pos).Normalized();
-		ghost.distance = (camera.position - ghost.pos).Length();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance <= 3 && inLocker)
+		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 3 && inLocker)
 		{
-			ghost.state = Ghost::WAITING;
-			ghost.waitTime = 3;
+			ghost->state = Ghost::WAITING;
+			ghost->waitTime = 3;
 		}
-		else if (ghost.distance <= 1)
+		else if (ghost->distance <= 1)
 		{
 			//TBC
 			//end game condition met, either that or HP - 1
 		}
 		break;
 	case Ghost::WAITING:
-		ghost.waitTime -= dt;
-		if (ghost.waitTime <= 0)
+		ghost->waitTime -= dt;
+		if (ghost->waitTime <= 0)
 		{
-			ghost.state = Ghost::SPEEDRUN;
-			ghost.speed = 50;
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
 		}
 		break;
 	case Ghost::SPEEDRUN:
-		ghost.facing = (ghost.pos - camera.position).Normalized();
-		ghost.UpdateMovement(dt);
-		if (ghost.distance > 500 || !inLocker)
+		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
 		{
-			ghost.state = Ghost::NORMAL;
-			ghost.speed = 5;
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
 		}
 		break;
 
@@ -1893,8 +1904,8 @@ void SceneSP2Main::Render()
 
 	//ghost
 	modelStack.PushMatrix();
-	modelStack.Translate(ghost.pos.x, ghost.pos.y, ghost.pos.z);
-	modelStack.Rotate(ghost.rotateY - 90, 0, 1, 0);
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Scale(4.2, 4.2, 4.2);
@@ -1932,41 +1943,41 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
 	//warning overlay
-	if (ghost.distance <= 50)
+	if (ghost->distance <= 50)
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
 	}
-	else if (ghost.distance <= 100)
+	else if (ghost->distance <= 100)
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
 	//inventory
-	if (inventory.open)
+	if (inventory->open)
 	{
 		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
 		
 		for (int i = 0; i < 8; i++)
 		{
-			if (inventory.items[i] != nullptr)
+			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
 				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
 				//number of item if more than 1
-				if (inventory.items[i]->count > 1)
+				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory.items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
 				}
 			} 
 		}
 		
-		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory.selected * 4, 7.9, 4, 4);
-		if (inventory.items[inventory.selected] != nullptr)
+		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory->selected * 4, 7.9, 4, 4);
+		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
-			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->name, Color(0, 0, 0), 3, 40, 6);
-			RenderTextOnScreen(meshList[GEO_TEXT], inventory.items[inventory.selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
 		}
 		
 	}
@@ -2063,20 +2074,21 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
-	test1 << "ghost pos: " << ghost.pos;
+	test1 << "ghost pos: " << ghost->pos;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "ghost rotateY: " << ghost.rotateY;
+	test3 << "ghost rotateY: " << ghost->rotateY;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
-	test2 << "ghost state: " << ghost.state;
+	test2 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 }
 
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
-	
+	delete ghost;
+	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -2091,13 +2103,13 @@ void SceneSP2Main::UseItem(int itemname)
 			flashlight_lifetime = 90;
 
 			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory.items[inventory.selected]->count > 1)
+			if (inventory->items[inventory->selected]->count > 1)
 			{
-				inventory.items[inventory.selected]->count--;
+				inventory->items[inventory->selected]->count--;
 			}
 			else
 			{
-				inventory.items[inventory.selected] = nullptr; 
+				inventory->items[inventory->selected] = nullptr; 
 			}
 		} 
 		//else warning message?
@@ -2112,20 +2124,20 @@ bool SceneSP2Main::PickUpItem(Item* item)
 	//picking up item into inventory
 	for (int i = 0; i < 8; i++)
 	{
-		if (inventory.items[i] != nullptr)
+		if (inventory->items[i] != nullptr)
 		{
-			if (inventory.items[i]->name == item->name)
+			if (inventory->items[i]->name == item->name)
 			{
-				inventory.items[i]->count++;
+				inventory->items[i]->count++;
 				return true;
 			}
 		}
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		if (inventory.items[i] == nullptr)
+		if (inventory->items[i] == nullptr)
 		{
-			inventory.items[i] = item;
+			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
 			return false;
 		}
@@ -3320,7 +3332,5 @@ void SceneSP2Main::RenderTrees()
 	modelStack.PopMatrix();//Added collider
 
 }
-
-
 
 
