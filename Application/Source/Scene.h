@@ -151,7 +151,7 @@ public:
 				{
 					dir *= -1;
 				}
-				rotateY += float(dir * 20 * dt);
+				rotateY += float(dir * 100 * dt);
 			}
 			else
 			{

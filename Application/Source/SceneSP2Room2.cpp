@@ -54,7 +54,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, -5), Vector3(0, 5, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -229,7 +229,7 @@ void SceneSP2Room2::Init()
 	Rpressed = Rreleased = false;
 
 	//walls
-	school_walls[0].mid.Set(0, 17.5, 0); 
+	school_walls[0].mid.Set(0, 20, 0); 
 	school_walls[1].mid.Set(-57.5, 12.5, 0);
 	school_walls[2].mid.Set(57.5, 12.5, 0); 
 	school_walls[3].mid.Set(0, 12.5, -100); //back
@@ -246,16 +246,16 @@ void SceneSP2Room2::Init()
 	{
 		school_walls[i].lengthy = 25;
 	}
-	school_walls[0].lengthy = 15;
+	school_walls[0].lengthy = 10;
 
 
-	lounge_walls[0].mid.Set(-10, 17.5, -50);
+	lounge_walls[0].mid.Set(-10, 20, -50);
 	lounge_walls[1].mid.Set(-10, 12.5, -22.5);
 	lounge_walls[2].mid.Set(-10, 12.5, -77.5);
 	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 45;
 	lounge_walls[0].lengthz = 10;
 
-	classroom_walls[0].mid.Set(10, 17.5, -95);
+	classroom_walls[0].mid.Set(10, 20, -95);
 	classroom_walls[1].mid.Set(10, 12.5, -45);
 	classroom_walls[1].lengthz = 90;
 	classroom_walls[0].lengthz = 10;
@@ -264,18 +264,18 @@ void SceneSP2Room2::Init()
 		lounge_walls[i].lengthy = 25;
 	}
 	classroom_walls[1].lengthy = 25;
-	classroom_walls[0].lengthy = 15;
-	lounge_walls[0].lengthy = 15;
-
+	classroom_walls[0].lengthy = 10;
+	lounge_walls[0].lengthy = 10;
+	
 
 
 	//doors
-	school_door[0].mid.Set(-2.5, 5, 0);
-	school_door[1].mid.Set(2.5, 5, 0);
-	lounge_door[0].mid.Set(-10, 5, -47.5);
-	lounge_door[1].mid.Set(-10, 5, -52.5);
-	classroom_door[0].mid.Set(10, 5, -97.5);
-	classroom_door[1].mid.Set(10, 5, -92.5);
+	school_door[0].mid.Set(-2.5, 7.5, 0);
+	school_door[1].mid.Set(2.5, 7.5, 0);
+	lounge_door[0].mid.Set(-10, 7.5, -47.5);
+	lounge_door[1].mid.Set(-10, 7.5, -52.5);
+	classroom_door[0].mid.Set(10, 7.5, -97.5);
+	classroom_door[1].mid.Set(10, 7.5, -92.5);
 	school_door[0].lengthx = 5;
 	school_door[1].lengthx = 5;
 	lounge_door[0].lengthz = 5;
@@ -284,7 +284,7 @@ void SceneSP2Room2::Init()
 	classroom_door[1].lengthz = 5;
 	for (int i = 0; i < 6; i++)
 	{
-		all_doors[i]->lengthy = 10;
+		all_doors[i]->lengthy = 15;
 	}
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
