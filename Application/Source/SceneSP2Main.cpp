@@ -331,9 +331,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_PAVEMENT] = MeshBuilder::GenerateQuad("pavement", 1, 1, White);
 	meshList[GEO_PAVEMENT]->textureID = LoadTGA("Assigment2Images//pavement3.tga");
 	meshList[GEO_PAVEMENT]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-	/*meshList[GEO_SCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//Warehouse.obj");
-	meshList[GEO_SCHOOL ]->textureID = LoadTGA("Assigment2Images//warehouse2.tga");
-	meshList[GEO_SCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
+	meshList[HAUNTEDSCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//school.obj");
+	meshList[HAUNTEDSCHOOL]->textureID = LoadTGA("Assigment2Images//school.tga");
+	meshList[HAUNTEDSCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[HOUSE] = MeshBuilder::GenerateOBJ("Building", "OBJ//smallhouse.obj");
 	meshList[HOUSE]->textureID = LoadTGA("Assigment2Images//smallhouse.tga");
 	meshList[HOUSE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -1960,6 +1960,12 @@ void SceneSP2Main::Render()
 	modelStack.Translate(-520, -2, 0);
 	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
+	modelStack.PopMatrix();//Added collider
+
+	modelStack.PushMatrix();
+	modelStack.Translate(520, -1, 0);
+	modelStack.Scale(0.12, 0.12, 0.12);
+	RenderMesh(meshList[HAUNTEDSCHOOL], true);
 	modelStack.PopMatrix();//Added collider
 
 
