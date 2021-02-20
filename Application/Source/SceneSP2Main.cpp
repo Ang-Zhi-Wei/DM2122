@@ -71,6 +71,7 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -566,7 +567,11 @@ void SceneSP2Main::Init()
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
-	inLocker = false;
+	inLocker = true;
+	suffocationScale = 10;
+	suffocationScale = 1;
+	suffocationTranslate = 14;
+	suffocationTranslateDir = 1;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -1210,6 +1215,15 @@ void SceneSP2Main::Update(double dt)
 		}
 
 	}
+	if (inLocker == true)
+	{
+		suffocationScale -= suffocationScaleDir * camera.playerStamina;
+	}
+	if (inLocker == false)
+	{
+		suffocationScale = 10;
+		suffocationTranslate = 0;
+	}
 
 	//fps
 	fps = 1.f / float(dt);
@@ -1408,6 +1422,7 @@ void SceneSP2Main::Update(double dt)
 			Rpressed = false;
 		}
 	}
+	
 
 	//ghost
 	switch (ghost->state)
@@ -2100,7 +2115,11 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	//stamina icon
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+	}
+		//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
 	//warning overlay

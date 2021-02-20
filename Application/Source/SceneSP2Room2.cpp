@@ -507,6 +507,9 @@ void SceneSP2Room2::Set(Scene* scene)
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+	DS_school = OPEN;
+	school_door[0].rotateY = 0;
+	school_door[1].rotateY = 0;
 }
 
 void SceneSP2Room2::Update(double dt)

@@ -288,6 +288,13 @@ private:
 	int Interact_Num;
 	bool canTalk_man;
 
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
+
+
 	Item test;
 	Item test2;
 	Item battery;
