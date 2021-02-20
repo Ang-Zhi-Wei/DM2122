@@ -129,7 +129,7 @@ Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
-Scene* Application::scene = sceneMenu;
+Scene* Application::scene = scene1;
 
 
 void Application::Run()
