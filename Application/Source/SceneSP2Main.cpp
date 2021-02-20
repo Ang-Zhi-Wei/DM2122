@@ -317,6 +317,9 @@ void SceneSP2Main::Init()
 	meshList[HOUSE] = MeshBuilder::GenerateOBJ("Building", "OBJ//smallhouse.obj");
 	meshList[HOUSE]->textureID = LoadTGA("Assigment2Images//smallhouse.tga");
 	meshList[HOUSE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[HOSPITAL] = MeshBuilder::GenerateOBJ("Building", "OBJ//hospital.obj");
+	meshList[HOSPITAL]->textureID = LoadTGA("Assigment2Images//hospital.tga");
+	meshList[HOSPITAL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//meshList[GEO_GHOST] = MeshBuilder::GenerateOBJ("ghost", "OBJ//Ghost03.obj");
 	//meshList[GEO_GHOST]->textureID = LoadTGA("Image//ghostskin.tga");
 	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
@@ -1931,8 +1934,14 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, -460);
 	modelStack.Rotate(270, 1, 0, 0);
-	modelStack.Scale(0.1, 0.1, 0.1);
+	modelStack.Scale(0.13, 0.13, 0.13);
 	RenderMesh(meshList[HOUSE], true);
+	modelStack.PopMatrix();//Added collider
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-520, -2, 0);
+	modelStack.Scale(0.09, 0.09, 0.09);
+	RenderMesh(meshList[HOSPITAL], true);
 	modelStack.PopMatrix();//Added collider
 
 

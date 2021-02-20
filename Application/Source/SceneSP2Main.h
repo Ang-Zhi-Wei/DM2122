@@ -77,6 +77,7 @@ public:
 		GEO_PAVEMENT,
 		GEO_SCHOOL,
 		HOUSE,
+		HOSPITAL,
 	
 		GEO_TRUCK,
 		Fountain,
