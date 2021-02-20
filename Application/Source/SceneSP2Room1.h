@@ -48,6 +48,11 @@ public:
 		Colliderbox,
 		locker,
 		GEO_BEARTRAP,
+		//ghost
+		GEO_SKULL,
+		GEO_MYSTERIOUSMAN,
+
+
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision

@@ -193,6 +193,11 @@ public:
 		//locker
 		locker,
 
+
+		//game tings
+		GEO_SKULL,
+		GEO_MYSTERIOUSMAN,
+
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision

@@ -34,7 +34,7 @@ private:
 	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3;
 	static bool isquit;
 	static bool ispaused;
-	static bool mainInit, s1Init, s2Init, s3Init, menuInit;
+	static bool mainInit, s1Init, s2Init, s3Init;
 	
 };
 enum Scenemanager {

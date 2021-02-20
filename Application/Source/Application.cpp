@@ -115,7 +115,7 @@ bool Application::mainInit = false;
 bool Application::s1Init = false;
 bool Application::s2Init = false;
 bool Application::s3Init = false;
-bool Application::menuInit = false;
+//bool Application::menuInit = false;
 
 //initialise functions
 bool Application::isquit = false;
@@ -218,15 +218,14 @@ void Application::setscene(int scenenum)
 		scene = sceneMain;
 		break;
 	case Scene_Menu:
-		if (!menuInit)
-		{
-			sceneMenu->Init();
-			menuInit = false;
-			mainInit = false;
-			s1Init = false;
-			s2Init = false;
-			s3Init = false;
-		}
+		
+		sceneMenu->Init();
+		//menuInit = false;
+		mainInit = false;
+		s1Init = false;
+		s2Init = false;
+		s3Init = false;
+		
 		scene = sceneMenu;
 		break;
 	case Scene_1:

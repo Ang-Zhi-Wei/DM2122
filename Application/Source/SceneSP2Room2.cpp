@@ -415,7 +415,13 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TABLE]->textureID = LoadTGA("Image//greywood.tga");
 	meshList[GEO_LONGTABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//LongTable.obj");
 	meshList[GEO_LONGTABLE]->textureID = LoadTGA("Image//darkwood.tga");
-	
+	//ghost
+	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
+	meshList[GEO_SKULL]->material.kAmbient.Set(Gray);
+	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
+	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
+	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	//camcorder
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
@@ -1187,7 +1193,23 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
 	
-	
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 	//UI OVERLAY
 
