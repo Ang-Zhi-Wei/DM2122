@@ -62,7 +62,7 @@ public:
 		workbench,
 		wheelbarrow,
 		metalcabinet,
-
+		garagedoor,
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
