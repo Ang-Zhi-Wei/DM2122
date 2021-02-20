@@ -74,7 +74,8 @@ public:
 		GEO_MYSTERIOUSMAN,
 		GEO_SKULL,
 		GEO_LAMP,
-
+		GEO_PAVEMENT,
+	
 		GEO_TRUCK,
 		Fountain,
 		//colliderbox 
