@@ -13,7 +13,7 @@ Mesh* MeshBuilder::Generatering(const std::string& meshName, float lengthX, floa
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned>index_buffer_data;
 	for (int theta = 0; theta <= 360; theta += 10) {
-		v.pos.Set(10.f * float(cos(theta * (PI / 180)))), 0.f, 10.f * sin(theta * (PI / 180)); 
+		v.pos.Set(float(10 * cos(theta * (PI / 180)))), 0.f, float(10 * sin(theta * (PI / 180)));
 		v.normal.Set(0, 1, 0);
 		v.color.Set(Red); 
 		vertex_buffer_data.push_back(v);
@@ -44,12 +44,12 @@ Mesh* MeshBuilder::Generatehemisphere(const std::string& meshName, float lengthX
 	for (int phi = 0; phi <90; phi+=10) {
 		for (int theta = 0; theta <= 360; theta += 10) {
 			v.pos.Set(float(5*cos(phi*Rad)*cos(theta*Rad)),float(5*sin(phi*Rad)),float(5*cos(phi*Rad)*sin(theta*Rad))); v.color.Set(Purple); vertex_buffer_data.push_back(v);
-			v.pos.Set(5*cos((phi+10) * Rad) * cos(theta * Rad), 5 * sin((phi+10) * Rad), 5* cos((phi+10) * Rad) * sin(theta * Rad)); v.color.Set(Blue); vertex_buffer_data.push_back(v);
+			v.pos.Set(float(5*cos((double(phi)+10) * Rad) * cos(theta * Rad)), float(5 * sin((double(phi)+10) * Rad)), float(5* cos((double(phi)+10) * Rad) * sin(theta * Rad))); v.color.Set(Blue); vertex_buffer_data.push_back(v);
 		}
 	}
 	for (int theta = 0; theta <= 360; theta += 10) {
 		v.pos.Set(0, 0, 0); v.color.Set(Purple); vertex_buffer_data.push_back(v);
-		v.pos.Set(5 * cos(theta*Rad), 0, 5 * sin(theta*Rad)); v.color.Set(Purple); vertex_buffer_data.push_back(v);
+		v.pos.Set(5 * float(cos(theta*Rad)), 0, 5 * float(sin(theta*Rad))); v.color.Set(Purple); vertex_buffer_data.push_back(v);
 	}
 	for (int i = 0; i < 740; i++) {
 		index_buffer_data.push_back(i);
@@ -77,18 +77,18 @@ Mesh* MeshBuilder::Generatesphere(const std::string& meshName, float lengthX, fl
 		for (int theta = 0; theta <= 360; theta += 10) {
 			v.pos.Set(float(cos(phi * Rad) * cos(theta * Rad)), float(sin(phi * Rad)), float(cos(phi * Rad) * sin(theta * Rad))); 
 			v.color.Set(name);
-			v.normal.Set(cos(phi * Rad) * cos(theta * Rad), sin(phi * Rad), cos(phi * Rad) * sin(theta * Rad));
+			v.normal.Set(float(cos(phi * Rad) * cos(theta * Rad)), float(sin(phi * Rad)), float(cos(phi * Rad) * sin(theta * Rad)));
 			x = float(((cos((theta/2) * Rad))/2.8)+0.5);
 			y = float((sin(phi * Rad)/2)+0.5);
 			v.texCoord.Set(x, y);
 			
 			vertex_buffer_data.push_back(v);
 			count++;
-			v.pos.Set(cos((phi + 10) * Rad) * cos(theta * Rad),sin((phi + 10) * Rad),cos((phi + 10) * Rad) * sin(theta * Rad)); 
+			v.pos.Set(float(cos((double(phi) + 10) * Rad) * cos(theta * Rad)),float(sin((double(phi) + 10) * Rad)),float(cos((double(phi) + 10) * Rad) * sin(theta * Rad))); 
 			v.color.Set(name); 
-			v.normal.Set(cos((phi + 10) * Rad) * cos(theta * Rad),  sin((phi + 10) * Rad), cos((phi + 10) * Rad) * sin(theta * Rad));
+			v.normal.Set(float(cos((double(phi) + 10) * Rad) * cos(theta * Rad)), float( sin((double(phi) + 10) * Rad)), float(cos((double(phi) + 10) * Rad) * sin(theta * Rad)));
 			x = float((cos((theta/2) * Rad)/2.8)+0.5);
-			y = (sin((phi + 10) * Rad) / 2)+0.5f;
+			y = float(sin((double(phi) + 10) * Rad) / 2)+0.5f;
 			v.texCoord.Set(x, y);
 		
 			vertex_buffer_data.push_back(v);
@@ -122,11 +122,11 @@ Mesh* MeshBuilder::GenerateTorus(const std::string& meshName, unsigned numStack,
 	Mesh* mesh = new Mesh(meshName);
 	for (unsigned stack = 0; stack < numStack + 1; stack++) {
 		for (unsigned slice = 0; slice < numSlice + 1; slice++) {
-			z1 = outerR * cos(float(stack) * degreePerStack*Rad);
-			x1 = outerR * sin(float(stack) * degreePerStack*Rad);
-			z2 = (outerR + innerR * cos(float(slice) * degreePerSlice*Rad)) * cos(float(stack) * degreePerStack*Rad);
-			y2 = innerR * sin(float(slice) * degreePerSlice*Rad);
-			x2 = (outerR + innerR * cos(float(slice) * degreePerSlice*Rad)) * sin(float(stack) * degreePerStack*Rad);
+			z1 = outerR * float(cos(stack * double(degreePerStack)*Rad));
+			x1 = outerR * float(sin(stack * double(degreePerStack)*Rad));
+			z2 = (outerR + innerR * float(cos(slice * double(degreePerSlice)*Rad))) * float(cos(stack * double(degreePerStack)*Rad));
+			y2 = innerR * float(sin(float(slice) * double(degreePerSlice)*Rad));
+			x2 = (outerR + innerR * float(cos(slice * double(degreePerSlice)*Rad))) * float(sin(stack *double(degreePerStack)*Rad));
 			v.pos.Set(x2, y2, z2);
 			v.color.Set(color);
 			v.normal.Set(x2-x1,y2,z2-z1);
@@ -165,11 +165,11 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string& meshName, float lengthX, 
 	Mesh* mesh = new Mesh(meshName);
 	for (int stack = 0; stack < NumStack; ++stack) {
 		for (int theta = 0; theta <= 360; theta += 10) {
-			v.pos.Set(1 * cos(theta * Rad), (-height / 2) + stack * stackheight, 1 * sin(theta * Rad));
+			v.pos.Set(1 * float(cos(theta * Rad)), (-height / 2) + stack * stackheight, 1 * float(sin(theta * Rad)));
 			v.color.Set(name);
-			v.normal.Set(cos(theta * Rad), 0, sin(theta * Rad));
+			v.normal.Set(float(cos(theta * Rad)), 0.f, float(sin(theta * Rad)));
 			vertex_buffer_data.push_back(v);
-			v.pos.Set(1 * cos(theta * Rad), (-height / 2) + (stack+1) * stackheight, 1 * sin(theta * Rad));
+			v.pos.Set(float(1 * float(cos(theta * Rad))), float((-height / 2) + (stack + 1) * stackheight), float( 1 * sin(theta * Rad)));
 			v.color.Set(name);
 			v.normal.Set(float(cos(theta * Rad)), 0, float(sin(theta * Rad)));
 			vertex_buffer_data.push_back(v);
@@ -177,7 +177,7 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string& meshName, float lengthX, 
 		}
 	}
 	for (int theta = 0; theta <= 360; theta += 10) {
-		v.pos.Set(1 * cos(theta * Rad), height/2,1 * sin(theta * Rad));
+		v.pos.Set(float(1 * cos(theta * Rad)), height/2.f,1.f * float(sin(theta * Rad)));
 		v.color.Set(name);
 		v.normal.Set(0, 1, 0);
 		vertex_buffer_data.push_back(v);
@@ -223,11 +223,11 @@ Mesh* MeshBuilder::GenerateCone(const std::string& meshName, float lengthX, floa
 	for (int theta = 0; theta <= 360; theta += 10) {
 		v.pos.Set(height / height*1 * float(cos(theta * Rad)), -height / 2, height / height *1* float(sin(theta * Rad)));
 		v.color.Set(name);
-		v.normal.Set(height * (height / height * 1 * cos(theta * Rad)), 1, height * (height / height * 1 * sin(theta * Rad)));
+		v.normal.Set(float(height * (double(height) / height * 1 * cos(theta * Rad))), 1.f, float(height * (double(height) / height * 1 * sin(theta * Rad))));
 		vertex_buffer_data.push_back(v);
 		v.pos.Set(0, height / 2, 0);
 		v.color.Set(name);
-		v.normal.Set(height * (height / height * 1 * cos(theta * Rad)), 1, height * (height / height * 1 * sin(theta * Rad)));
+		v.normal.Set(float(height * (double(height) / height * 1 * cos(theta * Rad))), 1.f,float( height * (double(height) / height * 1 * sin(theta * Rad))));
 		vertex_buffer_data.push_back(v);
 		index += 2;
 	}
@@ -461,8 +461,8 @@ Mesh* MeshBuilder::GenerateCircle(const std::string& meshName, float lengthX, fl
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned>index_buffer_data;
 	for (int theta = 0; theta <= 360; theta+=10) {
-		v.pos.Set(1*cos(theta*(PI/180)), 0, 1*float(sin(theta*(PI/180)))); v.color.Set(Red); vertex_buffer_data.push_back(v);
-		v.pos.Set(0, 0, 0);v.color.Set(Blue);vertex_buffer_data.push_back(v);
+		v.pos.Set(float(1*cos(theta*(PI/180))), 0.f, float(1*float(sin(theta*(PI/180))))); v.color.Set(Red); vertex_buffer_data.push_back(v);
+		v.pos.Set(0.f, 0.f, 0.f);v.color.Set(Blue);vertex_buffer_data.push_back(v);
 	}
 	for (int i = 0; i < 74; i++) {
 		index_buffer_data.push_back(i);

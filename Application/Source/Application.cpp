@@ -66,7 +66,7 @@ void Application::Init()
 	{
 		exit(EXIT_FAILURE);
 	}
-	srand(time(NULL));
+	srand(unsigned int(time(NULL)));
 	//Set the GLFW window creation hints - these are optional
 	glfwWindowHint(GLFW_SAMPLES, 4); //Request 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //Request a specific OpenGL version

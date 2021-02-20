@@ -26,7 +26,7 @@ public:
 	void Render();
 	void Render(unsigned offset, unsigned count);
 	const std::string name;
-	DRAW_MODE mode;
+	int mode;
 	unsigned vertexBuffer;
 	unsigned indexBuffer;
 	unsigned indexSize;

@@ -117,6 +117,7 @@ public:
 		U_TOTAL,
 
 	};
+	
 	enum DOOR_STATE
 	{
 		OPEN,
@@ -124,7 +125,6 @@ public:
 		OPENING,
 		CLOSING
 	};
-
 
 private:
 
@@ -156,6 +156,7 @@ private:
 		{
 			lengthx =lengthy =lengthz = 0.5;
 		}
+		
 	};
 	struct Door : Wall
 	{
@@ -213,7 +214,7 @@ private:
 
 	
 
-	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 

@@ -285,9 +285,6 @@ private:
 	float campos_y;
 	float campos_z;
 
-	bool canPickUp;
-	bool showText;
-
 	int Interact_Num;
 	bool canTalk_man;
 

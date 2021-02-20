@@ -2,7 +2,7 @@
 
 Locker::Locker()
 {
-	Position = (0, 0, 0);
+	Position = (0.f, 0.f, 0.f);
 	hidden = false;
 	yaw = 0;
 }

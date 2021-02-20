@@ -20,6 +20,7 @@ struct Light
 		kQ = 0.001f;
 		cosCutoff = cos(Math::DegreeToRadian(7));
 		cosInner = cos(Math::DegreeToRadian(1));
+		exponent = 3.f;
 	}
 	enum LIGHT_TYPE
 	{
@@ -27,7 +28,7 @@ struct Light
 		LIGHT_DIRECTIONAL,
 		LIGHT_SPOT,
 	};
-	LIGHT_TYPE type;
+	int type;
 	Vector3 spotDirection;
 	float cosCutoff;
 	float cosInner;

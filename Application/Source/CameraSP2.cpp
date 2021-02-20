@@ -19,6 +19,8 @@ CameraSP2::CameraSP2()
 	can_move = true;
 	slowed = false;
 	offsetX = 0;
+	mousePosX = 0;
+	mousePosY = 0;
 }
 
 CameraSP2::~CameraSP2()

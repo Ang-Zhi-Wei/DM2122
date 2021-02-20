@@ -41,6 +41,14 @@ SceneSP2Main::SceneSP2Main()
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
 	gamepaused = false;
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 }
 
 SceneSP2Main::~SceneSP2Main()
@@ -593,7 +601,7 @@ void SceneSP2Main::Init()
 	//truck collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(50, 20, 20);
-	Colliderlist[7].Setposition(Vector3(35, 4, 322.5));
+	Colliderlist[7].Setposition(Vector3(30, 6, 370));
 	//bench colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[8].setlength(10, 20, 25);
@@ -905,7 +913,6 @@ void SceneSP2Main::Init()
 	Colliderlist[108].setlength(1, 20, 35);
 	Colliderlist[108].Setposition(Vector3(25, -4, 275));
 	//Table colliders same position add 1.5
-	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[109].setlength(28, 20, 23);
 	Colliderlist[109].Setposition(Vector3(130, 8, 211.5));
@@ -1737,7 +1744,6 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
-	//@collider
 	modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[109].getPosition().x, Colliderlist[109].getPosition().y, Colliderlist[109].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
@@ -1946,13 +1952,13 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, -460);
 	modelStack.Rotate(270, 1, 0, 0);
-	modelStack.Scale(0.13, 0.13, 0.13);
+	modelStack.Scale(0.13f, 0.13f, 0.13f);
 	RenderMesh(meshList[HOUSE], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-520, -2, 0);
-	modelStack.Scale(0.09, 0.09, 0.09);
+	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -3163,7 +3169,6 @@ void SceneSP2Main::RenderTables()
 	modelStack.Scale(0.2f, 0.3f, 0.2f);
 	RenderMesh(meshList[GEO_TABLE], true);
 	modelStack.PopMatrix();//Added collider
-	//@tables
 	//front
 	modelStack.PushMatrix();
 	modelStack.Translate(130, 8, -210);

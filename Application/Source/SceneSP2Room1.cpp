@@ -41,6 +41,14 @@ SceneSP2Room1::SceneSP2Room1()
 	jumpscareTimerActive4 = false;
 	inLocker = false;
 	fps = 60;
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 }
 
 SceneSP2Room1::~SceneSP2Room1()
@@ -770,7 +778,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + 5);
+		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
 	}
 
 
@@ -795,7 +803,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + 5);
+		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
 	}
 
 
@@ -1157,11 +1165,11 @@ void SceneSP2Room1::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], 25.9f + float(i) * double(4), 7.9f, 3.5f, 3.5f);
+				RenderMeshOnScreen(itemImage[i], 25.9f + float(i) * float(4), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1, 1, 1), 2, 34 + i * 5, 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(34 + i * 5), 3.f);
 				}
 			}
 		}

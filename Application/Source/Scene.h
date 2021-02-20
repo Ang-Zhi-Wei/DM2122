@@ -10,6 +10,8 @@ public:
 	Scene() {
 		ghost = nullptr;
 		inventory = nullptr;
+		flashlight_lifetime = 60;
+		flashlight = true;
 	}
 	~Scene() {}
 
@@ -25,15 +27,17 @@ public:
 		//Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
 		int count;
-		ITEM_TYPE type; //type of item (for reusability e.g 100 batteries; easier setting)
+		int type; //type of item (for reusability e.g 100 batteries; easier setting)
 		std::string name;  //Name that shows up in item display; can also be used to differentiate btw objects of same type but different, eg both keys but unlock diff doors, type = key but name different
 		std::string description; //Short description of item that shows up in item display
 
 		Item()
 		{
 			count = 1;
+			type = BATTERY;
+			image = "Image//fountaintexture.tga";
 		}
-		void Set(std::string name, ITEM_TYPE type)
+		void Set(std::string name, int type)
 		{
 			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
 			this->type = type;

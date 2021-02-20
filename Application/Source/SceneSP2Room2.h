@@ -305,7 +305,7 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 0.5;
+			lengthx =lengthy =lengthz = 0.5;
 		}
 	};
 	struct Door : Wall
@@ -361,7 +361,7 @@ private:
 
 	
 
-	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 	Mesh* itemImage[8];
