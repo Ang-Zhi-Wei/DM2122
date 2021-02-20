@@ -440,7 +440,7 @@ void SceneSP2Menu::Update(double dt)
 
 }
 
-void SceneSP2Menu::PauseUpdate(double dt)
+void SceneSP2Menu::PauseUpdate()
 {
 
 }

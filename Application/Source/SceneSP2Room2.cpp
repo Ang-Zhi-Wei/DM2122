@@ -986,7 +986,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 }
 
-void SceneSP2Room2::PauseUpdate(double dt)
+void SceneSP2Room2::PauseUpdate()
 {
 	Application::hidemousecursor(false);
 }

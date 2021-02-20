@@ -35,11 +35,11 @@ Initialize camera
 \param up - up vector of camera
 */
 /******************************************************************************/
-void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
+void Camera::Init(const Vector3& posVector, const Vector3& targetVector, const Vector3& upVector)
 {
-	this->position = pos;
-	this->target = target;
-	this->up = up;
+	position = posVector;
+	target = targetVector;
+	up = upVector;
 
 }
 

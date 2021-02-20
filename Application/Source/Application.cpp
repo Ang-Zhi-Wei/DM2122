@@ -23,7 +23,7 @@ const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 
 //Define an error callback
-static void error_callback(int error, const char* description)
+static void error_callback(int error,const char* description)
 {
 	fputs(description, stderr);
 	_fgetchar();
@@ -147,7 +147,7 @@ void Application::Run()
 
 		//pause screen update
 		if(ispaused)
-			scene->PauseUpdate(m_timer.getElapsedTime());
+			scene->PauseUpdate();
 
 		scene->Render();
 		//Swap buffers

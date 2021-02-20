@@ -2,9 +2,9 @@
 #include "Application.h"
 #include "Mtx44.h"
 
-void CameraSP2::setchecker(std::vector<ColliderBox>Checker)
+void CameraSP2::setchecker(std::vector<ColliderBox>Checkerlist)
 {
-	this->Checker = Checker;
+	Checker = Checkerlist;
 }
 
 

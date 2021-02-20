@@ -27,11 +27,11 @@ void ColliderBox::Setposition(Vector3 Position)
 	this->Position = Position;
 }
 
-void ColliderBox::setlength(double xlength, double ylength, double zlength)
+void ColliderBox::setlength(double xlengthvalue, double ylengthvalue, double zlengthvalue)
 {
-	this->xlength = xlength;
-	this->ylength = ylength;
-	this->zlength = zlength;
+	xlength = xlengthvalue;
+	ylength = ylengthvalue;
+	zlength = zlengthvalue;
 }
 
 Vector3 ColliderBox::getPosition()
@@ -54,9 +54,9 @@ double ColliderBox::getzlength()
 	return zlength;
 }
 
-void ColliderBox::setactive(bool active)
+void ColliderBox::setactive(bool activetype)
 {
-	this->active = active;
+	active = activetype;
 }
 
 bool ColliderBox::getactive()

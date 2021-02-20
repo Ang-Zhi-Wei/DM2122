@@ -13,7 +13,7 @@ public:
 		flashlight_lifetime = 60;
 		flashlight = true;
 	}
-	~Scene() {}
+	~Scene() {};
 
 	struct Item
 	{
@@ -37,21 +37,21 @@ public:
 			type = BATTERY;
 			image = "Image//fountaintexture.tga";
 		}
-		void Set(std::string name, int type)
+		void Set(std::string itemname, int itemtype)
 		{
 			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
-			this->type = type;
-			this->name = name;
+			type = itemtype;
+			name = itemname;
 			switch (type)
 			{
 			case BATTERY:
-				this->description = "Use to refill flashlight batteries aaaaaa idk";
-				this->image = "Image//fountaintexture.tga";
+				description = "Use to refill flashlight batteries aaaaaa idk";
+				image = "Image//fountaintexture.tga";
 				//set image and description
 				break;
 			case ITEM2:
-				this->description = "TESTESTTESTETSESTESTESTETST>--|-o";
-				this->image = "Image//man1.tga";
+				description = "TESTESTTESTETSESTESTESTETST>--|-o";
+				image = "Image//man1.tga";
 				break;
 			}
 		}
@@ -167,7 +167,7 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Update(double dt) = 0;
-	virtual void PauseUpdate(double dt) = 0;
+	virtual void PauseUpdate() = 0;
 	virtual void Render() = 0;
 	virtual void Exit() = 0;
 	virtual void Set(Scene* scene) = 0;
