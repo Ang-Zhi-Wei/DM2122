@@ -5,7 +5,10 @@
 #include "shader.hpp"
 #include "LoadTGA.h"
 #include <sstream>
-
+#include <iostream>
+#include <irrKlang.h>
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib")
 SceneSP2Main::SceneSP2Main()
 {
 	//if you see anything from here missing in init just copy and paste them 
