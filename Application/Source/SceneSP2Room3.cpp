@@ -366,6 +366,19 @@ void SceneSP2Room3::Update(double dt)
 {
 	//mouse cursor show/hide
 	Application::hidemousecursor(true);
+	//switch scenes button for now
+	if (Application::IsKeyPressed('6')) {
+		Application::setscene(Scene_Main);
+	}
+	if (Application::IsKeyPressed('7')) {
+		Application::setscene(Scene_1);
+	}
+	if (Application::IsKeyPressed('8')) {
+		Application::setscene(Scene_2);
+	}
+	if (Application::IsKeyPressed('9')) {
+		Application::setscene(Scene_3);
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
