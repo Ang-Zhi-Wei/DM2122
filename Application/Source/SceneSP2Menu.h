@@ -68,6 +68,7 @@ public:
 		//UI tings
 		GEO_TEXT,
 		GEO_GAMETITLE,
+		GEO_GAMETITLEBACK,
 		GEO_CREDITS,
 		GEO_BUTTONBAR,
 		GEO_CLOSEBUTTON,
@@ -163,7 +164,12 @@ private:
 	float LSPEED;
 	float rotate_Man;
 	float fps;
-
+	float titleScaleX;
+	float titleScaleXDir;
+	float titleScaleY;
+	float titleScaleYDir;
+	float titlePosY;
+	float titlePosYDir;
 	//mouse positions
 	double Mousex, Mousey;
 	double MposX, MposY;

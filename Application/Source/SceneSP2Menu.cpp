@@ -32,6 +32,14 @@ void SceneSP2Menu::Init()
 	//quit = false;
 	show_credits = false;
 
+	//Title glow
+	titleScaleX = 40;
+	titleScaleXDir = 1;
+	titleScaleY = 8;
+	titleScaleYDir = 1;
+	titlePosY = 29;
+	titlePosYDir = 0.5;
+	
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -247,6 +255,8 @@ void SceneSP2Menu::Init()
 	//menu screen items
 	meshList[GEO_GAMETITLE] = MeshBuilder::GenerateQuad2("title", 1, 1, White);
 	meshList[GEO_GAMETITLE]->textureID = LoadTGA("Image//Title.tga");
+	meshList[GEO_GAMETITLEBACK] = MeshBuilder::GenerateQuad2("Title Background", 1, 1, White);
+	meshList[GEO_GAMETITLEBACK]->textureID = LoadTGA("Image//BlurryTitle.tga");
 	meshList[GEO_BUTTONBAR] = MeshBuilder::GenerateQuad2("bar", 1, 1, Black);
 	meshList[GEO_CREDITS] = MeshBuilder::GenerateQuad2("credits", 1, 1, Black);
 	meshList[GEO_CREDITS]->textureID = LoadTGA("Image//credits.tga");
@@ -366,7 +376,24 @@ void SceneSP2Menu::Update(double dt)
 	Application::GetCursorPos(&Mousex, &Mousey);
 	MposX = Mousex / 80;
 	MposY = Mousey / 60;
+	//Title scaling
+	titleScaleX += (float)(titleScaleXDir * dt);
+	if (titleScaleX >= 42)
+		titleScaleXDir *= -1;
+	if (titleScaleX <= 40)
+		titleScaleXDir *= -1;
 
+	titleScaleY += (float)(titleScaleYDir * dt);
+	if (titleScaleY >= 10)
+		titleScaleYDir *= -1;
+	if (titleScaleY <= 8)
+		titleScaleYDir *= -1;
+
+	titlePosY += (float)(titlePosYDir * dt);
+	if (titlePosY >= 30)
+		titlePosYDir *= -1;
+	if (titlePosY <= 29)
+		titlePosYDir *= -1;
 	//check for button coords
 	if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
 		ButtonNum = 0;
@@ -435,8 +462,6 @@ void SceneSP2Menu::Update(double dt)
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
 
-
-	
 
 }
 
@@ -805,8 +830,11 @@ void SceneSP2Menu::Render()
 		break;
 	}
 
-	//MENU SCREEN
-	RenderMeshOnScreen(meshList[GEO_GAMETITLE], 25, 30, 40, 8);
+	////MENU SCREEN
+	modelStack.PushMatrix();
+	RenderMeshOnScreen(meshList[GEO_GAMETITLEBACK], 25, titlePosY, titleScaleX, titleScaleY);
+	modelStack.PopMatrix();
+	RenderMeshOnScreen(meshList[GEO_GAMETITLE], 25, titlePosY, 40, 8);
 	RenderTextOnScreen(meshList[GEO_TEXT], "PLAY", White, 3, 4, 7);
 	RenderTextOnScreen(meshList[GEO_TEXT], "CREDITS", White, 3, 4, 6);
 	RenderTextOnScreen(meshList[GEO_TEXT], "QUIT", White, 3, 4, 5);
