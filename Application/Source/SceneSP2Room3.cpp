@@ -8,6 +8,16 @@
 
 SceneSP2Room3::SceneSP2Room3()
 {
+	LSPEED = 10.F;
+	flashlight = true;
+	flashlight_lifetime = 90;
+	inLocker = false;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 }
 
 SceneSP2Room3::~SceneSP2Room3()

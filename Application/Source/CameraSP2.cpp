@@ -10,6 +10,14 @@ void CameraSP2::setchecker(std::vector<ColliderBox>Checker)
 
 CameraSP2::CameraSP2()
 {
+	boundX1 = 0;
+	boundX2 = 300;
+	boundZ1 = 0;
+	boundZ2 = 300;
+	playerStamina = 10;
+	cooldown = 1;
+	can_move = true;
+	slowed = false;
 }
 
 CameraSP2::~CameraSP2()
@@ -82,7 +90,7 @@ void CameraSP2::Update(double dt)
 	Application::GetCursorPos(&mousePosX, &mousePosY);
 	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
 	viewTarget.z = cos(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
-	viewTarget.y = viewY * cos(Math::DegreeToRadian((mousePosY) * (1.0f / 6)));
+	viewTarget.y = viewY * cos(Math::DegreeToRadian(float(mousePosY) * (1.0f / 6.f)));
 	target = rawTarget + viewTarget;
 	view = (target - position).Normalized();
 	

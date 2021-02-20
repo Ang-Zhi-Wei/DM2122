@@ -8,6 +8,14 @@
 
 SceneSP2Menu::SceneSP2Menu()
 {
+	ButtonNum = 0;
+	menuScreen = true;
+	show_credits = false;
+	LSPEED = 10.F;
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	fps = 60;
 }
 
 SceneSP2Menu::~SceneSP2Menu()
@@ -192,7 +200,7 @@ void SceneSP2Menu::Init()
 	//building
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
-	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Building", "OBJ//road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Assigment2Images//road.tga");
 	meshList[GEO_ROAD]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -216,7 +224,7 @@ void SceneSP2Menu::Init()
 	meshList[GEO_LAMP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[GEO_BENCH] = MeshBuilder::GenerateOBJ("Building", "OBJ//ParkBench.obj");
 	meshList[GEO_BENCH]->textureID = LoadTGA("Assigment2Images//benchtexture.tga");
-	meshList[GEO_BENCH]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BENCH]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	//paths and deco
@@ -228,7 +236,7 @@ void SceneSP2Menu::Init()
 	//truck
 	meshList[GEO_TRUCK] = MeshBuilder::GenerateOBJ("truck", "OBJ//truck.obj");
 	meshList[GEO_TRUCK]->textureID = LoadTGA("Image//Silver.tga");
-	meshList[GEO_TRUCK]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_TRUCK]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -676,14 +684,14 @@ void SceneSP2Menu::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, -170);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -80);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
@@ -704,28 +712,28 @@ void SceneSP2Menu::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, 170);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 80);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 170);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.18, 0.18, 0.18);
+	modelStack.Scale(0.18f, 0.18f, 0.18f);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
 	modelStack.PopMatrix();
 
