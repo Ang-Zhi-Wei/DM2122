@@ -1201,22 +1201,22 @@ void SceneSP2Room1::Render()
 
 	if (jumpscareActive1 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive2 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive3 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive4 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
