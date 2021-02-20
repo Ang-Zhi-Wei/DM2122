@@ -9,6 +9,7 @@
 
 SceneSP2Room1::SceneSP2Room1()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	camBlinkOn = true;
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
@@ -21,6 +22,7 @@ SceneSP2Room1::SceneSP2Room1()
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
 	jumpscareEntrance1 = 0;
 	jumpscareActive1 = false;
@@ -37,6 +39,8 @@ SceneSP2Room1::SceneSP2Room1()
 	jumpscareEntrance4 = 0;
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
+	inLocker = false;
+	fps = 60;
 }
 
 SceneSP2Room1::~SceneSP2Room1()

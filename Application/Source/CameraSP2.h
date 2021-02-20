@@ -22,7 +22,7 @@ public:
 	std::vector<ColliderBox>Checker;
 
 	double mousePosX, mousePosY;
-	double offsetX, offsetY;
+	double offsetX;
 	double playerStamina, cooldown;
 	
    

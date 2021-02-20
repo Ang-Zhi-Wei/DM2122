@@ -8,6 +8,7 @@
 
 SceneSP2Menu::SceneSP2Menu()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	ButtonNum = 0;
 	menuScreen = true;
 	show_credits = false;
@@ -16,6 +17,7 @@ SceneSP2Menu::SceneSP2Menu()
 	MposX = Mousex / 80;
 	MposY = Mousey / 60;
 	fps = 60;
+	rotate_Man = 0;
 }
 
 SceneSP2Menu::~SceneSP2Menu()
@@ -698,7 +700,7 @@ void SceneSP2Menu::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -170);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();
 

@@ -18,6 +18,7 @@ CameraSP2::CameraSP2()
 	cooldown = 1;
 	can_move = true;
 	slowed = false;
+	offsetX = 0;
 }
 
 CameraSP2::~CameraSP2()
@@ -45,6 +46,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	cooldown = 1;
 	can_move = true;
 	slowed = false;
+	Application::GetCursorPos(&mousePosX, &mousePosY);
 }
 
 void CameraSP2::Update(double dt)
@@ -88,8 +90,8 @@ void CameraSP2::Update(double dt)
 	}
 
 	Application::GetCursorPos(&mousePosX, &mousePosY);
-	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
-	viewTarget.z = cos(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.x = -1 * sin(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.z = cos(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
 	viewTarget.y = viewY * cos(Math::DegreeToRadian(float(mousePosY) * (1.0f / 6.f)));
 	target = rawTarget + viewTarget;
 	view = (target - position).Normalized();

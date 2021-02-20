@@ -8,6 +8,7 @@
 
 SceneSP2Room2::SceneSP2Room2()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
@@ -22,6 +23,11 @@ SceneSP2Room2::SceneSP2Room2()
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
+	interact = false;
+	DS_classroom = CLOSED;
+	DS_lounge = CLOSED;
+	DS_school = OPEN;
+	fps = 60;
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -284,7 +290,7 @@ void SceneSP2Room2::Init()
 			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
-			classroom_chairs[row * 5 + col].mid.Set(40 + row * 15 + 5, 3, -80 + (col * 15));
+			classroom_chairs[row * 5 + col].mid.Set(float(40 + row * 15 + 5), 3.f, float(-80 + (col * 15)));
 			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
@@ -1186,7 +1192,7 @@ void SceneSP2Room2::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25), 52, float(camera.playerStamina * 0.5), 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina * 0.5f), 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon

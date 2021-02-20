@@ -148,7 +148,6 @@ public:
 
 private:
 
-	int lockernum;
 	int ButtonNum;
 
 	bool show_credits;

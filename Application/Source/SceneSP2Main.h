@@ -222,7 +222,6 @@ public:
 
 private:
 
-	int lockernum;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
