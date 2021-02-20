@@ -247,7 +247,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
-
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -692,18 +693,6 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + 5;
 	}
-
-	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
-	{
-		jumpscareActive1 = true;
-	}
-	if (jumpscareTimer1 <= 0)
-	{
-		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1= rand() % 5 + 5;
-
-		jumpscareEntrance1 = 1;
-	}*/
 
 	//Jumpscare, living room
 	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
