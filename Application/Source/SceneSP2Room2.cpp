@@ -28,14 +28,14 @@ SceneSP2Room2::SceneSP2Room2()
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	fps = 60;
-	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
 	itemImage[2] = meshList[GEO_ITEMIMAGE2];
 	itemImage[3] = meshList[GEO_ITEMIMAGE3];
 	itemImage[4] = meshList[GEO_ITEMIMAGE4];
 	itemImage[5] = meshList[GEO_ITEMIMAGE5];
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];*/
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -107,6 +107,8 @@ void SceneSP2Room2::Init()
 		"lights[1].kL");
 	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID,
 		"lights[1].kQ");
+
+	
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -205,6 +207,7 @@ void SceneSP2Room2::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	
+
 	
 
 	//Set Material locations
@@ -507,7 +510,7 @@ void SceneSP2Room2::Set(Scene* scene)
 void SceneSP2Room2::Update(double dt)
 {
 	//mouse cursor show/hide
-	Application::hidemousecursor(true);
+	//Application::hidemousecursor(true);
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
@@ -1286,6 +1289,8 @@ void SceneSP2Room2::Render()
 
 void SceneSP2Room2::Exit()
 {
+	delete ghost;
+	delete inventory;
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);

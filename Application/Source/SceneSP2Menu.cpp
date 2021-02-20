@@ -361,7 +361,7 @@ void SceneSP2Menu::Set(Scene* scene)
 void SceneSP2Menu::Update(double dt)
 {
 	//mouse cursor show/hide
-	Application::hidemousecursor(false);
+//	Application::hidemousecursor(false);
 	//get mouse positional coords
 	Application::GetCursorPos(&Mousex, &Mousey);
 	MposX = Mousex / 80;

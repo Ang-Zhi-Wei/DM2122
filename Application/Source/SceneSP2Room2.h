@@ -271,7 +271,8 @@ public:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
-		
+	
+	
 		U_TOTAL,
 
 	};

@@ -294,7 +294,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
-
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -1256,6 +1257,8 @@ void SceneSP2Room1::Render()
 void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
+	delete ghost;
+	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

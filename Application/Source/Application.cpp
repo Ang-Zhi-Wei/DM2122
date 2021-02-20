@@ -109,12 +109,13 @@ void Application::Init()
 		//return -1;
 	}
 
+	hidemousecursor(false);
 }
 
 bool Application::mainInit = false;
-bool Application::s1Init = false;
-bool Application::s2Init = false;
-bool Application::s3Init = false;
+//bool Application::s1Init = false;
+//bool Application::s2Init = false;
+//bool Application::s3Init = false;
 //bool Application::menuInit = false;
 
 //initialise functions
@@ -134,8 +135,11 @@ Scene* Application::scene = sceneMenu;
 
 void Application::Run()
 {
-	scene->Init();
-
+	sceneMenu->Init();
+	//sceneMain->Init();
+	scene1->Init();
+	scene2->Init();
+	scene3->Init();
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -159,6 +163,7 @@ void Application::Run()
 	} //Check if the ESC key had been pressed or if the window had been closed
 	delete scene1;
 	delete scene2;
+	delete scene3;
 	delete sceneMain;
 	delete sceneMenu;
 }
@@ -206,6 +211,7 @@ void Application::setscene(int scenenum)
 	switch (scenetype)
 	{
 	case Scene_Main:
+		hidemousecursor(true);
 		if (!mainInit)
 		{
 			sceneMain->Init();
@@ -218,40 +224,21 @@ void Application::setscene(int scenenum)
 		scene = sceneMain;
 		break;
 	case Scene_Menu:
-		
-		sceneMenu->Init();
-		//menuInit = false;
 		mainInit = false;
-		s1Init = false;
-		s2Init = false;
-		s3Init = false;
-		
+		hidemousecursor(false);
+		scene->Exit();
 		scene = sceneMenu;
+		sceneMenu->Init();
 		break;
 	case Scene_1:
-		if (!s1Init)
-		{
-			scene1->Init();
-			s1Init = true;
-		}
 		scene1->Set(scene);
 		scene = scene1;
 		break;
 	case Scene_2:
-		if (!s2Init)
-		{
-			scene2->Init();
-			s2Init = true;
-		}
 		scene2->Set(scene);
 		scene = scene2;
 		break;
 	case Scene_3:
-		if (!s3Init)
-		{
-			scene3->Init();
-			s3Init = true;
-		}
 		scene3->Set(scene);
 		scene = scene3;
 		break;
