@@ -23,8 +23,8 @@ public:
 	static unsigned m_width;
 	static unsigned m_height;
 	static void setscene(int scenenum);
-	static void quit(static bool quit);
-	static void pause(static bool pause);
+	static void quit(bool quit);
+	static void pause(bool pause);
 	
 private:
 	//Declare a window object

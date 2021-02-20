@@ -9,6 +9,7 @@ class Scene
 public:
 	Scene() {
 		ghost = nullptr;
+		inventory = nullptr;
 	}
 	~Scene() {}
 

@@ -8,6 +8,7 @@
 
 SceneSP2Main::SceneSP2Main()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
@@ -39,6 +40,7 @@ SceneSP2Main::SceneSP2Main()
 	fps = 60;
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
+	gamepaused = true;
 }
 
 SceneSP2Main::~SceneSP2Main()
@@ -61,7 +63,6 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
-
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -1942,7 +1943,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, -460);
 	modelStack.Rotate(270, 1, 0, 0);
-	modelStack.Scale(0.1, 0.1, 0.1);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[HOUSE], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -2077,7 +2078,7 @@ void SceneSP2Main::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
@@ -2106,7 +2107,7 @@ void SceneSP2Main::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(34 + i * 5), 3.f);
 				}
 			} 
 		}

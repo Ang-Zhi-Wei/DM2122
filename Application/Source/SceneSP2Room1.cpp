@@ -9,6 +9,7 @@
 
 SceneSP2Room1::SceneSP2Room1()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	camBlinkOn = true;
 	camBlinkOff = false;
 	camBlinkOffSec = 0;

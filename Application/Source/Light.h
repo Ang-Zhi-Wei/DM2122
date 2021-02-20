@@ -17,6 +17,7 @@ struct Light
 		kC = 1;
 		kL = 0.01f;
 		kQ = 0.001f;
+		cosCutoff = cos(Math::DegreeToRadian(7));
 	}
 	enum LIGHT_TYPE
 	{

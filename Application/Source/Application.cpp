@@ -260,12 +260,12 @@ void Application::setscene(int scenenum)
 	
 }
 
-void Application::quit(static bool quit)
+void Application::quit(bool quit)
 {
 	isquit = quit;
 }
 
-void Application::pause(static bool pause)
+void Application::pause(bool pause)
 {
 	ispaused = pause;
 }

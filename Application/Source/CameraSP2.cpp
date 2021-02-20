@@ -18,6 +18,7 @@ CameraSP2::CameraSP2()
 	cooldown = 1;
 	can_move = true;
 	slowed = false;
+	offsetX = 0;
 }
 
 CameraSP2::~CameraSP2()
@@ -45,6 +46,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	cooldown = 1;
 	can_move = true;
 	slowed = false;
+	Application::GetCursorPos(&mousePosX, &mousePosY);
 }
 
 void CameraSP2::Update(double dt)

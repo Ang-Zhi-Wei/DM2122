@@ -8,6 +8,7 @@
 
 SceneSP2Room3::SceneSP2Room3()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
 	interact = false;
 	flashlight = true;
@@ -25,6 +26,8 @@ SceneSP2Room3::SceneSP2Room3()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+	camBlinkOn = false;
+	camBlinkOff = true;
 }
 
 SceneSP2Room3::~SceneSP2Room3()

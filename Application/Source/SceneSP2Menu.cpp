@@ -8,6 +8,7 @@
 
 SceneSP2Menu::SceneSP2Menu()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	ButtonNum = 0;
 	menuScreen = true;
 	show_credits = false;
