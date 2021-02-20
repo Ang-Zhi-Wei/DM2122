@@ -8,6 +8,7 @@
 
 SceneSP2Main::SceneSP2Main()
 {
+	//if you see anything from here missing in init just copy and paste them 
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
@@ -29,6 +30,17 @@ SceneSP2Main::SceneSP2Main()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+	PKeypressed = PKeyreleased = false;
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
+	fps = 60;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	gamepaused = true;
 }
 
 SceneSP2Main::~SceneSP2Main()
@@ -38,7 +50,8 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
-
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
@@ -50,7 +63,6 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
-
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -311,9 +323,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_PAVEMENT] = MeshBuilder::GenerateQuad("pavement", 1, 1, White);
 	meshList[GEO_PAVEMENT]->textureID = LoadTGA("Assigment2Images//pavement3.tga");
 	meshList[GEO_PAVEMENT]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-	meshList[GEO_SCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//Warehouse.obj");
+	/*meshList[GEO_SCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//Warehouse.obj");
 	meshList[GEO_SCHOOL ]->textureID = LoadTGA("Assigment2Images//warehouse2.tga");
-	meshList[GEO_SCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[GEO_SCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
 	meshList[HOUSE] = MeshBuilder::GenerateOBJ("Building", "OBJ//smallhouse.obj");
 	meshList[HOUSE]->textureID = LoadTGA("Assigment2Images//smallhouse.tga");
 	meshList[HOUSE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -2075,7 +2087,7 @@ void SceneSP2Main::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
@@ -2104,7 +2116,7 @@ void SceneSP2Main::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1,1,1), 2, 34 + i * 5, 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(34 + i * 5), 3.f);
 				}
 			} 
 		}
@@ -2197,7 +2209,7 @@ void SceneSP2Main::Render()
 	{
 	case 0:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 0.8, 7.9);
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
 			break;
 		}
 	case 1:
