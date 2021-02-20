@@ -418,7 +418,7 @@ void SceneSP2Room3::Set(Scene* scene)
 void SceneSP2Room3::Update(double dt)
 {
 	//mouse cursor show/hide
-	Application::hidemousecursor(true);
+	//Application::hidemousecursor(true);
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
@@ -1096,6 +1096,8 @@ void SceneSP2Room3::Render()
 void SceneSP2Room3::Exit()
 {
 	// Cleanup VBO here
+	delete ghost;
+	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
