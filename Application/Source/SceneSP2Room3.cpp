@@ -181,6 +181,12 @@ void SceneSP2Room3::Init()
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
 	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[workbench]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
+	meshList[GEO_SKULL]->material.kAmbient.Set(Gray);
+	//Mysterious man
+	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
+	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
+	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[wheelbarrow] = MeshBuilder::GenerateOBJ("Building", "OBJ//wheelbarrow.obj");
 	meshList[wheelbarrow]->textureID = LoadTGA("Assigment2Images//wheelbarrow.tga");
@@ -759,10 +765,13 @@ void SceneSP2Room3::Update(double dt)
 	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
+
 		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing.y = 0;
 		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 20)
+
+		if (ghost->distance <= 50)
 		{
 			ghost->state = Ghost::CHASING;
 			ghost->speed = 25;
@@ -775,7 +784,7 @@ void SceneSP2Room3::Update(double dt)
 		if (ghost->distance <= 3 && inLocker)
 		{
 			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 5;
+			ghost->waitTime = 3;
 		}
 		else if (ghost->distance <= 1)
 		{
@@ -793,8 +802,10 @@ void SceneSP2Room3::Update(double dt)
 		break;
 	case Ghost::SPEEDRUN:
 		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing.y = 0;
+		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance > 300 || !inLocker)
+		if (ghost->distance > 500 || !inLocker)
 		{
 			ghost->state = Ghost::NORMAL;
 			ghost->speed = 5;
@@ -1064,6 +1075,26 @@ void SceneSP2Room3::Render()
 	//modelStack.Scale(5, 5, 5);
 	//RenderMesh(meshList[garagedoor], true);
 	//modelStack.PopMatrix();
+
+
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 
 	//UI OVERLAY

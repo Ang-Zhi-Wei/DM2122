@@ -84,8 +84,10 @@ public:
 			SPEEDRUN
 		};
 		int state;
+		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction
+		Vector3 axis;
 		float speed; //TBC normal - 5, chasing - 25, speedrunning away - 50; //player is 20 normal and 40 sprinting
 		float distance;
 		float waitTime;
@@ -93,8 +95,11 @@ public:
 
 		Ghost()
 		{
+			up.Set(0, 1, 0);
 			speed = 5;
-			pos = Vector3(0, 0, 0); //TBC
+			facing.Set(0, 0, -1);
+			axis = facing.Cross(up);
+			pos.Set(0, 0, -300); //TBC
 			rotateY = 0;
 			state = NORMAL;
 			waitTime = 5;
@@ -157,6 +162,7 @@ public:
 			{
 				pos += facing * speed * float(dt);
 			}
+			axis = facing.Cross(up).Normalized();
 		}
 	};
 	Inventory* inventory;

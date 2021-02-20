@@ -734,6 +734,7 @@ void SceneSP2Room2::Update(double dt)
 	case Ghost::NORMAL:
 		
 		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing.y = 0;
 		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
 		
@@ -768,6 +769,8 @@ void SceneSP2Room2::Update(double dt)
 		break;
 	case Ghost::SPEEDRUN:
 		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing.y = 0;
+		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
 		if (ghost->distance > 500 || !inLocker)
 		{
@@ -777,6 +780,7 @@ void SceneSP2Room2::Update(double dt)
 		break;
 
 	}
+
 
 
 	//INTERACTION CHECKS
@@ -1205,6 +1209,7 @@ void SceneSP2Room2::Render()
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
 	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -1279,15 +1284,15 @@ void SceneSP2Room2::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	/*std::ostringstream test1;
-	test1 << "camera view: " << camera.view;
+	std::ostringstream test1;
+	test1 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "light[1]spotdirec: " << light[1].spotDirection;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
-	//std::ostringstream test2;
-	//test2 << "camera view: " << camera.view;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	test3 << "ghost distance: " << ghost->distance;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test2;
+	test2 << "ghost stat: " << ghost->state;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;

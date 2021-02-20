@@ -681,11 +681,12 @@ void SceneSP2Room1::Update(double dt)
 	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
-	
+
 		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing.y = 0;
 		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
-		
+
 		if (ghost->distance <= 50)
 		{
 			ghost->state = Ghost::CHASING;
@@ -717,6 +718,8 @@ void SceneSP2Room1::Update(double dt)
 		break;
 	case Ghost::SPEEDRUN:
 		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing.y = 0;
+		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
 		if (ghost->distance > 500 || !inLocker)
 		{
@@ -1128,6 +1131,7 @@ void SceneSP2Room1::Render()
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
 	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
