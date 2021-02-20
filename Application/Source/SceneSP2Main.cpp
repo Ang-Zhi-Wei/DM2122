@@ -852,14 +852,14 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[106].setlength(25, 20, 10);
 	Colliderlist[106].Setposition(Vector3(-170, 2, -30));
-	//Gate collider
+	//Gate colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[107].setlength(1, 20, 35);
 	Colliderlist[107].Setposition(Vector3(-25, -4, 275));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[108].setlength(1, 20, 35);
 	Colliderlist[108].Setposition(Vector3(25, -4, 275));
-	//Table collider same position add 1.5
+	//Table colliders same position add 1.5
 	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[109].setlength(28, 20, 23);
@@ -915,8 +915,8 @@ void SceneSP2Main::Update(double dt)
 	// mouse cursor show / hide
 	Application::hidemousecursor(true);
 	//switch scenes button for now
-	if (Application::IsKeyPressed('6')) {
-		Application::setscene(Scene_Main);
+	if (Application::IsKeyPressed('5')) {
+		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('7')) {
 		Application::setscene(Scene_1);

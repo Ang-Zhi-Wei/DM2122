@@ -163,6 +163,11 @@ void Application::Run()
 	scene2->Exit();
 	scene3->Exit();
 	sceneMenu->Exit();
+	
+	
+
+
+
 	delete scene1;
 	delete scene2;
 	delete scene3;
@@ -231,7 +236,13 @@ void Application::setscene(int scenenum)
 		{
 			sceneMenu->Init();
 			menuInit = true;
+			s1Init = false;
+			s2Init = false;
+			s3Init = false;
+			mainInit = false;
+			menuInit = false;
 		}
+	
 		sceneMenu->Set(scene);
 		scene = sceneMenu;
 		break;
