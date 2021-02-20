@@ -47,6 +47,10 @@ public:
 		GEO_LEFTDOOR,
 		GEO_RIGHTDOOR,
 
+		//ghost
+		GEO_SKULL,
+		GEO_MYSTERIOUSMAN,
+
 		//colliderbox 
 		Colliderbox,
 		
