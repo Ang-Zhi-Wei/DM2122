@@ -17,7 +17,7 @@ Mesh* MeshBuilder::Generatering(const std::string& meshName, float lengthX, floa
 		v.normal.Set(0, 1, 0);
 		v.color.Set(Red); 
 		vertex_buffer_data.push_back(v);
-		v.pos.Set(5*cos(theta*(PI/180)), 0, 5*sin(theta*(PI/180))); 
+		v.pos.Set(float(5*cos(theta*(PI/180))), 0.f, float(5*sin(theta*(PI/180)))); 
 		v.color.Set(Red); 
 		v.normal.Set(0, 1, 0);
 		vertex_buffer_data.push_back(v);
@@ -43,7 +43,7 @@ Mesh* MeshBuilder::Generatehemisphere(const std::string& meshName, float lengthX
 	std::vector<unsigned>index_buffer_data;
 	for (int phi = 0; phi <90; phi+=10) {
 		for (int theta = 0; theta <= 360; theta += 10) {
-			v.pos.Set(5*cos(phi*Rad)*cos(theta*Rad),5*sin(phi*Rad),5*cos(phi*Rad)*sin(theta*Rad)); v.color.Set(Purple); vertex_buffer_data.push_back(v);
+			v.pos.Set(float(5*cos(phi*Rad)*cos(theta*Rad)),float(5*sin(phi*Rad)),float(5*cos(phi*Rad)*sin(theta*Rad))); v.color.Set(Purple); vertex_buffer_data.push_back(v);
 			v.pos.Set(5*cos((phi+10) * Rad) * cos(theta * Rad), 5 * sin((phi+10) * Rad), 5* cos((phi+10) * Rad) * sin(theta * Rad)); v.color.Set(Blue); vertex_buffer_data.push_back(v);
 		}
 	}
@@ -75,11 +75,11 @@ Mesh* MeshBuilder::Generatesphere(const std::string& meshName, float lengthX, fl
 	float y = 0;
 	for (int phi = -90; phi < 90; phi += 10) {
 		for (int theta = 0; theta <= 360; theta += 10) {
-			v.pos.Set(cos(phi * Rad) * cos(theta * Rad), sin(phi * Rad), cos(phi * Rad) * sin(theta * Rad)); 
+			v.pos.Set(float(cos(phi * Rad) * cos(theta * Rad)), float(sin(phi * Rad)), float(cos(phi * Rad) * sin(theta * Rad))); 
 			v.color.Set(name);
 			v.normal.Set(cos(phi * Rad) * cos(theta * Rad), sin(phi * Rad), cos(phi * Rad) * sin(theta * Rad));
-			x = ((cos((theta/2) * Rad))/2.8)+0.5;
-			y = (sin(phi * Rad)/2)+0.5;
+			x = float(((cos((theta/2) * Rad))/2.8)+0.5);
+			y = float((sin(phi * Rad)/2)+0.5);
 			v.texCoord.Set(x, y);
 			
 			vertex_buffer_data.push_back(v);
@@ -87,7 +87,7 @@ Mesh* MeshBuilder::Generatesphere(const std::string& meshName, float lengthX, fl
 			v.pos.Set(cos((phi + 10) * Rad) * cos(theta * Rad),sin((phi + 10) * Rad),cos((phi + 10) * Rad) * sin(theta * Rad)); 
 			v.color.Set(name); 
 			v.normal.Set(cos((phi + 10) * Rad) * cos(theta * Rad),  sin((phi + 10) * Rad), cos((phi + 10) * Rad) * sin(theta * Rad));
-			x = (cos((theta/2) * Rad)/2.8)+0.5;
+			x = float((cos((theta/2) * Rad)/2.8)+0.5);
 			y = (sin((phi + 10) * Rad) / 2)+0.5;
 			v.texCoord.Set(x, y);
 		
@@ -126,7 +126,7 @@ Mesh* MeshBuilder::GenerateTorus(const std::string& meshName, unsigned numStack,
 			x1 = outerR * sin(stack * degreePerStack*Rad);
 			z2 = (outerR + innerR * cos(slice * degreePerSlice*Rad)) * cos(stack * degreePerStack*Rad);
 			y2 = innerR * sin(slice * degreePerSlice*Rad);
-			x2 = (outerR + innerR * cos(slice * degreePerSlice*Rad)) * sin(stack * degreePerStack*Rad);
+			x2 = (outerR + innerR * cos(float(slice) * degreePerSlice*Rad)) * sin(stack * degreePerStack*Rad);
 			v.pos.Set(x2, y2, z2);
 			v.color.Set(color);
 			v.normal.Set(x2-x1,y2,z2-z1);
@@ -413,23 +413,23 @@ Mesh* MeshBuilder::GenerateColliderBox(const std::string& meshName, double legnt
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned> index_buffer_data;
 	//bottom
-	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(-lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(-lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(-lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(-lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(-lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(-lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(-lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(-lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	//top
-	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(lengthy / 2), float(-lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx / 2), float(lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx / 2), float(lengthy / 2), float(lengthz / 2)); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	//sides
 	v.pos.Set(float(-legnthx) / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	v.pos.Set(float(-legnthx) / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);

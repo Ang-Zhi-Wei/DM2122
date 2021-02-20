@@ -154,7 +154,7 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 0.5;
+			lengthx =lengthy =lengthz = 0.5;
 		}
 	};
 	struct Door : Wall
@@ -226,8 +226,6 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
-	bool switchtga1;
-	bool switchtga2;
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;

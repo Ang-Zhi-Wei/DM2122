@@ -8,6 +8,20 @@
 
 SceneSP2Room2::SceneSP2Room2()
 {
+	LSPEED = 10.F;
+	flashlight = true;
+	flashlight_lifetime = 90;
+	inLocker = false;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	camBlinkOn = false;
+	camBlinkOff = true;
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -434,7 +448,7 @@ void SceneSP2Room2::Init()
 
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
 	camera.setchecker(Colliderlist);
@@ -447,7 +461,8 @@ void SceneSP2Room2::Init()
 	camBlinkOn = false;
 	camBlinkOff = true;
 	//door state
-	DS_classroom = DS_lounge = CLOSED;
+	DS_classroom =CLOSED;
+	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -1041,7 +1056,7 @@ void SceneSP2Room2::Render()
 		modelStack.PushMatrix();
 		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
 		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2, 0.2, 0.2);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
@@ -1075,7 +1090,7 @@ void SceneSP2Room2::Render()
 		modelStack.Translate(classroom_chairs[i].mid.x, classroom_chairs[i].mid.y, classroom_chairs[i].mid.z);
 		modelStack.Rotate(-90, 0, 1, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[GEO_CHAIR], true);
 		modelStack.PopMatrix();
 	}
@@ -1185,7 +1200,7 @@ void SceneSP2Room2::Render()
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2.f);
 	//inventory
 	if (inventory->open)
 	{
@@ -1196,7 +1211,7 @@ void SceneSP2Room2::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], float(25.9 + i * 4), 7.9, 3.5, 3.5f);
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -1205,7 +1220,7 @@ void SceneSP2Room2::Render()
 			}
 		}
 
-		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * 4), 7.9, 4, 4);
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
 		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);

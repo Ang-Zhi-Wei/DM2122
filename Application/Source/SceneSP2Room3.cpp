@@ -8,6 +8,16 @@
 
 SceneSP2Room3::SceneSP2Room3()
 {
+	LSPEED = 10.F;
+	flashlight = true;
+	flashlight_lifetime = 90;
+	inLocker = false;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 }
 
 SceneSP2Room3::~SceneSP2Room3()
@@ -276,11 +286,11 @@ void SceneSP2Room3::Init()
 	{
 		for (int col = 0; col < 5; col++)
 		{
-			classroom_tables[row * 5 + col].mid.Set(40 + row * 15, 3, -80 + (col * 15));
+			classroom_tables[row * 5 + col].mid.Set(float(40 + row * 15), float(3), float(-80 + (col * 15)));
 			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
-			classroom_chairs[row * 5 + col].mid.Set(40 + row * 15 + 5, 3, float(-80 + (col * 15)));
+			classroom_chairs[row * 5 + col].mid.Set(float(40 + row * 15 + 5), float(3), float(-80 + (col * 15)));
 			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
@@ -318,7 +328,7 @@ void SceneSP2Room3::Init()
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Assigment2Images//garage.tga");//this one was in render cousing memory leak
-	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//garage.tga");
 	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
@@ -346,7 +356,8 @@ void SceneSP2Room3::Init()
 	camBlinkOn = false;
 	camBlinkOff = true;
 	//door state
-	DS_classroom = DS_lounge = CLOSED;
+	DS_classroom = CLOSED;
+	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -978,7 +989,7 @@ void SceneSP2Room3::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(25, 0.8, -30);
+	modelStack.Translate(25.f, 0.8f, -30.f);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.05f, 0.05f, 0.05f);
 	RenderMesh(meshList[barrels], true);

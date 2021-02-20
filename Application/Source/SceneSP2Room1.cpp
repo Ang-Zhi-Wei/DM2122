@@ -9,10 +9,39 @@
 
 SceneSP2Room1::SceneSP2Room1()
 {
+	camBlinkOn = true;
+	camBlinkOff = false;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	LSPEED = 10.F;
+	flashlight = true;
+	flashlight_lifetime = 90;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
+	jumpscareEntrance1 = 0;
+	jumpscareActive1 = false;
+	jumpscareTimerActive1 = false;
+	jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
+	jumpscareEntrance2 = 0;
+	jumpscareActive2 = false;
+	jumpscareTimerActive2 = false;
+	jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
+	jumpscareEntrance3 = 0;
+	jumpscareActive3 = false;
+	jumpscareTimerActive3 = false;
+	jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
+	jumpscareEntrance4 = 0;
+	jumpscareActive4 = false;
+	jumpscareTimerActive4 = false;
 }
 
 SceneSP2Room1::~SceneSP2Room1()
 {
+	
 }
 
 
@@ -146,7 +175,7 @@ void SceneSP2Room1::Init()
 	//terrain
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
-	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1.f, 1.f, 1.f, 0.5f, 1.f, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
@@ -261,8 +290,6 @@ void SceneSP2Room1::Init()
 
 	//init update stuff
 	LSPEED = 10.F;
-
-
 	flashlight = true;
 	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
@@ -529,7 +556,7 @@ void SceneSP2Room1::Update(double dt)
 	//Locker
 
 
-	for (int i = 0; i < Lockerlist.size(); i++) {
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
@@ -703,7 +730,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + 5;
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
 	}
 
 	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
@@ -739,7 +766,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2 = rand() % 5 + 5;
+		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + 5);
 	}
 
 
@@ -764,7 +791,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3 = rand() % 5 + 5;
+		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + 5);
 	}
 
 
@@ -790,7 +817,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4 = double(rand() % 5 + 5);
+		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}
 
 }
@@ -1115,7 +1142,7 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
 	if (inventory->open)
 	{
@@ -1126,7 +1153,7 @@ void SceneSP2Room1::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], float(25.9 + i * 4), 7.9f, 3.5f, 3.5f);
+				RenderMeshOnScreen(itemImage[i], 25.9f + float(i) * double(4), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -1135,7 +1162,7 @@ void SceneSP2Room1::Render()
 			}
 		}
 
-		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory->selected * 4, 7.9, 4, 4);
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
 		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
