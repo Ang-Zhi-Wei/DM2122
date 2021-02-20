@@ -155,6 +155,7 @@ public:
 			}
 			else
 			{
+				facing.y = 0;
 				pos += facing * speed * float(dt);
 			}
 		}
