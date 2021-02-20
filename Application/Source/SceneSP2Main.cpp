@@ -917,7 +917,7 @@ void SceneSP2Main::Init()
 
 	//Locker test
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of lockers
 	//Lockerlist.push_back(Locker());
@@ -1779,7 +1779,7 @@ void SceneSP2Main::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 1, -170);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1793,7 +1793,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, -170);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1814,7 +1814,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 1, 80);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(1.1, 1.1, 1.1);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1829,7 +1829,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(110, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1850,7 +1850,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(170, 2, -30);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1866,7 +1866,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, 2, 30);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BENCH], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1887,7 +1887,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.18, 0.18, 0.18);
+	modelStack.Scale(0.18f, 0.18f, 0.18f);
 	RenderMesh(meshList[GEO_FOUNTAIN], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1955,7 +1955,7 @@ void SceneSP2Main::Render()
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
 		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Scale(0.2, 0.2, 0.2);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
@@ -1966,7 +1966,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
-	modelStack.Scale(4.2, 4.2, 4.2);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
 	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
@@ -2021,7 +2021,7 @@ void SceneSP2Main::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+				RenderMeshOnScreen(itemImage[i], 25.9 + i * double(4), 7.9, 3.5, 3.5);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -2077,16 +2077,16 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0, 0, 0), 4, 10, 1.8);
 		break;
 	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(0, 0, 1), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 10:
-		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0, 0, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 11:
 		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(0, 0, 1), 4.f, 10.f, 1.8f);
 		break;
 	case 12:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0, 0, 0), 4, 10, 1.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	}
 
@@ -2400,7 +2400,7 @@ void SceneSP2Main::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 
 	//Change this line inside for loop
 	std::string toPrint;
-	if (text.length() > limit)
+	if (signed(text.length()) > limit)
 	{
 		toPrint = text.substr(0, limit);
 		for (unsigned i = 0; i < toPrint.length(); ++i)
@@ -2931,7 +2931,7 @@ void SceneSP2Main::RenderFence()
 	modelStack.PushMatrix();
 	modelStack.Translate(335, -7, -35);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(2.6, 4.5, 4.5);
+	modelStack.Scale(2.6f, 4.5f, 4.5f);
 	RenderMesh(meshList[GEO_FENCE], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -3024,7 +3024,7 @@ void SceneSP2Main::RenderTables()
 	modelStack.PushMatrix();
 	modelStack.Translate(220, 8, 210);
 	//modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.2, 0.3, 0.2);
+	modelStack.Scale(0.2f, 0.3f, 0.2f);
 	RenderMesh(meshList[GEO_TABLE], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -3032,7 +3032,7 @@ void SceneSP2Main::RenderTables()
 	modelStack.PushMatrix();
 	modelStack.Translate(130, 8, 130);
 	//modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.2, 0.3, 0.2);
+	modelStack.Scale(0.2f, 0.3f, 0.2f);
 	RenderMesh(meshList[GEO_TABLE], true);
 	modelStack.PopMatrix();//Added collider
 	
@@ -3069,7 +3069,7 @@ void SceneSP2Main::RenderTables()
 	modelStack.PushMatrix();
 	modelStack.Translate(-220, 8, 130);
 	//modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.2, 0.3, 0.2);
+	modelStack.Scale(0.2f, 0.3f, 0.2f);
 	RenderMesh(meshList[GEO_TABLE], true);
 	modelStack.PopMatrix();//Added collider
 	//@tables

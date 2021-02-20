@@ -25,7 +25,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
-	viewTarget = (0,0,0);
+	viewTarget = (0.f,0.f,0.f);
 	rawTarget = pos;
 	Application::SetCursorPos(960, 540);
 	offsetX = 0;
@@ -139,7 +139,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.x += float(right.x * CAMERA_SPEED * dt);
 				rawTarget.z += float(right.z * CAMERA_SPEED * dt);
 			}
-			for (int i = 0; i < Checker.size(); i++) {
+			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive()==true) {
 					position.x += float(right.x * CAMERA_SPEED * dt);
 					position.z += float(right.z * CAMERA_SPEED * dt);
@@ -195,7 +195,7 @@ void CameraSP2::Update(double dt)
 				rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
 				rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
 			}
-			for (int i = 0; i < Checker.size(); i++) {
+			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
 					position.x -= float(right.x * CAMERA_SPEED * dt);
 					position.z -= float(right.z * CAMERA_SPEED * dt);

@@ -434,7 +434,7 @@ void SceneSP2Room2::Init()
 
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
 	camera.setchecker(Colliderlist);
@@ -1075,7 +1075,7 @@ void SceneSP2Room2::Render()
 		modelStack.Translate(classroom_chairs[i].mid.x, classroom_chairs[i].mid.y, classroom_chairs[i].mid.z);
 		modelStack.Rotate(-90, 0, 1, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[GEO_CHAIR], true);
 		modelStack.PopMatrix();
 	}
@@ -1205,7 +1205,7 @@ void SceneSP2Room2::Render()
 			}
 		}
 
-		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * 4), 7.9, 4, 4);
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
 		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);

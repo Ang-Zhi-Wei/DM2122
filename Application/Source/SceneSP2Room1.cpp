@@ -739,7 +739,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2 = rand() % 5 + 5;
+		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + 5);
 	}
 
 
@@ -764,7 +764,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive3 = true;
-		jumpscareTimer3 = jumpscareTimerReset3 = rand() % 5 + 5;
+		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + 5);
 	}
 
 
@@ -790,7 +790,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 
 		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4 = double(rand() % 5 + 5);
+		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}
 
 }
@@ -1115,7 +1115,7 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
 	if (inventory->open)
 	{
@@ -1126,7 +1126,7 @@ void SceneSP2Room1::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], float(25.9 + i * 4), 7.9f, 3.5f, 3.5f);
+				RenderMeshOnScreen(itemImage[i], 25.9f + float(i) * double(4), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -1135,7 +1135,7 @@ void SceneSP2Room1::Render()
 			}
 		}
 
-		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory->selected * 4, 7.9, 4, 4);
+		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory->selected * double(4), 7.9, 4, 4);
 		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
