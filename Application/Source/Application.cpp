@@ -123,13 +123,13 @@ bool Application::ispaused = false;
 
 
 //Don't change anything here,use the buttons 5-9 to switch scenes when your in main
-int Application::scenetype = Scene_Menu;
+int Application::scenetype = Scene_Main;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
-Scene* Application::scene = sceneMenu;
+Scene* Application::scene = sceneMain;
 
 
 void Application::Run()
