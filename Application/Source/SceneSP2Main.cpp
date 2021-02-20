@@ -40,7 +40,7 @@ SceneSP2Main::SceneSP2Main()
 	fps = 60;
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
-	gamepaused = true;
+	gamepaused = false;
 }
 
 SceneSP2Main::~SceneSP2Main()

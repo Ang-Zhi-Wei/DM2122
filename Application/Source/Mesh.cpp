@@ -20,6 +20,7 @@ Mesh::Mesh(const std::string &meshName)
 	glGenBuffers(1, &vertexBuffer);
 	//glGenBuffers(1, &colorBuffer);
 	glGenBuffers(1, &indexBuffer);
+	indexSize = 0;
 }
 
 /******************************************************************************/
