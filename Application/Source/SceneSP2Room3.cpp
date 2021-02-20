@@ -318,22 +318,51 @@ void SceneSP2Room3::Init()
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(1, 25, 100);
+	Colliderlist[0].setlength(3, 25, 100);
 	Colliderlist[0].Setposition(Vector3(30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(1, 25, 100);
+	Colliderlist[1].setlength(3, 25, 100);
 	Colliderlist[1].Setposition(Vector3(-30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(100, 25, 1);
+	Colliderlist[2].setlength(100, 25, 3);
 	Colliderlist[2].Setposition(Vector3(0, 12, -100));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(20, 30, 2);
+	Colliderlist[3].setlength(20, 30, 3);
 	Colliderlist[3].Setposition(Vector3(-25, 12, 2));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(20, 30, 2);
+	Colliderlist[4].setlength(20, 30, 3);
 	Colliderlist[4].Setposition(Vector3(25, 12, 2));
+	//random objects colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(5, 20, 7);
+	Colliderlist[5].Setposition(Vector3(10, 0, -34));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(7, 20, 3);
+	Colliderlist[6].Setposition(Vector3(-20, 0, -95));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(4.5, 20,12.5);
+	Colliderlist[7].Setposition(Vector3 (- 20, 4, -60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(17, 20, 38);
+	Colliderlist[8].Setposition(Vector3(0, 1.5, -50));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(12, 20, 13);
+	Colliderlist[9].Setposition(Vector3(-25.f, 1.2f, -22.f));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(12, 20, 12.5);
+	Colliderlist[10].Setposition(Vector3(25.f, 0.8f, -30.f));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(10, 20, 19);
+	Colliderlist[11].Setposition(Vector3(26, 4, -47));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[12].setlength(11.5, 20, 5.5);
+	Colliderlist[12].Setposition(Vector3(25, 8, -94.5));
+	//Locker collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[12].setlength(3.9, 10, 4.3);
+	Colliderlist[12].Setposition(Vector3(Lockerlist[0].getpos()));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[4].getxlength(), Colliderlist[4].getylength(), Colliderlist[4].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -875,10 +904,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[4].getPosition().x, Colliderlist[4].getPosition().y, Colliderlist[4].getPosition().z);
-	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
+	//RenderMesh(meshList[Colliderbox], false);
+	//modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();
@@ -909,7 +938,7 @@ void SceneSP2Room3::Render()
 
 	//all doors
 	//schoolleft
-	//@obj
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 12, -50);
 	modelStack.Rotate(90, 0, 0, 1);
@@ -946,7 +975,7 @@ void SceneSP2Room3::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(30, 2, 20);
 	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 
@@ -965,45 +994,46 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(10, 0, -35);
 	modelStack.Scale(0.4f, 0.4f, 0.4f);
 	RenderMesh(meshList[tire], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 0, -95);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.08f, 0.08f, 0.08f);
 	RenderMesh(meshList[shelves], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 4, -60);
 	//modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(6,6,6);
 	RenderMesh(meshList[garagetable], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 1.5,-50);
 	modelStack.Scale(0.13f, 0.13f, 0.13f);
 	RenderMesh(meshList[rustycar], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	
 	modelStack.PushMatrix();
 	modelStack.Translate(-22.f, 1.2f, -25.f);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[rustychair], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(25.f, 0.8f, -30.f);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.05f, 0.05f, 0.05f);
 	RenderMesh(meshList[barrels], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 
 	//modelStack.PushMatrix();
@@ -1019,14 +1049,14 @@ void SceneSP2Room3::Render()
 	//modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(19, 19, 19);
 	RenderMesh(meshList[wheelbarrow], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(25, 8, -95);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[metalcabinet], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, 8, -30);

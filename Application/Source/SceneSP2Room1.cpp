@@ -345,43 +345,43 @@ void SceneSP2Room1::Init()
 	Lockerlist[1].setpos(Vector3(90.5, 0, 145));
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(1, 20, 100);
+	Colliderlist[0].setlength(3, 20, 100);
 	Colliderlist[0].Setposition(Vector3(-10, 10, 220));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(1, 20, 100);
+	Colliderlist[1].setlength(3, 20, 100);
 	Colliderlist[1].Setposition(Vector3(10, 10, 220));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(1, 20, 75);
+	Colliderlist[2].setlength(3, 20, 75);
 	Colliderlist[2].Setposition(Vector3(-10, 10, 132.5));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(1, 20, 75);
+	Colliderlist[3].setlength(3, 20, 75);
 	Colliderlist[3].Setposition(Vector3(65, 10, 132.5));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(70, 20, 1);
+	Colliderlist[4].setlength(70, 20, 3);
 	Colliderlist[4].Setposition(Vector3(30, 10, 170));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(70, 20, 1);
+	Colliderlist[5].setlength(70, 20, 3);
 	Colliderlist[5].Setposition(Vector3(25, 10, 95));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(1, 20, 30);
+	Colliderlist[6].setlength(3, 20, 30);
 	Colliderlist[6].Setposition(Vector3(52.5, 10, 80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(1, 20, 30);
+	Colliderlist[7].setlength(3, 20, 30);
 	Colliderlist[7].Setposition(Vector3(92.5, 10, 80));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(40, 20, 1);
+	Colliderlist[8].setlength(40, 20, 3);
 	Colliderlist[8].Setposition(Vector3(72.5, 10, 65));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(22, 20, 1);
+	Colliderlist[9].setlength(22, 20, 3);
 	Colliderlist[9].Setposition(Vector3(76.5, 10, 95));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(1, 20, 75);
+	Colliderlist[10].setlength(3, 20, 75);
 	Colliderlist[10].Setposition(Vector3(72, 10, 132.5));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(1, 20, 75);
+	Colliderlist[11].setlength(3, 20, 75);
 	Colliderlist[11].Setposition(Vector3(92.5, 10, 132.5));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(25, 20, 1);
+	Colliderlist[12].setlength(25, 20, 3);
 	Colliderlist[12].Setposition(Vector3(82.5, 10, 170));
 	//Locker colliders
 	Colliderlist.push_back(ColliderBox());
@@ -751,18 +751,6 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
 	}
-
-	/*if ((jumpscareTimer1 >= jumpscareTimerReset1 - 0.2) && (jumpscareTimer1 >= 1) && (jumpscareEntrance1 == 1))
-	{
-		jumpscareActive1 = true;
-	}
-	if (jumpscareTimer1 <= 0)
-	{
-		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1= rand() % 5 + 5;
-
-		jumpscareEntrance1 = 1;
-	}*/
 
 	//Jumpscare, living room
 	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
@@ -1213,22 +1201,22 @@ void SceneSP2Room1::Render()
 
 	if (jumpscareActive1 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive2 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive3 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	if (jumpscareActive4 == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 0, 0, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	}
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
