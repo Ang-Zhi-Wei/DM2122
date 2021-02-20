@@ -75,6 +75,8 @@ public:
 		GEO_SKULL,
 		GEO_LAMP,
 		GEO_PAVEMENT,
+		GEO_SCHOOL,
+		HOUSE,
 	
 		GEO_TRUCK,
 		Fountain,
