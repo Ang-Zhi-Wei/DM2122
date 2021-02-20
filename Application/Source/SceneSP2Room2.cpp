@@ -22,6 +22,7 @@ SceneSP2Room2::SceneSP2Room2()
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
+	interact = false;
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -1186,7 +1187,7 @@ void SceneSP2Room2::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25), 52, float(camera.playerStamina * 0.5), 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina * 0.5f), 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon

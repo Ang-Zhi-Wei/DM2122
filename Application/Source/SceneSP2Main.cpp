@@ -29,6 +29,16 @@ SceneSP2Main::SceneSP2Main()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+	PKeypressed = PKeyreleased = false;
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
+	fps = 60;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
 }
 
 SceneSP2Main::~SceneSP2Main()
@@ -38,7 +48,8 @@ SceneSP2Main::~SceneSP2Main()
 
 void SceneSP2Main::Init()
 {
-
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
@@ -2169,7 +2180,7 @@ void SceneSP2Main::Render()
 	{
 	case 0:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1, 1, 0), 2, 0.8, 7.9);
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
 			break;
 		}
 	case 1:

@@ -21,6 +21,7 @@ SceneSP2Room1::SceneSP2Room1()
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
 	jumpscareEntrance1 = 0;
 	jumpscareActive1 = false;
@@ -37,6 +38,8 @@ SceneSP2Room1::SceneSP2Room1()
 	jumpscareEntrance4 = 0;
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
+	inLocker = false;
+	fps = 60;
 }
 
 SceneSP2Room1::~SceneSP2Room1()

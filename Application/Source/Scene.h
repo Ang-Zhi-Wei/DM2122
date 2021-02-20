@@ -7,7 +7,9 @@
 class Scene
 {
 public:
-	Scene() {}
+	Scene() {
+		ghost = nullptr;
+	}
 	~Scene() {}
 
 	struct Item

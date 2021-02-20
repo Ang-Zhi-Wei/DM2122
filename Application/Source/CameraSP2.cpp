@@ -88,8 +88,8 @@ void CameraSP2::Update(double dt)
 	}
 
 	Application::GetCursorPos(&mousePosX, &mousePosY);
-	viewTarget.x = -1 * sin(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
-	viewTarget.z = cos(Math::DegreeToRadian((mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.x = -1 * sin(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
+	viewTarget.z = cos(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
 	viewTarget.y = viewY * cos(Math::DegreeToRadian(float(mousePosY) * (1.0f / 6.f)));
 	target = rawTarget + viewTarget;
 	view = (target - position).Normalized();

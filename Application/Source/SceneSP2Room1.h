@@ -173,7 +173,6 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-	double jumpscareTimer;
 	bool inLocker;
 	Mesh* itemImage[8];
 

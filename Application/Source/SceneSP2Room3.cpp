@@ -9,6 +9,7 @@
 SceneSP2Room3::SceneSP2Room3()
 {
 	LSPEED = 10.F;
+	interact = false;
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
@@ -18,6 +19,12 @@ SceneSP2Room3::SceneSP2Room3()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	fps = 60;
+	DS_classroom = CLOSED;
+	DS_lounge = CLOSED;
+	DS_school = OPEN;
 }
 
 SceneSP2Room3::~SceneSP2Room3()
@@ -180,9 +187,9 @@ void SceneSP2Room3::Init()
 	meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
 	meshList[metalcabinet]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");
+	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
 	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
-	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	//meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
 	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
@@ -1018,12 +1025,12 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[metalcabinet], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 8, -30);
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 8, -30);
 	//modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[garagedoor], true);
-	modelStack.PopMatrix();
+	//modelStack.Scale(5, 5, 5);
+	//RenderMesh(meshList[garagedoor], true);
+	//modelStack.PopMatrix();
 
 
 	//UI OVERLAY
