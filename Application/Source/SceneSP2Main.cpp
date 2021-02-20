@@ -5,7 +5,8 @@
 #include "shader.hpp"
 #include "LoadTGA.h"
 #include <sstream>
-
+#include <iostream>
+#include "irrKlang.h"
 SceneSP2Main::SceneSP2Main()
 {
 	//if you see anything from here missing in init just copy and paste them 
