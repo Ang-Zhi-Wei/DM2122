@@ -1964,7 +1964,7 @@ void SceneSP2Main::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(520, -1, 0);
-	modelStack.Scale(0.12, 0.12, 0.12);
+	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
 	modelStack.PopMatrix();//Added collider
 

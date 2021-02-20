@@ -13,7 +13,7 @@ Mesh* MeshBuilder::Generatering(const std::string& meshName, float lengthX, floa
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<unsigned>index_buffer_data;
 	for (int theta = 0; theta <= 360; theta += 10) {
-		v.pos.Set(float(10 * cos(theta * (PI / 180)))), 0.f, float(10 * sin(theta * (PI / 180)));
+		v.pos.Set((10.f * float(cos(theta * (PI / 180)))), 0.f, 10.f * float(sin(theta * (PI / 180))));
 		v.normal.Set(0, 1, 0);
 		v.color.Set(Red); 
 		vertex_buffer_data.push_back(v);
