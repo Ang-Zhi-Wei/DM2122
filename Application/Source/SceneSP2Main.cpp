@@ -1493,7 +1493,7 @@ void SceneSP2Main::Update(double dt)
 
 void SceneSP2Main::PauseUpdate()
 {
-	Application::hidemousecursor(false);
+	//Application::hidemousecursor(false);
 
 	if (!Application::IsKeyPressed('P'))
 	{
