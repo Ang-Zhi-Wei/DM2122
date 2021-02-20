@@ -111,21 +111,25 @@ void Application::Init()
 
 }
 
-
+bool Application::mainInit = false;
+bool Application::s1Init = false;
+bool Application::s2Init = false;
+bool Application::s3Init = false;
+bool Application::menuInit = false;
 
 //initialise functions
 bool Application::isquit = false;
 bool Application::ispaused = false;
 
 
-//starting menu(just change back to scene_Menu when done)
-int Application::scenetype = Scene_Main;
+//Don't change anything here,use the buttons 5-9 to switch scenes when your in main
+int Application::scenetype = Scene_Menu;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::sceneMenu = new SceneSP2Menu;
-Scene* Application::scene = sceneMain;
+Scene* Application::scene = sceneMenu;
 
 
 void Application::Run()
@@ -202,29 +206,55 @@ void Application::setscene(int scenenum)
 	switch (scenetype)
 	{
 	case Scene_Main:
-		scene->Exit();
+		if (!mainInit)
+		{
+			sceneMain->Init();
+			mainInit = true;
+		}
+		else
+		{
+			sceneMain->Set(scene);
+		}
 		scene = sceneMain;
-		scene->Init();
 		break;
 	case Scene_Menu:
-		scene->Exit();
+		if (!menuInit)
+		{
+			sceneMenu->Init();
+			menuInit = false;
+			mainInit = false;
+			s1Init = false;
+			s2Init = false;
+			s3Init = false;
+		}
 		scene = sceneMenu;
-		scene->Init();
 		break;
 	case Scene_1:
-		scene->Exit();
+		if (!s1Init)
+		{
+			scene1->Init();
+			s1Init = true;
+		}
+		scene1->Set(scene);
 		scene = scene1;
-		scene->Init();
 		break;
 	case Scene_2:
-		scene->Exit();
+		if (!s2Init)
+		{
+			scene2->Init();
+			s2Init = true;
+		}
+		scene2->Set(scene);
 		scene = scene2;
-		scene->Init();
 		break;
 	case Scene_3:
-		scene->Exit();
+		if (!s3Init)
+		{
+			scene3->Init();
+			s3Init = true;
+		}
+		scene3->Set(scene);
 		scene = scene3;
-		scene->Init();
 		break;
 	}
 	
