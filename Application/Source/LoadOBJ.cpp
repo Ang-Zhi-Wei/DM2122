@@ -178,7 +178,7 @@ void IndexVBO(
 			out_vertices.push_back(v);
 			unsigned newindex = (unsigned)out_vertices.size() - 1;
 			out_indices.push_back(newindex);
-			VertexToOutIndex[packed] = newindex;
+			VertexToOutIndex[packed] = unsigned short(newindex);
 		}
 	}
 }

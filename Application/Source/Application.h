@@ -23,8 +23,8 @@ public:
 	static unsigned m_width;
 	static unsigned m_height;
 	static void setscene(int scenenum);
-	static void quit(static bool quit);
-	static void pause(static bool pause);
+	static void quit(bool quit);
+	static void pause(bool pause);
 	
 private:
 	//Declare a window object
@@ -34,7 +34,7 @@ private:
 	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3;
 	static bool isquit;
 	static bool ispaused;
-	static bool mainInit, s1Init, s2Init, s3Init, menuInit;
+	static bool mainInit, s1Init, s2Init, s3Init;
 	
 };
 enum Scenemanager {

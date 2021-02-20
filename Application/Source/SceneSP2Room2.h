@@ -20,7 +20,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	virtual void PauseUpdate(double dt);
+	virtual void PauseUpdate();
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
@@ -193,6 +193,11 @@ public:
 		//locker
 		locker,
 
+
+		//game tings
+		GEO_SKULL,
+		GEO_MYSTERIOUSMAN,
+
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
@@ -305,7 +310,7 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 0.5;
+			lengthx =lengthy =lengthz = 0.5;
 		}
 	};
 	struct Door : Wall
@@ -322,7 +327,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = (0.f, 0.f, 0.f);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;
@@ -361,7 +366,7 @@ private:
 
 	
 
-	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 	Mesh* itemImage[8];
@@ -378,8 +383,6 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
-	bool switchtga1;
-	bool switchtga2;
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;

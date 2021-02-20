@@ -8,6 +8,34 @@
 
 SceneSP2Room2::SceneSP2Room2()
 {
+	//if you see anything from here missing in init just copy and paste them 
+	LSPEED = 10.F;
+	flashlight = true;
+	flashlight_lifetime = 90;
+	inLocker = false;
+	Qpressed = Qreleased = false;
+	Epressed = Ereleased = false;
+	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
+	camBlinkOffSec = 0;
+	camBlinkOnSec = 0;
+	camBlinkOn = false;
+	camBlinkOff = true;
+	interact = false;
+	DS_classroom = CLOSED;
+	DS_lounge = CLOSED;
+	DS_school = OPEN;
+	fps = 60;
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -26,7 +54,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 5, -5), Vector3(0, 5, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -201,7 +229,7 @@ void SceneSP2Room2::Init()
 	Rpressed = Rreleased = false;
 
 	//walls
-	school_walls[0].mid.Set(0, 17.5, 0); 
+	school_walls[0].mid.Set(0, 20, 0); 
 	school_walls[1].mid.Set(-57.5, 12.5, 0);
 	school_walls[2].mid.Set(57.5, 12.5, 0); 
 	school_walls[3].mid.Set(0, 12.5, -100); //back
@@ -218,16 +246,16 @@ void SceneSP2Room2::Init()
 	{
 		school_walls[i].lengthy = 25;
 	}
-	school_walls[0].lengthy = 15;
+	school_walls[0].lengthy = 10;
 
 
-	lounge_walls[0].mid.Set(-10, 17.5, -50);
+	lounge_walls[0].mid.Set(-10, 20, -50);
 	lounge_walls[1].mid.Set(-10, 12.5, -22.5);
 	lounge_walls[2].mid.Set(-10, 12.5, -77.5);
 	lounge_walls[1].lengthz = lounge_walls[2].lengthz = 45;
 	lounge_walls[0].lengthz = 10;
 
-	classroom_walls[0].mid.Set(10, 17.5, -95);
+	classroom_walls[0].mid.Set(10, 20, -95);
 	classroom_walls[1].mid.Set(10, 12.5, -45);
 	classroom_walls[1].lengthz = 90;
 	classroom_walls[0].lengthz = 10;
@@ -236,18 +264,18 @@ void SceneSP2Room2::Init()
 		lounge_walls[i].lengthy = 25;
 	}
 	classroom_walls[1].lengthy = 25;
-	classroom_walls[0].lengthy = 15;
-	lounge_walls[0].lengthy = 15;
-
+	classroom_walls[0].lengthy = 10;
+	lounge_walls[0].lengthy = 10;
+	
 
 
 	//doors
-	school_door[0].mid.Set(-2.5, 5, 0);
-	school_door[1].mid.Set(2.5, 5, 0);
-	lounge_door[0].mid.Set(-10, 5, -47.5);
-	lounge_door[1].mid.Set(-10, 5, -52.5);
-	classroom_door[0].mid.Set(10, 5, -97.5);
-	classroom_door[1].mid.Set(10, 5, -92.5);
+	school_door[0].mid.Set(-2.5, 7.5, 0);
+	school_door[1].mid.Set(2.5, 7.5, 0);
+	lounge_door[0].mid.Set(-10, 7.5, -47.5);
+	lounge_door[1].mid.Set(-10, 7.5, -52.5);
+	classroom_door[0].mid.Set(10, 7.5, -97.5);
+	classroom_door[1].mid.Set(10, 7.5, -92.5);
 	school_door[0].lengthx = 5;
 	school_door[1].lengthx = 5;
 	lounge_door[0].lengthz = 5;
@@ -256,7 +284,7 @@ void SceneSP2Room2::Init()
 	classroom_door[1].lengthz = 5;
 	for (int i = 0; i < 6; i++)
 	{
-		all_doors[i]->lengthy = 10;
+		all_doors[i]->lengthy = 15;
 	}
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
@@ -266,11 +294,11 @@ void SceneSP2Room2::Init()
 	{
 		for (int col = 0; col < 5; col++)
 		{
-			classroom_tables[row * 5 + col].mid.Set(40 + row * 15, 3, -80 + (col * 15));
+			classroom_tables[row * 5 + col].mid.Set(float(40 + row * 15), 3.f, float(-80 + (col * 15)));
 			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
-			classroom_chairs[row * 5 + col].mid.Set(40 + row * 15 + 5, 3, -80 + (col * 15));
+			classroom_chairs[row * 5 + col].mid.Set(float(40 + row * 15 + 5), 3.f, float(-80 + (col * 15)));
 			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
 			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
 			//lengthy unset
@@ -286,7 +314,7 @@ void SceneSP2Room2::Init()
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(8, 0, -30));
 	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(50, 0, -2.1));
+	Lockerlist[1].setpos(Vector3(50.f, 0.f, -2.1f));
 	Lockerlist[1].setyaw(-90);
 	Lockerlist.push_back(Locker());
 	Lockerlist[2].setpos(Vector3(-70, 0, -98));
@@ -373,9 +401,9 @@ void SceneSP2Room2::Init()
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
-	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1, 0.1, 0.1));
+	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
@@ -387,7 +415,13 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TABLE]->textureID = LoadTGA("Image//greywood.tga");
 	meshList[GEO_LONGTABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//LongTable.obj");
 	meshList[GEO_LONGTABLE]->textureID = LoadTGA("Image//darkwood.tga");
-	
+	//ghost
+	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
+	meshList[GEO_SKULL]->material.kAmbient.Set(Gray);
+	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
+	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
+	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	//camcorder
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
@@ -434,7 +468,7 @@ void SceneSP2Room2::Init()
 
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
-	meshList[locker]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
 	camera.setchecker(Colliderlist);
@@ -447,12 +481,13 @@ void SceneSP2Room2::Init()
 	camBlinkOn = false;
 	camBlinkOff = true;
 	//door state
-	DS_classroom = DS_lounge = CLOSED;
+	DS_classroom =CLOSED;
+	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
-	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35, 0.35, 0.35);
+	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(-57, 0, -10)));
 	traplist.push_back(trap(trap::beartrap, Vector3(100, 0, -55)));
@@ -473,6 +508,19 @@ void SceneSP2Room2::Update(double dt)
 {
 	//mouse cursor show/hide
 	Application::hidemousecursor(true);
+	//switch scenes button for now
+	if (Application::IsKeyPressed('5')) {
+		Application::setscene(Scene_Menu);
+	}
+	if (Application::IsKeyPressed('6')) {
+		Application::setscene(Scene_Main);
+	}
+	if (Application::IsKeyPressed('7')) {
+		Application::setscene(Scene_1);
+	}
+	if (Application::IsKeyPressed('9')) {
+		Application::setscene(Scene_3);
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -569,7 +617,7 @@ void SceneSP2Room2::Update(double dt)
 		Rreleased = false;
 	}
 	//fps
-	fps = 1.f / dt;
+	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
 	//light
@@ -625,7 +673,7 @@ void SceneSP2Room2::Update(double dt)
 	{
 		if (flashlight_lifetime >= 0)
 		{
-			flashlight_lifetime -= dt;
+			flashlight_lifetime -= float(dt);
 		}
 		else
 		{
@@ -703,7 +751,7 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case Ghost::WAITING:
-		ghost->waitTime -= dt;
+		ghost->waitTime -= float(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -759,16 +807,16 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case OPENING:
-		school_door[0].rotateY -= 20 * dt;
-		school_door[1].rotateY += 20 * dt;
+		school_door[0].rotateY -= float(20 * dt);
+		school_door[1].rotateY += float(20 * dt);
 		if (school_door[1].rotateY >= 90)
 		{
 			Application::setscene(Scene_Main);
 		}
 		break;
 	case CLOSING:
-		school_door[0].rotateY += 20 * dt;
-		school_door[1].rotateY -= 20 * dt;
+		school_door[0].rotateY += 20 * float(dt);
+		school_door[1].rotateY -= 20 * float(dt);
 		if (school_door[1].rotateY <= 0)
 		{
 			DS_school = CLOSED;
@@ -821,8 +869,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case OPENING:
-		classroom_door[0].rotateY += 20 * dt;
-		classroom_door[1].rotateY -= 20 * dt;
+		classroom_door[0].rotateY += 20 * float(dt);
+		classroom_door[1].rotateY -= 20 * float(dt);
 		if (classroom_door[0].rotateY >= 90)
 		{
 			classroom_door[0].rotateY = 90;
@@ -830,8 +878,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		classroom_door[0].rotateY -= 20 * dt;
-		classroom_door[1].rotateY += 20 * dt;
+		classroom_door[0].rotateY -= 20 * float(dt);
+		classroom_door[1].rotateY += 20 * float(dt);
 	
 		if (classroom_door[0].rotateY <= 0)
 		{
@@ -883,8 +931,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case OPENING:
-		lounge_door[0].rotateY += 20 * dt;
-		lounge_door[1].rotateY -= 20 * dt;
+		lounge_door[0].rotateY += float(20 * dt);
+		lounge_door[1].rotateY -= float(20 * dt);
 		if (lounge_door[0].rotateY >= 90)
 		{
 			lounge_door[0].rotateY = 90;
@@ -892,8 +940,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		lounge_door[0].rotateY -= 20 * dt;
-		lounge_door[1].rotateY += 20 * dt;
+		lounge_door[0].rotateY -= float(20 * dt);
+		lounge_door[1].rotateY += float(20 * dt);
 		if (lounge_door[0].rotateY <= 0)
 		{
 			lounge_door[0].rotateY = 0;
@@ -904,7 +952,7 @@ void SceneSP2Room2::Update(double dt)
 	
 	
 	//Locker
-	for (int i = 0; i < Lockerlist.size(); i++) {
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
@@ -926,7 +974,7 @@ void SceneSP2Room2::Update(double dt)
 
 	//trap detection
 	bool detected = false;
-	for (int i = 0; i < traplist.size(); i++) {
+	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
@@ -944,7 +992,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 }
 
-void SceneSP2Room2::PauseUpdate(double dt)
+void SceneSP2Room2::PauseUpdate()
 {
 	Application::hidemousecursor(false);
 }
@@ -1012,7 +1060,7 @@ void SceneSP2Room2::Render()
 	//skybox
 	//RenderSkybox();
 	//trap rendering
-	for (int i = 0; i < traplist.size(); i++) {
+	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
 		case trap::beartrap:
 			modelStack.PushMatrix();
@@ -1024,11 +1072,11 @@ void SceneSP2Room2::Render()
 		}
 	}
 	//lockers
-	for (int i = 0; i < Lockerlist.size(); i++) {
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
 		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
 		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2, 0.2, 0.2);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
@@ -1055,14 +1103,14 @@ void SceneSP2Room2::Render()
 		modelStack.PushMatrix();
 		modelStack.Translate(classroom_tables[i].mid.x, classroom_tables[i].mid.y, classroom_tables[i].mid.z);
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.025, 0.025, 0.05);
+		modelStack.Scale(0.025f, 0.025f, 0.05f);
 		RenderMesh(meshList[GEO_TABLE], true);
 		modelStack.PopMatrix();
 		modelStack.PushMatrix();
 		modelStack.Translate(classroom_chairs[i].mid.x, classroom_chairs[i].mid.y, classroom_chairs[i].mid.z);
 		modelStack.Rotate(-90, 0, 1, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[GEO_CHAIR], true);
 		modelStack.PopMatrix();
 	}
@@ -1139,13 +1187,29 @@ void SceneSP2Room2::Render()
 	//longtable in faculty lounge
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
-	modelStack.Scale(0.1, 0.1, 0.1);
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
 	
-	
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 	//UI OVERLAY
 
@@ -1158,7 +1222,7 @@ void SceneSP2Room2::Render()
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
 	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - camera.playerStamina * 0.25), 52, camera.playerStamina * 0.5, 1);
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina * 0.5f), 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//breathing icon
@@ -1172,7 +1236,7 @@ void SceneSP2Room2::Render()
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5 + (4.5 - flashlight_lifetime * 0.025), 6.4, flashlight_lifetime * 0.05, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2.f);
 	//inventory
 	if (inventory->open)
 	{
@@ -1183,16 +1247,16 @@ void SceneSP2Room2::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], 25.9 + i * 4, 7.9, 3.5, 3.5);
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1, 1, 1), 2, 34 + i * 5, 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1, 1, 1), 2, float(34 + i * 5), 3);
 				}
 			}
 		}
 
-		RenderMeshOnScreen(meshList[GEO_SELECT], 25.9 + inventory->selected * 4, 7.9, 4, 4);
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
 		if (inventory->items[inventory->selected] != nullptr)
 		{
 			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
@@ -1474,7 +1538,7 @@ void SceneSP2Room2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 
 	//Change this line inside for loop
 	std::string toPrint;
-	if (text.length() > limit)
+	if (signed(text.length()) > limit)
 	{
 		toPrint = text.substr(0, limit);
 		for (unsigned i = 0; i < toPrint.length(); ++i)

@@ -18,9 +18,9 @@ struct Position
 		Set(x, y,
 			z);
 	}
-	void Set(float x, float y, float z) {
-		this->x = x; this->y = y;
-		this->z = z;
+	void Set(float xvalue, float yvalue, float zvalue) {
+		x = xvalue; y = yvalue;
+		z = zvalue;
 	}
 	void Set(int vertices) {
 		switch (vertices) {
@@ -91,15 +91,15 @@ struct TexCoord
 {
 	float u, v;
 	TexCoord(float u = 0, float v = 0) { Set(u, v); }
-	void Set(float u, float v) { this->u = u; this->v = v; }
+	void Set(float uvalue, float vvalue) { u = uvalue; v = vvalue; }
 };
 struct Color
 {
 	float r, g, b;
 	Color(float r = 1, float g = 1, float b = 1) { Set(r, g, b); }
-	void Set(float r, float g, float b) {
-		this->r = r; this->g = g;
-		this->b = b;
+	void Set(float rvalue, float gvalue, float bvalue) {
+		r = rvalue; g = gvalue;
+		b = bvalue;
 	}
 	void Set(int color) {
 		switch (color) {

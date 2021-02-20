@@ -7,6 +7,7 @@ struct Light
 	float power;
 	float kC, kL, kQ;
 	Light() {
+		type = LIGHT_POINT;
 		position = {
 			0.5,0.5,0.5
 		};
@@ -17,6 +18,9 @@ struct Light
 		kC = 1;
 		kL = 0.01f;
 		kQ = 0.001f;
+		cosCutoff = cos(Math::DegreeToRadian(7));
+		cosInner = cos(Math::DegreeToRadian(1));
+		exponent = 3.f;
 	}
 	enum LIGHT_TYPE
 	{
@@ -24,7 +28,7 @@ struct Light
 		LIGHT_DIRECTIONAL,
 		LIGHT_SPOT,
 	};
-	LIGHT_TYPE type;
+	int type;
 	Vector3 spotDirection;
 	float cosCutoff;
 	float cosInner;

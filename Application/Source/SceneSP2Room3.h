@@ -20,7 +20,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	virtual void PauseUpdate(double dt);
+	virtual void PauseUpdate();
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
@@ -62,7 +62,7 @@ public:
 		workbench,
 		wheelbarrow,
 		metalcabinet,
-
+		garagedoor,
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
@@ -117,6 +117,7 @@ public:
 		U_TOTAL,
 
 	};
+	
 	enum DOOR_STATE
 	{
 		OPEN,
@@ -124,7 +125,6 @@ public:
 		OPENING,
 		CLOSING
 	};
-
 
 private:
 
@@ -154,8 +154,9 @@ private:
 		//bool xy; //plane
 		Wall()
 		{
-			lengthx = lengthz = 0.5;
+			lengthx =lengthy =lengthz = 0.5;
 		}
+		
 	};
 	struct Door : Wall
 	{
@@ -173,7 +174,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = (0.f, 0.f, 0.f);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;
@@ -213,7 +214,7 @@ private:
 
 	
 
-	DOOR_STATE DS_school, DS_classroom, DS_lounge;
+	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 
@@ -226,8 +227,6 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
-	bool switchtga1;
-	bool switchtga2;
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;

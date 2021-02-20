@@ -19,7 +19,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	virtual void PauseUpdate(double dt);
+	virtual void PauseUpdate();
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
@@ -48,6 +48,11 @@ public:
 		Colliderbox,
 		locker,
 		GEO_BEARTRAP,
+		//ghost
+		GEO_SKULL,
+		GEO_MYSTERIOUSMAN,
+
+
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
@@ -139,7 +144,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = Vector3(0, 0, 0);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;
@@ -173,7 +178,6 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-	double jumpscareTimer;
 	bool inLocker;
 	Mesh* itemImage[8];
 

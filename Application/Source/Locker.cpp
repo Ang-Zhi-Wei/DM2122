@@ -2,14 +2,14 @@
 
 Locker::Locker()
 {
-	Position = (0, 0, 0);
+	Position = (0.f, 0.f, 0.f);
 	hidden = false;
 	yaw = 0;
 }
 
-void Locker::setpos(Vector3 Position)
+void Locker::setpos(Vector3 PositionVector)
 {
-	this->Position = Position;
+	Position = PositionVector;
 }
 
 Vector3 Locker::getpos()
@@ -45,9 +45,9 @@ bool Locker::status(Vector3 Point,Vector3 cameraview,bool fpressed)
 	return(condition1 && condition2 && condition3);
 }
 
-void Locker::Sethidden(bool hidden)
+void Locker::Sethidden(bool hiddentype)
 {
-	this->hidden = hidden;
+	hidden = hiddentype;
 }
 
 bool Locker::gethidden()

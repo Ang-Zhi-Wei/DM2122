@@ -23,7 +23,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	virtual void PauseUpdate(double dt);
+	virtual void PauseUpdate();
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
@@ -148,7 +148,6 @@ public:
 
 private:
 
-	int lockernum;
 	int ButtonNum;
 
 	bool show_credits;

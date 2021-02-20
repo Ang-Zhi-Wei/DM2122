@@ -7,8 +7,13 @@
 class Scene
 {
 public:
-	Scene() {}
-	~Scene() {}
+	Scene() {
+		ghost = nullptr;
+		inventory = nullptr;
+		flashlight_lifetime = 60;
+		flashlight = true;
+	}
+	~Scene() {};
 
 	struct Item
 	{
@@ -22,29 +27,31 @@ public:
 		//Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
 		int count;
-		ITEM_TYPE type; //type of item (for reusability e.g 100 batteries; easier setting)
+		int type; //type of item (for reusability e.g 100 batteries; easier setting)
 		std::string name;  //Name that shows up in item display; can also be used to differentiate btw objects of same type but different, eg both keys but unlock diff doors, type = key but name different
 		std::string description; //Short description of item that shows up in item display
 
 		Item()
 		{
 			count = 1;
+			type = BATTERY;
+			image = "Image//fountaintexture.tga";
 		}
-		void Set(std::string name, ITEM_TYPE type)
+		void Set(std::string itemname, int itemtype)
 		{
 			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
-			this->type = type;
-			this->name = name;
+			type = itemtype;
+			name = itemname;
 			switch (type)
 			{
 			case BATTERY:
-				this->description = "Use to refill flashlight batteries aaaaaa idk";
-				this->image = "Image//fountaintexture.tga";
+				description = "Use to refill flashlight batteries aaaaaa idk";
+				image = "Image//fountaintexture.tga";
 				//set image and description
 				break;
 			case ITEM2:
-				this->description = "TESTESTTESTETSESTESTESTETST>--|-o";
-				this->image = "Image//man1.tga";
+				description = "TESTESTTESTETSESTESTESTETST>--|-o";
+				image = "Image//man1.tga";
 				break;
 			}
 		}
@@ -87,7 +94,7 @@ public:
 		Ghost()
 		{
 			speed = 5;
-			pos = (0, 0, 0); //TBC
+			pos = Vector3(0, 0, 0); //TBC
 			rotateY = 0;
 			state = NORMAL;
 			waitTime = 5;
@@ -137,18 +144,18 @@ public:
 			}
 
 			//update rotate angle(in render) to face/turn towards direction player is walking in
-			int dir = (newangle - rotateY) / abs(newangle - rotateY);
+			int dir = int((newangle - rotateY) / abs(newangle - rotateY));
 			if ((int)rotateY != (int)newangle)
 			{
 				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
 				{
 					dir *= -1;
 				}
-				rotateY += float(dir * 20 * dt);
+				rotateY += float(dir * 100 * dt);
 			}
 			else
 			{
-				pos += facing * speed * dt;
+				pos += facing * speed * float(dt);
 			}
 		}
 	};
@@ -160,7 +167,7 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Update(double dt) = 0;
-	virtual void PauseUpdate(double dt) = 0;
+	virtual void PauseUpdate() = 0;
 	virtual void Render() = 0;
 	virtual void Exit() = 0;
 	virtual void Set(Scene* scene) = 0;

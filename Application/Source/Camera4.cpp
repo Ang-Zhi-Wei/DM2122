@@ -4,10 +4,17 @@
 
 Camera4::Camera4()
 {
+	yaw = 0;
+	boundX1 = -35;
+	boundX2 = 40;
+	boundZ1 = -280;
+	boundZ2 = 280;
+	AxeYaw = 0;
 }
 
 Camera4::~Camera4()
 {
+
 }
 
 void Camera4::Init(const Vector3& pos, const Vector3& target, const Vector3& up)

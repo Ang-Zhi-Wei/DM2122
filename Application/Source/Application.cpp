@@ -23,7 +23,7 @@ const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 
 //Define an error callback
-static void error_callback(int error, const char* description)
+static void error_callback(int error,const char* description)
 {
 	fputs(description, stderr);
 	_fgetchar();
@@ -66,7 +66,7 @@ void Application::Init()
 	{
 		exit(EXIT_FAILURE);
 	}
-	srand(time(NULL));
+	srand(unsigned int(time(NULL)));
 	//Set the GLFW window creation hints - these are optional
 	glfwWindowHint(GLFW_SAMPLES, 4); //Request 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //Request a specific OpenGL version
@@ -115,16 +115,15 @@ bool Application::mainInit = false;
 bool Application::s1Init = false;
 bool Application::s2Init = false;
 bool Application::s3Init = false;
-bool Application::menuInit = false;
-
+//bool Application::menuInit = false;
 
 //initialise functions
 bool Application::isquit = false;
 bool Application::ispaused = false;
 
 
-//starting menu(just change back to scene_Menu when done)
-int Application::scenetype = Scene_1;
+//Don't change anything here,use the buttons 5-9 to switch scenes when your in main
+int Application::scenetype = Scene_Menu;
 Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
@@ -136,7 +135,7 @@ Scene* Application::scene = scene1;
 void Application::Run()
 {
 	scene->Init();
-	
+
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -148,7 +147,7 @@ void Application::Run()
 
 		//pause screen update
 		if(ispaused)
-			scene->PauseUpdate(m_timer.getElapsedTime());
+			scene->PauseUpdate();
 
 		scene->Render();
 		//Swap buffers
@@ -158,14 +157,8 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
-	sceneMain->Exit();
-	scene1->Exit();
-	scene2->Exit();
-	scene3->Exit();
-	sceneMenu->Exit();
 	delete scene1;
 	delete scene2;
-	delete scene3;
 	delete sceneMain;
 	delete sceneMenu;
 }
@@ -207,7 +200,6 @@ int Application::GetWindowHeight()
 	return m_height;
 }
 
-
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
@@ -224,15 +216,16 @@ void Application::setscene(int scenenum)
 			sceneMain->Set(scene);
 		}
 		scene = sceneMain;
-		
-		break; 
+		break;
 	case Scene_Menu:
-		if (!menuInit)
-		{
-			sceneMenu->Init();
-			menuInit = true;
-		}
-		sceneMenu->Set(scene);
+		
+		sceneMenu->Init();
+		//menuInit = false;
+		mainInit = false;
+		s1Init = false;
+		s2Init = false;
+		s3Init = false;
+		
 		scene = sceneMenu;
 		break;
 	case Scene_1:
@@ -261,18 +254,17 @@ void Application::setscene(int scenenum)
 		}
 		scene3->Set(scene);
 		scene = scene3;
-		
 		break;
 	}
 	
 }
 
-void Application::quit(static bool quit)
+void Application::quit(bool quit)
 {
 	isquit = quit;
 }
 
-void Application::pause(static bool pause)
+void Application::pause(bool pause)
 {
 	ispaused = pause;
 }

@@ -23,7 +23,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	virtual void PauseUpdate(double dt);
+	virtual void PauseUpdate();
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
@@ -74,7 +74,11 @@ public:
 		GEO_MYSTERIOUSMAN,
 		GEO_SKULL,
 		GEO_LAMP,
-
+		GEO_PAVEMENT,
+		HAUNTEDSCHOOL,
+		HOUSE,
+		HOSPITAL,
+	
 		GEO_TRUCK,
 		Fountain,
 		//colliderbox 
@@ -218,7 +222,6 @@ public:
 
 private:
 
-	int lockernum;
 
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -255,7 +258,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = (0.f, 0.f, 0.f);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;
@@ -281,9 +284,6 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
-
-	bool canPickUp;
-	bool showText;
 
 	int Interact_Num;
 	bool canTalk_man;
