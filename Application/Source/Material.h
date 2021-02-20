@@ -12,9 +12,9 @@ struct Component
 		return *this;
 	}
 
-	void Set(float r, float g, float b)
+	void Set(float rvalue, float gvalue, float bvalue)
 	{
-		this->r = r; this->g = g; this->b = b;
+		r = rvalue; g = gvalue; b = bvalue;
 	}
 	void Set(int color) {
 		switch (color) {
