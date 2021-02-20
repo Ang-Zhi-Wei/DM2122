@@ -26,6 +26,7 @@ public:
 	virtual void PauseUpdate(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual void Set(Scene* scene);
 
 
 	enum GEOMETRY_TYPE

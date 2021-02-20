@@ -22,6 +22,7 @@ public:
 	virtual void PauseUpdate(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual void Set(Scene* scene);
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -50,10 +51,31 @@ public:
 		//UI tings
 		GEO_TEXT,
 		GEO_OVERLAY, //vision
-		GEO_OVERLAY2,//Camcorder
+		GEO_OVERLAY2, //Camcorder
+		GEO_WARNING1,
+		GEO_WARNING2,
+		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
+		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
+		GEO_PLAYGROUND,
+		GEO_LIVES,
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
 
+		GEO_INVENTORY,
+		GEO_BATTERY,
+		GEO_SELECT,
+
+		GEO_ITEMDISPLAY,
+		GEO_ITEMIMAGE0,
+		GEO_ITEMIMAGE1,
+		GEO_ITEMIMAGE2,
+		GEO_ITEMIMAGE3,
+		GEO_ITEMIMAGE4,
+		GEO_ITEMIMAGE5,
+		GEO_ITEMIMAGE6,
+		GEO_ITEMIMAGE7,
 		//Jumpscares
 		GEO_JUMPSCARE1,	
 		
@@ -103,104 +125,12 @@ public:
 
 	};
 
+	
+
 private:
-	struct Item
-	{
+	
 
-	};
-
-	struct Inventory
-	{
-		Item* selected;
-		Item* inventory[10];
-	};
-
-
-	struct Ghost
-	{
-		enum GHOST_STATE
-		{
-			NORMAL,
-			CHASING,
-			WAITING,
-			SPEEDRUN
-		};
-		int state;
-		Vector3 pos;
-		Vector3 facing; //ghost direction
-		float speed; //TBC normal - 5, chasing - 25, speedrunning away - 50; //player is 20 normal and 40 sprinting
-		float distance;
-		float waitTime;
-		float rotateY;
-
-		Ghost()
-		{
-			speed = 5;
-			pos = (0, 0, 0); //TBC
-			rotateY = 0;
-			state = NORMAL;
-			waitTime = 5;
-		}
-
-		void UpdateMovement(double dt)
-		{
-			float newangle = Math::RadianToDegree(atan(facing.x / facing.z)); //facing is vector that player/char shud be facing
-																				//newangle is angle of rotation for playerr/char based on the vector
-
-			//since tan inverse returns basic angle, gotta set the angle myself
-			if (newangle == 0 && facing.z < 0)
-			{
-				newangle = 180;
-			}
-			else if (newangle < 0 && facing.x >= 0 && facing.z <= 0)
-			{
-				newangle = newangle + 180;
-			}
-			else if (newangle > 0 && facing.x <= 0 && facing.z <= 0)
-			{
-				newangle = newangle - 180;
-			}
-
-			//if angle exceeds one cycle, bring it back to within 0 to 360 cycle
-			if (rotateY > 360)
-			{
-				rotateY -= 360;
-			}
-			if (rotateY < 0)
-			{
-				rotateY += 360;
-			}
-			if (newangle > 360)
-			{
-				newangle -= 360;
-			}
-			if (newangle < 0)
-			{
-				newangle += 360;
-			}
-
-			//int/float offset for checking
-			if (abs(newangle - rotateY) < 5)
-			{
-				rotateY = newangle;
-			}
-
-			//update rotate angle(in render) to face/turn towards direction player is walking in
-			int dir = (newangle - rotateY) / abs(newangle - rotateY);
-			if ((int)rotateY != newangle)
-			{
-				if (abs(newangle - rotateY) > 180) //so that it rotates ACW/CW the shortest path 
-				{
-					dir *= -1;
-				}
-				rotateY += float(dir * 200 * dt);
-			}
-			else
-			{
-				pos += facing * speed * dt;
-			}
-		}
-	};
+	
 	struct trap {
 		enum traptype {
 			beartrap,
@@ -209,7 +139,7 @@ private:
 		Vector3 TrapPosition;
 		trap() {
 			TRAPTYPE = beartrap;
-			TrapPosition = (0, 0, 0);
+			TrapPosition = Vector3(0, 0, 0);
 		}
 		trap(int TRAPTYPE, Vector3 TrapPosition) {
 			this->TRAPTYPE = TRAPTYPE;
@@ -245,7 +175,7 @@ private:
 	double camBlinkOffSec;
 	double jumpscareTimer;
 	bool inLocker;
-	Ghost ghost;
+	Mesh* itemImage[8];
 
 	//Jumpscare stuff
 	int jumpscareEntrance1;
@@ -272,8 +202,6 @@ private:
 	bool jumpscareActive4;
 	bool jumpscareTimerActive4;
 
-	bool flashlight;
-	float flashlight_lifetime;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -285,9 +213,12 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 };
 

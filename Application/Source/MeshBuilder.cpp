@@ -431,14 +431,14 @@ Mesh* MeshBuilder::GenerateColliderBox(const std::string& meshName, double legnt
 	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	//sides
-	v.pos.Set(-legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(-legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
-	v.pos.Set(legnthx / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx) / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx) / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx) / 2, lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx) / 2, -lengthy / 2, -lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx) / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(-legnthx) / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx) / 2, lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
+	v.pos.Set(float(legnthx) / 2, -lengthy / 2, lengthz / 2); v.color.Set(Red); vertex_buffer_data.push_back(v);
 	Mesh* mesh = new Mesh(meshName);
 	for (int i = 0; i < 24; i++) {
 		index_buffer_data.push_back(i);
