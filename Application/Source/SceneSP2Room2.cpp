@@ -1224,17 +1224,6 @@ void SceneSP2Room2::Render()
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina * 0.5f), 1);
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//breathing icon
 	//warning overlay
 	if (ghost->distance <= 50)
 	{
@@ -1244,8 +1233,23 @@ void SceneSP2Room2::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (inLocker == true)
+	{
+		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+	}
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2.f);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
 	if (inventory->open)
 	{
@@ -1260,7 +1264,7 @@ void SceneSP2Room2::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1, 1, 1), 2, float(34 + i * 5), 3);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(34 + i * 5), 3.f);
 				}
 			}
 		}

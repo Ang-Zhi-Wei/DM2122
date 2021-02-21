@@ -50,6 +50,7 @@ public:
 
 		//ground mesh
 		Ground_Mesh,
+		Ground_Mesh2, //for buildings etc
 		GEO_PATH,
 
 		//models

@@ -335,6 +335,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_PAVEMENT] = MeshBuilder::GenerateQuad("pavement", 1, 1, White);
 	meshList[GEO_PAVEMENT]->textureID = LoadTGA("Assigment2Images//pavement3.tga");
 	meshList[GEO_PAVEMENT]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[Ground_Mesh2] = MeshBuilder::GenerateQuadRepeat("pavement", 1, 1, White);
+	meshList[Ground_Mesh2]->textureID = LoadTGA("Assigment2Images//burnedground.tga");
+	meshList[Ground_Mesh2]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[HAUNTEDSCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//school.obj");
 	meshList[HAUNTEDSCHOOL]->textureID = LoadTGA("Assigment2Images//school.tga");
 	meshList[HAUNTEDSCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -366,6 +369,9 @@ void SceneSP2Main::Init()
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0.f, 0.20f, 0.13f);
+
+
+
 
 
 	//truck
@@ -989,7 +995,8 @@ void SceneSP2Main::Init()
 	//Lockerlist.push_back(Locker());
 	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
+	//camera.SetBounds(-415, 415, -365, 360); original one
+	camera.SetBounds(-800, 800, -800, 800);
 
 	ghost = new Ghost;
 	inventory = new Inventory;
@@ -1770,14 +1777,14 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(407, -44, 14);
+	modelStack.Translate(390, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-407, -44, 14);
+	modelStack.Translate(-390, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
@@ -1978,10 +1985,27 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_PAVEMENT], true);
 	modelStack.PopMatrix();
 
+	//ground mesh 2
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30.f, -2.8f, 530.f);
+	modelStack.Scale(950, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+
+
+
 	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -0.1f, -312.f);
 	modelStack.Scale(750, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30.f, -2.8f, -540.f);
+	modelStack.Scale(950, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1992,31 +2016,32 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-581, -2.8, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(1200, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(352, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(730, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(562, -2.8, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(1200, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+	
+
 	//UI OVERLAY
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	if (inLocker == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
-	}
-		//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//breathing icon
 	//warning overlay
 	if (ghost->distance <= 50)
 	{
@@ -2026,6 +2051,21 @@ void SceneSP2Main::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+	}
+		//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
