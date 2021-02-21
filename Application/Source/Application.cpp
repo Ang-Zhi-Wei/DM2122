@@ -142,7 +142,7 @@ void Application::Run()
 	scene1->Init();
 	scene2->Init();
 	scene3->Init();
-
+	sceneMenu->SetBackground();
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && isquit==false)
@@ -232,18 +232,20 @@ void Application::setscene(int scenenum)
 		scene->Exit();
 		scene = sceneMenu;
 		sceneMenu->Init();
-		//Background noise
 		break;
 	case Scene_1:
 		scene1->Set(scene);
+		scene1->SetBackground();
 		scene = scene1;
 		break;
 	case Scene_2:
 		scene2->Set(scene);
+		scene2->SetBackground();
 		scene = scene2;
 		break;
 	case Scene_3:
 		scene3->Set(scene);
+		scene3->SetBackground();
 		scene = scene3;
 		break;
 	}

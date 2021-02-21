@@ -11,6 +11,9 @@
 #include "Light.h"
 #include "Utility.h"
 #include "ColliderBox.h"
+#include "irrKlang.h"
+
+using namespace irrklang;
 class SceneSP2Room1 : public Scene
 {
 public:
@@ -223,6 +226,9 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//Irrklang sound
+	ISoundEngine* Background;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

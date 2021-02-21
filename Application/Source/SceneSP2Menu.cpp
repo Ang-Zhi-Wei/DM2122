@@ -370,6 +370,9 @@ void SceneSP2Menu::Set(Scene* scene)
 
 void SceneSP2Menu::SetBackground()
 {
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\428865__supervanz__horror01-loop.wav", true);
+	Background->setSoundVolume(0.5f);//Volume control
 }
 
 void SceneSP2Menu::Update(double dt)
@@ -418,6 +421,7 @@ void SceneSP2Menu::Update(double dt)
 		{
 			std::cout << "S Hit!" << std::endl;
 			Application::setscene(Scene_Main);
+			Background->drop();
 			menuScreen = false;
 		}
 		else if (MposX > 1.5 && MposX < 12 && MposY >11.6 && MposY < 12 && !show_credits)

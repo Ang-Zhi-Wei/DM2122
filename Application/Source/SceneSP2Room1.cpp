@@ -5,7 +5,9 @@
 #include "shader.hpp"
 #include "LoadTGA.h"
 #include <sstream>
+#include "irrKlang.h"
 
+using namespace irrklang;
 
 SceneSP2Room1::SceneSP2Room1()
 {
@@ -458,6 +460,9 @@ void SceneSP2Room1::Set(Scene* scene)
 
 void SceneSP2Room1::SetBackground()
 {
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	Background->setSoundVolume(0.25f);//Volume control
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -467,15 +472,19 @@ void SceneSP2Room1::Update(double dt)
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('6')) {
 		Application::setscene(Scene_Main);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('8')) {
 		Application::setscene(Scene_2);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
+		Background->drop();
 	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
