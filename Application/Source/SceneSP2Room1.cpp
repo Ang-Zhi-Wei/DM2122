@@ -220,28 +220,28 @@ void SceneSP2Room1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2images//Arial.tga");
 	//light 0
-	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 7, 270);
-	light[0].color.Set(White);
-	light[0].power = 0; //Tbc
-	light[0].kC = 1.f;
-	light[0].kL = 0.01f;
-	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.f;
-	light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
-	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
-	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
-	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
-	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
-	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
-	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
-	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
+	//light[0].type = Light::LIGHT_POINT;
+	//light[0].position.Set(0, 7, 270);
+	//light[0].color.Set(White);
+	//light[0].power = 0; //Tbc
+	//light[0].kC = 1.f;
+	//light[0].kL = 0.01f;
+	//light[0].kQ = 0.001f;
+	//light[0].cosCutoff = cos(Math::DegreeToRadian(45));
+	//light[0].cosInner = cos(Math::DegreeToRadian(30));
+	//light[0].exponent = 3.f;
+	//light[0].spotDirection.Set(0.f, 1.f, 0.f);
+	//glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
+	//glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
+	//glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
+	//glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
+	//glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
+	//glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	//glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
+	//glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
+	//glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	//light 1
-	light[1].type = Light::LIGHT_SPOT;
+	/*light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
 	light[1].power = 2;
@@ -260,7 +260,7 @@ void SceneSP2Room1::Init()
 	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
-	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
+	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);*/
 
 
 	//other lights
