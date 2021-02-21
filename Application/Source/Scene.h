@@ -100,7 +100,7 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(0, 0, -300); //TBC
+			pos.Set(0, 0, -1000); //TBC
 			rotateY = 0;
 			state = NORMAL;
 			waitTime = 5;
