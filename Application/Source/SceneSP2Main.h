@@ -29,7 +29,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
-	
+	virtual void SetBackground();
 
 	int SpeakPhase;
 	double SpeakTimer;

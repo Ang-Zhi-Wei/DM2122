@@ -7,9 +7,7 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
-#include <irrKlang.h>
-#include <iostream>
-#pragma comment(lib, "irrKlang.lib")
+#include <string>
 
 //Include the standard C++ headers
 #include <stdio.h>
@@ -220,13 +218,13 @@ void Application::setscene(int scenenum)
 		if (!mainInit)
 		{
 			sceneMain->Init();
-			
 			mainInit = true;
 		}
 		else
 		{
 			sceneMain->Set(scene);
 		}
+		sceneMain->SetBackground();
 		scene = sceneMain;
 		break;
 	case Scene_Menu:

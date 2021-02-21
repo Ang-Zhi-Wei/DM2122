@@ -1003,10 +1003,7 @@ void SceneSP2Main::Init()
 	//trap list
 
 
-	//Background sound loop
-	Background = createIrrKlangDevice();
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav",true);
-	Background->setSoundVolume(0.1f);//Volume control
+	
 }
 
 
@@ -1019,6 +1016,12 @@ void SceneSP2Main::Set(Scene* scene)
 	
 }
 
+void SceneSP2Main::SetBackground() {
+	//Background sound loop
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	Background->setSoundVolume(0.1f);//Volume control
+}
 void SceneSP2Main::Update(double dt)
 {
 	// mouse cursor show / hide

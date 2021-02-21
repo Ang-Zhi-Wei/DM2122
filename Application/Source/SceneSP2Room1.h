@@ -23,6 +23,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
+	virtual void SetBackground();
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,

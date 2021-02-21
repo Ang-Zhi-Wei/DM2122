@@ -512,6 +512,10 @@ void SceneSP2Room2::Set(Scene* scene)
 	school_door[1].rotateY = 90;
 }
 
+void SceneSP2Room2::SetBackground()
+{
+}
+
 void SceneSP2Room2::Update(double dt)
 {
 	//mouse cursor show/hide
