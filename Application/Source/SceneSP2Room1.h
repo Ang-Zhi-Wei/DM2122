@@ -11,6 +11,9 @@
 #include "Light.h"
 #include "Utility.h"
 #include "ColliderBox.h"
+#include "irrKlang.h"
+
+using namespace irrklang;
 class SceneSP2Room1 : public Scene
 {
 public:
@@ -23,6 +26,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
+	virtual void SetBackground();
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -59,6 +63,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_WARNING1,
 		GEO_WARNING2,
+		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
@@ -125,7 +130,17 @@ public:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
-		
+		//light 2
+		U_LIGHT2_POWER,
+
+		//light 3
+		U_LIGHT3_POWER,
+
+		//light 4
+		U_LIGHT4_POWER,
+
+		//light 5
+		U_LIGHT5_POWER,
 		U_TOTAL,
 
 	};
@@ -169,7 +184,7 @@ private:
 	
 
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[6];
 	CameraSP2 camera;
 	
 	float LSPEED;
@@ -179,7 +194,7 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
-	Mesh* itemImage[8];
+//	Mesh* itemImage[8];
 
 	//Jumpscare stuff
 	int jumpscareEntrance1;
@@ -212,6 +227,10 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//Irrklang sound
+	ISoundEngine* Background;
+	ISoundEngine* Jumpscare;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

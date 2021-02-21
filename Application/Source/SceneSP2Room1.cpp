@@ -5,7 +5,9 @@
 #include "shader.hpp"
 #include "LoadTGA.h"
 #include <sstream>
+#include "irrKlang.h"
 
+using namespace irrklang;
 
 SceneSP2Room1::SceneSP2Room1()
 {
@@ -127,6 +129,16 @@ void SceneSP2Room1::Init()
 	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID,
 		"lights[1].kQ");
 
+	//other lights
+	m_parameters[U_LIGHT2_POWER] =
+		glGetUniformLocation(m_programID, "lights[2].power");
+	m_parameters[U_LIGHT3_POWER] =
+		glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT4_POWER] =
+		glGetUniformLocation(m_programID, "lights[4].power");
+	m_parameters[U_LIGHT5_POWER] =
+		glGetUniformLocation(m_programID, "lights[5].power");
+
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -208,28 +220,28 @@ void SceneSP2Room1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2images//Arial.tga");
 	//light 0
-	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 7, 270);
-	light[0].color.Set(White);
-	light[0].power = 0; //Tbc
-	light[0].kC = 1.f;
-	light[0].kL = 0.01f;
-	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.f;
-	light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
-	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
-	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
-	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
-	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
-	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
-	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
-	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
+	//light[0].type = Light::LIGHT_POINT;
+	//light[0].position.Set(0, 7, 270);
+	//light[0].color.Set(White);
+	//light[0].power = 0; //Tbc
+	//light[0].kC = 1.f;
+	//light[0].kL = 0.01f;
+	//light[0].kQ = 0.001f;
+	//light[0].cosCutoff = cos(Math::DegreeToRadian(45));
+	//light[0].cosInner = cos(Math::DegreeToRadian(30));
+	//light[0].exponent = 3.f;
+	//light[0].spotDirection.Set(0.f, 1.f, 0.f);
+	//glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
+	//glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
+	//glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
+	//glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
+	//glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
+	//glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
+	//glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
+	//glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
+	//glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	//light 1
-	light[1].type = Light::LIGHT_SPOT;
+	/*light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
 	light[1].power = 2;
@@ -248,9 +260,18 @@ void SceneSP2Room1::Init()
 	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
-	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
+	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);*/
 
 
+	//other lights
+	light[2].power = 0;
+	light[3].power = 0;
+	light[4].power = 0;
+	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -258,7 +279,7 @@ void SceneSP2Room1::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
 
 
 	//camcorder
@@ -280,6 +301,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
+	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
+	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -417,6 +440,32 @@ void SceneSP2Room1::Set(Scene* scene)
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+
+	//other lights
+	light[2].power = 0;
+	light[3].power = 0;
+	light[4].power = 0;
+	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
+
+
+	//inventory item image
+	for (int i = 0; i < 8; i++)
+	{
+		itemImage[i] = scene->itemImage[i];
+	}
+
+}
+
+void SceneSP2Room1::SetBackground()
+{
+	Jumpscare = createIrrKlangDevice();
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	Background->setSoundVolume(0.25f);//Volume control
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -426,15 +475,23 @@ void SceneSP2Room1::Update(double dt)
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
+		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('6')) {
 		Application::setscene(Scene_Main);
+		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('8')) {
 		Application::setscene(Scene_2);
+		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
+		Background->drop();
+		Jumpscare->drop();
 	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
@@ -678,57 +735,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//ghost
-	switch (ghost->state)
-	{
-	case Ghost::NORMAL:
-
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-
-		if (ghost->distance <= 50)
-		{
-			ghost->state = Ghost::CHASING;
-			ghost->speed = 25;
-		}
-		break;
-	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
-		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
-		}
-		else if (ghost->distance <= 1)
-		{
-			//TBC
-			//end game condition met, either that or HP - 1
-		}
-		break;
-	case Ghost::WAITING:
-		ghost->waitTime -= float(dt);
-		if (ghost->waitTime <= 0)
-		{
-			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
-		}
-		break;
-	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance > 500 || !inLocker)
-		{
-			ghost->state = Ghost::NORMAL;
-			ghost->speed = 5;
-		}
-		break;
-
-	}
+	ghost->UpdateState(camera.position, inLocker, dt);
 
 
 	//Jumpscare, Entrance hallway
@@ -750,7 +757,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer1 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
 	}
@@ -774,7 +782,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer2 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive2 = true;
 		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
 	}
@@ -799,8 +808,9 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer3 <= 0)
 	{
-
-		jumpscareActive3 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
+		jumpscareActive3 = true;	
 		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
 	}
 
@@ -825,7 +835,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer4 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive4 = true;
 		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}
@@ -1151,19 +1162,12 @@ void SceneSP2Room1::Render()
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//breathing icon
 	//warning overlay
-	if (ghost->distance <= 50)
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 50)
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
 	}
@@ -1171,6 +1175,21 @@ void SceneSP2Room1::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
 	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (inLocker == true)
+	{
+		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+	}
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
@@ -1183,7 +1202,7 @@ void SceneSP2Room1::Render()
 			if (inventory->items[i] != nullptr)
 			{
 				//item icon in inventory
-				RenderMeshOnScreen(itemImage[i], 25.9f + float(i) * float(4), 7.9f, 3.5f, 3.5f);
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
@@ -1201,7 +1220,6 @@ void SceneSP2Room1::Render()
 		}
 
 	}
-
 
 	if (jumpscareActive1 == true)
 	{
@@ -1407,7 +1425,7 @@ bool SceneSP2Room1::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return false;
+			return true;
 		}
 	}
 	return false;
