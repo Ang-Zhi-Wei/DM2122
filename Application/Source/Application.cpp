@@ -211,6 +211,7 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
+	Application::SetCursorPos(960, 540);
 	switch (scenetype)
 	{
 	case Scene_Main:
