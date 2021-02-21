@@ -1759,27 +1759,27 @@ void SceneSP2Main::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -15.5, -351);
-	modelStack.Scale(35, 10, 15);
+	modelStack.Scale(25, 10, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -15.5, 360);
-	modelStack.Scale(35, 10, 15);
+	modelStack.Scale(25, 10, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(390, -44, 100);
+	modelStack.Translate(407, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(35, 35, 15);
+	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-390, -44, 100);
+	modelStack.Translate(-407, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(35, 35, 15);
+	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
@@ -1881,6 +1881,7 @@ void SceneSP2Main::Render()
 
 	RenderTrees();
 
+	RenderBenches();
 
 
 	modelStack.PushMatrix();
