@@ -207,13 +207,10 @@ void SceneSP2Room3::Init()
 	meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
 	meshList[metalcabinet]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
-	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
-	//meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//garagedoor.obj");
+	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
+	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
-	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
-	//meshList[rolldoor]->material.kAmbient.Set(0.35, 0.35, 0.35);
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -1059,12 +1056,12 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[metalcabinet], true);
 	modelStack.PopMatrix();//Added collider
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 8, -30);
-	//modelStack.Rotate(180, 0, 1, 0);
-	//modelStack.Scale(5, 5, 5);
-	//RenderMesh(meshList[garagedoor], true);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 2.1, 1);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(0.1, 0.12, 0.155);
+	RenderMesh(meshList[garagedoor], true);
+	modelStack.PopMatrix();
 
 
 	//ghost

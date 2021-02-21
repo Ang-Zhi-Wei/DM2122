@@ -63,7 +63,6 @@ public:
 		rustycar,
 		rustychair,
 		barrels,
-		rolldoor,
 		workbench,
 		wheelbarrow,
 		metalcabinet,
