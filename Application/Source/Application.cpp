@@ -7,6 +7,10 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
+#include <irrKlang.h>
+#include <iostream>
+#pragma comment(lib, "irrKlang.lib")
+
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +20,7 @@
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
 #include "time.h"
+
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -215,6 +220,7 @@ void Application::setscene(int scenenum)
 		if (!mainInit)
 		{
 			sceneMain->Init();
+			
 			mainInit = true;
 		}
 		else
@@ -229,6 +235,7 @@ void Application::setscene(int scenenum)
 		scene->Exit();
 		scene = sceneMenu;
 		sceneMenu->Init();
+		//Background noise
 		break;
 	case Scene_1:
 		scene1->Set(scene);

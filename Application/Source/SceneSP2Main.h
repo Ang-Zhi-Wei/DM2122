@@ -13,7 +13,9 @@
 #include <vector>
 #include "Locker.h"
 #include "SceneSP2Room2.h"
+#include "irrKlang.h"
 
+using namespace irrklang;
 class SceneSP2Main : public Scene
 {
 public:
@@ -294,6 +296,8 @@ private:
 	float suffocationScale;
 	float suffocationScaleDir;
 
+	//Irrklang sound
+	ISoundEngine* Background;
 
 	Item test;
 	Item test2;

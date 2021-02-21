@@ -6,9 +6,10 @@
 #include "LoadTGA.h"
 #include <sstream>
 #include <iostream>
-#include <irrKlang.h>
+
+
 using namespace irrklang;
-#pragma comment(lib, "irrKlang.lib")
+
 SceneSP2Main::SceneSP2Main()
 {
 	//if you see anything from here missing in init just copy and paste them 
@@ -74,7 +75,6 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
-
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -1002,7 +1002,11 @@ void SceneSP2Main::Init()
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
 
-	
+
+	//Background sound loop
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav",true);
+	Background->setSoundVolume(0.1f);//Volume control
 }
 
 
@@ -1022,15 +1026,19 @@ void SceneSP2Main::Update(double dt)
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('7')) {
 		Application::setscene(Scene_1);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('8')) {
 		Application::setscene(Scene_2);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
+		Background->drop();
 	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)

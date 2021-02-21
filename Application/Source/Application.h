@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "timer.h"
+//Include IrrKlang
 
 class Application
 {
@@ -35,7 +36,6 @@ private:
 	static bool isquit;
 	static bool ispaused;
 	static bool mainInit;
-	
 };
 enum Scenemanager {
 	
