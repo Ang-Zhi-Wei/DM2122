@@ -570,7 +570,7 @@ void SceneSP2Main::Init()
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
-	inLocker = true;
+	inLocker = false;
 	suffocationScale = 10;
 	suffocationScale = 1;
 	suffocationTranslate = 14;
@@ -1220,7 +1220,7 @@ void SceneSP2Main::Update(double dt)
 	}
 	if (inLocker == true)
 	{
-		suffocationScale -= suffocationScaleDir * camera.playerStamina;
+		suffocationScale -= (float)(suffocationScaleDir * dt) * camera.playerStamina;
 	}
 	if (inLocker == false)
 	{
@@ -2124,7 +2124,7 @@ void SceneSP2Main::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR], 14, suffocationTranslate, suffocationScale, 1);
 	}
 		//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);

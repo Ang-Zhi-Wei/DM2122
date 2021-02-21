@@ -230,6 +230,16 @@ void SceneSP2Room2::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+	//Jumpscare
+	jumpscareTimerActive1 = false;
+	jumpscareCounter1 = 0;
+	jumpscareTimer1 = 0.2;
+	jumpscareTimerActive2 = false;
+	jumpscareTimer2 = 0.2;
+	jumpscare2Counter = 0;
+	jumpscare2Pass = false;
+	jumpscareActive1 = false;
+	jumpscareActive2 = false;
 
 	//walls
 	school_walls[0].mid.Set(0, 20, 0); 
@@ -460,6 +470,8 @@ void SceneSP2Room2::Init()
 	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -1002,6 +1014,56 @@ void SceneSP2Room2::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
+
+	//Jumpscares ((Might add on that you press the button to open the door before this activates))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -8) && (camera.position.x <= -6)) && ((camera.position.z >= -50) && (camera.position.z <= -40)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
+	{
+		jumpscareActive1 = true;
+	}
+	if (jumpscareActive1 == true)
+	{
+		jumpscareTimerActive1 = true;
+	}
+	if (jumpscareTimerActive1 == true)
+	{
+		jumpscareTimer1 -= dt;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = false;
+		jumpscareCounter1 = 1;
+	}
+
+	//Jumpscare 2
+	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 0))
+	{
+		jumpscare2Pass = true;
+	}
+	else
+	{
+		jumpscare2Pass = false;
+	}
+	if (jumpscare2Pass == true)
+	{
+		jumpscare2Counter = 1;
+	}
+	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 1) && (jumpscare2Pass == false) && (jumpscareTimer2 != 0))
+	{
+		jumpscareActive1 = true;
+	}
+	if (jumpscareActive2 == true)
+	{
+		jumpscareTimerActive2 = true;
+	}
+	if (jumpscareTimerActive2 == true)
+	{
+		jumpscareTimer2 -= dt;
+	}
+	if (jumpscareTimer2 <= 0)
+	{
+		jumpscareActive2 = false;
+		jumpscare2Counter = 2;
+	}
 }
 
 void SceneSP2Room2::PauseUpdate()
@@ -1296,6 +1358,18 @@ void SceneSP2Room2::Render()
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
+
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
+
+	if (jumpscareActive2 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
+
+
 }
 
 void SceneSP2Room2::Exit()

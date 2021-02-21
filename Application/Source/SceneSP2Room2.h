@@ -227,6 +227,8 @@ public:
 		GEO_ITEMIMAGE6,
 		GEO_ITEMIMAGE7,
 
+		GEO_JUMPSCARE1,
+
 		//trap
 		GEO_BEARTRAP,
 		
@@ -343,6 +345,19 @@ private:
 			return(distance.Length() < 3);
 		}
 	};
+
+	//Jumpscare
+	bool jumpscareTimerActive1;
+	double jumpscareTimer1;
+	int jumpscareCounter1;
+	bool jumpscareActive1;
+	bool jumpscareTimerActive2;
+	double jumpscareTimer2;
+	int jumpscare2Counter;
+	bool jumpscare2Pass;
+	bool jumpscareActive2;
+
+
 	//game related vars
 	bool inLocker;
 
