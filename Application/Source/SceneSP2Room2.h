@@ -272,6 +272,17 @@ public:
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
 	
+		//light 2
+		U_LIGHT2_POWER,
+
+		//light 3
+		U_LIGHT3_POWER,
+
+		//light 4
+		U_LIGHT4_POWER,
+
+		//light 5
+		U_LIGHT5_POWER,
 	
 		U_TOTAL,
 
@@ -294,7 +305,7 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[6];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;

@@ -158,7 +158,7 @@ public:
 				}
 				rotateY += float(dir * 100 * dt);
 			}
-			else
+			else 
 			{
 				pos += facing * speed * float(dt);
 			}

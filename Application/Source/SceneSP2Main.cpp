@@ -1012,6 +1012,16 @@ void SceneSP2Main::Set(Scene* scene)
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+
+	//other lights
+	light[2].power = 2;
+	light[3].power = 2;
+	light[4].power = 2;
+	light[5].power = 2;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 	
 }
 
@@ -1458,6 +1468,7 @@ void SceneSP2Main::Update(double dt)
 		{
 			//TBC
 			//end game condition met, either that or HP - 1
+			ghost->state = Ghost::WAITING;
 		}
 		break;
 	case Ghost::WAITING:

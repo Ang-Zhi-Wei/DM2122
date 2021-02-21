@@ -99,6 +99,17 @@ void SceneSP2Room3::Init()
 		"lights[1].kL");
 	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID,
 		"lights[1].kQ");
+
+	//other lights
+	m_parameters[U_LIGHT2_POWER] =
+		glGetUniformLocation(m_programID, "lights[2].power");
+	m_parameters[U_LIGHT3_POWER] =
+		glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT4_POWER] =
+		glGetUniformLocation(m_programID, "lights[4].power");
+	m_parameters[U_LIGHT5_POWER] =
+		glGetUniformLocation(m_programID, "lights[5].power");
+
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -247,7 +258,16 @@ void SceneSP2Room3::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	
-	
+	//other lights
+	light[2].power = 0;
+	light[3].power = 0;
+	light[4].power = 0;
+	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
+
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -255,7 +275,7 @@ void SceneSP2Room3::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
 
 	
 	//init update stuff
@@ -419,6 +439,17 @@ void SceneSP2Room3::Set(Scene* scene)
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+
+	//other lights
+	light[2].power = 0;
+	light[3].power = 0;
+	light[4].power = 0;
+	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
+
 }
 
 void SceneSP2Room3::Update(double dt)
@@ -791,6 +822,7 @@ void SceneSP2Room3::Update(double dt)
 		{
 			//TBC
 			//end game condition met, either that or HP - 1
+			ghost->state = Ghost::WAITING;
 		}
 		break;
 	case Ghost::WAITING:
