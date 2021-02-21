@@ -137,6 +137,7 @@ Scene* Application::scene = sceneMenu;
 
 void Application::Run()
 {
+	
 	sceneMenu->Init();
 	//sceneMain->Init();
 	scene1->Init();
@@ -210,6 +211,7 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
+	Application::SetCursorPos(960, 540);
 	switch (scenetype)
 	{
 	case Scene_Main:
@@ -229,6 +231,9 @@ void Application::setscene(int scenenum)
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
+		scene->Exit();
+		scene->Init();
+		sceneMenu->Init();
 		sceneMenu->SetBackground();
 		scene = sceneMenu;
 		break;
