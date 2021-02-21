@@ -12,6 +12,9 @@
 #include "Utility.h"
 #include "ColliderBox.h"
 #include <vector>
+#include "irrKlang.h"
+
+using namespace irrklang;
 class SceneSP2Room2 : public Scene
 {
 public:
@@ -357,6 +360,9 @@ private:
 	};
 	//game related vars
 	bool inLocker;
+
+	//Irrklang sound
+	ISoundEngine* Background;
 
 	Wall school_walls[6];  //0 front top, 1 front left, 2 front right, 3 back, 4 left, 5 right
 							

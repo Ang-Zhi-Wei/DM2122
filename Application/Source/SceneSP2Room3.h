@@ -12,6 +12,9 @@
 #include "Utility.h"
 #include "ColliderBox.h"
 #include <vector>
+#include "irrKlang.h"
+
+using namespace irrklang;
 class SceneSP2Room3 : public Scene
 {
 public:
@@ -63,7 +66,6 @@ public:
 		rustycar,
 		rustychair,
 		barrels,
-		rolldoor,
 		workbench,
 		wheelbarrow,
 		metalcabinet,
@@ -246,6 +248,9 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	//Irrklang sound
+	ISoundEngine* Background;
 };
 
 #endif
