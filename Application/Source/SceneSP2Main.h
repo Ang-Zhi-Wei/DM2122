@@ -78,6 +78,8 @@ public:
 		HAUNTEDSCHOOL,
 		HOUSE,
 		HOSPITAL,
+		GARAGE,
+		GARAGEDOOR,
 	
 		GEO_TRUCK,
 		Fountain,
@@ -313,6 +315,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderBuilding();
+	void RenderBenches();
 	void RenderFence();
 	void RenderTables();
 	void RenderTrees();
