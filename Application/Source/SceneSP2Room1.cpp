@@ -301,6 +301,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
+	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
+	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -1152,7 +1154,11 @@ void SceneSP2Room1::Render()
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//warning overlay
-	if (ghost->distance <= 50)
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 50)
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
 	}
