@@ -7,7 +7,6 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
-#include <string>
 
 //Include the standard C++ headers
 #include <stdio.h>

@@ -4,7 +4,6 @@
 
 #include "Scene.h"
 #include "timer.h"
-//Include IrrKlang
 
 class Application
 {
