@@ -995,7 +995,8 @@ void SceneSP2Main::Init()
 	//Lockerlist.push_back(Locker());
 	//Lockerlist[0].setpos(Vector3(0, -4.5, 0));
 	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
+	//camera.SetBounds(-415, 415, -365, 360); original one
+	camera.SetBounds(-800, 800, -800, 800);
 
 	ghost = new Ghost;
 	inventory = new Inventory;
