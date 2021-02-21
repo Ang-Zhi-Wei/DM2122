@@ -24,6 +24,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
+	virtual void SetBackground();
 	//struct Item
 	//{
 	//	enum ITEM_TYPE
@@ -272,6 +273,17 @@ public:
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
 	
+		//light 2
+		U_LIGHT2_POWER,
+
+		//light 3
+		U_LIGHT3_POWER,
+
+		//light 4
+		U_LIGHT4_POWER,
+
+		//light 5
+		U_LIGHT5_POWER,
 	
 		U_TOTAL,
 
@@ -294,7 +306,7 @@ private:
 	Mesh* meshList[NUM_GEOMETRY];
 
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[6];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
@@ -370,7 +382,7 @@ private:
 	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
-	Mesh* itemImage[8];
+	//Mesh* itemImage[8];
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;

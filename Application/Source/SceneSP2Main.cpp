@@ -6,9 +6,10 @@
 #include "LoadTGA.h"
 #include <sstream>
 #include <iostream>
-#include <irrKlang.h>
+
+
 using namespace irrklang;
-#pragma comment(lib, "irrKlang.lib")
+
 SceneSP2Main::SceneSP2Main()
 {
 	//if you see anything from here missing in init just copy and paste them 
@@ -74,7 +75,6 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
-
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -576,7 +576,7 @@ void SceneSP2Main::Init()
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
-	inLocker = true;
+	inLocker = false;
 	suffocationScale = 10;
 	suffocationScale = 1;
 	suffocationTranslate = 14;
@@ -991,22 +991,23 @@ void SceneSP2Main::Init()
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 
-	//test examples for item
-	/*test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
-	test2.Set("Battery", (0, 0, 0), Item::BATTERY);*/
-	//PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	//PickUpItem(&test2); //to be called only in one frame.
-	//PickUpItem(&test);
-	//PickUpItem(&test2);
-	//PickUpItem(&test2);
 	ghost = new Ghost;
 	inventory = new Inventory;
 
+	//test examples for item
+	test.Set("item2testAAAA", Item::ITEM2);
+	test2.Set("Battery", Item::BATTERY);
+	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	PickUpItem(&test2); //to be called only in one frame.
+	PickUpItem(&test);
+	PickUpItem(&test2);
+	PickUpItem(&test2);
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
+
 
 	
 }
@@ -1018,9 +1019,30 @@ void SceneSP2Main::Set(Scene* scene)
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+
+	//other lights
+	light[2].power = 2;
+	light[3].power = 2;
+	light[4].power = 2;
+	light[5].power = 2;
+	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
+	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 	
+	//inventory item image
+	for (int i = 0; i < 8; i++)
+	{
+		itemImage[i] = scene->itemImage[i];
+	}
 }
 
+void SceneSP2Main::SetBackground() {
+	//Background sound loop
+	Background = createIrrKlangDevice();
+	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	Background->setSoundVolume(0.1f);//Volume control
+}
 void SceneSP2Main::Update(double dt)
 {
 	// mouse cursor show / hide
@@ -1028,15 +1050,19 @@ void SceneSP2Main::Update(double dt)
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('7')) {
 		Application::setscene(Scene_1);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('8')) {
 		Application::setscene(Scene_2);
+		Background->drop();
 	}
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
+		Background->drop();
 	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
@@ -1434,57 +1460,9 @@ void SceneSP2Main::Update(double dt)
 	
 
 	//ghost
-	switch (ghost->state)
+	if (!is_talking)
 	{
-	case Ghost::NORMAL:
-		if (!is_talking)
-		{
-			ghost->facing = (camera.position - ghost->pos).Normalized();
-			ghost->distance = (camera.position - ghost->pos).Length();
-			ghost->UpdateMovement(dt);
-		}
-		if (ghost->distance <= 50)
-		{
-			ghost->state = Ghost::CHASING;
-			ghost->speed = 25;
-		}
-		break;
-	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
-		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
-		}
-		else if (ghost->distance <= 1)
-		{
-			//TBC
-			//end game condition met, either that or HP - 1
-		}
-		break;
-	case Ghost::WAITING:
-		ghost->waitTime -= float(dt);
-		if (ghost->waitTime <= 0)
-		{
-			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
-		}
-		break;
-	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance > 500 || !inLocker)
-		{
-			ghost->state = Ghost::NORMAL;
-			ghost->speed = 5;
-		}
-		break;
-
+		ghost->UpdateState(camera.position, inLocker, dt);
 	}
 
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
@@ -2170,10 +2148,10 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
-	test1 << "ghost pos: " << ghost->pos;
+	test1 << "ghost distance: " << ghost->distance;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "ghost rotateY: " << ghost->rotateY;
+	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost->state;
@@ -2235,7 +2213,7 @@ bool SceneSP2Main::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return false;
+			return true;
 		}
 	}
 	return false;

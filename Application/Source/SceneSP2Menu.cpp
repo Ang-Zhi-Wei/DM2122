@@ -368,6 +368,10 @@ void SceneSP2Menu::Set(Scene* scene)
 
 }
 
+void SceneSP2Menu::SetBackground()
+{
+}
+
 void SceneSP2Menu::Update(double dt)
 {
 	//mouse cursor show/hide

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include "Vector3.h"
+#include "Mesh.h"
 
 class Scene
 {
@@ -104,7 +105,6 @@ public:
 			state = NORMAL;
 			waitTime = 5;
 		}
-
 		void UpdateMovement(double dt)
 		{
 			float newangle = Math::RadianToDegree(atan(facing.x / facing.z)); //facing is vector that player/char shud be facing
@@ -158,11 +158,69 @@ public:
 				}
 				rotateY += float(dir * 100 * dt);
 			}
-			else
+			else 
 			{
 				pos += facing * speed * float(dt);
 			}
 			axis = facing.Cross(up).Normalized();
+		}
+		void UpdateState(Vector3 cameraPos, bool inLocker, double dt)
+		{
+			switch (state)
+			{
+			case NORMAL:
+				this->facing = cameraPos - this->pos;
+				this->facing.y = 0;
+				this->distance = this->facing.Length();
+				this->facing.Normalize();
+				this->UpdateMovement(dt);
+				
+				if (this->distance <= 50)
+				{
+					this->state = Ghost::CHASING;
+					this->speed = 25;
+				}
+				break;
+			case Ghost::CHASING:
+				this->facing = cameraPos - this->pos;
+				this->facing.y = 0;
+				this->distance = this->facing.Length();
+				this->facing.Normalize();
+				this->UpdateMovement(dt);
+				if (this->distance <= 5 && inLocker)
+				{
+					this->state = Ghost::WAITING;
+					this->waitTime = 5;
+				}
+				else if (this->distance <= 1)
+				{
+					//end game condition;; but for now make it speedrun so we can test in peace
+					this->state = Ghost::WAITING;
+					this->waitTime = 5;
+				}
+				break;
+			case Ghost::WAITING:
+				this->waitTime -= float(dt);
+				if (this->waitTime <= 0)
+				{
+					this->state = Ghost::SPEEDRUN;
+					this->speed = 50;
+				}
+				break;
+			case Ghost::SPEEDRUN:
+				this->facing = this->pos - cameraPos;
+				this->facing.y = 0;
+				this->distance = this->facing.Length();
+				this->facing.Normalize();
+				this->UpdateMovement(dt);
+				if (this->distance > 500 || !inLocker)
+				{
+					this->state = Ghost::NORMAL;
+					this->speed = 5;
+				}
+				break;
+
+			}
 		}
 	};
 	Inventory* inventory;
@@ -171,12 +229,16 @@ public:
 	bool flashlight;
 	float flashlight_lifetime;
 
+	Mesh* itemImage[8];
+
+
 	virtual void Init() = 0;
 	virtual void Update(double dt) = 0;
 	virtual void PauseUpdate() = 0;
 	virtual void Render() = 0;
 	virtual void Exit() = 0;
 	virtual void Set(Scene* scene) = 0;
+	virtual void SetBackground()=0;
 
 	
 };
