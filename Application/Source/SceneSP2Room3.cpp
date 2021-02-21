@@ -779,12 +779,13 @@ void SceneSP2Room3::Update(double dt)
 		break;
 	case Ghost::CHASING:
 		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing.y = 0;
 		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
+		if (ghost->distance <= 5 && inLocker)
 		{
 			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
+			ghost->waitTime = 5;
 		}
 		else if (ghost->distance <= 1)
 		{
