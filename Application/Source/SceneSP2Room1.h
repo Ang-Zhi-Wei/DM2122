@@ -189,7 +189,7 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
-	Mesh* itemImage[8];
+//	Mesh* itemImage[8];
 
 	//Jumpscare stuff
 	int jumpscareEntrance1;

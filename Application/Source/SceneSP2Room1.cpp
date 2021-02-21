@@ -447,6 +447,13 @@ void SceneSP2Room1::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
+
+	//inventory item image
+	for (int i = 0; i < 8; i++)
+	{
+		itemImage[i] = scene->itemImage[i];
+	}
+
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -1387,7 +1394,7 @@ bool SceneSP2Room1::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return false;
+			return true;
 		}
 	}
 	return false;

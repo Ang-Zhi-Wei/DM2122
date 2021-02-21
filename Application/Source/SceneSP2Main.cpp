@@ -985,17 +985,17 @@ void SceneSP2Main::Init()
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
 
-	//test examples for item
-	/*test.Set("item2testAAAA", (0, 0, 0), Item::ITEM2);
-	test2.Set("Battery", (0, 0, 0), Item::BATTERY);*/
-	//PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	//PickUpItem(&test2); //to be called only in one frame.
-	//PickUpItem(&test);
-	//PickUpItem(&test2);
-	//PickUpItem(&test2);
 	ghost = new Ghost;
 	inventory = new Inventory;
 
+	//test examples for item
+	test.Set("item2testAAAA", Item::ITEM2);
+	test2.Set("Battery", Item::BATTERY);
+	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
+	PickUpItem(&test2); //to be called only in one frame.
+	PickUpItem(&test);
+	PickUpItem(&test2);
+	PickUpItem(&test2);
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -1023,6 +1023,11 @@ void SceneSP2Main::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 	
+	//inventory item image
+	for (int i = 0; i < 8; i++)
+	{
+		itemImage[i] = scene->itemImage[i];
+	}
 }
 
 void SceneSP2Main::Update(double dt)
@@ -2288,7 +2293,7 @@ bool SceneSP2Main::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return false;
+			return true;
 		}
 	}
 	return false;

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include "Vector3.h"
+#include "Mesh.h"
 
 class Scene
 {
@@ -227,6 +228,9 @@ public:
 
 	bool flashlight;
 	float flashlight_lifetime;
+
+	Mesh* itemImage[8];
+
 
 	virtual void Init() = 0;
 	virtual void Update(double dt) = 0;

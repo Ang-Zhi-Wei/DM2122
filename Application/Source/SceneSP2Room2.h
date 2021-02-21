@@ -381,7 +381,7 @@ private:
 	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
-	Mesh* itemImage[8];
+	//Mesh* itemImage[8];
 
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
