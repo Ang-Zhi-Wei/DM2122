@@ -230,9 +230,7 @@ void Application::setscene(int scenenum)
 		mainInit = false;
 		hidemousecursor(false);
 		sceneMenu->SetBackground();
-		scene->Exit();
 		scene = sceneMenu;
-		sceneMenu->Init();
 		break;
 	case Scene_1:
 		scene1->Set(scene);
