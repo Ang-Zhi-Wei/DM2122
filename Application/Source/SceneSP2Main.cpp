@@ -570,7 +570,7 @@ void SceneSP2Main::Init()
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
-	inLocker = true;
+	inLocker = false;
 	suffocationScale = 10;
 	suffocationScale = 1;
 	suffocationTranslate = 14;
@@ -1438,59 +1438,9 @@ void SceneSP2Main::Update(double dt)
 	
 
 	//ghost
-	switch (ghost->state)
+	if (!is_talking)
 	{
-	case Ghost::NORMAL:
-		if (!is_talking)
-		{
-			ghost->facing = (camera.position - ghost->pos).Normalized();
-			ghost->facing.y = 0;
-			ghost->distance = (camera.position - ghost->pos).Length();
-			ghost->UpdateMovement(dt);
-		}
-		if (ghost->distance <= 50)
-		{
-			ghost->state = Ghost::CHASING;
-			ghost->speed = 25;
-		}
-		break;
-	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 5 && inLocker)
-		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 5;
-		}
-		else if (ghost->distance <= 1)
-		{
-			//TBC
-			//end game condition met, either that or HP - 1
-			ghost->state = Ghost::WAITING;
-		}
-		break;
-	case Ghost::WAITING:
-		ghost->waitTime -= float(dt);
-		if (ghost->waitTime <= 0)
-		{
-			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
-		}
-		break;
-	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance > 500 || !inLocker)
-		{
-			ghost->state = Ghost::NORMAL;
-			ghost->speed = 5;
-		}
-		break;
-
+		ghost->UpdateState(camera.position, inLocker, dt);
 	}
 
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
@@ -2273,10 +2223,10 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
-	test1 << "ghost pos: " << ghost->pos;
+	test1 << "ghost distance: " << ghost->distance;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "ghost rotateY: " << ghost->rotateY;
+	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost->state;
