@@ -456,6 +456,10 @@ void SceneSP2Room1::Set(Scene* scene)
 
 }
 
+void SceneSP2Room1::SetBackground()
+{
+}
+
 void SceneSP2Room1::Update(double dt)
 {
 	// mouse cursor show / hide
