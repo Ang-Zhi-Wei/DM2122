@@ -508,8 +508,8 @@ void SceneSP2Room2::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
 	DS_school = OPEN;
-	school_door[0].rotateY = 0;
-	school_door[1].rotateY = 0;
+	school_door[0].rotateY = -90;
+	school_door[1].rotateY = 90;
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -746,12 +746,13 @@ void SceneSP2Room2::Update(double dt)
 		break;
 	case Ghost::CHASING:
 		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing.y = 0;
 		ghost->distance = (camera.position - ghost->pos).Length();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
+		if (ghost->distance <= 5 && inLocker)
 		{
 			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
+			ghost->waitTime = 5;
 		}
 		else if (ghost->distance <= 1)
 		{
