@@ -460,6 +460,7 @@ void SceneSP2Room1::Set(Scene* scene)
 
 void SceneSP2Room1::SetBackground()
 {
+	Jumpscare = createIrrKlangDevice();
 	Background = createIrrKlangDevice();
 	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
@@ -473,18 +474,22 @@ void SceneSP2Room1::Update(double dt)
 	if (Application::IsKeyPressed('5')) {
 		Application::setscene(Scene_Menu);
 		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('6')) {
 		Application::setscene(Scene_Main);
 		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('8')) {
 		Application::setscene(Scene_2);
 		Background->drop();
+		Jumpscare->drop();
 	}
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
 		Background->drop();
+		Jumpscare->drop();
 	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
@@ -750,7 +755,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer1 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
 	}
@@ -774,7 +780,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer2 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive2 = true;
 		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
 	}
@@ -799,8 +806,9 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer3 <= 0)
 	{
-
-		jumpscareActive3 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
+		jumpscareActive3 = true;	
 		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
 	}
 
@@ -825,7 +833,8 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer4 <= 0)
 	{
-
+		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive4 = true;
 		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}

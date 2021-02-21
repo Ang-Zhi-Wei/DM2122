@@ -229,6 +229,7 @@ private:
 
 	//Irrklang sound
 	ISoundEngine* Background;
+	ISoundEngine* Jumpscare;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

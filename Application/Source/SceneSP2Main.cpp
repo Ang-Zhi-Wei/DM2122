@@ -1554,6 +1554,7 @@ void SceneSP2Main::PauseUpdate()
 			gamepaused = false;
 			Application::pause(false);
 			Application::setscene(Scene_Menu);
+			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
