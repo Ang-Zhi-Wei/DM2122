@@ -335,6 +335,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_PAVEMENT] = MeshBuilder::GenerateQuad("pavement", 1, 1, White);
 	meshList[GEO_PAVEMENT]->textureID = LoadTGA("Assigment2Images//pavement3.tga");
 	meshList[GEO_PAVEMENT]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[Ground_Mesh2] = MeshBuilder::GenerateQuadRepeat("pavement", 1, 1, White);
+	meshList[Ground_Mesh2]->textureID = LoadTGA("Assigment2Images//burnedground.tga");
+	meshList[Ground_Mesh2]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[HAUNTEDSCHOOL] = MeshBuilder::GenerateOBJ("Building", "OBJ//school.obj");
 	meshList[HAUNTEDSCHOOL]->textureID = LoadTGA("Assigment2Images//school.tga");
 	meshList[HAUNTEDSCHOOL]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -366,6 +369,9 @@ void SceneSP2Main::Init()
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0.f, 0.20f, 0.13f);
+
+
+
 
 
 	//truck
@@ -1770,14 +1776,14 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(407, -44, 14);
+	modelStack.Translate(390, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-407, -44, 14);
+	modelStack.Translate(-390, -44, 14);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(24.7, 35, 15);
 	RenderMesh(meshList[GEO_ROAD], true);
@@ -1978,10 +1984,27 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_PAVEMENT], true);
 	modelStack.PopMatrix();
 
+	//ground mesh 2
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30.f, -2.8f, 530.f);
+	modelStack.Scale(950, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+
+
+
 	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -0.1f, -312.f);
 	modelStack.Scale(750, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30.f, -2.8f, -540.f);
+	modelStack.Scale(950, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1992,11 +2015,27 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-581, -2.8, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(1200, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(352, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(730, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(562, -2.8, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(1200, 1, 300);
+	RenderMesh(meshList[Ground_Mesh2], true);
+	modelStack.PopMatrix();
+
+	
 
 	//UI OVERLAY
 
