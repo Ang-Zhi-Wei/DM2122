@@ -80,6 +80,7 @@ public:
 		HOSPITAL,
 		GARAGE,
 		GARAGEDOOR,
+		BATTERY,
 	
 		GEO_TRUCK,
 		Fountain,
@@ -239,6 +240,8 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 	bool NearGarage;
+	bool nearBattery;
+	bool PickUpBattery;
 	bool NearHouse;
 	bool NearSchool;
 	bool NearHospital;
@@ -309,6 +312,7 @@ private:
 	Item test;
 	Item test2;
 	Item battery;
+
 
 	Vector3 temp;
 	void RenderSkybox();

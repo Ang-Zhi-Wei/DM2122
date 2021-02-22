@@ -21,6 +21,8 @@ SceneSP2Main::SceneSP2Main()
 	SpeakTimer = 0;
 	Interact_Num = 0;
 	manAppear = true;
+	nearBattery = false;
+	PickUpBattery = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -367,6 +369,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//paths and deco
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
@@ -1007,11 +1013,14 @@ void SceneSP2Main::Init()
 	//test examples for item
 	test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
+	battery.Set("Battery", Item::BATTERY);
 	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
 	PickUpItem(&test2); //to be called only in one frame.
+	PickUpItem(&battery);
 	PickUpItem(&test);
 	PickUpItem(&test2);
 	PickUpItem(&test2);
+	
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -1194,6 +1203,14 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpBattery = true;
+		PickUpItem(&battery);
+		nearBattery = false;
+		Fpressed = false;
+	}
+
 
 	
 	if (!Application::IsKeyPressed('E'))
@@ -1275,7 +1292,15 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 430 && campos_x > -17 && campos_x < 17)
+	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && PickUpBattery == false)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
 	{
 		NearGarage = true;
 	}
@@ -1283,7 +1308,7 @@ void SceneSP2Main::Update(double dt)
 		NearGarage = false;
 	}
 
-	if (campos_z < -415 && campos_z > -420 && campos_x > -10 && campos_x < 10)
+	if (campos_z < -415 && campos_z > -420 && campos_x > -10 && campos_x < 10 && ObjectivePhase >= 2)
 	{
 		NearHouse = true;
 	}
@@ -1292,7 +1317,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 
-	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13)
+	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13 && ObjectivePhase >= 2)
 	{
 		NearSchool = true;
 	}
@@ -1300,7 +1325,7 @@ void SceneSP2Main::Update(double dt)
 		NearSchool = false;
 	}
 
-	if (campos_x < -479 && campos_z > -44 && campos_z < -30)
+	if (campos_x < -479 && campos_z > -44 && campos_z < -30 && ObjectivePhase >= 2)
 	{
 		NearHospital = true;
 	}
@@ -1475,6 +1500,7 @@ void SceneSP2Main::Update(double dt)
 			SpeakTimer = 0;
 			is_talking = false;
 			SpeakPhase = 0;
+			ObjectivePhase = 2;
 		}
 		break;
 	}
@@ -2101,6 +2127,39 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();//Added collider
 
+	if (PickUpBattery == false) {
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -3, 340);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(60, -3, 0);
+	modelStack.Scale(0.09, 0.09, 0.09);
+	RenderMesh(meshList[BATTERY], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-60, -3, 100);
+	modelStack.Scale(0.09, 0.09, 0.09);
+	RenderMesh(meshList[BATTERY], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, -3, -200);
+	modelStack.Scale(0.09, 0.09, 0.09);
+	RenderMesh(meshList[BATTERY], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, -3, 0);
+	modelStack.Scale(0.09, 0.09, 0.09);
+	RenderMesh(meshList[BATTERY], true);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -0.1f, 313.f);
 	modelStack.Scale(750, 8, 30);
@@ -2177,7 +2236,10 @@ void SceneSP2Main::Render()
 
 
 	
-
+	if (nearBattery == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
 	//UI OVERLAY
 
 	//Vision vignette
@@ -2324,6 +2386,11 @@ void SceneSP2Main::Render()
 	case 1:
 		if (showSideBox == true) {
 			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in garage", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
 			break;
 		}
 	}
