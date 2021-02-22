@@ -1322,30 +1322,38 @@ void SceneSP2Main::Update(double dt)
 
 	if (enterBuilding == true && NearGarage == true)
 	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
-		Background->drop();
 		enterBuilding = false;
 	}
 
 	else if (enterBuilding == true && NearHouse == true)
 	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
-		Background->drop();
 		enterBuilding = false;
 	}
 
 
 	else if (enterBuilding == true && NearSchool == true)
 	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
-		Background->drop();
 		enterBuilding = false;
 	}
 
 	else if (enterBuilding == true && NearHospital == true)
 	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
-		Background->drop();
 		enterBuilding = false;
 	}
 
