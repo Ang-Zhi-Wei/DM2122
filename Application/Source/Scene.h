@@ -7,6 +7,7 @@
 #include "irrKlang.h"
 
 using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib") 
 class Scene
 {
 public:
@@ -86,7 +87,7 @@ public:
 			CHASING,
 			WAITING,
 			SPEEDRUN,
-			DEATH
+			DEATH,
 		};
 		int state;
 		Vector3 up;

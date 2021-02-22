@@ -28,6 +28,8 @@ SceneSP2Main::SceneSP2Main()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
+	NearGarage = false;
+	enterBuilding = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -84,6 +86,7 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
+
 
 
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
@@ -1190,6 +1193,11 @@ void SceneSP2Main::Update(double dt)
 			Fpressed = true;
 		}
 		Freleased = false;
+
+		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
+		{
+			enterBuilding = true;
+		}
 	}
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -1279,6 +1287,68 @@ void SceneSP2Main::Update(double dt)
 		suffocationTranslate = 0;
 	}
 
+	if (campos_z > 430 && campos_x > -17 && campos_x < 17)
+	{
+		NearGarage = true;
+	}
+	else {
+		NearGarage = false;
+	}
+
+	if (campos_z < -430 && campos_x > -10 && campos_x < 10)
+	{
+		NearHouse = true;
+	}
+	else {
+		NearHouse = false;
+	}
+
+
+	if (campos_x > 470 && campos_z > -26 && campos_z < -13)
+	{
+		NearSchool = true;
+	}
+	else {
+		NearSchool = false;
+	}
+
+	if (campos_x < -479 && campos_z > -44 && campos_z < -30)
+	{
+		NearHospital = true;
+	}
+	else {
+		NearHospital = false;
+	}
+
+	if (enterBuilding == true && NearGarage == true)
+	{
+		Application::setscene(Scene_3);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHouse == true)
+	{
+		Application::setscene(Scene_1);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+
+	else if (enterBuilding == true && NearSchool == true)
+	{
+		Application::setscene(Scene_2);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHospital == true)
+	{
+		Application::setscene(Scene_4);
+		Background->drop();
+		enterBuilding = false;
+	}
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -1297,9 +1367,10 @@ void SceneSP2Main::Update(double dt)
 	{
 		//default
 	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-
+		if (NearGarage == false && NearHouse == false && NearSchool == false && NearHospital == false) {
+			showChatbox = false;
+			SpeakTimer = 0;
+		}
 		break;
 		//starting phase
 	case 1:
@@ -2062,7 +2133,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-581, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
@@ -2076,9 +2147,27 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(562, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
+
+	
+
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+
 
 	
 
@@ -2144,6 +2233,8 @@ void SceneSP2Main::Render()
 		}
 		
 	}
+
+	
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -2232,6 +2323,13 @@ void SceneSP2Main::Render()
 			break;
 		}
 	}
+
+
+	if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go inside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	
 	//pause menu
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
