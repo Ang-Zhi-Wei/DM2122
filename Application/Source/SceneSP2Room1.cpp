@@ -861,6 +861,12 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
+	if (Application::IsKeyPressed('0')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_4);
+	}
 }
 
 void SceneSP2Room1::PauseUpdate()
