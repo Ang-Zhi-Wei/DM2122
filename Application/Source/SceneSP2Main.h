@@ -228,7 +228,6 @@ public:
 
 private:
 
-
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];

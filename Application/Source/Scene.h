@@ -79,6 +79,7 @@ public:
 	{
 		enum GHOST_STATE
 		{
+			UNSPAWNED,
 			NORMAL,
 			CHASING,
 			WAITING,
@@ -101,10 +102,11 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(0, 0, -100); //TBC
+			pos.Set(0, 0, -2000); //far far away so no one knows its there
 			rotateY = 0;
-			state = NORMAL;
+			state = UNSPAWNED;
 			waitTime = 5;
+			distance = 2000; //just anyth not < 100
 		}
 		void UpdateMovement(double dt)
 		{
@@ -218,7 +220,7 @@ public:
 					this->speed = 5;
 				}
 				break;
-			case Ghost::DEATH:
+			default:
 				break;
 
 			}
