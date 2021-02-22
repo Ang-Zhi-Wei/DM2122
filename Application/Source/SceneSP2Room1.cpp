@@ -74,7 +74,7 @@ void SceneSP2Room1::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(-5, 9, 265), Vector3(0, 9, 250), Vector3(0, 1,
+	camera.Init(Vector3(-30, 9, -340), Vector3(0, 9, 250), Vector3(0, 1,
 		0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -451,6 +451,9 @@ void SceneSP2Room1::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
+	camera.position.Set(-30, 9, -340);
+	camera.rawTarget = camera.position;
+
 
 	//inventory item image
 	for (int i = 0; i < 8; i++)
@@ -729,7 +732,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 10)) && ((camera.position.z >= 170) && (camera.position.z <= 280)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= -15)) && ((camera.position.z >= -430) && (camera.position.z <= -330)))
 	{
 		jumpscareTimerActive1 = true;
 	}
@@ -754,7 +757,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//Jumpscare, living room
-	if ((camera.position.y >= 0) && ((camera.position.x >= -10) && (camera.position.x <= 65)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
 	{
 		jumpscareTimerActive2 = true;
 	}
@@ -781,7 +784,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//Jumpscare, Connecting room
-	if ((camera.position.y >= 0) && ((camera.position.x >= 50) && (camera.position.x <= 95)) && ((camera.position.z >= 65) && (camera.position.z <= 95)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 28) && (camera.position.x <= 70)) && ((camera.position.z >= -535) && (camera.position.z <= -505)))
 	{
 		jumpscareTimerActive3 = true;
 	}
@@ -807,7 +810,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//Jumpscare, Final room
-	if ((camera.position.y >= 0) && ((camera.position.x >= 70)&& (camera.position.x <= 95)) && ((camera.position.z >= 95) && (camera.position.z <= 170)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 50)&& (camera.position.x <= 70)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
 	{
 		jumpscareTimerActive4 = true;
 	}
@@ -942,6 +945,9 @@ void SceneSP2Room1::Render()
 
 
 
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-24.5, 0, -600);
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
@@ -962,9 +968,6 @@ void SceneSP2Room1::Render()
 			break;
 		}
 	}
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-24.5, 0, -600);
 	
 	//Main door
 	modelStack.PushMatrix();
