@@ -498,7 +498,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
-	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -579,17 +579,20 @@ void SceneSP2Room2::SetBackground()
 {
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
 	Effect->setSoundVolume(0.f);
+	
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -1495,9 +1498,6 @@ void SceneSP2Room2::Render()
 
 void SceneSP2Room2::Exit()
 {
-	Background->drop();
-	Effect->drop();
-	Jumpscare->drop();
 	delete ghost;
 	delete inventory;
 	// Cleanup VBO here
