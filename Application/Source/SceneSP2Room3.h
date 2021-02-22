@@ -38,6 +38,10 @@ public:
 		GEO_FRONT,
 		GEO_BACK,
 
+		//UI
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
+
 		//terrain
 		GEO_TOPHALFWALL,
 		GEO_WALL,
@@ -155,6 +159,12 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitGarage;
+	bool nearExit;
+	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
