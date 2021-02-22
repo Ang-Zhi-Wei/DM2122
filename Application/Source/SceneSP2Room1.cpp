@@ -42,6 +42,10 @@ SceneSP2Room1::SceneSP2Room1()
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
 	inLocker = false;
+	suffocationScale = 10;
+	suffocationScale = 1;
+	suffocationTranslate = 14;
+	suffocationTranslateDir = 1;
 	fps = 60;
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -656,6 +660,15 @@ void SceneSP2Room1::Update(double dt)
 			}
 		}
 
+	}
+	if (inLocker == true)
+	{
+		suffocationScale -= (float)(suffocationScaleDir * dt) * camera.playerStamina;
+	}
+	if (inLocker == false)
+	{
+		suffocationScale = 10;
+		suffocationTranslate = 0;
 	}
 
 
@@ -1281,6 +1294,10 @@ void SceneSP2Room1::Render()
 	}
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory

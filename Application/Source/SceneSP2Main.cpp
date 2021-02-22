@@ -588,10 +588,7 @@ void SceneSP2Main::Init()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
-	suffocationScale = 10;
-	suffocationScale = 1;
-	suffocationTranslate = 14;
-	suffocationTranslateDir = 1;
+
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -1282,15 +1279,6 @@ void SceneSP2Main::Update(double dt)
 			}
 		}
 
-	}
-	if (inLocker == true)
-	{
-		suffocationScale -= (float)(suffocationScaleDir * dt) * camera.playerStamina;
-	}
-	if (inLocker == false)
-	{
-		suffocationScale = 10;
-		suffocationTranslate = 0;
 	}
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17)
@@ -2213,10 +2201,7 @@ void SceneSP2Main::Render()
 	//breathing icon
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	if (inLocker == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14, suffocationTranslate, suffocationScale, 1);
-	}
+
 		//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar

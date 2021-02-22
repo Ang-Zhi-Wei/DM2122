@@ -218,6 +218,13 @@ private:
 	bool jumpscareActive4;
 	bool jumpscareTimerActive4;
 
+
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
+
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
