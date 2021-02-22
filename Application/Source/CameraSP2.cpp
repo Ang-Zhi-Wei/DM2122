@@ -47,6 +47,7 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	cooldown = 1;
 	can_move = true;
 	slowed = false;
+	movement = false;
 	Application::GetCursorPos(&mousePosX, &mousePosY);
 }
 
@@ -100,7 +101,7 @@ void CameraSP2::Update(double dt)
 	up = defaultUp;
 	right = view.Cross(up).Normalized();
 	up = right.Cross(view).Normalized();
-
+	movement = false;
 	if (can_move)
 	{
 		if (Application::IsKeyPressed('W'))
@@ -115,11 +116,13 @@ void CameraSP2::Update(double dt)
 			position.z += float(view.z * CAMERA_SPEED * dt);
 			rawTarget.x += float(view.x * CAMERA_SPEED * dt);
 			rawTarget.z += float(view.z * CAMERA_SPEED * dt);
+			movement = true;
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
 				position.x -= float(view.x * CAMERA_SPEED * dt);
 				position.z -= float(view.z * CAMERA_SPEED * dt);
 				rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
 				rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
+				movement = !movement;
 			}
 			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
@@ -127,6 +130,7 @@ void CameraSP2::Update(double dt)
 					position.z -= float(view.z * CAMERA_SPEED * dt);
 					rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
 					rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
+					movement = !movement;
 				}
 			}
 
@@ -144,11 +148,13 @@ void CameraSP2::Update(double dt)
 			position.z -= float(right.z * CAMERA_SPEED * dt);
 			rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
 			rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
+			movement = true;
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
 				position.x += float(right.x * CAMERA_SPEED * dt);
 				position.z += float(right.z * CAMERA_SPEED * dt);
 				rawTarget.x += float(right.x * CAMERA_SPEED * dt);
 				rawTarget.z += float(right.z * CAMERA_SPEED * dt);
+				movement = !movement;
 			}
 			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive()==true) {
@@ -156,6 +162,7 @@ void CameraSP2::Update(double dt)
 					position.z += float(right.z * CAMERA_SPEED * dt);
 					rawTarget.x += float(right.x * CAMERA_SPEED * dt);
 					rawTarget.z += float(right.z * CAMERA_SPEED * dt);
+					movement = !movement;
 				}
 			}
 			target = rawTarget + viewTarget;
@@ -172,11 +179,13 @@ void CameraSP2::Update(double dt)
 			position.z -= float(view.z * CAMERA_SPEED * dt);
 			rawTarget.x -= float(view.x * CAMERA_SPEED * dt);
 			rawTarget.z -= float(view.z * CAMERA_SPEED * dt);
+			movement = true;
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
 				position.x += float(view.x * CAMERA_SPEED * dt);
 				position.z += float(view.z * CAMERA_SPEED * dt);
 				rawTarget.x += float(view.x * CAMERA_SPEED * dt);
 				rawTarget.z += float(view.z * CAMERA_SPEED * dt);
+				movement = !movement;
 			}
 			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
@@ -184,6 +193,7 @@ void CameraSP2::Update(double dt)
 					position.z += float(view.z * CAMERA_SPEED * dt);
 					rawTarget.x += float(view.x * CAMERA_SPEED * dt);
 					rawTarget.z += float(view.z * CAMERA_SPEED * dt);
+					movement = !movement;
 				}
 			}
 			target = rawTarget + viewTarget;
@@ -200,11 +210,13 @@ void CameraSP2::Update(double dt)
 			position.z += float(right.z * CAMERA_SPEED * dt);
 			rawTarget.x += float(right.x * CAMERA_SPEED * dt);
 			rawTarget.z += float(right.z * CAMERA_SPEED * dt);
+			movement = true;
 			if ((position.x < boundX1) || (position.x > boundX2) || (position.z < boundZ1) || (position.z > boundZ2)) {
 				position.x -= float(right.x * CAMERA_SPEED * dt);
 				position.z -= float(right.z * CAMERA_SPEED * dt);
 				rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
 				rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
+				movement = !movement;
 			}
 			for (int i = 0; i < signed(Checker.size()); i++) {
 				if (Checker[i].iscollide(position) && Checker[i].getactive() == true) {
@@ -212,6 +224,7 @@ void CameraSP2::Update(double dt)
 					position.z -= float(right.z * CAMERA_SPEED * dt);
 					rawTarget.x -= float(right.x * CAMERA_SPEED * dt);
 					rawTarget.z -= float(right.z * CAMERA_SPEED * dt);
+					movement = !movement;
 				}
 			}
 			target = rawTarget + viewTarget;

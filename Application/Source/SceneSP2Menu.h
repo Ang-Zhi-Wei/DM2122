@@ -12,9 +12,6 @@
 #include "ColliderBox.h"
 #include <vector>
 #include "Locker.h"
-#include "irrKlang.h"
-
-using namespace irrklang;
 class SceneSP2Menu : public Scene
 {
 public:
@@ -177,8 +174,6 @@ private:
 	double Mousex, Mousey;
 	double MposX, MposY;
 
-	//Irrklang sound
-	ISoundEngine* Background;
 
 	Vector3 temp;
 	void RenderSkybox();
