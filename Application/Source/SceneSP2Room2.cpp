@@ -1046,7 +1046,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscares ((Might add on that you press the button to open the door before this activates))
-	if ((camera.position.y >= 0) && ((camera.position.x >= -8) && (camera.position.x <= -6)) && ((camera.position.z >= -50) && (camera.position.z <= -40)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 510) && (camera.position.x <= 520)) && ((camera.position.z >= -10) && (camera.position.z <= -5)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
 	{
 		jumpscareActive1 = true;
 	}
@@ -1065,7 +1065,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscare 2
-	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 0))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
 	{
 		jumpscare2Pass = true;
 	}
@@ -1471,6 +1471,9 @@ void SceneSP2Room2::Render()
 	}
 
 
+	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 }
 
 void SceneSP2Room2::Exit()
