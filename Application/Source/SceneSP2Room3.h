@@ -164,6 +164,7 @@ private:
 	float campos_z;
 	bool exitGarage;
 	bool nearExit;
+	bool showSideBox;
 	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;

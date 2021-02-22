@@ -1481,7 +1481,7 @@ void SceneSP2Main::Update(double dt)
 		break;
 	case 10:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
@@ -1496,6 +1496,12 @@ void SceneSP2Main::Update(double dt)
 
 	case 12:
 		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase++;
+		}
+	case 13:
+		SpeakTimer += dt;
 		rotate_Man = 90;
 		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
 			SpeakTimer = 0;
@@ -1503,6 +1509,8 @@ void SceneSP2Main::Update(double dt)
 			SpeakPhase = 0;
 			ObjectivePhase = 2;
 		}
+
+
 		break;
 	}
 	//light
@@ -2334,21 +2342,24 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about this place. Are they true sir?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 7:
-		RenderTextOnScreen(meshList[GEO_TEXT], "...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
-		break;
-	case 8:
 		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
+	case 8:
+		RenderTextOnScreen(meshList[GEO_TEXT], "My car broke down..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		break;
 	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Is there any way i can fix it?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 10:
-		RenderTextOnScreen(meshList[GEO_TEXT], "It's here...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "There are stuff lying around in the buildings.. ", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 11:
-		RenderTextOnScreen(meshList[GEO_TEXT], "What is?", Color(0, 0, 1), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "But be  CAREFUL...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 12:
+		RenderTextOnScreen(meshList[GEO_TEXT], "What? Why?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		break;
+	case 13:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	}
@@ -2391,7 +2402,7 @@ void SceneSP2Main::Render()
 		}
 	case 2:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in garage", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
 			break;
 		}
 	}
