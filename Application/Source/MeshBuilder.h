@@ -17,7 +17,7 @@ public:
 	static Mesh* GenerateQuad2(const std::string& meshName, float lengthX, float lengthY, int color);
 	static Mesh* GenerateQuadRepeat(const std::string& meshName, float lengthX, float lengthY, int color);
 	static Mesh* GenerateCube(const std::string &meshName, float lengthX, float lengthY, float lengthZ,int color);
-	static Mesh* GenerateCubeT(const std::string& meshName, float lengthX, float lengthY, float lengthZ, float texStart, float texEnd, Color col);
+	static Mesh* GenerateCubeT(const std::string& meshName, float lengthX, float lengthY, float lengthZ, float x1, float y1, float x2, float y2, Color col);
 	static Mesh* GenerateCircle(const std::string& meshName, float lengthX, float lengthY, float lengthZ);
 	static Mesh* GenerateSemiCircle(const std::string& meshName, float lengthX, float lengthY, float lengthZ,int color);
 	static Mesh* Generatering(const std::string& meshName, float lengthX, float lengthY, float lengthZ);

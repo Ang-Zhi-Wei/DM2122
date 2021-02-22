@@ -250,6 +250,7 @@ private:
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
     
+	bool manAppear;
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;

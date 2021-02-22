@@ -20,6 +20,7 @@ SceneSP2Main::SceneSP2Main()
 	SpeakPhase = 1;
 	SpeakTimer = 0;
 	Interact_Num = 0;
+	manAppear = true;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -1194,14 +1195,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 
-	if (Fpressed == true)
-	{
-		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
-		{
-			enterBuilding = true;
-			Fpressed = false;
-		}
-	}
+	
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -1289,7 +1283,7 @@ void SceneSP2Main::Update(double dt)
 		NearGarage = false;
 	}
 
-	if (campos_z < -430 && campos_x > -10 && campos_x < 10)
+	if (campos_z < -415 && campos_z > -420 && campos_x > -10 && campos_x < 10)
 	{
 		NearHouse = true;
 	}
@@ -1298,7 +1292,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 
-	if (campos_x > 470 && campos_z > -26 && campos_z < -13)
+	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13)
 	{
 		NearSchool = true;
 	}
@@ -1312,6 +1306,15 @@ void SceneSP2Main::Update(double dt)
 	}
 	else {
 		NearHospital = false;
+	}
+	if (Fpressed == true)
+	{
+		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
+		{
+			enterBuilding = true;
+			Fpressed = false;
+			manAppear = false;
+		}
 	}
 
 	if (enterBuilding == true && NearGarage == true)
@@ -2009,14 +2012,14 @@ void SceneSP2Main::Render()
 
 	RenderBenches();
 
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -3, 20);
-	modelStack.Rotate(rotate_Man, 0, 1, 0);
-	modelStack.Scale(4.2f, 4.2f, 4.2f);
-	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
-	modelStack.PopMatrix();
-
+	if (manAppear == true) {
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -3, 20);
+		modelStack.Rotate(rotate_Man, 0, 1, 0);
+		modelStack.Scale(4.2f, 4.2f, 4.2f);
+		RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -1, 0);
@@ -2320,7 +2323,7 @@ void SceneSP2Main::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Investigate the area", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
 			break;
 		}
 	}
