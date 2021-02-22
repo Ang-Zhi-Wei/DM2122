@@ -423,7 +423,7 @@ void SceneSP2Room1::Init()
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 
 	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
+	camera.SetBounds(-415, 415, -1500, 360);
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -937,6 +937,8 @@ void SceneSP2Room1::Render()
 		}
 	}
 
+	modelStack.PushMatrix();
+	modelStack.Translate(-24.5, 0, -600);
 	
 	//Main door
 	modelStack.PushMatrix();
@@ -1155,6 +1157,7 @@ void SceneSP2Room1::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(0.5, 0.5, 0.5);
 	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	
