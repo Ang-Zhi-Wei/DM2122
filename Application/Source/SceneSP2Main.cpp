@@ -1060,16 +1060,17 @@ void SceneSP2Main::SetBackground() {
 	//Background sound loop
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+
 	Effect->setSoundVolume(0.f);
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.5f);//Volume control
 }
 void SceneSP2Main::Update(double dt)
@@ -2352,9 +2353,6 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
-	Background->drop();
-	Effect->drop();
-	Jumpscare->drop();
 	delete ghost;
 	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);

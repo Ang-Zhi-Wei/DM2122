@@ -495,17 +495,18 @@ void SceneSP2Room4::SetBackground()
 	if (!Background) {
 		Background = createIrrKlangDevice();
 		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
-		Background->setSoundVolume(0.5f);//Volume control
+		
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
 		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
-		Effect->setSoundVolume(0.f);
+	
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	
+	Background->setSoundVolume(0.25f);//Volume control
+	Effect->setSoundVolume(0.f);
 	
 }
 
@@ -1521,9 +1522,6 @@ void SceneSP2Room4::Render()
 
 void SceneSP2Room4::Exit()
 {
-	Background->drop();
-	Jumpscare->drop();
-	Effect->drop();
 	// Cleanup VBO here
 	delete ghost;
 	delete inventory;

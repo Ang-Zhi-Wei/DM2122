@@ -236,8 +236,8 @@ void Application::setscene(int scenenum)
 		scene->Exit();
 		scene->Init();
 		sceneMenu->SetBackground();
-		scene = sceneMenu;
 		sceneMenu->Init();
+		scene = sceneMenu;
 		break;
 	case Scene_1:
 		scene1->Set(scene);
