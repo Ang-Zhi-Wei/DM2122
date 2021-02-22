@@ -1073,6 +1073,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -1527,7 +1528,12 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
-
+	}
+	if (Application::IsKeyPressed('0')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_4);
 	}
 }
 
