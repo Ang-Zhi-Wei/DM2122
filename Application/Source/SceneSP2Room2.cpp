@@ -437,13 +437,17 @@ void SceneSP2Room2::Init()
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
-	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[GEO_WALL]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0.5, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL1] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL1]->textureID = LoadTGA("Image//schoolwall.tga");/////////////////////////////////////////////////////////
+	meshList[GEO_WALL2] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL2]->textureID = LoadTGA("Image//schoolwall.tga");
+	meshList[GEO_WALL3] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL3]->textureID = LoadTGA("Image//schoolwall.tga");
+	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1.f/22.f, 10.f/25.f, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
+	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
-	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 1, White);
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("chair", "OBJ//schoolChair.obj");
 	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//greywood.tga");
@@ -793,7 +797,7 @@ void SceneSP2Room2::Update(double dt)
 
 	//INTERACTION CHECKS
 	interact = false;
-	Vector3 origin(0, 5, 0);
+	Vector3 origin(470, 5, 0);
 	//doors
 	switch (DS_school)
 	{
@@ -844,7 +848,7 @@ void SceneSP2Room2::Update(double dt)
 		break;
 	}
 
-	origin.Set(-95, 5, 10);
+	origin.Set(565, 5, 10);
 	switch (DS_classroom)
 	{
 	case OPEN:
@@ -909,7 +913,7 @@ void SceneSP2Room2::Update(double dt)
 		break;
 	}
 
-	origin.Set(-50, 5, -10);
+	origin.Set(520, 5, -10);
 	switch (DS_lounge)
 	{
 	case OPEN:
@@ -1196,14 +1200,27 @@ void SceneSP2Room2::Render()
 		RenderMesh(meshList[GEO_TOPHALFWALL], true);
 		modelStack.PopMatrix();
 	}
-	for (int i = 3; i < wall_count; i++)
+	for (int i = 3; i < 8; i++)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(all_walls[i]->mid.x, all_walls[i]->mid.y, all_walls[i]->mid.z);
 		modelStack.Scale(all_walls[i]->lengthx, all_walls[i]->lengthy, all_walls[i]->lengthz);
-		RenderMesh(meshList[GEO_WALL], true);
+		RenderMesh(meshList[GEO_WALL2], true);
 		modelStack.PopMatrix();
 	}
+	for (int i = 8; i < 10; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(all_walls[i]->mid.x, all_walls[i]->mid.y, all_walls[i]->mid.z);
+		modelStack.Scale(all_walls[i]->lengthx, all_walls[i]->lengthy, all_walls[i]->lengthz);
+		RenderMesh(meshList[GEO_WALL3], true);
+		modelStack.PopMatrix();
+	}
+	modelStack.PushMatrix();
+	modelStack.Translate(all_walls[10]->mid.x, all_walls[10]->mid.y, all_walls[10]->mid.z);
+	modelStack.Scale(all_walls[10]->lengthx, all_walls[10]->lengthy, all_walls[10]->lengthz);
+	RenderMesh(meshList[GEO_WALL1], true);
+	modelStack.PopMatrix();
 	//tables and chairs in classroom
 	for (int i = 0; i < 20; i++)
 	{
@@ -1271,9 +1288,9 @@ void SceneSP2Room2::Render()
 	//lounge left
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_door[0].mid.x, lounge_door[0].mid.y, lounge_door[0].mid.z);
-	modelStack.Translate(2.5, 0, -0.25);
-	modelStack.Rotate(lounge_door[0].rotateY, 0, 1, 0);
 	modelStack.Translate(-2.5, 0, 0.25);
+	modelStack.Rotate(lounge_door[0].rotateY, 0, 1, 0);
+	modelStack.Translate(2.5, 0, -0.25);
 	modelStack.Scale(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
