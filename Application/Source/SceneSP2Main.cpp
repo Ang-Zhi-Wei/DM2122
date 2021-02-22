@@ -88,6 +88,7 @@ void SceneSP2Main::Init()
 	//camera
 
 
+
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
 		0));
 
@@ -1343,7 +1344,7 @@ void SceneSP2Main::Update(double dt)
 
 	else if (enterBuilding == true && NearHospital == true)
 	{
-		Application::setscene(Scene_2);
+		Application::setscene(Scene_4);
 		Background->drop();
 		enterBuilding = false;
 	}
