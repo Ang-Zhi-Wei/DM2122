@@ -456,32 +456,26 @@ void SceneSP2Room3::Set(Scene* scene)
 
 void SceneSP2Room3::SetBackground()
 {
-	Background = createIrrKlangDevice();
+	if (!Background) {
+		Background = createIrrKlangDevice();
+	}
+	if (!Effect) {
+		Effect = createIrrKlangDevice();
+	}
+	if (!Jumpscare) {
+		Jumpscare = createIrrKlangDevice();
+	}
 	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
+	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	Effect->setSoundVolume(0.f);
 }
 
 void SceneSP2Room3::Update(double dt)
 {
 	//mouse cursor show/hide
 	//Application::hidemousecursor(true);
-	//switch scenes button for now
-	if (Application::IsKeyPressed('5')) {
-		Application::setscene(Scene_Menu);
-		Background->drop();
-	}
-	if (Application::IsKeyPressed('6')) {
-		Application::setscene(Scene_Main);
-		Background->drop();
-	}
-	if (Application::IsKeyPressed('7')) {
-		Application::setscene(Scene_1);
-		Background->drop();
-	}
-	if (Application::IsKeyPressed('8')) {
-		Application::setscene(Scene_2);
-		Background->drop();
-	}
+	
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -846,6 +840,43 @@ void SceneSP2Room3::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
+	//switch scenes button for now
+	if (Application::IsKeyPressed('5')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Menu);
+	}
+	if (Application::IsKeyPressed('6')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+	}
+	if (Application::IsKeyPressed('7')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_1);
+	}
+	if (Application::IsKeyPressed('8')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_2);
+	}
+	if (Application::IsKeyPressed('0')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_4);
+	}
 }
 
 void SceneSP2Room3::PauseUpdate()
@@ -1120,6 +1151,9 @@ void SceneSP2Room3::Render()
 
 void SceneSP2Room3::Exit()
 {
+	Background->drop();
+	Effect->drop();
+	Jumpscare->drop();
 	// Cleanup VBO here
 	delete ghost;
 	delete inventory;

@@ -28,6 +28,8 @@ SceneSP2Main::SceneSP2Main()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
+	NearGarage = false;
+	enterBuilding = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -84,6 +86,7 @@ void SceneSP2Main::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
+
 
 
 	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
@@ -1025,9 +1028,18 @@ void SceneSP2Main::Init()
 void SceneSP2Main::Set(Scene* scene)
 {
 	inventory = scene->inventory;
-	ghost = scene->ghost;
+	if (ghost->state == Ghost::UNSPAWNED)
+	{
+		ghost->pos.Set(0, 0, -1000);
+		ghost->state = Ghost::NORMAL;
+	}
+	else
+	{
+		ghost = scene->ghost;
+	}
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
+
 
 	//other lights
 	light[2].power = 2;
@@ -1048,31 +1060,32 @@ void SceneSP2Main::Set(Scene* scene)
 
 void SceneSP2Main::SetBackground() {
 	//Background sound loop
-	Background = createIrrKlangDevice();
+	if (!Background) {
+		Background = createIrrKlangDevice();
+	}
+	if (!Effect) {
+		Effect = createIrrKlangDevice();
+	}
+	if (!Jumpscare) {
+		Jumpscare = createIrrKlangDevice();
+	}
+	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	Effect->setSoundVolume(0.f);
 	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.5f);//Volume control
 }
 void SceneSP2Main::Update(double dt)
 {
 	// mouse cursor show / hide
-	Application::hidemousecursor(true);
-	//switch scenes button for now
-	if (Application::IsKeyPressed('5')) {
-		Application::setscene(Scene_Menu);
-		Background->drop();
+	//Application::hidemousecursor(true);
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
 	}
-	if (Application::IsKeyPressed('7')) {
-		Application::setscene(Scene_1);
-		Background->drop();
+	else {
+		Effect->setSoundVolume(0.f);
 	}
-	if (Application::IsKeyPressed('8')) {
-		Application::setscene(Scene_2);
-		Background->drop();
-	}
-	if (Application::IsKeyPressed('9')) {
-		Application::setscene(Scene_3);
-		Background->drop();
-	}
+	
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -1180,6 +1193,11 @@ void SceneSP2Main::Update(double dt)
 			Fpressed = true;
 		}
 		Freleased = false;
+
+		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
+		{
+			enterBuilding = true;
+		}
 	}
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -1269,6 +1287,76 @@ void SceneSP2Main::Update(double dt)
 		suffocationTranslate = 0;
 	}
 
+	if (campos_z > 430 && campos_x > -17 && campos_x < 17)
+	{
+		NearGarage = true;
+	}
+	else {
+		NearGarage = false;
+	}
+
+	if (campos_z < -430 && campos_x > -10 && campos_x < 10)
+	{
+		NearHouse = true;
+	}
+	else {
+		NearHouse = false;
+	}
+
+
+	if (campos_x > 470 && campos_z > -26 && campos_z < -13)
+	{
+		NearSchool = true;
+	}
+	else {
+		NearSchool = false;
+	}
+
+	if (campos_x < -479 && campos_z > -44 && campos_z < -30)
+	{
+		NearHospital = true;
+	}
+	else {
+		NearHospital = false;
+	}
+
+	if (enterBuilding == true && NearGarage == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_3);
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHouse == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_1);
+		enterBuilding = false;
+	}
+
+
+	else if (enterBuilding == true && NearSchool == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_2);
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHospital == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_4);
+		enterBuilding = false;
+	}
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -1287,9 +1375,10 @@ void SceneSP2Main::Update(double dt)
 	{
 		//default
 	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-
+		if (NearGarage == false && NearHouse == false && NearSchool == false && NearHospital == false) {
+			showChatbox = false;
+			SpeakTimer = 0;
+		}
 		break;
 		//starting phase
 	case 1:
@@ -1431,7 +1520,7 @@ void SceneSP2Main::Update(double dt)
 		}
 	}
 
-
+	
 	//inventory
 	if (Epressed)
 	{
@@ -1502,7 +1591,38 @@ void SceneSP2Main::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
+	//switch scenes button for now
+	if (Application::IsKeyPressed('5')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Menu);
+	}
+	if (Application::IsKeyPressed('7')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_1);
 
+	}
+	if (Application::IsKeyPressed('8')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_2);
+	}
+	if (Application::IsKeyPressed('9')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_3);
+	}
+	if (Application::IsKeyPressed('0')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_4);
+	}
 }
 
 void SceneSP2Main::PauseUpdate()
@@ -2021,7 +2141,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-581, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
@@ -2035,9 +2155,27 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(562, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
+
+	
+
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+
 
 	
 
@@ -2050,7 +2188,7 @@ void SceneSP2Main::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
 	}
-	else if (ghost->distance <= 50)
+	else if (ghost->state == Ghost::CHASING)
 	{
 		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
 	}
@@ -2103,6 +2241,8 @@ void SceneSP2Main::Render()
 		}
 		
 	}
+
+	
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -2191,6 +2331,13 @@ void SceneSP2Main::Render()
 			break;
 		}
 	}
+
+
+	if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go inside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	
 	//pause menu
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
@@ -2209,6 +2356,9 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
+	Background->drop();
+	Effect->drop();
+	Jumpscare->drop();
 	delete ghost;
 	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);

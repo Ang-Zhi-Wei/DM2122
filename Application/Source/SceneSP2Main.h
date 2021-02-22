@@ -13,9 +13,6 @@
 #include <vector>
 #include "Locker.h"
 #include "SceneSP2Room2.h"
-#include "irrKlang.h"
-
-using namespace irrklang;
 class SceneSP2Main : public Scene
 {
 public:
@@ -228,7 +225,6 @@ public:
 
 private:
 
-
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
@@ -242,6 +238,11 @@ private:
 	float fps;
 	bool showChatbox;
 	bool showSideBox;
+	bool NearGarage;
+	bool NearHouse;
+	bool NearSchool;
+	bool NearHospital;
+	bool enterBuilding;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -302,6 +303,7 @@ private:
 
 	//Irrklang sound
 	ISoundEngine* Background;
+	ISoundEngine* Effect;
 
 	Item test;
 	Item test2;

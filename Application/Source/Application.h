@@ -31,7 +31,7 @@ private:
 	StopWatch m_timer;
 	static int scenetype;
 	static Scene* scene;
-	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3;
+	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3, *scene4;
 	static bool isquit;
 	static bool ispaused;
 	static bool mainInit;
