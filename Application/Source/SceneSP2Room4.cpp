@@ -936,6 +936,43 @@ void SceneSP2Room4::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
+	//switch scenes button for now
+	if (Application::IsKeyPressed('5')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Menu);
+	}
+	if (Application::IsKeyPressed('6')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+	}
+	if (Application::IsKeyPressed('7')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_1);
+	}
+	if (Application::IsKeyPressed('8')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_2);
+	}
+	if (Application::IsKeyPressed('9')) {
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_3);
+	}
 }
 
 void SceneSP2Room4::PauseUpdate()
