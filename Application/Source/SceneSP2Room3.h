@@ -12,6 +12,9 @@
 #include "Utility.h"
 #include "ColliderBox.h"
 #include <vector>
+#include "irrKlang.h"
+
+using namespace irrklang;
 class SceneSP2Room3 : public Scene
 {
 public:
@@ -24,6 +27,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
+	virtual void SetBackground();
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -62,7 +66,6 @@ public:
 		rustycar,
 		rustychair,
 		barrels,
-		rolldoor,
 		workbench,
 		wheelbarrow,
 		metalcabinet,
@@ -117,7 +120,17 @@ public:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
-		
+		//light 2
+		U_LIGHT2_POWER,
+
+		//light 3
+		U_LIGHT3_POWER,
+
+		//light 4
+		U_LIGHT4_POWER,
+
+		//light 5
+		U_LIGHT5_POWER,
 		U_TOTAL,
 
 	};
@@ -141,7 +154,7 @@ private:
 
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[6];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
@@ -235,6 +248,9 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	//Irrklang sound
+	ISoundEngine* Background;
 };
 
 #endif

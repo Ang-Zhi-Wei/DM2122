@@ -35,7 +35,6 @@ private:
 	static bool isquit;
 	static bool ispaused;
 	static bool mainInit;
-	
 };
 enum Scenemanager {
 	

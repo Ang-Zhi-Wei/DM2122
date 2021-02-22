@@ -157,6 +157,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneSP2Main.cpp" />
     <ClCompile Include="Source\SceneSP2Menu.cpp" />
     <ClCompile Include="Source\SceneSP2Room1.cpp" />

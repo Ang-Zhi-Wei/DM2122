@@ -13,7 +13,9 @@
 #include <vector>
 #include "Locker.h"
 #include "SceneSP2Room2.h"
+#include "irrKlang.h"
 
+using namespace irrklang;
 class SceneSP2Main : public Scene
 {
 public:
@@ -27,7 +29,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Set(Scene* scene);
-	
+	virtual void SetBackground();
 
 	int SpeakPhase;
 	double SpeakTimer;
@@ -48,6 +50,7 @@ public:
 
 		//ground mesh
 		Ground_Mesh,
+		Ground_Mesh2, //for buildings etc
 		GEO_PATH,
 
 		//models
@@ -78,6 +81,8 @@ public:
 		HAUNTEDSCHOOL,
 		HOUSE,
 		HOSPITAL,
+		GARAGE,
+		GARAGEDOOR,
 	
 		GEO_TRUCK,
 		Fountain,
@@ -93,6 +98,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_WARNING1,
 		GEO_WARNING2,
+		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
@@ -288,6 +294,15 @@ private:
 	int Interact_Num;
 	bool canTalk_man;
 
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
+
+	//Irrklang sound
+	ISoundEngine* Background;
+
 	Item test;
 	Item test2;
 	Item battery;
@@ -297,7 +312,7 @@ private:
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
-	Mesh* itemImage[8];
+	//Mesh* itemImage[8];
 	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
 	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
@@ -306,6 +321,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderBuilding();
+	void RenderBenches();
 	void RenderFence();
 	void RenderTables();
 	void RenderTrees();
