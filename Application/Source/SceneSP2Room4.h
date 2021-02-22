@@ -39,6 +39,10 @@ public:
 		GEO_FRONT,
 		GEO_BACK,
 
+		//UI
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
+
 		//terrain
 		GEO_TOPHALFWALL,
 		GEO_WALL,
@@ -171,6 +175,15 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitHospital;
+	bool nearExit;
+	bool showChatbox;
+
 	struct Wall
 	{
 		Vector3 mid;

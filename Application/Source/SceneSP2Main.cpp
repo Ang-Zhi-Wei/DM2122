@@ -1197,14 +1197,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 
-	if (Fpressed == true)
-	{
-		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
-		{
-			enterBuilding = true;
-			Fpressed = false;
-		}
-	}
+	
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -1310,7 +1303,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 
-	if (campos_x > 470 && campos_z > -26 && campos_z < -13)
+	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13)
 	{
 		NearSchool = true;
 	}
@@ -1324,6 +1317,14 @@ void SceneSP2Main::Update(double dt)
 	}
 	else {
 		NearHospital = false;
+	}
+	if (Fpressed == true)
+	{
+		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
+		{
+			enterBuilding = true;
+			Fpressed = false;
+		}
 	}
 
 	if (enterBuilding == true && NearGarage == true)

@@ -589,7 +589,7 @@ void SceneSP2Room3::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_x > -3)
+	if (campos_z > -8 && campos_x > -14 && campos_x < 14)
 	{
 		nearExit = true;
 	}
@@ -689,7 +689,7 @@ void SceneSP2Room3::Update(double dt)
 	{
 	case OPEN:
 		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
+		/*if ((camera.position - origin).Length() >= 20)
 		{
 			DS_school = CLOSING;
 		}
@@ -714,7 +714,7 @@ void SceneSP2Room3::Update(double dt)
 				Fpressed = false;
 				DS_school = OPENING;
 			}
-		}
+		}*/
 		break;
 	case OPENING:
 		school_door[0].rotateY -= 20 * float(dt);

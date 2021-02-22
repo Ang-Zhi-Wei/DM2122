@@ -168,6 +168,10 @@ void SceneSP2Room4::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
 
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
 
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
@@ -509,19 +513,6 @@ void SceneSP2Room4::Update(double dt)
 {
 	//mouse cursor show/hide
 	//Application::hidemousecursor(true);
-	//switch scenes button for now
-	if (Application::IsKeyPressed('5')) {
-		Application::setscene(Scene_Menu);
-	}
-	if (Application::IsKeyPressed('6')) {
-		Application::setscene(Scene_Main);
-	}
-	if (Application::IsKeyPressed('7')) {
-		Application::setscene(Scene_1);
-	}
-	if (Application::IsKeyPressed('8')) {
-		Application::setscene(Scene_2);
-	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -562,6 +553,15 @@ void SceneSP2Room4::Update(double dt)
 		}
 		Freleased = false;
 	}
+
+
+	if (nearExit == true && Fpressed == true)
+	{
+		exitHospital = true;
+		Fpressed = false;
+	}
+
+
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -617,6 +617,26 @@ void SceneSP2Room4::Update(double dt)
 		}
 		Rreleased = false;
 	}
+
+	if (campos_z > -9 && campos_x > -4 && campos_x < 4)
+	{
+		nearExit = true;
+	}
+	else {
+		nearExit = false;
+		showChatbox = false;
+	}
+
+	if (exitHospital == true && nearExit == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+		exitHospital = false;
+	}
+
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -693,7 +713,7 @@ void SceneSP2Room4::Update(double dt)
 	{
 	case OPEN:
 		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
+		/*if ((camera.position - origin).Length() >= 20)
 		{
 			DS_school = CLOSING;
 		}
@@ -719,13 +739,13 @@ void SceneSP2Room4::Update(double dt)
 				DS_school = OPENING;
 			}
 		}
-		break;
+		break;*/
 	case OPENING:
 		school_door[0].rotateY -= 20 * float(dt);
 		school_door[1].rotateY += 20 * float(dt);
 		if (school_door[1].rotateY >= 90)
 		{
-			Application::setscene(Scene_Main);
+			//Application::setscene(Scene_Main);
 		}
 		break;
 	case CLOSING:
@@ -973,6 +993,10 @@ void SceneSP2Room4::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
+
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
 }
 
 void SceneSP2Room4::PauseUpdate()
@@ -1443,6 +1467,28 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 
 	//UI OVERLAY
 	//vision vignette
