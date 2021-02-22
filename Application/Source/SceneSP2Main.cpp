@@ -1074,7 +1074,7 @@ void SceneSP2Main::SetBackground() {
 void SceneSP2Main::Update(double dt)
 {
 	// mouse cursor show / hide
-	Application::hidemousecursor(true);
+	//Application::hidemousecursor(true);
 	if (camera.movement) {
 		Effect->setSoundVolume(0.5f);
 	}
