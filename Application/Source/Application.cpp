@@ -143,6 +143,7 @@ void Application::Run()
 	scene2->Init();
 	scene3->Init();
 	scene4->Init();
+	sceneMenu->SetBackground();
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -212,6 +213,7 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
+	Application::SetCursorPos(960, 540);
 	switch (scenetype)
 	{
 	case Scene_Main:
@@ -225,29 +227,36 @@ void Application::setscene(int scenenum)
 		{
 			sceneMain->Set(scene);
 		}
+		sceneMain->SetBackground();
 		scene = sceneMain;
 		break;
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
 		scene->Exit();
+		scene->Init();
+		sceneMenu->SetBackground();
 		scene = sceneMenu;
 		sceneMenu->Init();
 		break;
 	case Scene_1:
 		scene1->Set(scene);
+		scene1->SetBackground();
 		scene = scene1;
 		break;
 	case Scene_2:
 		scene2->Set(scene);
+		scene2->SetBackground();
 		scene = scene2;
 		break;
 	case Scene_3:
 		scene3->Set(scene);
+		scene3->SetBackground();
 		scene = scene3;
 		break;
 	case Scene_4:
 		scene4->Set(scene);
+		scene4->SetBackground();
 		scene = scene4;
 		break;
 	}

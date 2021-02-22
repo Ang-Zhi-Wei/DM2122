@@ -296,9 +296,6 @@ private:
 	float suffocationScale;
 	float suffocationScaleDir;
 
-	//Irrklang sound
-	ISoundEngine* Background;
-	ISoundEngine* Effect;
 
 	Item test;
 	Item test2;
