@@ -83,7 +83,7 @@ public:
 			CHASING,
 			WAITING,
 			SPEEDRUN,
-			DEATH
+			DEATH,
 		};
 		int state;
 		Vector3 up;

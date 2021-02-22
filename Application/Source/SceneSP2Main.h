@@ -242,7 +242,11 @@ private:
 	float fps;
 	bool showChatbox;
 	bool showSideBox;
-	bool NearBuilding;
+	bool NearGarage;
+	bool NearHouse;
+	bool NearSchool;
+	bool NearHospital;
+	bool enterBuilding;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;

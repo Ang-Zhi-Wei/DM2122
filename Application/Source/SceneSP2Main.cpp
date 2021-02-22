@@ -28,7 +28,8 @@ SceneSP2Main::SceneSP2Main()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
-	NearBuilding = false;
+	NearGarage = false;
+	enterBuilding = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -1181,6 +1182,11 @@ void SceneSP2Main::Update(double dt)
 			Fpressed = true;
 		}
 		Freleased = false;
+
+		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
+		{
+			enterBuilding = true;
+		}
 	}
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -1270,14 +1276,67 @@ void SceneSP2Main::Update(double dt)
 		suffocationTranslate = 0;
 	}
 
-	if (campos_z > 380 && campos_x > -20 && campos_x < 20)
+	if (campos_z > 430 && campos_x > -17 && campos_x < 17)
 	{
-		NearBuilding = true;
+		NearGarage = true;
 	}
 	else {
-		NearBuilding = false;
+		NearGarage = false;
 	}
 
+	if (campos_z < -430 && campos_x > -10 && campos_x < 10)
+	{
+		NearHouse = true;
+	}
+	else {
+		NearHouse = false;
+	}
+
+
+	if (campos_x > 470 && campos_z > -26 && campos_z < -13)
+	{
+		NearSchool = true;
+	}
+	else {
+		NearSchool = false;
+	}
+
+	if (campos_x < -479 && campos_z > -44 && campos_z < -30)
+	{
+		NearHospital = true;
+	}
+	else {
+		NearHospital = false;
+	}
+
+	if (enterBuilding == true && NearGarage == true)
+	{
+		Application::setscene(Scene_3);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHouse == true)
+	{
+		Application::setscene(Scene_1);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+
+	else if (enterBuilding == true && NearSchool == true)
+	{
+		Application::setscene(Scene_2);
+		Background->drop();
+		enterBuilding = false;
+	}
+
+	else if (enterBuilding == true && NearHospital == true)
+	{
+		Application::setscene(Scene_2);
+		Background->drop();
+		enterBuilding = false;
+	}
 
 	//fps
 	fps = 1.f / float(dt);
@@ -1297,7 +1356,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		//default
 	case 0:
-		if (NearBuilding == false) {
+		if (NearGarage == false && NearHouse == false && NearSchool == false && NearHospital == false) {
 			showChatbox = false;
 			SpeakTimer = 0;
 		}
@@ -2224,10 +2283,9 @@ void SceneSP2Main::Render()
 	}
 
 
-	if (NearBuilding == true) {
+	if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Oh.. A Garage! I wonder what's inside..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-		NearBuilding = false;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go inside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	
 	//pause menu
