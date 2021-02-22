@@ -513,19 +513,26 @@ void SceneSP2Room3::Update(double dt)
 	{
 		Freleased = true;
 		Fpressed = false;
+
+		
 	}
 	else
 	{
 		if (Freleased)
 		{
 			Fpressed = true;
+			
 		}
+		
 		Freleased = false;
-		if (nearExit == true)
-		{
-			exitGarage = true;
-		}
 	}
+	if (nearExit == true && Fpressed == true)
+	{
+		exitGarage = true;
+		Fpressed = false;
+	}
+
+
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -582,7 +589,7 @@ void SceneSP2Room3::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_z > -4 && campos_x < 13 && campos_x > -13)
+	if (campos_x > -3)
 	{
 		nearExit = true;
 	}
@@ -590,13 +597,15 @@ void SceneSP2Room3::Update(double dt)
 		nearExit = false;
 	}
 
-
 	if (exitGarage == true && nearExit == true)
 	{
-		Application::setscene(Scene_1);
-		Background->drop();
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
 		exitGarage = false;
 	}
+	
 
 	//fps
 	fps = 1.f / float(dt);
@@ -909,6 +918,8 @@ void SceneSP2Room3::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
+	
 }
 
 void SceneSP2Room3::PauseUpdate()
@@ -1167,9 +1178,13 @@ void SceneSP2Room3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go inside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	//UI OVERLAY
 	//vision vignette
