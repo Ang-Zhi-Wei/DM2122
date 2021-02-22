@@ -1027,6 +1027,10 @@ void SceneSP2Main::Update(double dt)
 	if (Application::IsKeyPressed('9')) {
 		Application::setscene(Scene_3);
 	}
+	if (Application::IsKeyPressed('0')) {
+		Application::setscene(Scene_4);
+	}
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{

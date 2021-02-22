@@ -15,6 +15,7 @@
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
+#include "SceneSP2Room4.h"
 #include "time.h"
 
 GLFWwindow* m_window;
@@ -129,6 +130,7 @@ Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
+Scene* Application::scene4 = new SceneSP2Room4;
 Scene* Application::sceneMenu = new SceneSP2Menu;
 Scene* Application::scene = sceneMenu;
 
@@ -140,6 +142,7 @@ void Application::Run()
 	scene1->Init();
 	scene2->Init();
 	scene3->Init();
+	scene4->Init();
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -164,6 +167,7 @@ void Application::Run()
 	delete scene1;
 	delete scene2;
 	delete scene3;
+	delete scene4;
 	delete sceneMain;
 	delete sceneMenu;
 }
@@ -241,6 +245,10 @@ void Application::setscene(int scenenum)
 	case Scene_3:
 		scene3->Set(scene);
 		scene = scene3;
+		break;
+	case Scene_4:
+		scene4->Set(scene);
+		scene = scene4;
 		break;
 	}
 	
