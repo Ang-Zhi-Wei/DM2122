@@ -595,6 +595,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 	else {
 		nearExit = false;
+		showChatbox = false;
 	}
 
 	if (exitGarage == true && nearExit == true)

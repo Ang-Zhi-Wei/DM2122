@@ -188,6 +188,9 @@ public:
 		GEO_LEFTDOOR,
 		GEO_RIGHTDOOR,
 
+
+
+
 		//colliderbox 
 		Colliderbox,
 		
@@ -369,6 +372,13 @@ private:
 	int jumpscare2Counter;
 	bool jumpscare2Pass;
 	bool jumpscareActive2;
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitSchool;
+	bool nearExit;
+	bool showChatbox;
 
 
 	//game related vars

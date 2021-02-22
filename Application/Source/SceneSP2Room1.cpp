@@ -665,6 +665,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else {
 		nearExit = false;
+		showChatbox = false;
 	}
 
 	if (exitHouse == true && nearExit == true)
