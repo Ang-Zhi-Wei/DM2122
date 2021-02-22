@@ -241,6 +241,7 @@ private:
 	float fps;
 	bool showChatbox;
 	bool showSideBox;
+	bool NearBuilding;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;

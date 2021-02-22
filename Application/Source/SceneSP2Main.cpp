@@ -28,6 +28,7 @@ SceneSP2Main::SceneSP2Main()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
+	NearBuilding = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -1267,6 +1268,15 @@ void SceneSP2Main::Update(double dt)
 		suffocationTranslate = 0;
 	}
 
+	if (campos_z > 380 && campos_x > -20 && campos_x < 20)
+	{
+		NearBuilding = true;
+	}
+	else {
+		NearBuilding = false;
+	}
+
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -1285,9 +1295,10 @@ void SceneSP2Main::Update(double dt)
 	{
 		//default
 	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-
+		if (NearBuilding == false) {
+			showChatbox = false;
+			SpeakTimer = 0;
+		}
 		break;
 		//starting phase
 	case 1:
@@ -2018,7 +2029,7 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-581, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
@@ -2032,9 +2043,27 @@ void SceneSP2Main::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(562, -2.8, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(1200, 1, 300);
+	modelStack.Scale(1360, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
+
+	
+
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+
 
 	
 
@@ -2096,6 +2125,8 @@ void SceneSP2Main::Render()
 		}
 		
 	}
+
+	
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -2184,6 +2215,14 @@ void SceneSP2Main::Render()
 			break;
 		}
 	}
+
+
+	if (NearBuilding == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Oh.. A Garage! I wonder what's inside..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		NearBuilding = false;
+	}
+	
 	//pause menu
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
