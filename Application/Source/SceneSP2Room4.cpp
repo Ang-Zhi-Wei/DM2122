@@ -301,7 +301,7 @@ void SceneSP2Room4::Init()
 		m_parameters[U_MATERIAL_SPECULAR],
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
-	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
 
 	
 	//init update stuff
@@ -1420,18 +1420,18 @@ void SceneSP2Room4::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
 
-	/*std::ostringstream test1;
-	test1 << "camera view: " << camera.view;
+	std::ostringstream test1;
+	test1 << "camera up: " << camera.up;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
-	test3 << "light[1]spotdirec: " << light[1].spotDirection;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
-	//std::ostringstream test2;
-	//test2 << "camera view: " << camera.view;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-	////checking
-	//std::cout << camera.position.x << std::endl;
-	//std::cout << camera.position.z << std::endl;
+	test3 << "camera target: " << camera.target;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test2;
+	test2 << "camera view: " << camera.view;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	//checking
+	std::cout << camera.position.x << std::endl;
+	std::cout << camera.position.z << std::endl;
 }
 
 void SceneSP2Room4::Exit()

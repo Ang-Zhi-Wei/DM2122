@@ -161,7 +161,7 @@ private:
 
 	
 	MS modelStack, viewStack, projectionStack;
-	Light light[2];
+	Light light[6];
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;

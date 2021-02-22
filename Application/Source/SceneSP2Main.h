@@ -238,6 +238,11 @@ private:
 	float fps;
 	bool showChatbox;
 	bool showSideBox;
+	bool NearGarage;
+	bool NearHouse;
+	bool NearSchool;
+	bool NearHospital;
+	bool enterBuilding;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -296,6 +301,9 @@ private:
 	float suffocationScale;
 	float suffocationScaleDir;
 
+	//Irrklang sound
+	ISoundEngine* Background;
+	ISoundEngine* Effect;
 
 	Item test;
 	Item test2;
