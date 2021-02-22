@@ -42,8 +42,8 @@ SceneSP2Room1::SceneSP2Room1()
 	jumpscareActive4 = false;
 	jumpscareTimerActive4 = false;
 	inLocker = false;
-	suffocationScale = 10;
-	suffocationScale = 1;
+	suffocationScale = 15;
+	suffocationScaleDir = 1;
 	suffocationTranslate = 14;
 	suffocationTranslateDir = 1;
 	fps = 60;
@@ -204,7 +204,7 @@ void SceneSP2Room1::Init()
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1.0f / 22, 0.6, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
@@ -322,7 +322,7 @@ void SceneSP2Room1::Init()
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
-	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -492,15 +492,17 @@ void SceneSP2Room1::SetBackground()
 	}
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+		
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	
 	}
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
-
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
 	Effect->setSoundVolume(0.f);
+	
 }
 
 void SceneSP2Room1::Update(double dt)
@@ -675,12 +677,24 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (inLocker == true)
 	{
-		suffocationScale -= (float)(suffocationScaleDir * dt) * camera.playerStamina;
+
+		suffocationScale -= (float)(suffocationScaleDir * dt /7) * camera.playerStamina;
+		suffocationTranslate -= (float)(suffocationTranslateDir * dt/ 7) * camera.playerStamina;
+		if (suffocationScale <= 0)
+		{
+			suffocationScaleDir = 0;
+		}
+		if (suffocationTranslate <= 0)
+		{
+			suffocationTranslateDir = 0;
+		}
 	}
 	if (inLocker == false)
 	{
-		suffocationScale = 10;
-		suffocationTranslate = 0;
+		suffocationScale = 15;
+		suffocationTranslate = 14;
+		suffocationScaleDir = 1;
+		suffocationTranslateDir = 1;
 	}
 
 	interact = false;
@@ -900,6 +914,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else {
 		nearExit = false;
+		showChatbox = false;
 	}
 
 	if (exitHouse == true && nearExit == true)
@@ -1531,10 +1546,6 @@ void SceneSP2Room1::Render()
 	//breathing icon
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	if (inLocker == true)
-	{
-		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
-	}
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (inLocker == true)
@@ -1622,9 +1633,6 @@ void SceneSP2Room1::Render()
 void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
-	Background->drop();
-	Effect->drop();
-	Jumpscare->drop();
 	delete ghost;
 	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);

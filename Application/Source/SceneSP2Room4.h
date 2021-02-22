@@ -39,6 +39,10 @@ public:
 		GEO_FRONT,
 		GEO_BACK,
 
+		//UI
+		GEO_CHATBOX,
+		GEO_SIDEBOX,
+
 		//terrain
 		GEO_TOPHALFWALL,
 		GEO_WALL,
@@ -76,6 +80,7 @@ public:
 		heartmon,
 		xtable,
 		oplight,
+		frontdesk,
 
 		//UI tings
 		GEO_TEXT,
@@ -171,6 +176,17 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+
+
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitHospital;
+	bool nearExit;
+	bool showChatbox;
+
+
 	struct Wall
 	{
 		Vector3 mid;
@@ -257,6 +273,22 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	int bodyNum;
+	bool placeitem;
+	bool itemplaced[5];
+	bool doorunlocked;
+	enum bodynumber
+	{
+		body1_r,
+		body2_r,
+		body3_r,
+		body1_l,
+		body2_l,
+		body3_l,
+		body_op,
+
+	};
 };
 
 #endif

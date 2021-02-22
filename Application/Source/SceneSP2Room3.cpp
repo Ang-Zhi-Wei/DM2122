@@ -464,17 +464,20 @@ void SceneSP2Room3::SetBackground()
 {
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+		
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
 	Effect->setSoundVolume(0.f);
+	
 }
 
 void SceneSP2Room3::Update(double dt)
@@ -589,12 +592,13 @@ void SceneSP2Room3::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_x > -3)
+	if (campos_z > -8 && campos_x > -14 && campos_x < 14)
 	{
 		nearExit = true;
 	}
 	else {
 		nearExit = false;
+		showChatbox = false;
 	}
 
 	if (exitGarage == true && nearExit == true)
@@ -688,7 +692,7 @@ void SceneSP2Room3::Update(double dt)
 	{
 	case OPEN:
 		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
+		/*if ((camera.position - origin).Length() >= 20)
 		{
 			DS_school = CLOSING;
 		}
@@ -713,7 +717,7 @@ void SceneSP2Room3::Update(double dt)
 				Fpressed = false;
 				DS_school = OPENING;
 			}
-		}
+		}*/
 		break;
 	case OPENING:
 		school_door[0].rotateY -= 20 * float(dt);
@@ -1215,9 +1219,6 @@ void SceneSP2Room3::Render()
 
 void SceneSP2Room3::Exit()
 {
-	Background->drop();
-	Effect->drop();
-	Jumpscare->drop();
 	// Cleanup VBO here
 	delete ghost;
 	delete inventory;

@@ -498,7 +498,12 @@ void SceneSP2Room2::Init()
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
-	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//whiteTest.tga");
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -574,17 +579,20 @@ void SceneSP2Room2::SetBackground()
 {
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+	
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+	
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
 	Background->setSoundVolume(0.25f);//Volume control
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
 	Effect->setSoundVolume(0.f);
+	
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -630,6 +638,12 @@ void SceneSP2Room2::Update(double dt)
 			Fpressed = true;
 		}
 		Freleased = false;
+	}
+
+	if (nearExit == true && Fpressed == true)
+	{
+		exitSchool = true;
+		Fpressed = false;
 	}
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -686,6 +700,29 @@ void SceneSP2Room2::Update(double dt)
 		}
 		Rreleased = false;
 	}
+
+
+
+	if (campos_x < 480 && campos_z > -4 && campos_z < 4)
+	{
+		nearExit = true;
+	}
+	else {
+		nearExit = false;
+		showChatbox = false;
+	}
+
+	if (exitSchool == true && nearExit == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+		exitSchool = false;
+	}
+
+
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -1101,6 +1138,10 @@ void SceneSP2Room2::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
 }
 
 void SceneSP2Room2::PauseUpdate()
@@ -1336,6 +1377,29 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	//UI OVERLAY
 
 	//Vision vignette
@@ -1434,9 +1498,6 @@ void SceneSP2Room2::Render()
 
 void SceneSP2Room2::Exit()
 {
-	Background->drop();
-	Effect->drop();
-	Jumpscare->drop();
 	delete ghost;
 	delete inventory;
 	// Cleanup VBO here
