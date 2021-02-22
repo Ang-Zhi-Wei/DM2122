@@ -626,7 +626,7 @@ void SceneSP2Main::Init()
 	//truck collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(50, 20, 20);
-	Colliderlist[7].Setposition(Vector3(30, 6, 370));
+	Colliderlist[7].Setposition(Vector3(35, 6, 357));
 	//bench colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[8].setlength(10, 20, 25);
@@ -987,7 +987,7 @@ void SceneSP2Main::Init()
 	Colliderlist[124].setlength(28, 20, 23);
 	Colliderlist[124].Setposition(Vector3(-220, 8, -128.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[109].getxlength(), Colliderlist[109].getylength(), Colliderlist[109].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1888,7 +1888,7 @@ void SceneSP2Main::Render()
 
 	//colliderbox to check collider 
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[109].getPosition().x, Colliderlist[109].getPosition().y, Colliderlist[109].getPosition().z);
+	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
