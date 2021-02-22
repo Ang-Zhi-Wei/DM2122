@@ -32,6 +32,7 @@ public:
 	float boundZ2;
 	bool can_move;
 	bool slowed;
+	bool movement;
 	CameraSP2();
 	~CameraSP2();
 	

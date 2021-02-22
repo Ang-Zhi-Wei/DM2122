@@ -13,9 +13,6 @@
 #include <vector>
 #include "Locker.h"
 #include "SceneSP2Room2.h"
-#include "irrKlang.h"
-
-using namespace irrklang;
 class SceneSP2Main : public Scene
 {
 public:
@@ -307,6 +304,7 @@ private:
 
 	//Irrklang sound
 	ISoundEngine* Background;
+	ISoundEngine* Effect;
 
 	Item test;
 	Item test2;

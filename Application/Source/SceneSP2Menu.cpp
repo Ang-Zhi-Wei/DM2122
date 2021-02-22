@@ -370,7 +370,15 @@ void SceneSP2Menu::Set(Scene* scene)
 
 void SceneSP2Menu::SetBackground()
 {
-	Background = createIrrKlangDevice();
+	if (!Background) {
+		Background = createIrrKlangDevice();
+	}
+	if (!Effect) {
+		Effect = createIrrKlangDevice();
+	}
+	if (!Jumpscare) {
+		Jumpscare = createIrrKlangDevice();
+	}
 	Background->play2D("Sound\\Background\\428865__supervanz__horror01-loop.wav", true);
 	Background->setSoundVolume(0.5f);//Volume control
 }
@@ -421,6 +429,8 @@ void SceneSP2Menu::Update(double dt)
 		{
 			std::cout << "S Hit!" << std::endl;
 			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
 			Application::setscene(Scene_Main);
 			menuScreen = false;
 		}
@@ -869,6 +879,9 @@ void SceneSP2Menu::Render()
 
 void SceneSP2Menu::Exit()
 {
+	Background->drop();
+	Jumpscare->drop();
+	Effect->drop();
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
