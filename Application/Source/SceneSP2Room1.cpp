@@ -487,15 +487,17 @@ void SceneSP2Room1::SetBackground()
 	}
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
+		Background->setSoundVolume(0.25f);//Volume control
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
+		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
+		Effect->setSoundVolume(0.f);
 	}
-	Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
-	Background->setSoundVolume(0.25f);//Volume control
+	
 
-	Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
-	Effect->setSoundVolume(0.f);
+	
 }
 
 void SceneSP2Room1::Update(double dt)

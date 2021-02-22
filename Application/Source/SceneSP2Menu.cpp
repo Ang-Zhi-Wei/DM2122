@@ -372,6 +372,8 @@ void SceneSP2Menu::SetBackground()
 {
 	if (!Background) {
 		Background = createIrrKlangDevice();
+		Background->play2D("Sound\\Background\\428865__supervanz__horror01-loop.wav", true);
+		Background->setSoundVolume(0.5f);//Volume control
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
@@ -379,8 +381,7 @@ void SceneSP2Menu::SetBackground()
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-	Background->play2D("Sound\\Background\\428865__supervanz__horror01-loop.wav", true);
-	Background->setSoundVolume(0.5f);//Volume control
+
 }
 
 void SceneSP2Menu::Update(double dt)
