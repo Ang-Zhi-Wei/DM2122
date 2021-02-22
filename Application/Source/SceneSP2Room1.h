@@ -225,7 +225,12 @@ private:
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
 
-
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitHouse;
+	bool nearExit;
+	bool showChatbox;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

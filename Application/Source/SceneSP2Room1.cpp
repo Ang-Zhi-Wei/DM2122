@@ -330,6 +330,12 @@ void SceneSP2Room1::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
+	//UI
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = true;
@@ -574,6 +580,12 @@ void SceneSP2Room1::Update(double dt)
 		}
 		Freleased = false;
 	}
+
+	if (nearExit == true && Fpressed == true)
+	{
+		exitHouse = true;
+		Fpressed = false;
+	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -653,6 +665,23 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
+
+	if (campos_z > -337 && campos_x < -29)
+	{
+		nearExit = true;
+	}
+	else {
+		nearExit = false;
+	}
+
+	if (exitHouse == true && nearExit == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+		exitHouse = false;
+	}
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -698,6 +727,8 @@ void SceneSP2Room1::Update(double dt)
 		}
 	}
 
+
+	
 
 	//inventory
 	if (Epressed)
@@ -877,6 +908,10 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
 }
 
 void SceneSP2Room1::PauseUpdate()
@@ -1199,8 +1234,32 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
 	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	//UI OVERLAY
+
 
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);

@@ -14,6 +14,7 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight = true;
 	flashlight_lifetime = 90;
 	inLocker = false;
+	exitGarage = false;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -211,6 +212,11 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 	//light 0
 	//light[0].type = Light::LIGHT_POINT;
 	//light[0].position.Set(0, 7, 270);
@@ -507,15 +513,26 @@ void SceneSP2Room3::Update(double dt)
 	{
 		Freleased = true;
 		Fpressed = false;
+
+		
 	}
 	else
 	{
 		if (Freleased)
 		{
 			Fpressed = true;
+			
 		}
+		
 		Freleased = false;
 	}
+	if (nearExit == true && Fpressed == true)
+	{
+		exitGarage = true;
+		Fpressed = false;
+	}
+
+
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -571,6 +588,25 @@ void SceneSP2Room3::Update(double dt)
 		}
 		Rreleased = false;
 	}
+
+	if (campos_x > -3)
+	{
+		nearExit = true;
+	}
+	else {
+		nearExit = false;
+	}
+
+	if (exitGarage == true && nearExit == true)
+	{
+		Background->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Jumpscare->setSoundVolume(0.f);
+		Application::setscene(Scene_Main);
+		exitGarage = false;
+	}
+	
+
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -638,6 +674,11 @@ void SceneSP2Room3::Update(double dt)
 			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
+
+	campos_x = camera.position.x;
+	campos_y = camera.position.y;
+	campos_z = camera.position.z;
+
 
 	//INTERACTION CHECKS
 	interact = false;
@@ -877,6 +918,8 @@ void SceneSP2Room3::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
+	
 }
 
 void SceneSP2Room3::PauseUpdate()
@@ -1121,7 +1164,28 @@ void SceneSP2Room3::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	//UI OVERLAY
 	//vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);

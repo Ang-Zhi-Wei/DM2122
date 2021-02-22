@@ -1194,9 +1194,15 @@ void SceneSP2Main::Update(double dt)
 		}
 		Freleased = false;
 
+	}
+
+
+	if (Fpressed == true)
+	{
 		if (NearGarage == true || NearHouse == true || NearSchool == true || NearHospital == true)
 		{
 			enterBuilding = true;
+			Fpressed = false;
 		}
 	}
 	if (!Application::IsKeyPressed('E'))
@@ -1322,11 +1328,13 @@ void SceneSP2Main::Update(double dt)
 
 	if (enterBuilding == true && NearGarage == true)
 	{
+
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 		enterBuilding = false;
+
 	}
 
 	else if (enterBuilding == true && NearHouse == true)
