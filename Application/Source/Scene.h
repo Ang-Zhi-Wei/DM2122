@@ -4,7 +4,9 @@
 #include <string>
 #include "Vector3.h"
 #include "Mesh.h"
+#include "irrKlang.h"
 
+using namespace irrklang;
 class Scene
 {
 public:
@@ -229,6 +231,9 @@ public:
 	Inventory* inventory;
 	Ghost* ghost;
 
+	ISoundEngine* Background;
+	ISoundEngine* Jumpscare;
+	ISoundEngine* Effect;
 	bool flashlight;
 	float flashlight_lifetime;
 

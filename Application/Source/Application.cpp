@@ -7,7 +7,6 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
-
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,8 +15,8 @@
 #include "SceneSP2Room1.h"
 #include "SceneSP2Room2.h"
 #include "SceneSP2Room3.h"
+#include "SceneSP2Room4.h"
 #include "time.h"
-
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -131,19 +130,20 @@ Scene* Application::sceneMain = new SceneSP2Main;
 Scene* Application::scene1 = new SceneSP2Room1;
 Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
+Scene* Application::scene4 = new SceneSP2Room4;
 Scene* Application::sceneMenu = new SceneSP2Menu;
 Scene* Application::scene = sceneMenu;
 
 
 void Application::Run()
 {
-	
 	sceneMenu->Init();
 	//sceneMain->Init();
 	scene1->Init();
 	scene2->Init();
 	scene3->Init();
-	sceneMenu->SetBackground();
+	scene4->Init();
+
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && isquit==false)
@@ -167,6 +167,7 @@ void Application::Run()
 	delete scene1;
 	delete scene2;
 	delete scene3;
+	delete scene4;
 	delete sceneMain;
 	delete sceneMenu;
 }
@@ -211,7 +212,6 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
-	Application::SetCursorPos(960, 540);
 	switch (scenetype)
 	{
 	case Scene_Main:
@@ -225,32 +225,30 @@ void Application::setscene(int scenenum)
 		{
 			sceneMain->Set(scene);
 		}
-		sceneMain->SetBackground();
 		scene = sceneMain;
 		break;
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
 		scene->Exit();
-		scene->Init();
-		sceneMenu->Init();
-		sceneMenu->SetBackground();
 		scene = sceneMenu;
+		sceneMenu->Init();
 		break;
 	case Scene_1:
 		scene1->Set(scene);
-		scene1->SetBackground();
 		scene = scene1;
 		break;
 	case Scene_2:
 		scene2->Set(scene);
-		scene2->SetBackground();
 		scene = scene2;
 		break;
 	case Scene_3:
 		scene3->Set(scene);
-		scene3->SetBackground();
 		scene = scene3;
+		break;
+	case Scene_4:
+		scene4->Set(scene);
+		scene = scene4;
 		break;
 	}
 	
