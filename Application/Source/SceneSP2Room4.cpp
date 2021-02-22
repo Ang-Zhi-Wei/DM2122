@@ -448,6 +448,10 @@ void SceneSP2Room4::Set(Scene* scene)
 	flashlight_lifetime = scene->flashlight_lifetime;
 }
 
+void SceneSP2Room4::SetBackground()
+{
+}
+
 void SceneSP2Room4::Update(double dt)
 {
 	//mouse cursor show/hide
