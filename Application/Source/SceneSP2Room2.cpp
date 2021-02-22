@@ -562,7 +562,7 @@ void SceneSP2Room2::Set(Scene* scene)
 		itemImage[i] = scene->itemImage[i];
 	}
 
-	camera.position.Set(0, 9, 0);
+	camera.position.Set(475, 9, 0);
 	camera.rawTarget = camera.position;
 }
 
