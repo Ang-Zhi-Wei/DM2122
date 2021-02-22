@@ -218,6 +218,13 @@ private:
 	bool jumpscareActive4;
 	bool jumpscareTimerActive4;
 
+
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
+
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -225,7 +232,12 @@ private:
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
 
-
+	float campos_x;
+	float campos_y;
+	float campos_z;
+	bool exitHouse;
+	bool nearExit;
+	bool showChatbox;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

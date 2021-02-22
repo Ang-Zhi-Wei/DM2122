@@ -346,67 +346,67 @@ void SceneSP2Room2::Init()
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(8, 0, -30));
+	Lockerlist[0].setpos(Vector3(500, 0, 8));
+	Lockerlist[0].setyaw(90);
 	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(50.f, 0.f, -2.1f));
-	Lockerlist[1].setyaw(-90);
+	Lockerlist[1].setpos(Vector3(472.1, 0.f, 50));
 	Lockerlist.push_back(Locker());
-	Lockerlist[2].setpos(Vector3(-70, 0, -98));
-	Lockerlist[2].setyaw(90);
+	Lockerlist[2].setpos(Vector3(568, 0, -70));
+
 	//wall colliders
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(school_walls[1].lengthx, school_walls[1].lengthy, school_walls[1].lengthz+2.5);
+	Colliderlist[0].setlength(school_walls[1].lengthx+2.5, school_walls[1].lengthy, school_walls[1].lengthz);
 	Colliderlist[0].Setposition(Vector3(school_walls[1].mid.x, school_walls[1].mid.y, school_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(school_walls[2].lengthx, school_walls[2].lengthy, school_walls[2].lengthz+2.5);
+	Colliderlist[1].setlength(school_walls[2].lengthx+2.5, school_walls[2].lengthy, school_walls[2].lengthz);
 	Colliderlist[1].Setposition(Vector3(school_walls[2].mid.x, school_walls[2].mid.y, school_walls[2].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(school_walls[3].lengthx, school_walls[3].lengthy, school_walls[3].lengthz+2.5);
+	Colliderlist[2].setlength(school_walls[3].lengthx+2.5, school_walls[3].lengthy, school_walls[3].lengthz);
 	Colliderlist[2].Setposition(Vector3(school_walls[3].mid.x, school_walls[3].mid.y, school_walls[3].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(school_walls[4].lengthx+2.5, school_walls[4].lengthy, school_walls[4].lengthz);
+	Colliderlist[3].setlength(school_walls[4].lengthx, school_walls[4].lengthy, school_walls[4].lengthz+2.5);
 	Colliderlist[3].Setposition(Vector3(school_walls[4].mid.x, school_walls[4].mid.y, school_walls[4].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(school_walls[5].lengthx+2.5, school_walls[5].lengthy, school_walls[5].lengthz);
+	Colliderlist[4].setlength(school_walls[5].lengthx, school_walls[5].lengthy, school_walls[5].lengthz+2.5);
 	Colliderlist[4].Setposition(Vector3(school_walls[5].mid.x, school_walls[5].mid.y, school_walls[5].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(classroom_walls[1].lengthx+2.5,classroom_walls[1].lengthy,classroom_walls[1].lengthz);
+	Colliderlist[5].setlength(classroom_walls[1].lengthx,classroom_walls[1].lengthy,classroom_walls[1].lengthz+2.5);
 	Colliderlist[5].Setposition(Vector3(classroom_walls[1].mid.x,classroom_walls[1].mid.y,classroom_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(lounge_walls[1].lengthx+2.5,lounge_walls[1].lengthy,lounge_walls[1].lengthz);
+	Colliderlist[6].setlength(lounge_walls[1].lengthx,lounge_walls[1].lengthy,lounge_walls[1].lengthz+2.5);
 	Colliderlist[6].Setposition(Vector3(lounge_walls[1].mid.x,lounge_walls[1].mid.y,lounge_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(lounge_walls[2].lengthx+2.5, lounge_walls[2].lengthy, lounge_walls[2].lengthz);
+	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz+2.5);
 	Colliderlist[7].Setposition(Vector3(lounge_walls[2].mid.x, lounge_walls[2].mid.y, lounge_walls[2].mid.z));
 	//Locker colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(3.9,10,4.3);
+	Colliderlist[8].setlength(4.3,10,3.9);
 	Colliderlist[8].Setposition(Lockerlist[0].getpos());
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(4.3, 10, 3.9);
+	Colliderlist[9].setlength(3.9, 10, 4.3);
 	Colliderlist[9].Setposition(Lockerlist[1].getpos());
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(4.3, 10, 3.9);
+	Colliderlist[10].setlength(3.9, 10, 4.3);
 	Colliderlist[10].Setposition(Lockerlist[2].getpos());
 	//Door colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(school_door[0].lengthx,school_door[0].lengthy,school_door[0].lengthz+2.5);
+	Colliderlist[11].setlength(school_door[0].lengthx+2.5,school_door[0].lengthy,school_door[0].lengthz);
 	Colliderlist[11].Setposition(school_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz+2.5);
+	Colliderlist[12].setlength(school_door[1].lengthx+2.5, school_door[1].lengthy, school_door[1].lengthz);
 	Colliderlist[12].Setposition(school_door[1].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(classroom_door[0].lengthx+2.5,classroom_door[0].lengthy,classroom_door[0].lengthz);
+	Colliderlist[13].setlength(classroom_door[0].lengthx,classroom_door[0].lengthy,classroom_door[0].lengthz+2.5);
 	Colliderlist[13].Setposition(classroom_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(classroom_door[1].lengthx+2.5, classroom_door[1].lengthy, classroom_door[1].lengthz);
+	Colliderlist[14].setlength(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz+2.5);
 	Colliderlist[14].Setposition(classroom_door[1].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(lounge_door[0].lengthx+2.5,lounge_door[0].lengthy,lounge_door[0].lengthz);
+	Colliderlist[15].setlength(lounge_door[0].lengthx,lounge_door[0].lengthy,lounge_door[0].lengthz+2.5);
 	Colliderlist[15].Setposition(lounge_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(lounge_door[1].lengthx+2.5, lounge_door[1].lengthy, lounge_door[1].lengthz);
+	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz+2.5);
 	Colliderlist[16].Setposition(lounge_door[1].mid);
 	//chair colliders
 	for (int row = 0; row < 4; row++)
@@ -533,10 +533,10 @@ void SceneSP2Room2::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(-57, 0, -10)));
-	traplist.push_back(trap(trap::beartrap, Vector3(100, 0, -55)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-15, 0, -40)));
-	traplist.push_back(trap(trap::beartrap, Vector3(5, 0, -70)));
+	traplist.push_back(trap(trap::beartrap, Vector3(480, 0, -57)));
+	traplist.push_back(trap(trap::beartrap, Vector3(525, 0, 100)));
+	traplist.push_back(trap(trap::beartrap, Vector3(510, 0, -15)));
+	traplist.push_back(trap(trap::beartrap, Vector3(540, 0, 5)));
 	
 }
 
@@ -1016,7 +1016,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscares ((Might add on that you press the button to open the door before this activates))
-	if ((camera.position.y >= 0) && ((camera.position.x >= -8) && (camera.position.x <= -6)) && ((camera.position.z >= -50) && (camera.position.z <= -40)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 510) && (camera.position.x <= 520)) && ((camera.position.z >= -10) && (camera.position.z <= -5)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
 	{
 		jumpscareActive1 = true;
 	}
@@ -1035,7 +1035,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscare 2
-	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 0))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
 	{
 		jumpscare2Pass = true;
 	}
@@ -1427,6 +1427,9 @@ void SceneSP2Room2::Render()
 	}
 
 
+	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 }
 
 void SceneSP2Room2::Exit()
