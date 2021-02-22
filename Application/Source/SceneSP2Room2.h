@@ -180,7 +180,9 @@ public:
 
 		//terrain
 		GEO_TOPHALFWALL,
-		GEO_WALL,
+		GEO_WALL1,
+		GEO_WALL2,
+		GEO_WALL3,
 		GEO_QUAD,
 		GEO_TABLE,
 		GEO_LONGTABLE,
@@ -393,8 +395,10 @@ private:
 	Wall lounge_table;
 
 	const int wall_count = 11;
-	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], &school_walls[1], &school_walls[2], &school_walls[3], &school_walls[4], &school_walls[5],
-					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]};
+	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], 
+		&school_walls[1], &school_walls[2], &school_walls[4], &school_walls[5],&classroom_walls[1],
+					  &lounge_walls[1], &lounge_walls[2],  
+		&school_walls[3]};
 
 	Door school_door[2];
 	Door classroom_door[2];
