@@ -82,7 +82,8 @@ public:
 			NORMAL,
 			CHASING,
 			WAITING,
-			SPEEDRUN
+			SPEEDRUN,
+			DEATH
 		};
 		int state;
 		Vector3 up;
@@ -100,7 +101,7 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(0, 0, -300); //TBC
+			pos.Set(0, 0, -100); //TBC
 			rotateY = 0;
 			state = NORMAL;
 			waitTime = 5;
@@ -187,16 +188,14 @@ public:
 				this->distance = this->facing.Length();
 				this->facing.Normalize();
 				this->UpdateMovement(dt);
-				if (this->distance <= 5 && inLocker)
+				if (this->distance <= 15 && inLocker)
 				{
 					this->state = Ghost::WAITING;
 					this->waitTime = 5;
 				}
-				else if (this->distance <= 1)
+				else if (this->distance <= 7)
 				{
-					//end game condition;; but for now make it speedrun so we can test in peace
-					this->state = Ghost::WAITING;
-					this->waitTime = 5;
+					this->state = Ghost::DEATH;
 				}
 				break;
 			case Ghost::WAITING:
@@ -218,6 +217,8 @@ public:
 					this->state = Ghost::NORMAL;
 					this->speed = 5;
 				}
+				break;
+			case Ghost::DEATH:
 				break;
 
 			}

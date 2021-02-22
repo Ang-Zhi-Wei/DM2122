@@ -98,6 +98,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_WARNING1,
 		GEO_WARNING2,
+		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing

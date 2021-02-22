@@ -38,7 +38,6 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	this->up = defaultUp = right.Cross(view).Normalized();
 	viewTarget = (0.f,0.f,0.f);
 	rawTarget = pos;
-	Application::SetCursorPos(960, 540);
 	offsetX = 0;
 	boundX1 = 0;
 	boundX2 = 300;

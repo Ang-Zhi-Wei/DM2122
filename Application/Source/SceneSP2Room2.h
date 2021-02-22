@@ -208,6 +208,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_WARNING1,
 		GEO_WARNING2,
+		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BREATHINGBAR, // breathing
@@ -230,6 +231,8 @@ public:
 		GEO_ITEMIMAGE5,
 		GEO_ITEMIMAGE6,
 		GEO_ITEMIMAGE7,
+
+		GEO_JUMPSCARE1,
 
 		//trap
 		GEO_BEARTRAP,
@@ -358,6 +361,19 @@ private:
 			return(distance.Length() < 3);
 		}
 	};
+
+	//Jumpscare
+	bool jumpscareTimerActive1;
+	double jumpscareTimer1;
+	int jumpscareCounter1;
+	bool jumpscareActive1;
+	bool jumpscareTimerActive2;
+	double jumpscareTimer2;
+	int jumpscare2Counter;
+	bool jumpscare2Pass;
+	bool jumpscareActive2;
+
+
 	//game related vars
 	bool inLocker;
 
