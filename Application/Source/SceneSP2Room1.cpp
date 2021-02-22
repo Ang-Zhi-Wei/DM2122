@@ -347,7 +347,12 @@ void SceneSP2Room1::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
-
+	DS_MAIN = OPEN;
+	DS_LIVING = DS_HALL = DS_CONNECTING = CLOSED;
+	rotateY[0] = 90;
+	rotateY[1] = 0;
+	rotateY[2] = 0;
+	rotateY[3] = 0;
 	//jumpscare
 	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
 	jumpscareEntrance1 = 0;
@@ -678,8 +683,218 @@ void SceneSP2Room1::Update(double dt)
 		suffocationTranslate = 0;
 	}
 
+	interact = false;
+	Vector3 origin(-32, 7.5, -330);
+	switch (DS_MAIN)
+	{
+	case OPEN:
+		//doors close on their own
+		if ((camera.position - origin).Length() >= 20)
+		{
+			DS_MAIN = CLOSING;
+		}
+		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
+		{
+			interact = true;
+			interact_message = "Exit House";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				Background->setSoundVolume(0.f);
+				Effect->setSoundVolume(0.f);
+				Jumpscare->setSoundVolume(0.f);
+				Application::setscene(Scene_Main);
+			}
+		}
+		break;
+	case CLOSED:
+		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
+		{
+			interact = true;
+			interact_message = "Exit House";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_MAIN = OPENING;
+			}
+		}
+		break;
+	case OPENING:
+		rotateY[0] += float(20 * dt);
+		if (rotateY[0] >= 90)
+		{
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Application::setscene(Scene_Main);
+		}
+		break;
+	case CLOSING:
+		rotateY[0] -= 20 * float(dt);
+		if (rotateY[0] <= 0)
+		{
+			DS_MAIN = CLOSED;
+		}
+		break;
+	}
 
-	if (campos_z > -337 && campos_x < -29)
+	origin.Set(-32, 7.5, -430);
+	switch (DS_HALL)
+	{
+	case OPEN:
+		//doors close on their own
+		if ((camera.position - origin).Length() >= 20)
+		{
+			DS_HALL = CLOSING;
+		}
+		if (camera.position.z <= -425 && camera.position.z >= -435 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
+		{
+			interact = true;
+			interact_message = "Close Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_HALL = CLOSING;
+			}
+		}
+		break;
+	case CLOSED:
+		if (camera.position.z <= -425 && camera.position.z >= -435 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
+		{
+			interact = true;
+			interact_message = "Open Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_HALL = OPENING;
+			}
+		}
+		break;
+	case OPENING:
+		rotateY[1] += 20 * float(dt);
+		if (rotateY[1] >= 90)
+		{
+			rotateY[1] = 90;
+			DS_HALL = OPEN;
+		}
+		break;
+	case CLOSING:
+		rotateY[1] -= 20 * float(dt);
+
+		if (rotateY[1] <= 0)
+		{
+			rotateY[1] = 0;
+			DS_HALL = CLOSED;
+		}
+		break;
+	}
+
+	origin.Set(38, 7.5, -505);
+	switch (DS_LIVING)
+	{
+	case OPEN:
+		//doors close on their own
+		if ((camera.position - origin).Length() >= 20)
+		{
+			DS_LIVING = CLOSING;
+		}
+		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+		{
+			interact = true;
+			interact_message = "Close Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_LIVING = CLOSING;
+			}
+		}
+		break;
+	case CLOSED:
+		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+		{
+			interact = true;
+			interact_message = "Open Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_LIVING = OPENING;
+			}
+		}
+		break;
+	case OPENING:
+		rotateY[2] += 20 * float(dt);
+		if (rotateY[2] >= 90)
+		{
+			rotateY[2] = 90;
+			DS_LIVING = OPEN;
+		}
+		break;
+	case CLOSING:
+		rotateY[2] -= 20 * float(dt);
+		
+		if (rotateY[2] <= 0)
+		{
+			rotateY[2] = 0;
+			DS_LIVING = CLOSED;
+		}
+		break;
+	}
+
+	origin.Set(65.5, 7.5, -505);
+	switch (DS_CONNECTING)
+	{
+	case OPEN:
+		//doors close on their own
+		if ((camera.position - origin).Length() >= 20)
+		{
+			DS_CONNECTING = CLOSING;
+		}
+		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+		{
+			interact = true;
+			interact_message = "Close Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_CONNECTING = CLOSING;
+				Colliderlist[13].setactive(true);
+				Colliderlist[14].setactive(true);
+				camera.setchecker(Colliderlist);
+			}
+		}
+		break;
+	case CLOSED:
+		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+		{
+			interact = true;
+			interact_message = "Open Door";
+			if (Fpressed)
+			{
+				Fpressed = false;
+				DS_CONNECTING = OPENING;
+			}
+		}
+		break;
+	case OPENING:
+		rotateY[3] -= 20 * float(dt);
+		if (rotateY[3] <= -90)
+		{
+			rotateY[3] = -90;
+			DS_CONNECTING = OPEN;
+		}
+		break;
+	case CLOSING:
+		rotateY[3] += 20 * float(dt);
+
+		if (rotateY[3] >= 0)
+		{
+			rotateY[3] = 0;
+			DS_CONNECTING = CLOSED;
+		}
+		break;
+	}
+
+	/*if (campos_z > -337 && campos_x < -29)
 	{
 		nearExit = true;
 	}
@@ -694,7 +909,7 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 		exitHouse = false;
-	}
+	}*/
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -1029,6 +1244,11 @@ void SceneSP2Room1::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
+
+	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Rotate(rotateY[0], 0, 1, 0);
+	modelStack.Translate(2.5, 0, 0.5);
+
 	modelStack.Scale(5, 15, 1);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();//Added collider
@@ -1058,6 +1278,11 @@ void SceneSP2Room1::Render()
 	//door
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 170);
+
+	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Rotate(rotateY[1], 0, 1, 0);
+	modelStack.Translate(2.5, 0, 0.5);
+
 	modelStack.Scale(5,15,1);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1096,6 +1321,9 @@ void SceneSP2Room1::Render()
 	//Door
 	modelStack.PushMatrix();
 	modelStack.Translate(62.5, 7.5, 95);
+	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Rotate(rotateY[2], 0, 1, 0);
+	modelStack.Translate(2.5, 0, 0.5);
 	modelStack.Scale(5, 15, 1);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1149,6 +1377,11 @@ void SceneSP2Room1::Render()
 	//Door
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
+
+	modelStack.Translate(2.5, 0, -0.5);
+	modelStack.Rotate(rotateY[3], 0, 1, 0);
+	modelStack.Translate(-2.5, 0, 0.5);
+
 	modelStack.Scale(5, 15, 1);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1338,7 +1571,11 @@ void SceneSP2Room1::Render()
 		}
 
 	}
-
+	//INTERACTIONS
+	if (interact)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
+	}
 	if (jumpscareActive1 == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);

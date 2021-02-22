@@ -1270,18 +1270,18 @@ void SceneSP2Room2::Render()
 	//classroomleft
 	modelStack.PushMatrix();
 	modelStack.Translate(classroom_door[0].mid.x, classroom_door[0].mid.y, classroom_door[0].mid.z);
-	modelStack.Translate(2.5, 0, -0.25);
+	modelStack.Translate(2.5, 0, 0.25);
 	modelStack.Rotate(classroom_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.25);
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Scale(classroom_door[0].lengthx, classroom_door[0].lengthy, classroom_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 	//classroom right
 	modelStack.PushMatrix();
 	modelStack.Translate(classroom_door[1].mid.x, classroom_door[1].mid.y, classroom_door[1].mid.z);
-	modelStack.Translate(-2.5, 0, -0.25);
+	modelStack.Translate(-2.5, 0, 0.25);
 	modelStack.Rotate(classroom_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.25);
+	modelStack.Translate(2.5, 0, -0.25);
 	modelStack.Scale(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
