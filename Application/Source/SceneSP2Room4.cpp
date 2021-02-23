@@ -15,6 +15,7 @@ SceneSP2Room4::SceneSP2Room4()
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
+	showSideBox = true;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
@@ -255,9 +256,6 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->textureID = LoadTGA("Image//desks.tga");
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
-	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
-	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
@@ -342,12 +340,17 @@ void SceneSP2Room4::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+	flowerCounter = 0;
+	jumpscareTimerActive1 = false;
+	jumpscareTimer1 = 0.2;
+	jumpscareActive1 = false;
 
 	translateobj = 6;
 
 
-	//scene items
-	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
+
+	
+
 
 
 	
@@ -587,6 +590,11 @@ void SceneSP2Room4::Set(Scene* scene)
 {
 	inventory = scene->inventory;
 	ghost = scene->ghost;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
 
@@ -684,7 +692,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Qreleased)
 		{
 			Qpressed = true;
-
 		}
 		Qreleased = false;
 	}
@@ -954,14 +961,15 @@ void SceneSP2Room4::Update(double dt)
 	rotateobj += float(40 * dt);
 
 
+	
 	//ghost
 	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
-
-		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing = camera.position - ghost->pos;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 
 		if (ghost->distance <= 50)
@@ -971,20 +979,26 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
+		if (ghost->distance <= 7 && inLocker)
 		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
 		}
-		else if (ghost->distance <= 1)
+		else if (ghost->distance <= 7)
 		{
-			//TBC
-			//end game condition met, either that or HP - 1
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
 		}
 		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
 		if (ghost->waitTime <= 0)
@@ -994,15 +1008,48 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing = ghost->pos - camera.position;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 		if (ghost->distance > 500 || !inLocker)
 		{
 			ghost->state = Ghost::NORMAL;
 			ghost->speed = 5;
 		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
 		break;
 
 	}
@@ -1011,7 +1058,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1019,10 +1066,10 @@ void SceneSP2Room4::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1098,7 +1145,9 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
+
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
 	{
@@ -1108,6 +1157,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
@@ -1118,6 +1168,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
@@ -1128,6 +1179,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_r] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
@@ -1137,7 +1189,8 @@ void SceneSP2Room4::Update(double dt)
 		interact_message = "Place Flower";
 		if (Fpressed)
 		{
-			itemplaced[body2_r] = true;
+			itemplaced[body2_r] = true;		
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
@@ -1148,6 +1201,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_r] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
@@ -1158,6 +1212,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body_op] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else
@@ -1170,54 +1225,8 @@ void SceneSP2Room4::Update(double dt)
 	{
 		doorunlocked = true;
     }
-	//if final item placed, give sparkplug
-	if (itemplaced[6])
-	{
-		if (translateobj <= 7)
-		{
-			translateobj += float(0.5 * dt);
-		}
-		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
-		{
-			interact = true;
-			interact_message = "take spark plug";
-			if (Fpressed)
-			{
-				translateobj = 100;
-				takenspark = true;
-				PickUpItem(items[0]);
-				items[0] = NULL;
-				std::cout << "taken spark plug" << std::endl;
-			}
-		}
-	}
 
-}
-
-bool SceneSP2Room4::PickUpItem(Item* item)
-{
-	//picking up item into inventory
-	for (int i = 0; i < 8; i++)
-	{
-		if (inventory->items[i] != nullptr)
-		{
-			if (inventory->items[i]->name == item->name)
-			{
-				inventory->items[i]->count++;
-				return true;
-			}
-		}
-	}
-	for (int i = 0; i < 8; i++)
-	{
-		if (inventory->items[i] == nullptr)
-		{
-			inventory->items[i] = item;
-			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
-		}
-	}
-	return false;
+	doorRotate -= float(20 * dt);
 }
 
 void SceneSP2Room4::PauseUpdate()
@@ -1856,14 +1865,67 @@ void SceneSP2Room4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
+	}
+
+
+
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
+
 
 	if (nearExit == true) {
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
+
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Flower Counter: "+ std::to_string(flowerCounter), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 
 	//UI OVERLAY
 	//vision vignette
@@ -1922,6 +1984,10 @@ void SceneSP2Room4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 
 	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(camera.position.x) + " " + std::to_string(camera.position.y) + " " + std::to_string(camera.position.z), Color(0, 1, 0), 4, 0, 3);
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
 	//checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -1985,6 +2051,56 @@ void SceneSP2Room4::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
+void SceneSP2Room4::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+
+		flashlight_lifetime = 90;
+
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+
+		//else warning message?
+		break;
+	case Item::ITEM2:
+		break;
+	}
+}
+
+bool SceneSP2Room4::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] != nullptr)
+		{
+			if (inventory->items[i]->name == item->name)
+			{
+				inventory->items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] == nullptr)
+		{
+			inventory->items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return true;
+		}
+	}
+	return false;
+}
 
 void SceneSP2Room4::RenderMesh(Mesh* mesh, bool enableLight)
 {

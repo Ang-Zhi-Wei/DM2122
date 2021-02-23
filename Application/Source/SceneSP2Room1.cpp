@@ -16,6 +16,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
+	showSideBox = true;
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
@@ -44,7 +45,7 @@ SceneSP2Room1::SceneSP2Room1()
 	inLocker = false;
 	suffocationScale = 15;
 	suffocationScaleDir = 1;
-	suffocationTranslate = 14;
+	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
 	fps = 60;
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
@@ -359,28 +360,29 @@ void SceneSP2Room1::Init()
 	jumpscareActive1 = false;
 	jumpscareTimerActive1 = false;
 
-	//Jumpscare 2
-	jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
-	jumpscareEntrance2 = 0;
-	jumpscareActive2 = false;
-	jumpscareTimerActive2 = false;
+	////Jumpscare 2
+	//jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
+	//jumpscareEntrance2 = 0;
+	//jumpscareActive2 = false;
+	//jumpscareTimerActive2 = false;
 
-	//Jumpscare 3
-	jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
-	jumpscareEntrance3 = 0;
-	jumpscareActive3 = false;
-	jumpscareTimerActive3 = false;
+	////Jumpscare 3
+	//jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
+	//jumpscareEntrance3 = 0;
+	//jumpscareActive3 = false;
+	//jumpscareTimerActive3 = false;
 
-	//Jumpscare 4
-	jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
-	jumpscareEntrance4 = 0;
-	jumpscareActive4 = false;
-	jumpscareTimerActive4 = false;
+	////Jumpscare 4
+	//jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
+	//jumpscareEntrance4 = 0;
+	//jumpscareActive4 = false;
+	//jumpscareTimerActive4 = false;
 	//lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));
 	Lockerlist.push_back(Locker());
 	Lockerlist[1].setpos(Vector3(66, 0, -445));
+	Lockerlist[1].setyaw(180);
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(5, 15, 3);
@@ -470,7 +472,12 @@ void SceneSP2Room1::Set(Scene* scene)
 {
 	inventory = scene->inventory;
 	ghost = scene->ghost;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	flashlight = scene->flashlight;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
 
 	//other lights
@@ -697,13 +704,13 @@ void SceneSP2Room1::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
 			else if (suffocationScale <= 0) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -711,10 +718,10 @@ void SceneSP2Room1::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 
@@ -1073,11 +1080,100 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//ghost
-	ghost->UpdateState(camera.position, inLocker, dt);
+	switch (ghost->state)
+	{
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
+		break;
+
+	}
 
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)) && (inLocker == false))
 	{
 		jumpscareTimerActive1 = true;
 	}
@@ -1098,7 +1194,7 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 90 + double(45);
 	}
 
 	////Jumpscare, living room
@@ -1392,7 +1488,7 @@ void SceneSP2Room1::Render()
 
 	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(-10, 10, 220);
+	modelStack.Translate(-10.5, 10, 220);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1471,13 +1567,12 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	//Door
-	//@door
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
-	modelStack.Translate(2.5, 0, -0.25);
+	modelStack.Translate(2.5, 0, 0.25);
 	modelStack.Rotate(rotateY[3], 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.25);
+	modelStack.Translate(-2.5, 0, -0.25);
 
 	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
@@ -1490,7 +1585,7 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 	
-	//Left wall
+	//Right wall
 	modelStack.PushMatrix();
 	modelStack.Translate(52.5, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
@@ -1498,8 +1593,9 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 
+	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(92.5, 10, 80);
+	modelStack.Translate(93, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 30);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1578,6 +1674,51 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
 
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+			break;
+		}
+	}
 
 	if (nearExit == true) {
 		showChatbox = true;
@@ -1585,7 +1726,10 @@ void SceneSP2Room1::Render()
 	}
 	//UI OVERLAY
 
-
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//warning overlay
@@ -1614,7 +1758,7 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
@@ -1651,33 +1795,30 @@ void SceneSP2Room1::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	if (jumpscareActive1 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
 
-	if (jumpscareActive2 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
 
-	if (jumpscareActive3 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
+	//if (jumpscareActive2 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
 
-	if (jumpscareActive4 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
+	//if (jumpscareActive3 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
+
+	//if (jumpscareActive4 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
 
 
 	/*std::ostringstream test1;
@@ -1749,7 +1890,6 @@ void SceneSP2Room1::RenderSkybox()
 }
 
 
-
 //void SceneSP2Room1::RenderDeadTree(int x, int z,float rotate)
 //{
 //	modelStack.PushMatrix();
@@ -1814,20 +1954,19 @@ void SceneSP2Room1::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr;
-			}
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
 		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+		
 		//else warning message?
 		break;
 	case Item::ITEM2:

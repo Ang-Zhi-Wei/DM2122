@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -89,6 +90,8 @@ public:
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
+		GEO_JUMPSCARE1,
+
 
 		//trap
 		GEO_BEARTRAP,
@@ -184,6 +187,7 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+	bool showSideBox;
 
 	Item* items[10];
 
@@ -193,9 +197,7 @@ private:
 	bool exitHospital;
 	bool nearExit;
 	bool showChatbox;
-	float rotateobj;
-	float translateobj;
-	bool takenspark;
+
 
 	struct Wall
 	{
@@ -236,7 +238,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 
@@ -268,6 +270,8 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
+	bool PickUpItem(Item* item); //shud be called only in one frame
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);

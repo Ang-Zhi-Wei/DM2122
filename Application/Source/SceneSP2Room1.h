@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+	
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -175,7 +176,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 	void RenderSkybox();
@@ -250,6 +251,7 @@ private:
 	bool exitHouse;
 	bool nearExit;
 	bool showChatbox;
+	bool showSideBox;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

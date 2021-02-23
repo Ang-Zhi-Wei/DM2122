@@ -19,12 +19,13 @@ SceneSP2Main::SceneSP2Main()
 	showSideBox = true;
 	SpeakPhase = 1;
 	SpeakTimer = 0;
+	SparkplugFound = 0;
+	hammerFound = 0;
+	wrenchFound = 0;
+	screwDriverFound = 0;
 	Interact_Num = 0;
 	manAppear = true;
-	nearBattery = false;
-	nearBattery1 = false;
-	nearBattery2 = false;
-	nearBattery3 = false;
+	nearBattery,nearBattery1,nearBattery2, nearBattery3, nearBattery4 = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -991,8 +992,52 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[124].setlength(28, 20, 23);
 	Colliderlist[124].Setposition(Vector3(-220, 8, -128.5));
+	//Main building colliders
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[125].setlength(107, 100, 100);
+	Colliderlist[125].Setposition(Vector3(-0.5, -3, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[126].setlength(30, 100, 30);
+	Colliderlist[126].Setposition(Vector3(60, -3, -495));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[127].setlength(58, 100, 110);
+	Colliderlist[127].Setposition(Vector3(-516, -2, 0));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[128].setlength(5, 100, 10);
+	Colliderlist[128].Setposition(Vector3(-535, -2, -60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[129].setlength(3, 100, 3);
+	Colliderlist[129].Setposition(Vector3(-566, -2, 27));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[130].setlength(3, 100, 3);
+	Colliderlist[130].Setposition(Vector3(-566, -2, -27));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[131].setlength(100, 100, 267);
+	Colliderlist[131].Setposition(Vector3(533, -1, -17.60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[132].setlength(5, 100, 5);
+	Colliderlist[132].Setposition(Vector3(469, -1, -148.25));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[133].setlength(5, 100, 5);
+	Colliderlist[133].Setposition(Vector3(469, -1, -107));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[134].setlength(5, 100, 5);
+	Colliderlist[134].Setposition(Vector3(469, -1, -55.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[135].setlength(5, 100, 5);
+	Colliderlist[135].Setposition(Vector3(469, -1, -3));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[136].setlength(5, 100, 5);
+	Colliderlist[136].Setposition(Vector3(469, -1, 57.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[137].setlength(5, 100, 5);
+	Colliderlist[137].Setposition(Vector3(469, -1, 113.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[138].setlength(70, 100, 105);
+	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1019,6 +1064,7 @@ void SceneSP2Main::Init()
 	items[1] = new Item("battery", Item::BATTERY, (60, -3, 0));
 	items[2] = new Item("battery", Item::BATTERY, (-60, -3, 100));
 	items[3] = new Item("battery", Item::BATTERY, (-200, -3, -200));
+	items[4] = new Item("battery", Item::BATTERY, (255, -3, -190));
 //to be called only in one frame. placed under init just for testing first
 	//PickUpItem(&test2); //to be called only in one frame.
 	//PickUpItem(&battery);
@@ -1039,10 +1085,14 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Set(Scene* scene)
 {
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	inventory = scene->inventory;
 	if (ghost->state == Ghost::UNSPAWNED)
 	{
-		ghost->pos.Set(0, 0, -1000);
+		//ghost->pos.Set(0, 0, -1000);
 		ghost->state = Ghost::NORMAL;
 	}
 	else
@@ -1269,6 +1319,15 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
+	if (nearBattery4 == true && Fpressed == true)
+	{
+		PickUpItem(items[4]);
+		nearBattery4 = false;
+		Fpressed = false;
+		items[4] = NULL;
+
+	}
+
 	
 
 
@@ -1352,7 +1411,7 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && items[0] != nullptr )
+	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
 	{
 		nearBattery = true;
 	}
@@ -1389,6 +1448,15 @@ void SceneSP2Main::Update(double dt)
 		nearBattery3 = false;
 	}
 
+	if (campos_z < -178 && campos_z > -190 && campos_x > 240 && campos_x < 255 && items[4] != nullptr)
+	{
+
+		nearBattery4 = true;
+	}
+	else {
+		nearBattery4 = false;
+	}
+	
 
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
@@ -1686,9 +1754,95 @@ void SceneSP2Main::Update(double dt)
 	
 
 	//ghost
-	if (!is_talking)
+	switch (ghost->state)
 	{
-		ghost->UpdateState(camera.position, inLocker, dt);
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+		
+		
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+	
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+		
+		break;
+	default:
+		break;
+
 	}
 
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
@@ -1713,6 +1867,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::hidemousecursor(false);
 		Application::pause(true);
 	}
 
@@ -2014,8 +2169,9 @@ void SceneSP2Main::Render()
 	}
 
 	//colliderbox to check collider 
+	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -2108,6 +2264,8 @@ void SceneSP2Main::Render()
 	//RenderMesh(meshList[GEO_SCHOOL], true);
 	//modelStack.PopMatrix();//Added collider
 
+	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, -460);
 	modelStack.Rotate(270, 1, 0, 0);
@@ -2127,13 +2285,13 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
 	modelStack.PopMatrix();//Added collider
 
-
+	//@buildings
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 510);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.16, 0.16, 0.16);
 	RenderMesh(meshList[GARAGE], true);
-	modelStack.PopMatrix();//Added collider
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 8, 465);
@@ -2269,12 +2427,13 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(200, -3, 0);
-	//modelStack.Scale(0.09, 0.09, 0.09);
-	//RenderMesh(meshList[BATTERY], true);
-	//modelStack.PopMatrix();*/
-
+	if (items[4] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(255, -3, -190);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 	//modelStack.PushMatrix();
 	//modelStack.Translate(30.f, -0.1f, 313.f);
 	//modelStack.Scale(750, 8, 30);
@@ -2348,10 +2507,10 @@ void SceneSP2Main::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
+	
 
 
-
-	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true)
+	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true || nearBattery4 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2490,8 +2649,8 @@ void SceneSP2Main::Render()
 
 	//objectives screen
 	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2503,12 +2662,36 @@ void SceneSP2Main::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
 			break;
 		}
 	case 2:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
 			break;
 		}
 	}
@@ -2524,14 +2707,14 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
-	test1 << "ghost distance: " << ghost->distance;
+	test1 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
+	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 }
 
 void SceneSP2Main::Exit()
@@ -2548,21 +2731,20 @@ void SceneSP2Main::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				delete inventory->items[inventory->selected];
-				inventory->items[inventory->selected] = nullptr; 
-			}
-		} 
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			delete inventory->items[inventory->selected];
+			inventory->items[inventory->selected] = nullptr; 
+		}
+		 
 		//else warning message?
 		break;
 	case Item::ITEM2:
@@ -3986,5 +4168,4 @@ void SceneSP2Main::RenderTrees()
 	modelStack.PopMatrix();//Added collider
 
 }
-
 

@@ -28,9 +28,10 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
+
 	int SpeakPhase;
 	double SpeakTimer;
-	int ObjectivePhase;
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -240,7 +241,7 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 	bool NearGarage;
-	bool nearBattery, nearBattery1, nearBattery2, nearBattery3;
+	bool nearBattery, nearBattery1, nearBattery2, nearBattery3, nearBattery4;
 	bool NearHouse;
 	bool NearSchool;
 	bool NearHospital;
@@ -308,7 +309,7 @@ private:
 	ISoundEngine* Background;
 	ISoundEngine* Effect;
 
-	Item* items[30];
+	Item* items[10];
 
 
 	Vector3 temp;

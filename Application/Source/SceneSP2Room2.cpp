@@ -20,6 +20,7 @@ SceneSP2Room2::SceneSP2Room2()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	camBlinkOffSec = 0;
+	showSideBox = true;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
@@ -54,7 +55,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(475, 9, 0), Vector3(495, 9, 0), Vector3(0, 1, 0));
 	////shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -258,6 +259,7 @@ void SceneSP2Room2::Init()
 	jumpscare2Pass = false;
 	jumpscareActive1 = false;
 	jumpscareActive2 = false;
+	jumpscare2ActiveZone = false;
 
 	//walls
 	school_walls[0].mid.Set(470, 20, 0); 
@@ -356,6 +358,7 @@ void SceneSP2Room2::Init()
 	Lockerlist[1].setpos(Vector3(472.1, 0.f, 50));
 	Lockerlist.push_back(Locker());
 	Lockerlist[2].setpos(Vector3(568, 0, -70));
+	Lockerlist[2].setyaw(180);
 
 	//wall colliders
 
@@ -557,6 +560,11 @@ void SceneSP2Room2::Set(Scene* scene)
 {
 	inventory = scene->inventory;
 	ghost = scene->ghost;
+	ObjectivePhase = scene->ObjectivePhase;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
 	DS_school = OPEN;
@@ -581,6 +589,8 @@ void SceneSP2Room2::Set(Scene* scene)
 
 	camera.position.Set(475, 9, 0);
 	camera.rawTarget = camera.position;
+
+	Application::SetCursorPos(1440, camera.mousePosY);
 }
 
 void SceneSP2Room2::SetBackground()
@@ -868,7 +878,96 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//ghost
-	ghost->UpdateState(camera.position, inLocker, dt);
+	switch (ghost->state)
+	{
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
+		break;
+
+	}
 
 
 
@@ -1063,7 +1162,7 @@ void SceneSP2Room2::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1071,10 +1170,10 @@ void SceneSP2Room2::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1119,22 +1218,18 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscare 2
-	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
-	{
-		jumpscare2Pass = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	}
-	else
-	{
-		jumpscare2Pass = false;
-	}
-	if (jumpscare2Pass == true)
-	{
+
+	//redone:
+	if ((camera.position.y >= 0) && ((camera.position.x >= 550) && (camera.position.x <= 570)) && ((camera.position.z >= 20) && (camera.position.z <= 30)) && (jumpscare2Counter == 0))
 		jumpscare2Counter = 1;
-	}
-	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 1) && (jumpscare2Pass == false) && (jumpscareTimer2 != 0))
+
+	if ((camera.position.y >= 0) && ((camera.position.x >= 540) && (camera.position.x <= 560)) && ((camera.position.z >= 10) && (camera.position.z <= 30)) && (jumpscare2Counter == 0))
+		jumpscare2Counter = 1;
+
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 1 ))
 	{
-		jumpscareActive1 = true;
+		jumpscareActive2 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	if (jumpscareActive2 == true)
 	{
@@ -1148,8 +1243,52 @@ void SceneSP2Room2::Update(double dt)
 	{
 		jumpscareActive2 = false;
 		jumpscare2Counter = 2;
+
 	}
-	
+
+
+	//This is broken
+
+	/*if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
+	{
+		jumpscare2Pass = true;
+
+	}
+	else
+	{
+		jumpscare2Pass = false;
+	}
+	if (jumpscare2Pass == true)
+	{
+		jumpscare2Counter = 1;
+	}
+	if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
+	{
+		jumpscare2ActiveZone = true;
+	}
+	else
+		jumpscare2ActiveZone = false;
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
+	{
+		jumpscareActive2 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	}
+	if (jumpscareActive2 == true)
+	{
+		jumpscareTimerActive2 = true;
+
+	}
+	if (jumpscareTimerActive2 == true)
+	{
+		jumpscareTimer2 -= dt;
+
+	}
+	if (jumpscareTimer2 <= 0)
+	{
+		jumpscareActive2 = false;
+		jumpscare2Counter = 2;
+	}
+	*/
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1271,15 +1410,6 @@ void SceneSP2Room2::Render()
 			break;
 		}
 	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
 	//all walls
 	for (int i = 0; i < 3; i++)
 	{
@@ -1332,18 +1462,18 @@ void SceneSP2Room2::Render()
 	//schoolleft
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[0].mid.x, school_door[0].mid.y, school_door[0].mid.z);
-	modelStack.Translate(0.25, 0, -2.5);
+	modelStack.Translate(-0.25, 0, -2.5);
 	modelStack.Rotate(school_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, 2.5);
+	modelStack.Translate(0.25, 0, 2.5);
 	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 	//school right
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[1].mid.x, school_door[1].mid.y, school_door[1].mid.z);
-	modelStack.Translate(0.25, 0, 2.5);
+	modelStack.Translate(-0.25, 0, 2.5);
 	modelStack.Rotate(school_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, -2.5);
+	modelStack.Translate(0.25, 0, -2.5);
 	modelStack.Scale(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1413,15 +1543,15 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
-	modelStack.Translate(560, 10, -60); // pos on map
-	modelStack.Translate(100, 0, 0); //move to origin
-	modelStack.Scale(0.4, 0.4, 0.4);
+	modelStack.Translate(540, 10, -100); // pos on map
+	modelStack.Translate(50, 0, 0); //move obj to origin
+	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[GEO_PIGEONHOLE], true);
 	modelStack.PopMatrix();
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
-	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
+	modelStack.Rotate(-10, ghost->axis.x, 0, ghost->axis.z);
 	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -1437,6 +1567,15 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	std::stringstream posx;
@@ -1454,6 +1593,53 @@ void SceneSP2Room2::Render()
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
 	}
 
 	if (nearExit == true) {
@@ -1528,14 +1714,14 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
 	std::ostringstream test1;
-	test1 << "camera facing: " << camera.view;
+	test1 << "ghost pos: " << ghost->pos;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
-	test3 << "ghost distance: " << ghost->distance;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	std::ostringstream test2;
-	test2 << "ghost stat: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	//std::ostringstream test3;
+	//test3 << "ghost distance: " << ghost->distance;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	//std::ostringstream test2;
+	//test2 << "ghost stat: " << ghost->state;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -1554,6 +1740,8 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);
 }
 
 void SceneSP2Room2::Exit()
@@ -1870,5 +2058,3 @@ void SceneSP2Room2::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-
-

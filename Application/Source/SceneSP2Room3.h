@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -98,6 +99,8 @@ public:
 		wheelbarrow,
 		metalcabinet,
 		garagedoor,
+		screwdriver,
+		BATTERY,
 	
 
 		//trap
@@ -176,7 +179,6 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 
-	
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];
 	CameraSP2 camera;
@@ -188,6 +190,7 @@ private:
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
+	bool nearScrewdriver;
 	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
@@ -195,6 +198,9 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	Item* garageItems[10];
+
 	struct Wall
 	{
 		Vector3 mid;
@@ -234,7 +240,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 

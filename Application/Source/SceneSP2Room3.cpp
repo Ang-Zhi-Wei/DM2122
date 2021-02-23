@@ -15,6 +15,8 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight_lifetime = 90;
 	inLocker = false;
 	exitGarage = false;
+	nearScrewdriver = false;
+	showSideBox = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -190,6 +192,15 @@ void SceneSP2Room3::Init()
 	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	meshList[barrels]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	/*meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
+
+	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver2.obj");
+	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver2.tga");
+	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
 	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[workbench]->material.kAmbient.Set(0.35, 0.35, 0.35);
@@ -211,6 +222,8 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//garagedoor.obj");
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
 
 
 	//light 0
@@ -396,6 +409,7 @@ void SceneSP2Room3::Init()
 	//list of lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setyaw(180);
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
@@ -493,6 +507,11 @@ void SceneSP2Room3::Set(Scene* scene)
 	inventory = scene->inventory;
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
 
 	//other lights
@@ -610,6 +629,18 @@ void SceneSP2Room3::Update(double dt)
 		
 		Freleased = false;
 	}
+
+	if (nearScrewdriver == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[0]);
+		nearScrewdriver = false;
+		Fpressed = false;
+		garageItems[0] = NULL;
+		screwDriverFound = 1;
+
+	}
+
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitGarage = true;
@@ -680,6 +711,15 @@ void SceneSP2Room3::Update(double dt)
 	else {
 		nearExit = false;
 		showChatbox = false;
+	}
+
+
+	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91)
+	{
+		nearScrewdriver = true;
+	}
+	else {
+		nearScrewdriver = false;
 	}
 
 	if (exitGarage == true && nearExit == true)
@@ -1000,13 +1040,102 @@ void SceneSP2Room3::Update(double dt)
 		break;
 	}
 	//ghost
-	ghost->UpdateState(camera.position, inLocker, dt);
+	switch (ghost->state)
+	{
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
+		break;
+
+	}
 	//Locker
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1014,10 +1143,10 @@ void SceneSP2Room3::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1303,6 +1432,16 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[garagedoor], true);
 	modelStack.PopMatrix();
 
+	if (garageItems[0] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-22, 7.8, -95);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.27, 0.27, 0.27);
+		RenderMesh(meshList[screwdriver], true);
+		modelStack.PopMatrix();
+	}
+
 
 	//ghost
 	modelStack.PushMatrix();
@@ -1336,6 +1475,60 @@ void SceneSP2Room3::Render()
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
+
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+
+
+
+	if (nearScrewdriver == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
+
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
+	}
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -1464,8 +1657,6 @@ void SceneSP2Room3::RenderSkybox()
 }
 
 
-
-
 bool SceneSP2Room3::PickUpItem(Item* item)
 {
 	//picking up item into inventory
@@ -1497,20 +1688,19 @@ void SceneSP2Room3::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr;
-			}
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
 		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+		
 		//else warning message?
 		break;
 	case Item::ITEM2:

@@ -13,8 +13,12 @@ public:
 	bool gethidden();
 	void setyaw(float yaw);
 	float getyaw();
+	Vector3 getdirection();
+	Vector3 getfront();
 private:
 	Vector3 Position;
+	Vector3 direction;
+	Vector3 front;
 	float yaw;
 	bool hidden;
 };
