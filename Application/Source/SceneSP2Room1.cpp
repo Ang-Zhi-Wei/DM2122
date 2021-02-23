@@ -721,6 +721,7 @@ void SceneSP2Room1::Update(double dt)
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 

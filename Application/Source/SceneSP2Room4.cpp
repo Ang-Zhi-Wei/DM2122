@@ -638,7 +638,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Qreleased)
 		{
 			Qpressed = true;
-
 		}
 		Qreleased = false;
 	}
@@ -994,6 +993,7 @@ void SceneSP2Room4::Update(double dt)
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
