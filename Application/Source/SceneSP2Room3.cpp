@@ -193,11 +193,11 @@ void SceneSP2Room3::Init()
 
 	/*meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
-	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
 
-	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver.obj");
-	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver.tga");
-	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
+	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver2.obj");
+	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver2.tga");
+	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
@@ -1313,6 +1313,16 @@ void SceneSP2Room3::Render()
 	modelStack.Scale(0.1, 0.12, 0.155);
 	RenderMesh(meshList[garagedoor], true);
 	modelStack.PopMatrix();
+
+	if (ObjectivePhase == 2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-30, 10, -90);
+		//modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.6, 0.6, 0.6);
+		RenderMesh(meshList[screwdriver], true);
+		modelStack.PopMatrix();
+	}
 
 
 	//ghost

@@ -1403,7 +1403,7 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && items[0] != nullptr )
+	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
 	{
 		nearBattery = true;
 	}
