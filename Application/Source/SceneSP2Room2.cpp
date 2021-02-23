@@ -1099,6 +1099,7 @@ void SceneSP2Room2::Update(double dt)
 	if ((camera.position.y >= 0) && ((camera.position.x >= 510) && (camera.position.x <= 520)) && ((camera.position.z >= -10) && (camera.position.z <= -5)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
 	{
 		jumpscareActive1 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	if (jumpscareActive1 == true)
 	{
@@ -1118,6 +1119,7 @@ void SceneSP2Room2::Update(double dt)
 	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
 	{
 		jumpscare2Pass = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	else
 	{

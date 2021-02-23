@@ -39,7 +39,6 @@ void CameraSP2::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	viewTarget = (0.f,0.f,0.f);
 	rawTarget = pos;
 	offsetX = 0;
-	Application::SetCursorPos(960, 540);
 	boundX1 = 0;
 	boundX2 = 300;
 	boundZ1 = 0;
