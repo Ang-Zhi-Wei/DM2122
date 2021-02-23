@@ -2360,7 +2360,7 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "What? Why?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 13:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Nevermind...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Something awaits you..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	}
 
