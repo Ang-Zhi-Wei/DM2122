@@ -28,24 +28,21 @@ public:
 			ITEM3,
 			//add more depending on whta u need, don forget set in Set function
 		};
-		//Vector3 pos; //only if u plan to reuse struct for rendering
+		Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
 		int count;
 		int type; //type of item (for reusability e.g 100 batteries; easier setting)
 		std::string name;  //Name that shows up in item display; can also be used to differentiate btw objects of same type but different, eg both keys but unlock diff doors, type = key but name different
 		std::string description; //Short description of item that shows up in item display
 
-		Item()
+		Item(std::string itemname, int itemtype, Vector3 pos)
 		{
 			count = 1;
 			type = BATTERY;
 			image = "Image//fountaintexture.tga";
-		}
-		void Set(std::string itemname, int itemtype)
-		{
-			//this->pos = pos; //if used for rendering uncomment, otherwise can remove pos from function arguments
 			type = itemtype;
 			name = itemname;
+			this->pos = pos;
 			switch (type)
 			{
 			case BATTERY:

@@ -309,9 +309,7 @@ private:
 	ISoundEngine* Background;
 	ISoundEngine* Effect;
 
-	Item test;
-	Item test2;
-	Item battery;
+	Item* items[30];
 
 
 	Vector3 temp;

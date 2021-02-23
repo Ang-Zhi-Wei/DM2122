@@ -1411,7 +1411,13 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
 	modelStack.PopMatrix();
-	
+	//pigeon hole in lounge
+	modelStack.PushMatrix();
+	modelStack.Translate(560, 10, -60); // pos on map
+	modelStack.Translate(100, 0, 0); //move to origin
+	modelStack.Scale(0.4, 0.4, 0.4);
+	RenderMesh(meshList[GEO_PIGEONHOLE], true);
+	modelStack.PopMatrix();
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
