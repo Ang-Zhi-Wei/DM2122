@@ -1773,6 +1773,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::hidemousecursor(false);
 		Application::pause(true);
 	}
 
@@ -1841,6 +1842,7 @@ void SceneSP2Main::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
 
