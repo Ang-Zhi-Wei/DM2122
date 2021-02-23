@@ -241,7 +241,6 @@ private:
 	bool showSideBox;
 	bool NearGarage;
 	bool nearBattery;
-	bool nearBattery2;
 	bool PickUpBattery;
 	bool NearHouse;
 	bool NearSchool;
@@ -310,10 +309,7 @@ private:
 	ISoundEngine* Background;
 	ISoundEngine* Effect;
 
-	Item test;
-	Item test2;
-	Item battery;
-	Item battery2;
+	Item* items[30];
 
 
 	Vector3 temp;

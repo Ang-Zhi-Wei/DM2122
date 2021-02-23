@@ -520,18 +520,21 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->distance < 7) {
+	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
+		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
+		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1042,7 +1045,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= -15)) && ((camera.position.z >= -430) && (camera.position.z <= -330)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)))
 	{
 		jumpscareTimerActive1 = true;
 	}
@@ -1066,83 +1069,83 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
 	}
 
-	//Jumpscare, living room
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	{
-		jumpscareTimerActive2 = true;
-	}
-	else
-	{
-		jumpscareTimerActive2 = false;
-		jumpscareActive2 = false;
-	}
-	if (jumpscareTimerActive2 == true)
-		jumpscareTimer2 -= dt;
+	////Jumpscare, living room
+	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
+	//{
+	//	jumpscareTimerActive2 = true;
+	//}
+	//else
+	//{
+	//	jumpscareTimerActive2 = false;
+	//	jumpscareActive2 = false;
+	//}
+	//if (jumpscareTimerActive2 == true)
+	//	jumpscareTimer2 -= dt;
 
-	if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
-	{
-		jumpscareActive2 = false;
-	}
-	if (jumpscareTimer2 <= 0)
-	{
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-		Jumpscare->setSoundVolume(1.f);
-		jumpscareActive2 = true;
-		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
-	}
-
-
-
-	//Jumpscare, Connecting room
-	if ((camera.position.y >= 0) && ((camera.position.x >= 28) && (camera.position.x <= 70)) && ((camera.position.z >= -535) && (camera.position.z <= -505)))
-	{
-		jumpscareTimerActive3 = true;
-	}
-	else
-	{
-		jumpscareTimerActive3 = false;
-		jumpscareActive3 = false;
-	}
-	if (jumpscareTimerActive3 == true)
-		jumpscareTimer3 -= dt;
-	if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
-	{
-		jumpscareActive3 = false;
-	}
-	if (jumpscareTimer3 <= 0)
-	{
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-		Jumpscare->setSoundVolume(1.f);
-		jumpscareActive3 = true;	
-		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
-	}
+	//if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
+	//{
+	//	jumpscareActive2 = false;
+	//}
+	//if (jumpscareTimer2 <= 0)
+	//{
+	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	//	Jumpscare->setSoundVolume(1.f);
+	//	jumpscareActive2 = true;
+	//	jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
+	//}
 
 
 
-	//Jumpscare, Final room
-	if ((camera.position.y >= 0) && ((camera.position.x >= 50)&& (camera.position.x <= 70)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	{
-		jumpscareTimerActive4 = true;
-	}
-	else
-	{
-		jumpscareTimerActive4 = false;
-		jumpscareActive4 = false;
-	}
-	if (jumpscareTimerActive4 == true)
-		jumpscareTimer4 -= dt;
+	////Jumpscare, Connecting room
+	//if ((camera.position.y >= 0) && ((camera.position.x >= 28) && (camera.position.x <= 70)) && ((camera.position.z >= -535) && (camera.position.z <= -505)))
+	//{
+	//	jumpscareTimerActive3 = true;
+	//}
+	//else
+	//{
+	//	jumpscareTimerActive3 = false;
+	//	jumpscareActive3 = false;
+	//}
+	//if (jumpscareTimerActive3 == true)
+	//	jumpscareTimer3 -= dt;
+	//if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
+	//{
+	//	jumpscareActive3 = false;
+	//}
+	//if (jumpscareTimer3 <= 0)
+	//{
+	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	//	Jumpscare->setSoundVolume(1.f);
+	//	jumpscareActive3 = true;	
+	//	jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
+	//}
 
-	if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
-	{
-		jumpscareActive4 = false;
-	}
-	if (jumpscareTimer4 <= 0)
-	{
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-		Jumpscare->setSoundVolume(1.f);
-		jumpscareActive4 = true;
-		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
-	}
+
+
+	////Jumpscare, Final room
+	//if ((camera.position.y >= 0) && ((camera.position.x >= 50)&& (camera.position.x <= 70)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
+	//{
+	//	jumpscareTimerActive4 = true;
+	//}
+	//else
+	//{
+	//	jumpscareTimerActive4 = false;
+	//	jumpscareActive4 = false;
+	//}
+	//if (jumpscareTimerActive4 == true)
+	//	jumpscareTimer4 -= dt;
+
+	//if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
+	//{
+	//	jumpscareActive4 = false;
+	//}
+	//if (jumpscareTimer4 <= 0)
+	//{
+	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	//	Jumpscare->setSoundVolume(1.f);
+	//	jumpscareActive4 = true;
+	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
+	//}
 	
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
@@ -1306,11 +1309,11 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
 
-	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[0], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
+	modelStack.Translate(2.5, 0, 0.25);
 
-	modelStack.Scale(5, 15, 1);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1339,12 +1342,12 @@ void SceneSP2Room1::Render()
 	//door
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 170);
-
-	modelStack.Translate(-2.5, 0, -0.5);
+	
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[1], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
+	modelStack.Translate(2.5, 0, 0.25);
 
-	modelStack.Scale(5,15,1);
+	modelStack.Scale(5,15,0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
@@ -1382,21 +1385,21 @@ void SceneSP2Room1::Render()
 	//Door
 	modelStack.PushMatrix();
 	modelStack.Translate(62.5, 7.5, 95);
-	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[2], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
-	modelStack.Scale(5, 15, 1);
+	modelStack.Translate(2.5, 0, 0.25);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
 	//Door wall
 	modelStack.PushMatrix();
-	modelStack.Translate(62.5, 20, 95);
-	modelStack.Scale(5, 10, 1);
+	modelStack.Translate(62.25, 20, 95);
+	modelStack.Scale(4.5, 10, 1);
 	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
-	//Right wall
+	//Left wall
 	modelStack.PushMatrix();
 	modelStack.Translate(-10, 10, 132.5);
 	modelStack.Rotate(90, 0, 0, 1);
@@ -1404,11 +1407,11 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 
-	//Left wall
+	//Right wall
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 10, 132.5);
 	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(20, 1, 75);
+	modelStack.Scale(20, 1, 76);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 	
@@ -1439,11 +1442,11 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
-	modelStack.Translate(2.5, 0, -0.5);
+	modelStack.Translate(2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[3], 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.5);
+	modelStack.Translate(-2.5, 0, 0.25);
 
-	modelStack.Scale(5, 15, 1);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
