@@ -1317,9 +1317,9 @@ void SceneSP2Room3::Render()
 	if (ObjectivePhase == 2)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(-30, 10, -90);
-		//modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Scale(0.6, 0.6, 0.6);
+		modelStack.Translate(-22, 7.8, -95);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.27, 0.27, 0.27);
 		RenderMesh(meshList[screwdriver], true);
 		modelStack.PopMatrix();
 	}
