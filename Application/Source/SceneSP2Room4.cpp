@@ -25,7 +25,7 @@ SceneSP2Room4::SceneSP2Room4()
 	fps = 60;
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	DS_main = OPEN;
 	camBlinkOn = false;
 	camBlinkOff = true;
 	placeitem = false;
@@ -236,7 +236,7 @@ void SceneSP2Room4::Init()
 	meshList[heartmon]->textureID = LoadTGA("Image//hartmon-blood.tga");
 	meshList[heartmon]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	meshList[Hdoors] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
+	meshList[Hdoors] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[Hdoors]->textureID = LoadTGA("Image//hospital_door_full.tga");
 	meshList[Hdoors]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
@@ -334,25 +334,7 @@ void SceneSP2Room4::Init()
 
 
 
-	//doors
-	school_door[0].mid.Set(-2.5, 5, 0);
-	school_door[1].mid.Set(2.5, 5, 0);
-	lounge_door[0].mid.Set(-10, 5, -47.5);
-	lounge_door[1].mid.Set(-10, 5, -52.5);
-	classroom_door[0].mid.Set(10, 5, -97.5);
-	classroom_door[1].mid.Set(10, 5, -92.5);
-	school_door[0].lengthx = 5;
-	school_door[1].lengthx = 5;
-	lounge_door[0].lengthz = 5;
-	lounge_door[1].lengthz = 5;
-	classroom_door[0].lengthz = 5;
-	classroom_door[1].lengthz = 5;
-	for (int i = 0; i < 6; i++)
-	{
-		all_doors[i]->lengthy = 10;
-	}
-	school_door[0].rotateY = -90;
-	school_door[1].rotateY = 90;
+	
 	
 	//chairs/table
 	for (int row = 0; row < 4; row++)
@@ -398,9 +380,36 @@ void SceneSP2Room4::Init()
 	Colliderlist[3].setlength(1, 25, 100);
 	Colliderlist[3].Setposition(Vector3(60, 12, -50));
 
+	//@bedcolliders
+	//right row
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[4].setlength(12, 7, 10);
+	Colliderlist[4].Setposition(Vector3(23, 0, -5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[5].setlength(12, 7, 10);
+	Colliderlist[5].Setposition(Vector3(23, 0, -20));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[6].setlength(12, 7, 10);
+	Colliderlist[6].Setposition(Vector3(23, 0, -35));
+
+	//left row
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[7].setlength(12, 7, 10);
+	Colliderlist[7].Setposition(Vector3(53, 0, -5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[8].setlength(12, 7, 10);
+	Colliderlist[8].Setposition(Vector3(53, 0, -20));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[9].setlength(12, 7, 10);
+	Colliderlist[9].Setposition(Vector3(53, 0, -35));
+
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[0].getxlength(), Colliderlist[0].getylength(), Colliderlist[0].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[8].getxlength(), Colliderlist[8].getylength(), Colliderlist[8].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -409,10 +418,10 @@ void SceneSP2Room4::Init()
 	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//garage.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//floor-green-scrach.tga");
-	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
-	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
-	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
-	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
+	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//hos_door_L.tga");
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//hos_door_R.tga");
 	
 	//UI
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
@@ -438,7 +447,7 @@ void SceneSP2Room4::Init()
 	//door state
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	DS_main = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -487,6 +496,11 @@ void SceneSP2Room4::SetBackground()
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
+	if (!Heartbeat) {
+		Heartbeat = createIrrKlangDevice();
+		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
 	
@@ -498,6 +512,28 @@ void SceneSP2Room4::Update(double dt)
 {
 	//mouse cursor show/hide
 	//Application::hidemousecursor(true);
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
+	//sounds when ghost get too close
+	if (ghost->distance < 7) {
+		Heartbeat->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 50) {
+		Heartbeat->setSoundVolume(1.0f);
+		Background->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+		Heartbeat->setSoundVolume(0.5f);
+		Background->setSoundVolume(0.f);
+	}
+	else {
+		Heartbeat->setSoundVolume(0.f);
+		Background->setSoundVolume(0.5f);
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -545,7 +581,6 @@ void SceneSP2Room4::Update(double dt)
 		exitHospital = true;
 		Fpressed = false;
 	}
-
 
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -617,6 +652,7 @@ void SceneSP2Room4::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 		exitHospital = false;
 	}
@@ -693,8 +729,9 @@ void SceneSP2Room4::Update(double dt)
 	//INTERACTION CHECKS
 	interact = false;
 	Vector3 origin(0, 5, 0);
+
 	//doors
-	switch (DS_school)
+	switch (DS_main)
 	{
 	case OPEN:
 		//doors close on their own
@@ -725,21 +762,6 @@ void SceneSP2Room4::Update(double dt)
 			}
 		}
 		break;*/
-	case OPENING:
-		school_door[0].rotateY -= 20 * float(dt);
-		school_door[1].rotateY += 20 * float(dt);
-		if (school_door[1].rotateY >= 90)
-		{
-			//Application::setscene(Scene_Main);
-		}
-		break;
-	case CLOSING:
-		school_door[0].rotateY += float(20 * dt);
-		school_door[1].rotateY -= float(20 * dt);
-		if (school_door[1].rotateY <= 0)
-		{
-			DS_school = CLOSED;
-		}
 		break;
 	}
 
@@ -761,7 +783,7 @@ void SceneSP2Room4::Update(double dt)
 				Fpressed = false;
 				DS_classroom = CLOSING;
 
-				
+
 			}
 		}
 		break;
@@ -774,79 +796,8 @@ void SceneSP2Room4::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = OPENING;
-				
-			}
-		}
-		break;
-	case OPENING:
-		classroom_door[0].rotateY += 20 * float(dt);
-		classroom_door[1].rotateY -= 20 * float(dt);
-		if (classroom_door[0].rotateY >= 90)
-		{
-			classroom_door[0].rotateY = 90;
-			DS_classroom = OPEN;
-		}
-		break;
-	case CLOSING:
-		classroom_door[0].rotateY -= 20 * float(dt);
-		classroom_door[1].rotateY += 20 * float(dt);
-	
-		if (classroom_door[0].rotateY <= 0)
-		{
-			classroom_door[0].rotateY = 0;
-			DS_classroom = CLOSED;
-		}
-		break;
-	}
 
-	origin.Set(-10, 5, -50);
-	switch (DS_lounge)
-	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
-		{
-			DS_lounge = CLOSING;
-		}
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
-		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_lounge = CLOSING;
 			}
-		}
-		break;
-	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
-		{
-			interact = true;
-			interact_message = "Open Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_lounge = OPENING;
-			}
-		}
-		break;
-	case OPENING:
-		lounge_door[0].rotateY += 20 * float(dt);
-		lounge_door[1].rotateY -= 20 * float(dt);
-		if (lounge_door[0].rotateY >= 90)
-		{
-			lounge_door[0].rotateY = 90;
-			DS_lounge = OPEN;
-		}
-		break;
-	case CLOSING:
-		lounge_door[0].rotateY -= float(20 * dt);
-		lounge_door[1].rotateY += float(20 * dt);
-		if (lounge_door[0].rotateY <= 0)
-		{
-			lounge_door[0].rotateY = 0;
-			DS_lounge = CLOSED;
 		}
 		break;
 	}
@@ -942,41 +893,41 @@ void SceneSP2Room4::Update(double dt)
 		camera.Setslow(false);
 	}
 
-	if (camera.movement) {
-		Effect->setSoundVolume(0.5f);
-	}
-	else {
-		Effect->setSoundVolume(0.f);
-	}
+	
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 	}
 	if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
 	}
 	if (Application::IsKeyPressed('8')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
 	}
 	if (Application::IsKeyPressed('9')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
 
@@ -985,11 +936,12 @@ void SceneSP2Room4::Update(double dt)
 	campos_z = camera.position.z;
 
 
-	//check if place flowers on bed
+	//check if placed flowers on bed
 	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
 	{
 		//left body top
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body1_l] = true;
@@ -998,16 +950,18 @@ void SceneSP2Room4::Update(double dt)
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
 	{
 		//left body med
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body2_l] = true;
 		}
 	}
-	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[5])
+	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
 	{
 		//left body bottom
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body3_l] = true;
@@ -1016,7 +970,8 @@ void SceneSP2Room4::Update(double dt)
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
 	{
 		//left body top
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body1_r] = true;
@@ -1025,7 +980,8 @@ void SceneSP2Room4::Update(double dt)
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
 	{
 		//left body med
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body2_r] = true;
@@ -1034,7 +990,8 @@ void SceneSP2Room4::Update(double dt)
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
 	{
 		//left body bottom
-		placeitem = true;
+		interact = true;
+		interact_message = "Place Flower";
 		if (Fpressed)
 		{
 			itemplaced[body3_r] = true;
@@ -1053,6 +1010,8 @@ void SceneSP2Room4::Update(double dt)
 			doorunlocked = true;
 		}
 	}
+
+	doorRotate -= float(20 * dt);
 }
 
 void SceneSP2Room4::PauseUpdate()
@@ -1344,10 +1303,49 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[0].getPosition().x, Colliderlist[0].getPosition().y, Colliderlist[0].getPosition().z);
+	modelStack.Translate(Colliderlist[8].getPosition().x, Colliderlist[8].getPosition().y, Colliderlist[8].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
+
+	//@doors
+	//left room doors
+	modelStack.PushMatrix();
+	modelStack.Translate(37.5, 7.2, -44);
+	modelStack.Translate(2.5, 0,0);
+	modelStack.Rotate(110, 0, 1, 0);
+	modelStack.Translate(-2.5, 0, 0);
+	modelStack.Scale(5, 15.5, 1);
+	RenderMesh(meshList[GEO_LEFTDOOR], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(32.5, 7.2, -44);
+	modelStack.Translate(-2.5, 0, 0);
+	modelStack.Rotate(-40, 0, 1, 0);
+	modelStack.Translate(2.5, 0, 0);
+	modelStack.Scale(5, 15.5, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
+
+	//right room doors
+	modelStack.PushMatrix();
+	modelStack.Translate(-32.5, 7.2, -44);
+	modelStack.Translate(2.5, 0, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Translate(-2.5, 0, 0);
+	modelStack.Scale(5, 15.5, 1);
+	RenderMesh(meshList[GEO_LEFTDOOR], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-37.5, 7.2, -44);
+	modelStack.Translate(-2.5, 0, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Translate(2.5, 0, 0);
+	modelStack.Scale(5, 15.5, 1);
+	RenderMesh(meshList[GEO_RIGHTDOOR], true);
+	modelStack.PopMatrix();
 
 
 	//skybox
@@ -1377,7 +1375,6 @@ void SceneSP2Room4::Render()
 	
 
 
-	//all doors
 	//schoolleft
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 3, -73);
@@ -1456,7 +1453,7 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(55, 12, -44);
+	modelStack.Translate(50, 12, -44);
 	modelStack.Scale(20, 25, 1);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
@@ -1473,7 +1470,7 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-55, 12, -44);
+	modelStack.Translate(-50, 12, -44);
 	modelStack.Scale(20, 25, 1);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
@@ -1566,10 +1563,10 @@ void SceneSP2Room4::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	if (placeitem)
+	/*if (placeitem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Place Flower", Color(1, 1, 0), 4, 22, 5);
-	}
+	}*/
 	/*std::ostringstream test1;
 	test1 << "camera up: " << camera.up;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);

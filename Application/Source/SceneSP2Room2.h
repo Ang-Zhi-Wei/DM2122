@@ -189,6 +189,8 @@ public:
 		GEO_CHAIR,
 		GEO_LEFTDOOR,
 		GEO_RIGHTDOOR,
+		GEO_PODIUM,
+		GEO_PIGEONHOLE,
 
 
 
@@ -283,13 +285,10 @@ public:
 	
 		//light 2
 		U_LIGHT2_POWER,
-
 		//light 3
 		U_LIGHT3_POWER,
-
 		//light 4
 		U_LIGHT4_POWER,
-
 		//light 5
 		U_LIGHT5_POWER,
 	
@@ -393,6 +392,7 @@ private:
 	Wall classroom_tables[20];
 	Wall classroom_chairs[20];
 	Wall lounge_table;
+	Wall podium;
 
 	const int wall_count = 11;
 	Wall* all_walls[11] = { &school_walls[0], &lounge_walls[0], &classroom_walls[0], 

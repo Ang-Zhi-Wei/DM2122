@@ -343,6 +343,10 @@ void SceneSP2Room2::Init()
 	lounge_table.lengthx = 20; //not sure since obj
 	//lengthy unset
 
+	//podium
+	podium.mid.Set(670, 1, 90);
+	podium.lengthx = 5;
+	podium.lengthz = 5;
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
@@ -455,6 +459,10 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TABLE]->textureID = LoadTGA("Image//greywood.tga");
 	meshList[GEO_LONGTABLE] = MeshBuilder::GenerateOBJ("table", "OBJ//LongTable.obj");
 	meshList[GEO_LONGTABLE]->textureID = LoadTGA("Image//darkwood.tga");
+	meshList[GEO_PODIUM] = MeshBuilder::GenerateOBJ("podium", "OBJ//Podium.obj");
+	meshList[GEO_PODIUM]->textureID = LoadTGA("Image//greywood.tga");
+	meshList[GEO_PIGEONHOLE] = MeshBuilder::GenerateOBJ("podium", "OBJ//PigeonHole.obj");
+	meshList[GEO_PIGEONHOLE]->textureID = LoadTGA("Image//greywood.tga");
 	//ghost
 	meshList[GEO_SKULL] = MeshBuilder::GenerateOBJ("skull", "OBJ//Skull.obj");
 	meshList[GEO_SKULL]->material.kAmbient.Set(Gray);
@@ -590,6 +598,11 @@ void SceneSP2Room2::SetBackground()
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
+	if (!Heartbeat) {
+		Heartbeat = createIrrKlangDevice();
+		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
 	
@@ -599,6 +612,28 @@ void SceneSP2Room2::Update(double dt)
 {
 	//mouse cursor show/hide
 	//Application::hidemousecursor(true);
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
+	//sounds when ghost get too close
+	if (ghost->distance < 7) {
+		Heartbeat->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 50) {
+		Heartbeat->setSoundVolume(1.0f);
+		Background->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+		Heartbeat->setSoundVolume(0.5f);
+		Background->setSoundVolume(0.f);
+	}
+	else {
+		Heartbeat->setSoundVolume(0.f);
+		Background->setSoundVolume(0.5f);
+	}
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -703,7 +738,7 @@ void SceneSP2Room2::Update(double dt)
 
 
 
-	if (campos_x < 480 && campos_z > -4 && campos_z < 4)
+	/*if (campos_x < 480 && campos_z > -4 && campos_z < 4)
 	{
 		nearExit = true;
 	}
@@ -717,11 +752,12 @@ void SceneSP2Room2::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 		exitSchool = false;
-	}
+	}*/
 
-
+	
 
 	//fps
 	fps = 1.f / float(dt);
@@ -851,6 +887,9 @@ void SceneSP2Room2::Update(double dt)
 			if (Fpressed)
 			{
 				Fpressed = false;
+				Background->setSoundVolume(0.f);
+				Effect->setSoundVolume(0.f);
+				Jumpscare->setSoundVolume(0.f);
 				Application::setscene(Scene_Main);
 			}
 		}
@@ -872,6 +911,9 @@ void SceneSP2Room2::Update(double dt)
 		school_door[1].rotateY += float(20 * dt);
 		if (school_door[1].rotateY >= 90)
 		{
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
 			Application::setscene(Scene_Main);
 		}
 		break;
@@ -1101,41 +1143,41 @@ void SceneSP2Room2::Update(double dt)
 		jumpscareActive2 = false;
 		jumpscare2Counter = 2;
 	}
-	if (camera.movement) {
-		Effect->setSoundVolume(0.5f);
-	}
-	else {
-		Effect->setSoundVolume(0.f);
-	}
+	
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 	}
 	if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
 	}
 	if (Application::IsKeyPressed('9')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
 	if (Application::IsKeyPressed('0')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
 
@@ -1353,9 +1395,15 @@ void SceneSP2Room2::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
-
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_LONGTABLE], true);
+	modelStack.PopMatrix();
+	//podium
+	modelStack.PushMatrix();
+	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.15, 0.15, 0.15);
+	RenderMesh(meshList[GEO_PODIUM], true);
 	modelStack.PopMatrix();
 	
 	//ghost
@@ -1555,20 +1603,19 @@ void SceneSP2Room2::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr;
-			}
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
 		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+		
 		//else warning message?
 		break;
 	case Item::ITEM2:
