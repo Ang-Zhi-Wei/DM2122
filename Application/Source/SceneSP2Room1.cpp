@@ -526,15 +526,15 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
 		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
