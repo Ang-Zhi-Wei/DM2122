@@ -22,7 +22,9 @@ SceneSP2Main::SceneSP2Main()
 	Interact_Num = 0;
 	manAppear = true;
 	nearBattery = false;
-	PickUpBattery = false;
+	nearBattery1 = false;
+	nearBattery2 = false;
+	nearBattery3 = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -1010,12 +1012,19 @@ void SceneSP2Main::Init()
 	inventory = new Inventory;
 
 	//test examples for item
-	test.Set("item2testAAAA", Item::ITEM2);
+	/*test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
-	battery.Set("Battery", Item::BATTERY);
-	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	PickUpItem(&test2); //to be called only in one frame.
-	PickUpItem(&battery);
+	battery.Set("Battery", Item::BATTERY);*/
+	items[0] = new Item("battery", Item::BATTERY, (0, -3, 340));
+	items[1] = new Item("battery", Item::BATTERY, (60, -3, 0));
+	items[2] = new Item("battery", Item::BATTERY, (-60, -3, 100));
+	items[3] = new Item("battery", Item::BATTERY, (-200, -3, -200));
+//to be called only in one frame. placed under init just for testing first
+	//PickUpItem(&test2); //to be called only in one frame.
+	//PickUpItem(&battery);
+	//PickUpItem(&test);
+	//PickUpItem(&test2);
+	//PickUpItem(&test2);
 	
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -1023,7 +1032,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
 
-
+	
 	
 }
 
@@ -1101,15 +1110,15 @@ void SceneSP2Main::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
 		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1226,11 +1235,41 @@ void SceneSP2Main::Update(double dt)
 
 	if (nearBattery == true && Fpressed == true)
 	{
-		PickUpBattery = true;
-		PickUpItem(&battery);
+		PickUpItem(items[0]);
 		nearBattery = false;
 		Fpressed = false;
+		items[0] = NULL;
+		
 	}
+
+	if (nearBattery1 == true && Fpressed == true)
+	{
+		PickUpItem(items[1]);
+		nearBattery1 = false;
+		Fpressed = false;
+		items[1] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(items[2]);
+		nearBattery2 = false;
+		Fpressed = false;
+		items[2] = NULL;
+
+	}
+
+	if (nearBattery3 == true && Fpressed == true)
+	{
+		PickUpItem(items[3]);
+		nearBattery3 = false;
+		Fpressed = false;
+		items[3] = NULL;
+
+	}
+
+	
 
 
 	
@@ -1313,13 +1352,44 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && PickUpBattery == false)
+	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && items[0] != nullptr )
 	{
 		nearBattery = true;
 	}
 	else {
 		nearBattery = false;
 	}
+
+
+	if (campos_z < 15 && campos_z > 5  && campos_x > 53 && campos_x < 64 && items[1] != nullptr )
+	{
+
+		nearBattery1 = true;
+	}
+	else {
+		nearBattery1 = false;
+	}
+
+
+	if (campos_z < 112 && campos_z > 100 && campos_x > -63 && campos_x < -53 && items[2] != nullptr)
+	{
+
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
+	}
+
+	if (campos_z < -186 && campos_z > -195 && campos_x > -187 && campos_x < -175 && items[3] != nullptr)
+	{
+
+		nearBattery3 = true;
+	}
+	else {
+		nearBattery3 = false;
+	}
+
+
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
 	{
@@ -2020,7 +2090,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_LAMP], true);
 	modelStack.PopMatrix();//Added collider
 
-	
+
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -2165,7 +2235,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();//Added collider
 
-	if (PickUpBattery == false) {
+	if (items[0] != nullptr) {
 		modelStack.PushMatrix();
 		modelStack.Translate(0, -3, 340);
 		modelStack.Scale(0.09, 0.09, 0.09);
@@ -2173,36 +2243,41 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (items[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(60, -3, 0);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(60, -3, 0);
-	modelStack.Scale(0.09, 0.09, 0.09);
-	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
+	if (items[2] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(-60, -3, 100);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-60, -3, 100);
-	modelStack.Scale(0.09, 0.09, 0.09);
-	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
+	if (items[3] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(-185, -3, -200);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-200, -3, -200);
-	modelStack.Scale(0.09, 0.09, 0.09);
-	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(200, -3, 0);
+	//modelStack.Scale(0.09, 0.09, 0.09);
+	//RenderMesh(meshList[BATTERY], true);
+	//modelStack.PopMatrix();*/
 
-	modelStack.PushMatrix();
-	modelStack.Translate(200, -3, 0);
-	modelStack.Scale(0.09, 0.09, 0.09);
-	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(30.f, -0.1f, 313.f);
-	modelStack.Scale(750, 8, 30);
-	RenderMesh(meshList[GEO_PAVEMENT], true);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(30.f, -0.1f, 313.f);
+	//modelStack.Scale(750, 8, 30);
+	//RenderMesh(meshList[GEO_PAVEMENT], true);
+	//modelStack.PopMatrix();
 
 	//ground mesh 2
 
@@ -2255,7 +2330,7 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
-	
+
 
 	modelStack.PushMatrix();
 	std::stringstream posx;
@@ -2273,8 +2348,8 @@ void SceneSP2Main::Render()
 
 
 
-	
-	if (nearBattery == true)
+
+	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2471,20 +2546,20 @@ void SceneSP2Main::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr; 
-			}
-		} 
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			delete inventory->items[inventory->selected];
+			inventory->items[inventory->selected] = nullptr; 
+		}
+		 
 		//else warning message?
 		break;
 	case Item::ITEM2:

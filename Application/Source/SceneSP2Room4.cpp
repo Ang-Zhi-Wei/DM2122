@@ -23,7 +23,7 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
 	fps = 60;
-	DS_classroom = CLOSED;
+	DS_opRoom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_main = OPEN;
 	camBlinkOn = false;
@@ -407,9 +407,75 @@ void SceneSP2Room4::Init()
 	Colliderlist[9].setlength(12, 7, 10);
 	Colliderlist[9].Setposition(Vector3(53, 0, -35));
 
+	//right room colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[10].setlength(25, 7, 12);
+	Colliderlist[10].Setposition(Vector3(-40, 3, -19));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[11].setlength(10, 7, 16);
+	Colliderlist[11].Setposition(Vector3(-28, 9, -24));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[12].setlength(10, 7, 20);
+	Colliderlist[12].Setposition(Vector3(-56, 9, -24));
+
+	//back wall
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[13].setlength(165, 25, 1);
+	Colliderlist[13].Setposition(Vector3(0, 12, -100));
+
+	//front wall
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[13].setlength(165, 25, 1);
+	Colliderlist[13].Setposition(Vector3(0, 12, 0));
+
+	//entrance walls
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(1, 25, 43);
+	Colliderlist[14].Setposition(Vector3(-15, 12, -22));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[15].setlength(1, 25, 43);
+	Colliderlist[15].Setposition(Vector3(15, 12, -22));
+
+	//room front walls
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[16].setlength(20, 25, 1);
+	Colliderlist[16].Setposition(Vector3(20, 12, -44));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[17].setlength(20, 25, 1);
+	Colliderlist[17].Setposition(Vector3(50, 12, -44));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[18].setlength(20, 25, 1);
+	Colliderlist[18].Setposition(Vector3(-20, 12, -44));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[19].setlength(20, 25, 1);
+	Colliderlist[19].Setposition(Vector3(-50, 12, -44));
+
+	//OP room door 
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[20].setlength(10, 25, 1);
+	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+
+	//metal cabinet
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[21].setlength(9, 12, 9);
+	Colliderlist[21].Setposition(Vector3(37.5, 7, -4));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[22].setlength(5, 12, 24);
+	Colliderlist[22].Setposition(Vector3(57, 0, -18));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[23].setlength(5, 12, 24);
+	Colliderlist[23].Setposition(Vector3(16, 0, -18));
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[8].getxlength(), Colliderlist[8].getylength(), Colliderlist[8].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[22].getxlength(), Colliderlist[22].getylength(), Colliderlist[22].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -445,7 +511,7 @@ void SceneSP2Room4::Init()
 	camBlinkOn = false;
 	camBlinkOff = true;
 	//door state
-	DS_classroom = CLOSED;
+	DS_opRoom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_main = OPEN;
 	//trap mesh
@@ -525,15 +591,15 @@ void SceneSP2Room4::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
 		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false ){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -733,7 +799,11 @@ void SceneSP2Room4::Update(double dt)
 	interact = false;
 	Vector3 origin(0, 5, 0);
 
-	//doors
+
+
+
+
+	//door states
 	switch (DS_main)
 	{
 	case OPEN:
@@ -768,42 +838,42 @@ void SceneSP2Room4::Update(double dt)
 		break;
 	}
 
-	origin.Set(10, 5, -95);
-	switch (DS_classroom)
+
+
+	switch (DS_opRoom)
 	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
-		{
-			DS_classroom = CLOSING;
-		}
-		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
-		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_classroom = CLOSING;
-
-
-			}
-		}
-		break;
 	case CLOSED:
-		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
+		if (camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && doorunlocked)
 		{
 			interact = true;
 			interact_message = "Open Door";
 			if (Fpressed)
 			{
 				Fpressed = false;
-				DS_classroom = OPENING;
-
+				DS_opRoom = OPENING;
+				Colliderlist[20].setactive(false);
+				camera.setchecker(Colliderlist);
 			}
+		}
+		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked)
+		{
+			interact = true;
+			interact_message = "Locked";
+		}
+		break;
+	case OPENING:
+		opRoom_door[0].rotateY -= float(40 * dt);
+		opRoom_door[1].rotateY += float(40 * dt);
+		if (opRoom_door[1].rotateY >= 90)
+		{
+			DS_opRoom = OPEN;
 		}
 		break;
 	}
+
+
+
+
 	//ghost
 	switch (ghost->state)
 	{
@@ -1000,19 +1070,26 @@ void SceneSP2Room4::Update(double dt)
 			itemplaced[body3_r] = true;
 		}
 	}
+	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
+	{
+		//left body bottom
+		interact = true;
+		interact_message = "Place Flower";
+		if (Fpressed)
+		{
+			itemplaced[body_op] = true;
+		}
+	}
 	else
 	{
 		placeitem = false;
 	}
 
 	//if all placed, unlock door
-	for (int i = 0; i < 6; i++)
+	if (itemplaced[0] && itemplaced[1] && itemplaced[2] && itemplaced[3] && itemplaced[4] && itemplaced[5])
 	{
-		if (itemplaced[i])
-		{
-			doorunlocked = true;
-		}
-	}
+		doorunlocked = true;
+    }
 
 	doorRotate -= float(20 * dt);
 }
@@ -1228,6 +1305,12 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-40.2, 5.5, -22);
+	modelStack.Scale(0.06, 0.06, 0.06);
+	RenderMesh(meshList[corpse], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(-28, 1, -24);
 	modelStack.Rotate(30, 0, 1, 0);
 	modelStack.Scale(0.08, 0.08, 0.08);
@@ -1306,7 +1389,7 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[8].getPosition().x, Colliderlist[8].getPosition().y, Colliderlist[8].getPosition().z);
+	modelStack.Translate(Colliderlist[22].getPosition().x, Colliderlist[22].getPosition().y, Colliderlist[22].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -1335,7 +1418,7 @@ void SceneSP2Room4::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-32.5, 7.2, -44);
 	modelStack.Translate(2.5, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(opRoom_door[1].rotateY, 0, 1, 0);
 	modelStack.Translate(-2.5, 0, 0);
 	modelStack.Scale(5, 15.5, 1);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
@@ -1344,7 +1427,7 @@ void SceneSP2Room4::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-37.5, 7.2, -44);
 	modelStack.Translate(-2.5, 0, 0);
-	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(opRoom_door[0].rotateY, 0, 1, 0);
 	modelStack.Translate(2.5, 0, 0);
 	modelStack.Scale(5, 15.5, 1);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
@@ -1377,8 +1460,7 @@ void SceneSP2Room4::Render()
 	
 	
 
-
-	//schoolleft
+	//front desk
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 3, -73);
 	modelStack.Rotate(90, 0, 1, 0);
@@ -1423,14 +1505,14 @@ void SceneSP2Room4::Render()
 	
 	//entrance walls
 	modelStack.PushMatrix();
-	modelStack.Translate(-15, 12, -23);
+	modelStack.Translate(-15, 12, -22);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(43, 25, 1);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(15, 12, -23);
+	modelStack.Translate(15, 12, -22);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(43, 25, 1);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1503,7 +1585,7 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 	//school ceiling
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 25, -50);
+	modelStack.Translate(0, 24.5, -50);
 	modelStack.Scale(165, 1, 100);
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
@@ -1640,6 +1722,56 @@ void SceneSP2Room4::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
+void SceneSP2Room4::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+
+		flashlight_lifetime = 90;
+
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+
+		//else warning message?
+		break;
+	case Item::ITEM2:
+		break;
+	}
+}
+
+bool SceneSP2Room4::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] != nullptr)
+		{
+			if (inventory->items[i]->name == item->name)
+			{
+				inventory->items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] == nullptr)
+		{
+			inventory->items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return true;
+		}
+	}
+	return false;
+}
 
 void SceneSP2Room4::RenderMesh(Mesh* mesh, bool enableLight)
 {

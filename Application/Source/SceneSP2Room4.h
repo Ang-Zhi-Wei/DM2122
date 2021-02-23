@@ -246,10 +246,10 @@ private:
 					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]};
 
 
-
+	Door opRoom_door[2];
 	
 
-	int DS_main, DS_classroom, DS_lounge;
+	int DS_main, DS_opRoom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 
@@ -258,6 +258,8 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
+	bool PickUpItem(Item* item); //shud be called only in one frame
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

@@ -54,7 +54,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(475, 9, 0), Vector3(495, 9, 0), Vector3(0, 1, 0));
 	////shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -582,6 +582,8 @@ void SceneSP2Room2::Set(Scene* scene)
 
 	camera.position.Set(475, 9, 0);
 	camera.rawTarget = camera.position;
+
+	Application::SetCursorPos(1440, camera.mousePosY);
 }
 
 void SceneSP2Room2::SetBackground()
@@ -626,15 +628,15 @@ void SceneSP2Room2::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
 		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1373,18 +1375,18 @@ void SceneSP2Room2::Render()
 	//schoolleft
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[0].mid.x, school_door[0].mid.y, school_door[0].mid.z);
-	modelStack.Translate(0.25, 0, -2.5);
+	modelStack.Translate(-0.25, 0, -2.5);
 	modelStack.Rotate(school_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, 2.5);
+	modelStack.Translate(0.25, 0, 2.5);
 	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 	//school right
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[1].mid.x, school_door[1].mid.y, school_door[1].mid.z);
-	modelStack.Translate(0.25, 0, 2.5);
+	modelStack.Translate(-0.25, 0, 2.5);
 	modelStack.Rotate(school_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, -2.5);
+	modelStack.Translate(0.25, 0, -2.5);
 	modelStack.Scale(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1452,7 +1454,13 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
 	modelStack.PopMatrix();
-	
+	//pigeon hole in lounge
+	modelStack.PushMatrix();
+	modelStack.Translate(540, 10, -100); // pos on map
+	modelStack.Translate(50, 0, 0); //move obj to origin
+	modelStack.Scale(0.2, 0.2, 0.2);
+	RenderMesh(meshList[GEO_PIGEONHOLE], true);
+	modelStack.PopMatrix();
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);

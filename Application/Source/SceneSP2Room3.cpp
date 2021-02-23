@@ -554,15 +554,15 @@ void SceneSP2Room3::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
 		Jumpscare->setSoundVolume(1.f);
 	}
-	else if (ghost->distance < 50) {
+	else if (ghost->kill == false && ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);
 		Background->setSoundVolume(0.f);
 	}
-	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+	else if (ghost->kill == false && (ghost->distance < 100 || ghost->state == Ghost::CHASING)) {
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else {
+	else if(ghost->kill == false ){
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1142,10 +1142,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
@@ -1497,20 +1497,19 @@ void SceneSP2Room3::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr;
-			}
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
 		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+		
 		//else warning message?
 		break;
 	case Item::ITEM2:
