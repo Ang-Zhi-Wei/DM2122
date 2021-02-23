@@ -43,6 +43,8 @@ public:
 		//UI
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+
+		//@pause
 		GEO_PAUSEMENU,
 
 		//terrain
@@ -300,8 +302,9 @@ private:
 	bool placeitem;
 	bool itemplaced[7];
 	bool doorunlocked;
-	bool PKeypressed, PKeyreleased;
 
+	//@pause 
+	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;

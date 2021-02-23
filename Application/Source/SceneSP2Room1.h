@@ -72,6 +72,9 @@ public:
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 
+		//@pause
+		GEO_PAUSEMENU,
+
 		GEO_INVENTORY,
 		GEO_BATTERY,
 		GEO_SELECT,
@@ -244,6 +247,12 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	float campos_x;
 	float campos_y;

@@ -56,6 +56,11 @@ SceneSP2Room1::SceneSP2Room1()
 	itemImage[5] = meshList[GEO_ITEMIMAGE5];
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
+
+	//@pause
+	gamepaused = false;
+	PKeypressed = PKeyreleased = false;
+	//======
 }
 
 SceneSP2Room1::~SceneSP2Room1()
@@ -324,6 +329,11 @@ void SceneSP2Room1::Init()
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
+	//@pause
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
 
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
@@ -1041,7 +1051,31 @@ void SceneSP2Room1::Update(double dt)
 		}
 	}
 
+	//@pause
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
 
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
+
+	//@pause
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
+	}
 	
 
 	//inventory
@@ -1319,7 +1353,71 @@ void SceneSP2Room1::Update(double dt)
 
 void SceneSP2Room1::PauseUpdate()
 {
+	//@pause
 	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::hidemousecursor(true);
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+			Background->drop();
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Room1::Render()
@@ -1833,6 +1931,11 @@ void SceneSP2Room1::Render()
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
+
+	//@pause
+	//pause menu, place all the way at the bottom in render
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
 
 void SceneSP2Room1::Exit()

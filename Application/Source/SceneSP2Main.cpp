@@ -1846,7 +1846,7 @@ void SceneSP2Main::Update(double dt)
 	}
 
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;
@@ -1917,7 +1917,7 @@ void SceneSP2Main::PauseUpdate()
 {
 	Application::hidemousecursor(false);
 
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;

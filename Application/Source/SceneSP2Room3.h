@@ -86,6 +86,7 @@ public:
 		GEO_ITEMIMAGE5,
 		GEO_ITEMIMAGE6,
 		GEO_ITEMIMAGE7,
+
 		
 		//locker
 		locker,
@@ -198,6 +199,12 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	Item* garageItems[10];
 

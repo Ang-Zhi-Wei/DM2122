@@ -31,8 +31,11 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOff = true;
 	placeitem = false;
 	doorunlocked = false;
+
+	//@pause
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
+	//======
 
 	//inventory icons
 	itemImage[0] = meshList[GEO_SPARKPLUGICON];
@@ -538,6 +541,7 @@ void SceneSP2Room4::Init()
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 
+	//@pause
 	//pause menu
 	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
 	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
@@ -875,8 +879,9 @@ void SceneSP2Room4::Update(double dt)
 	Vector3 origin(0, 5, 0);
 
 
+	//@pause
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;
@@ -892,6 +897,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 	//================================================================
 
+	//@pause
 	if (PKeypressed)
 	{
 		PKeypressed = false;
@@ -1270,9 +1276,10 @@ void SceneSP2Room4::Update(double dt)
 
 void SceneSP2Room4::PauseUpdate()
 {
+	//@pause
 	Application::hidemousecursor(false);
 
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;
@@ -2031,7 +2038,8 @@ void SceneSP2Room4::Render()
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
 
-	//pause menu
+	//@pause
+	//pause menu, place all the way at the bottom in render
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
