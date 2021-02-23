@@ -22,6 +22,7 @@ SceneSP2Main::SceneSP2Main()
 	Interact_Num = 0;
 	manAppear = true;
 	nearBattery = false;
+	nearBattery2 = false;
 	PickUpBattery = false;
 	canTalk_man = true;
 	rotate_Man = 90;
@@ -1013,6 +1014,7 @@ void SceneSP2Main::Init()
 	test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
 	battery.Set("Battery", Item::BATTERY);
+	battery2.Set("Battery", Item::BATTERY);
 	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
 	PickUpItem(&test2); //to be called only in one frame.
 	PickUpItem(&battery);
@@ -1221,14 +1223,25 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (nearBattery == true && Fpressed == true)
+	
+
+	if (nearBattery == true  && Fpressed == true)
 	{
 		PickUpBattery = true;
 		PickUpItem(&battery);
 		nearBattery = false;
 		Fpressed = false;
+	
+	}
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpBattery = true;
+		PickUpItem(&battery2);
+		nearBattery = false;
+		Fpressed = false;
 	}
 
+	
 
 	
 	if (!Application::IsKeyPressed('E'))
@@ -1310,13 +1323,24 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && PickUpBattery == false)
+	if (campos_z > 328 && campos_z < 355  && campos_x > -5 && campos_x < 5 && PickUpBattery == false)
 	{
 		nearBattery = true;
 	}
 	else {
 		nearBattery = false;
 	}
+
+	
+	if (campos_z < 10 && campos_z > -10 && campos_x < 66 && campos_x > 54 && Fpressed == false)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
+	}
+
+
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
 	{
@@ -2170,14 +2194,15 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
+	if (PickUpBattery == false) {
+		modelStack.PushMatrix();
+		modelStack.Translate(60, -3, 0);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(60, -3, 0);
-	modelStack.Scale(0.09, 0.09, 0.09);
-	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(-60, -3, 100);
 	modelStack.Scale(0.09, 0.09, 0.09);
 	RenderMesh(meshList[BATTERY], true);
@@ -2193,7 +2218,7 @@ void SceneSP2Main::Render()
 	modelStack.Translate(200, -3, 0);
 	modelStack.Scale(0.09, 0.09, 0.09);
 	RenderMesh(meshList[BATTERY], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -0.1f, 313.f);
@@ -2271,7 +2296,7 @@ void SceneSP2Main::Render()
 
 
 	
-	if (nearBattery == true)
+	if (nearBattery == true || nearBattery2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}

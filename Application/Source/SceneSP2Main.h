@@ -241,6 +241,7 @@ private:
 	bool showSideBox;
 	bool NearGarage;
 	bool nearBattery;
+	bool nearBattery2;
 	bool PickUpBattery;
 	bool NearHouse;
 	bool NearSchool;
@@ -312,6 +313,7 @@ private:
 	Item test;
 	Item test2;
 	Item battery;
+	Item battery2;
 
 
 	Vector3 temp;
