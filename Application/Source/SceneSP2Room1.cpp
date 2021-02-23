@@ -1306,11 +1306,11 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
 
-	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[0], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
+	modelStack.Translate(2.5, 0, 0.25);
 
-	modelStack.Scale(5, 15, 1);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -1339,12 +1339,12 @@ void SceneSP2Room1::Render()
 	//door
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 170);
-
-	modelStack.Translate(-2.5, 0, -0.5);
+	
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[1], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
+	modelStack.Translate(2.5, 0, 0.25);
 
-	modelStack.Scale(5,15,1);
+	modelStack.Scale(5,15,0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
@@ -1382,17 +1382,17 @@ void SceneSP2Room1::Render()
 	//Door
 	modelStack.PushMatrix();
 	modelStack.Translate(62.5, 7.5, 95);
-	modelStack.Translate(-2.5, 0, -0.5);
+	modelStack.Translate(-2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[2], 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0.5);
-	modelStack.Scale(5, 15, 1);
+	modelStack.Translate(2.5, 0, 0.25);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
 	//Door wall
 	modelStack.PushMatrix();
-	modelStack.Translate(62.5, 20, 95);
-	modelStack.Scale(5, 10, 1);
+	modelStack.Translate(62.25, 20, 95);
+	modelStack.Scale(4.5, 10, 1);
 	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 
@@ -1408,7 +1408,7 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 10, 132.5);
 	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(20, 1, 75);
+	modelStack.Scale(20, 1, 76);
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 	
@@ -1439,11 +1439,11 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
-	modelStack.Translate(2.5, 0, -0.5);
+	modelStack.Translate(2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[3], 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.5);
+	modelStack.Translate(-2.5, 0, 0.25);
 
-	modelStack.Scale(5, 15, 1);
+	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
