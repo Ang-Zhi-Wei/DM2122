@@ -381,7 +381,6 @@ void SceneSP2Room1::Init()
 	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));
 	Lockerlist.push_back(Locker());
 	Lockerlist[1].setpos(Vector3(66, 0, -445));
-	//@collider
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(5, 15, 3);
@@ -435,8 +434,19 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[16].setlength(3.9, 10, 4.3);
 	Colliderlist[16].Setposition(Lockerlist[1].getpos());
+	//door colliders
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[17].setlength(5, 15, 3);
+	Colliderlist[17].Setposition(Vector3(-32, 7.5, -430));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[18].setlength(5, 15, 3);
+	Colliderlist[18].Setposition(Vector3(38, 7.5, -505));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[19].setlength(5, 15, 3);
+	Colliderlist[19].Setposition(Vector3(65.5, 7.5, -505));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[15].getxlength(), Colliderlist[15].getylength(), Colliderlist[15].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -790,6 +800,8 @@ void SceneSP2Room1::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_HALL = CLOSING;
+			Colliderlist[17].setactive(true);
+			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.z <= -425 && camera.position.z >= -435 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
 		{
@@ -799,6 +811,8 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_HALL = CLOSING;
+				Colliderlist[17].setactive(true);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -811,6 +825,8 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_HALL = OPENING;
+				Colliderlist[17].setactive(false);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -841,6 +857,9 @@ void SceneSP2Room1::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_LIVING = CLOSING;
+			Colliderlist[18].setactive(true);
+			camera.setchecker(Colliderlist);
+	
 		}
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 		{
@@ -850,6 +869,8 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_LIVING = CLOSING;
+				Colliderlist[18].setactive(true);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -862,6 +883,8 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_LIVING = OPENING;
+				Colliderlist[18].setactive(false);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -892,6 +915,8 @@ void SceneSP2Room1::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_CONNECTING = CLOSING;
+			Colliderlist[19].setactive(true);
+			camera.setchecker(Colliderlist);
 		}
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
 		{
@@ -901,8 +926,7 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_CONNECTING = CLOSING;
-				Colliderlist[13].setactive(true);
-				Colliderlist[14].setactive(true);
+				Colliderlist[19].setactive(true);
 				camera.setchecker(Colliderlist);
 			}
 		}
@@ -916,6 +940,8 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_CONNECTING = OPENING;
+				Colliderlist[19].setactive(false);
+				camera.setchecker(Colliderlist);
 			}
 		}
 		break;
@@ -1256,10 +1282,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[15].getPosition().x, Colliderlist[15].getPosition().y, Colliderlist[15].getPosition().z);
-	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Colliderlist[19].getPosition().x, Colliderlist[19].getPosition().y, Colliderlist[19].getPosition().z);
+	//RenderMesh(meshList[Colliderbox], false);
+	//modelStack.PopMatrix();
 
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -1338,7 +1364,7 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
-	
+
 	//door
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 170);
@@ -1349,7 +1375,7 @@ void SceneSP2Room1::Render()
 
 	modelStack.Scale(5,15,0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//wall on door
 	modelStack.PushMatrix();
@@ -1390,7 +1416,7 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(2.5, 0, 0.25);
 	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	//Door wall
 	modelStack.PushMatrix();
@@ -1439,6 +1465,7 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	//Door
+	//@door
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
