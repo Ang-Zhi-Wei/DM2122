@@ -39,6 +39,19 @@ public:
 		GEO_BACK,
 
 		//UI
+		GEO_TEXT,
+		GEO_OVERLAY, //vision
+		GEO_OVERLAY2, //Camcorder
+		GEO_WARNING1,
+		GEO_PAUSEMENU,
+		GEO_WARNING2,
+		GEO_DEATH,
+		GEO_REDDOT, // Camcorder dot
+		GEO_BAR, //stamina
+		GEO_BREATHINGBAR, // breathing
+		GEO_STAMINA,
+		GEO_PLAYGROUND,
+		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 
@@ -58,6 +71,20 @@ public:
 
 		//colliderbox 
 		Colliderbox,
+
+		GEO_INVENTORY,
+		GEO_BATTERY,
+		GEO_SELECT,
+
+		GEO_ITEMDISPLAY,
+		GEO_ITEMIMAGE0,
+		GEO_ITEMIMAGE1,
+		GEO_ITEMIMAGE2,
+		GEO_ITEMIMAGE3,
+		GEO_ITEMIMAGE4,
+		GEO_ITEMIMAGE5,
+		GEO_ITEMIMAGE6,
+		GEO_ITEMIMAGE7,
 		
 		//locker
 		locker,
@@ -71,11 +98,7 @@ public:
 		wheelbarrow,
 		metalcabinet,
 		garagedoor,
-		//UI tings
-		GEO_TEXT,
-		GEO_OVERLAY, //vision
-		GEO_OVERLAY2, //Camcorder
-		GEO_BAR, //stamina
+	
 
 		//trap
 		GEO_BEARTRAP,
@@ -248,9 +271,13 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
+
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	bool camBlinkOn;
 	bool camBlinkOff;

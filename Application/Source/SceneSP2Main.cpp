@@ -1016,9 +1016,6 @@ void SceneSP2Main::Init()
 	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
 	PickUpItem(&test2); //to be called only in one frame.
 	PickUpItem(&battery);
-	PickUpItem(&test);
-	PickUpItem(&test2);
-	PickUpItem(&test2);
 	
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -2326,7 +2323,7 @@ void SceneSP2Main::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(34 + i * 5), 3.f);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(33.8 + i * 5), 3.f);
 				}
 			} 
 		}
