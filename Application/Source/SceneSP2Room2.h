@@ -381,6 +381,7 @@ private:
 	bool exitSchool;
 	bool nearExit;
 	bool showChatbox;
+	bool showSideBox;
 
 
 	//game related vars

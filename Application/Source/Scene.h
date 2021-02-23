@@ -16,6 +16,7 @@ public:
 		inventory = nullptr;
 		flashlight_lifetime = 60;
 		flashlight = true;
+		
 	}
 	~Scene() {};
 
@@ -237,7 +238,7 @@ public:
 	ISoundEngine* Heartbeat;
 	bool flashlight;
 	float flashlight_lifetime;
-
+	int ObjectivePhase;
 	Mesh* itemImage[8];
 
 

@@ -30,7 +30,7 @@ public:
 
 	int SpeakPhase;
 	double SpeakTimer;
-	int ObjectivePhase;
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -308,7 +308,7 @@ private:
 	ISoundEngine* Background;
 	ISoundEngine* Effect;
 
-	Item* items[30];
+	Item* items[10];
 
 
 	Vector3 temp;
