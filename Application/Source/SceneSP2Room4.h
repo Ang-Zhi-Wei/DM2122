@@ -198,6 +198,18 @@ private:
 	bool nearExit;
 	bool showChatbox;
 
+	float rotateobj;
+	float translateobj;
+	bool takenspark;
+
+
+	//Jumpscare
+	int flowerCounter = 0;
+	bool jumpscareTimerActive1;
+	double jumpscareTimer1;
+	int jumpscareCounter1;
+	bool jumpscareActive1;
+
 
 	struct Wall
 	{
@@ -277,8 +289,6 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
-	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
-	void UseItem(int itemname);
 	void RenderLeftRoom();
 	void RenderRightRoom();
 	bool camBlinkOn;
@@ -288,7 +298,7 @@ private:
 
 	int bodyNum;
 	bool placeitem;
-	bool itemplaced[5];
+	bool itemplaced[7];
 	bool doorunlocked;
 	bool PKeypressed, PKeyreleased;
 

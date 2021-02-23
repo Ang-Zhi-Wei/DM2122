@@ -257,6 +257,14 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 
+	meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
+	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
+	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
+
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
 	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
@@ -340,17 +348,18 @@ void SceneSP2Room4::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+
+
+	translateobj = 6;
+
 	flowerCounter = 0;
 	jumpscareTimerActive1 = false;
 	jumpscareTimer1 = 0.2;
 	jumpscareActive1 = false;
 
-	translateobj = 6;
 
-
-
-	
-
+	//scene items
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
 
 
 	
@@ -474,7 +483,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -958,9 +967,24 @@ void SceneSP2Room4::Update(double dt)
 		break;
 	}
 
+	//rotate sparkplug
 	rotateobj += float(40 * dt);
 
-
+	//check for jumpscare
+	/*if (itemplaced[6])
+	{
+		jumpscareActive1 = true;
+		jumpscareTimerActive1 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	}
+	if (jumpscareTimerActive1 == true)
+	{
+		jumpscareTimer1 -= dt;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = false;
+	}*/
 	
 	//ghost
 	switch (ghost->state)
@@ -1145,7 +1169,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 
 	}
@@ -1157,7 +1180,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
@@ -1168,7 +1190,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
@@ -1179,7 +1200,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_r] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
@@ -1190,7 +1210,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_r] = true;		
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
@@ -1201,7 +1220,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_r] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
@@ -1212,7 +1230,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body_op] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else
@@ -1226,8 +1243,30 @@ void SceneSP2Room4::Update(double dt)
 		doorunlocked = true;
     }
 
-	doorRotate -= float(20 * dt);
+	//if final item placed, give sparkplug
+	if (itemplaced[6])
+	{
+		if (translateobj <= 7)
+		{
+			translateobj += float(0.5 * dt);
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+		{
+			interact = true;
+			interact_message = "take spark plug";
+			if (Fpressed)
+			{
+				translateobj = 100;
+				takenspark = true;
+				PickUpItem(items[0]);
+				items[0] = NULL;
+				std::cout << "taken spark plug" << std::endl;
+			}
+		}
+	}
+
 }
+
 
 void SceneSP2Room4::PauseUpdate()
 {
@@ -2051,30 +2090,6 @@ void SceneSP2Room4::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-void SceneSP2Room4::UseItem(int itemname)
-{
-	switch (itemname)
-	{
-	case Item::BATTERY:
-
-		flashlight_lifetime = 90;
-
-		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-		if (inventory->items[inventory->selected]->count > 1)
-		{
-			inventory->items[inventory->selected]->count--;
-		}
-		else
-		{
-			inventory->items[inventory->selected] = nullptr;
-		}
-
-		//else warning message?
-		break;
-	case Item::ITEM2:
-		break;
-	}
-}
 
 bool SceneSP2Room4::PickUpItem(Item* item)
 {
