@@ -80,6 +80,7 @@ public:
 		heartmon,
 		xtable,
 		oplight,
+		frontdesk,
 
 		//UI tings
 		GEO_TEXT,
@@ -177,12 +178,14 @@ private:
 	bool Rpressed, Rreleased;
 
 
+
 	float campos_x;
 	float campos_y;
 	float campos_z;
 	bool exitHospital;
 	bool nearExit;
 	bool showChatbox;
+
 
 	struct Wall
 	{
@@ -270,6 +273,22 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
+
+	int bodyNum;
+	bool placeitem;
+	bool itemplaced[5];
+	bool doorunlocked;
+	enum bodynumber
+	{
+		body1_r,
+		body2_r,
+		body3_r,
+		body1_l,
+		body2_l,
+		body3_l,
+		body_op,
+
+	};
 };
 
 #endif

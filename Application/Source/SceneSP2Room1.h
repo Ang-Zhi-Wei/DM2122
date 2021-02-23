@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 #include "ColliderBox.h"
+#include <string>
 class SceneSP2Room1 : public Scene
 {
 public:
@@ -142,7 +143,13 @@ public:
 
 	};
 
-	
+	enum DOOR_STATE
+	{
+		OPEN,
+		CLOSED,
+		OPENING,
+		CLOSING
+	};
 
 private:
 	
@@ -191,7 +198,12 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
+	bool interact;
+	std::string interact_message;
 //	Mesh* itemImage[8];
+
+	DOOR_STATE DS_MAIN, DS_HALL, DS_LIVING, DS_CONNECTING;
+	float rotateY[4]; //0-main, 1-hall, 2-living room, 3- connecting room door
 
 	//Jumpscare stuff
 	int jumpscareEntrance1;
