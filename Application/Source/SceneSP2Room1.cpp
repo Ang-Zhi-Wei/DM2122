@@ -1278,7 +1278,24 @@ void SceneSP2Room1::Render()
 		}
 	}
 
-
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-24.5, 0, -600);
@@ -1504,24 +1521,6 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_CEILING], true);
 	modelStack.PopMatrix();
 
-	//ghost
-	modelStack.PushMatrix();
-	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
-	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
-	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -3, 0);
-	modelStack.Scale(4.2f, 4.2f, 4.2f);
-	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(0.5, 10, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.5, 0.5, 0.5);
-	RenderMesh(meshList[GEO_SKULL], true);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
