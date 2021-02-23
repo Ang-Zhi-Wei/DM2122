@@ -88,6 +88,8 @@ public:
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
+		GEO_JUMPSCARE1,
+
 
 		//trap
 		GEO_BEARTRAP,
@@ -187,6 +189,12 @@ private:
 	bool nearExit;
 	bool showChatbox;
 
+	//Jumpscare
+	int flowerCounter = 0;
+	bool jumpscareTimerActive1;
+	double jumpscareTimer1;
+	int jumpscareCounter1;
+	bool jumpscareActive1;
 
 	struct Wall
 	{

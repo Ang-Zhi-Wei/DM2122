@@ -20,6 +20,7 @@ SceneSP2Room2::SceneSP2Room2()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	camBlinkOffSec = 0;
+	showSideBox = true;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
@@ -558,6 +559,7 @@ void SceneSP2Room2::Set(Scene* scene)
 {
 	inventory = scene->inventory;
 	ghost = scene->ghost;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
 	DS_school = OPEN;
@@ -1588,6 +1590,30 @@ void SceneSP2Room2::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
 
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+	}
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	}
+
 	if (nearExit == true) {
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -1686,8 +1712,8 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
-	RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);
 }
 
 void SceneSP2Room2::Exit()

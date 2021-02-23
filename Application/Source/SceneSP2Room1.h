@@ -251,6 +251,7 @@ private:
 	bool exitHouse;
 	bool nearExit;
 	bool showChatbox;
+	bool showSideBox;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

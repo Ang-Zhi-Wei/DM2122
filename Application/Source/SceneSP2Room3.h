@@ -99,6 +99,8 @@ public:
 		wheelbarrow,
 		metalcabinet,
 		garagedoor,
+		screwdriver,
+		BATTERY,
 	
 
 		//trap
@@ -177,7 +179,6 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 
-	
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];
 	CameraSP2 camera;

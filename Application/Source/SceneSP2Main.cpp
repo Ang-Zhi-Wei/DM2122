@@ -21,10 +21,7 @@ SceneSP2Main::SceneSP2Main()
 	SpeakTimer = 0;
 	Interact_Num = 0;
 	manAppear = true;
-	nearBattery = false;
-	nearBattery1 = false;
-	nearBattery2 = false;
-	nearBattery3 = false;
+	nearBattery,nearBattery1,nearBattery2, nearBattery3, nearBattery4 = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -1011,8 +1008,32 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[130].setlength(3, 100, 3);
 	Colliderlist[130].Setposition(Vector3(-566, -2, -27));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[131].setlength(100, 100, 267);
+	Colliderlist[131].Setposition(Vector3(533, -1, -17.60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[132].setlength(5, 100, 5);
+	Colliderlist[132].Setposition(Vector3(469, -1, -148.25));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[133].setlength(5, 100, 5);
+	Colliderlist[133].Setposition(Vector3(469, -1, -107));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[134].setlength(5, 100, 5);
+	Colliderlist[134].Setposition(Vector3(469, -1, -55.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[135].setlength(5, 100, 5);
+	Colliderlist[135].Setposition(Vector3(469, -1, -3));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[136].setlength(5, 100, 5);
+	Colliderlist[136].Setposition(Vector3(469, -1, 57.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[137].setlength(5, 100, 5);
+	Colliderlist[137].Setposition(Vector3(469, -1, 113.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[138].setlength(70, 100, 105);
+	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[130].getxlength(), Colliderlist[130].getylength(), Colliderlist[130].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1039,6 +1060,7 @@ void SceneSP2Main::Init()
 	items[1] = new Item("battery", Item::BATTERY, (60, -3, 0));
 	items[2] = new Item("battery", Item::BATTERY, (-60, -3, 100));
 	items[3] = new Item("battery", Item::BATTERY, (-200, -3, -200));
+	items[4] = new Item("battery", Item::BATTERY, (255, -3, -190));
 //to be called only in one frame. placed under init just for testing first
 	//PickUpItem(&test2); //to be called only in one frame.
 	//PickUpItem(&battery);
@@ -1289,6 +1311,15 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
+	if (nearBattery4 == true && Fpressed == true)
+	{
+		PickUpItem(items[4]);
+		nearBattery4 = false;
+		Fpressed = false;
+		items[4] = NULL;
+
+	}
+
 	
 
 
@@ -1372,7 +1403,7 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && items[0] != nullptr )
+	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
 	{
 		nearBattery = true;
 	}
@@ -1409,6 +1440,15 @@ void SceneSP2Main::Update(double dt)
 		nearBattery3 = false;
 	}
 
+	if (campos_z < -178 && campos_z > -190 && campos_x > 240 && campos_x < 255 && items[4] != nullptr)
+	{
+
+		nearBattery4 = true;
+	}
+	else {
+		nearBattery4 = false;
+	}
+	
 
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
@@ -1819,6 +1859,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::hidemousecursor(false);
 		Application::pause(true);
 	}
 
@@ -1887,6 +1928,7 @@ void SceneSP2Main::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
 
@@ -1906,6 +1948,7 @@ void SceneSP2Main::PauseUpdate()
 		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
 		{
 			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
 			Application::pause(false);
 			gamepaused = false;
 		}
@@ -2119,10 +2162,10 @@ void SceneSP2Main::Render()
 
 	//colliderbox to check collider 
 	//@collider
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[130].getPosition().x, Colliderlist[130].getPosition().y, Colliderlist[130].getPosition().z);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 
@@ -2221,20 +2264,20 @@ void SceneSP2Main::Render()
 	modelStack.Scale(0.13f, 0.13f, 0.13f);
 	RenderMesh(meshList[HOUSE], true);
 	modelStack.PopMatrix();//Added collider
-	//@buildings
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-520, -2, 0);
 	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
-
+	//@buildings
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 510);
 	modelStack.Rotate(90, 0, 1, 0);
@@ -2376,12 +2419,13 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(200, -3, 0);
-	//modelStack.Scale(0.09, 0.09, 0.09);
-	//RenderMesh(meshList[BATTERY], true);
-	//modelStack.PopMatrix();*/
-
+	if (items[4] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(255, -3, -190);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 	//modelStack.PushMatrix();
 	//modelStack.Translate(30.f, -0.1f, 313.f);
 	//modelStack.Scale(750, 8, 30);
@@ -2458,7 +2502,7 @@ void SceneSP2Main::Render()
 
 
 
-	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true)
+	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true || nearBattery4 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}

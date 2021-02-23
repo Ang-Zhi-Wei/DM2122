@@ -16,6 +16,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
+	showSideBox = true;
 	LSPEED = 10.F;
 	flashlight = true;
 	flashlight_lifetime = 90;
@@ -471,6 +472,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	inventory = scene->inventory;
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
 
 	//other lights
@@ -1481,7 +1483,7 @@ void SceneSP2Room1::Render()
 
 	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(-10, 10, 220);
+	modelStack.Translate(-10.5, 10, 220);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1560,7 +1562,6 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	//Door
-	//@door
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
@@ -1579,7 +1580,7 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 	
-	//Left wall
+	//Right wall
 	modelStack.PushMatrix();
 	modelStack.Translate(52.5, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
@@ -1587,8 +1588,9 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 
+	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(92.5, 10, 80);
+	modelStack.Translate(93, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 30);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1667,6 +1669,29 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
 
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+	}
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	}
 
 	if (nearExit == true) {
 		showChatbox = true;
@@ -1763,7 +1788,7 @@ void SceneSP2Room1::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
