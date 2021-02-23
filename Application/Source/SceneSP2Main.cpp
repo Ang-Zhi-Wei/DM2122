@@ -92,8 +92,7 @@ void SceneSP2Main::Init()
 
 
 
-	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1,
-		0));
+	camera.Init(Vector3(0, 9, 270), Vector3(0, 9, 250), Vector3(0, 1, 0));
 
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
