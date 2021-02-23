@@ -107,7 +107,7 @@ void CameraSP2::Update(double dt)
 	{
 		if (Application::IsKeyPressed('W'))
 		{
-			if (Application::IsKeyPressed(160) && playerStamina > 0)
+			if (Application::IsKeyPressed(160) && playerStamina > 0 &&!slowed)
 			{
 				CAMERA_SPEED += 20;
 				playerStamina -= 5 * dt;
