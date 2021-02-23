@@ -2546,21 +2546,20 @@ void SceneSP2Main::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				delete inventory->items[inventory->selected];
-				inventory->items[inventory->selected] = nullptr; 
-			}
-		} 
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			delete inventory->items[inventory->selected];
+			inventory->items[inventory->selected] = nullptr; 
+		}
+		 
 		//else warning message?
 		break;
 	case Item::ITEM2:
