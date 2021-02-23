@@ -47,7 +47,7 @@ public:
 			{
 			case BATTERY:
 				description = "Use to refill flashlight batteries aaaaaa idk";
-				image = "Image//fountaintexture.tga";
+				image = "Assigment2Images//batteryicon.tga";
 				//set image and description
 				break;
 			case ITEM2:
@@ -87,6 +87,7 @@ public:
 			DEATH,
 		};
 		int state;
+		bool kill;
 		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction
@@ -107,6 +108,7 @@ public:
 			state = UNSPAWNED;
 			waitTime = 5;
 			distance = 2000; //just anyth not < 100
+			kill = false;
 		}
 		void UpdateMovement(double dt)
 		{
