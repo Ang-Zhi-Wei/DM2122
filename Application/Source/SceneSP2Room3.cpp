@@ -409,6 +409,7 @@ void SceneSP2Room3::Init()
 	//list of lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setyaw(180);
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
@@ -1134,7 +1135,7 @@ void SceneSP2Room3::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1142,7 +1143,6 @@ void SceneSP2Room3::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
