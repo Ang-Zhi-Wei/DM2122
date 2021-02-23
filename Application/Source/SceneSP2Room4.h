@@ -42,6 +42,7 @@ public:
 		//UI
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		GEO_PAUSEMENU,
 
 		//terrain
 		GEO_TOPHALFWALL,
@@ -81,6 +82,7 @@ public:
 		xtable,
 		oplight,
 		frontdesk,
+		sparkplug,
 
 		//UI tings
 		GEO_TEXT,
@@ -90,6 +92,12 @@ public:
 
 		//trap
 		GEO_BEARTRAP,
+
+		GEO_INVENTORY,
+		GEO_ITEMIMAGE1,
+		GEO_SELECT,
+		GEO_ITEMDISPLAY,
+		GEO_SPARKPLUGICON,
 		
 		NUM_GEOMETRY,
 	};
@@ -177,7 +185,7 @@ private:
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
 
-
+	Item* items[10];
 
 	float campos_x;
 	float campos_y;
@@ -185,7 +193,9 @@ private:
 	bool exitHospital;
 	bool nearExit;
 	bool showChatbox;
-
+	float rotateobj;
+	float translateobj;
+	bool takenspark;
 
 	struct Wall
 	{
@@ -260,8 +270,11 @@ private:
 	Vector3 temp;
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
+	void UseItem(int itemname);
 	void RenderLeftRoom();
 	void RenderRightRoom();
 	bool camBlinkOn;
@@ -273,6 +286,11 @@ private:
 	bool placeitem;
 	bool itemplaced[5];
 	bool doorunlocked;
+	bool PKeypressed, PKeyreleased;
+
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	float doorRotate;
 	enum bodynumber

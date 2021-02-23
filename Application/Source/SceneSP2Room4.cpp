@@ -30,7 +30,11 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOff = true;
 	placeitem = false;
 	doorunlocked = false;
+	gamepaused = false;
+	PKeypressed = PKeyreleased = false;
 
+	//inventory icons
+	itemImage[0] = meshList[GEO_SPARKPLUGICON];
 }
 
 SceneSP2Room4::~SceneSP2Room4()
@@ -170,11 +174,18 @@ void SceneSP2Room4::Init()
 	
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
-
+	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
+	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
+	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
+	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
+	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+
+	meshList[GEO_SPARKPLUGICON] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
 	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
@@ -244,6 +255,10 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->textureID = LoadTGA("Image//desks.tga");
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
+	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
+	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
 	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
@@ -252,6 +267,7 @@ void SceneSP2Room4::Init()
 	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
 	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[rolldoor]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -327,11 +343,11 @@ void SceneSP2Room4::Init()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 
+	translateobj = 6;
 
 
-
-	
-
+	//scene items
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
 
 
 	
@@ -425,10 +441,6 @@ void SceneSP2Room4::Init()
 	Colliderlist[13].setlength(165, 25, 1);
 	Colliderlist[13].Setposition(Vector3(0, 12, -100));
 
-	//front wall
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(165, 25, 1);
-	Colliderlist[13].Setposition(Vector3(0, 12, 0));
 
 	//entrance walls
 	Colliderlist.push_back(ColliderBox());
@@ -459,7 +471,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -474,8 +486,26 @@ void SceneSP2Room4::Init()
 	Colliderlist[23].setlength(5, 12, 24);
 	Colliderlist[23].Setposition(Vector3(16, 0, -18));
 
+	//left room doors
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[24].setlength(5, 15.5, 4);
+	Colliderlist[24].Setposition(Vector3(32, 7.2, -42.5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[25].setlength(2, 15.5, 4);
+	Colliderlist[25].Setposition(Vector3(41, 7.2, -42.5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[26].setlength(22, 15.5, 7.5);
+	Colliderlist[26].Setposition(Vector3(0, 3, -72));
+
+	//front wall
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(165, 25, 1);
+	Colliderlist[27].Setposition(Vector3(0, 12, 0));
+
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[22].getxlength(), Colliderlist[22].getylength(), Colliderlist[22].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[26].getxlength(), Colliderlist[26].getylength(), Colliderlist[26].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -495,6 +525,11 @@ void SceneSP2Room4::Init()
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
+
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -521,6 +556,31 @@ void SceneSP2Room4::Init()
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
 	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
+}
+
+void SceneSP2Room4::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+		if (flashlight_lifetime < 20)
+		{
+			flashlight_lifetime = 90;
+
+			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+
+		break;
+	}
 }
 
 void SceneSP2Room4::Set(Scene* scene)
@@ -571,8 +631,6 @@ void SceneSP2Room4::SetBackground()
 	Effect->setSoundVolume(0.f);
 	
 }
-
-
 
 void SceneSP2Room4::Update(double dt)
 {
@@ -731,6 +789,7 @@ void SceneSP2Room4::Update(double dt)
 	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -800,8 +859,29 @@ void SceneSP2Room4::Update(double dt)
 	Vector3 origin(0, 5, 0);
 
 
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed('P'))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
 
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
 
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
+	}
 
 	//door states
 	switch (DS_main)
@@ -871,7 +951,7 @@ void SceneSP2Room4::Update(double dt)
 		break;
 	}
 
-
+	rotateobj += float(40 * dt);
 
 
 	//ghost
@@ -1090,13 +1170,122 @@ void SceneSP2Room4::Update(double dt)
 	{
 		doorunlocked = true;
     }
+	//if final item placed, give sparkplug
+	if (itemplaced[6])
+	{
+		if (translateobj <= 7)
+		{
+			translateobj += float(0.5 * dt);
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+		{
+			interact = true;
+			interact_message = "take spark plug";
+			if (Fpressed)
+			{
+				translateobj = 100;
+				takenspark = true;
+				PickUpItem(items[0]);
+				items[0] = NULL;
+				std::cout << "taken spark plug" << std::endl;
+			}
+		}
+	}
 
-	doorRotate -= float(20 * dt);
+}
+
+bool SceneSP2Room4::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] != nullptr)
+		{
+			if (inventory->items[i]->name == item->name)
+			{
+				inventory->items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] == nullptr)
+		{
+			inventory->items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return true;
+		}
+	}
+	return false;
 }
 
 void SceneSP2Room4::PauseUpdate()
 {
 	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed('P'))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::hidemousecursor(true);
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+			Background->drop();
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Room4::RenderLeftRoom()
@@ -1311,6 +1500,13 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-39, translateobj, -22);
+	modelStack.Rotate(rotateobj, 0, 1, 0);
+	modelStack.Scale(0.2, 0.2, 0.2);
+	RenderMesh(meshList[sparkplug], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(-28, 1, -24);
 	modelStack.Rotate(30, 0, 1, 0);
 	modelStack.Scale(0.08, 0.08, 0.08);
@@ -1389,9 +1585,44 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[22].getPosition().x, Colliderlist[22].getPosition().y, Colliderlist[22].getPosition().z);
+	modelStack.Translate(Colliderlist[26].getPosition().x, Colliderlist[26].getPosition().y, Colliderlist[26].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
+
+	//inventory
+	if (Epressed)
+	{
+		inventory->open = !inventory->open;
+		Epressed = false;
+	}
+	if (inventory->open)
+	{
+		camera.can_move = false;
+		if (Apressed)
+		{
+			inventory->selected--;
+			if (inventory->selected == -1)
+			{
+				inventory->selected = 7;
+			}
+			Apressed = false;
+		}
+		else if (Dpressed)
+		{
+			inventory->selected++;
+			inventory->selected %= 8;
+			Dpressed = false;
+		}
+		else if (Rpressed)
+		{
+			if (inventory->items[inventory->selected] != nullptr)
+			{
+				UseItem(inventory->items[inventory->selected]->type);
+			}
+			//else warning that no item selected?
+			Rpressed = false;
+		}
+	}
 
 
 	//@doors
@@ -1592,8 +1823,6 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 
 
-
-
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
@@ -1648,6 +1877,36 @@ void SceneSP2Room4::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
+
+	//inventory
+	if (inventory->open)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (inventory->items[i] != nullptr)
+			{
+				//item icon in inventory
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
+				//number of item if more than 1
+				if (inventory->items[i]->count > 1)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f, 0);
+				}
+			}
+		}
+
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
+		if (inventory->items[inventory->selected] != nullptr)
+		{
+			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
+		}
+
+	}
+
 	/*if (placeitem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Place Flower", Color(1, 1, 0), 4, 22, 5);
@@ -1666,6 +1925,10 @@ void SceneSP2Room4::Render()
 	//checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
+
+	//pause menu
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
 
 void SceneSP2Room4::Exit()
@@ -1844,6 +2107,70 @@ void SceneSP2Room4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
 
+}
+
+void SceneSP2Room4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit)
+{
+	if (!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 200, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+
+	//Change this line inside for loop
+	std::string toPrint;
+	if (signed(text.length()) > limit)
+	{
+		toPrint = text.substr(0, limit);
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], text.substr(limit, text.length()), color, size, x, y - 1, limit);
+	}
+	else
+	{
+		toPrint = text;
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+	}
+
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSP2Room4::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)

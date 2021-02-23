@@ -1760,7 +1760,7 @@ void SceneSP2Main::Update(double dt)
 
 void SceneSP2Main::PauseUpdate()
 {
-	//Application::hidemousecursor(false);
+	Application::hidemousecursor(false);
 
 	if (!Application::IsKeyPressed('P'))
 	{
@@ -1781,6 +1781,7 @@ void SceneSP2Main::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
 
@@ -1800,6 +1801,7 @@ void SceneSP2Main::PauseUpdate()
 		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
 		{
 			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
 			Application::pause(false);
 			gamepaused = false;
 		}

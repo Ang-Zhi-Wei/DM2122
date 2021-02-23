@@ -26,6 +26,7 @@ public:
 			BATTERY,
 			ITEM2,
 			ITEM3,
+			SPARK_PLUG
 			//add more depending on whta u need, don forget set in Set function
 		};
 		Vector3 pos; //only if u plan to reuse struct for rendering
@@ -48,6 +49,11 @@ public:
 			case BATTERY:
 				description = "Use to refill flashlight batteries aaaaaa idk";
 				image = "Assigment2Images//batteryicon.tga";
+				//set image and description
+				break;
+			case SPARK_PLUG:
+				description = "A spark plug used for delivery current to the combustion chamber in a car's engine ";
+				image = "Image//sparkplug_icon.tga";
 				//set image and description
 				break;
 			case ITEM2:
