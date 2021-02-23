@@ -1095,8 +1095,11 @@ void SceneSP2Main::Update(double dt)
 	
 	
 	//sounds when ghost get too close
-	if (ghost->distance < 7) {
+	if (ghost->kill==false && ghost->state==Ghost::DEATH) {
+		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
+		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
+		Jumpscare->setSoundVolume(1.f);
 	}
 	else if (ghost->distance < 50) {
 		Heartbeat->setSoundVolume(1.0f);

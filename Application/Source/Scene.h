@@ -90,6 +90,7 @@ public:
 			DEATH,
 		};
 		int state;
+		bool kill;
 		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction
@@ -110,6 +111,7 @@ public:
 			state = UNSPAWNED;
 			waitTime = 5;
 			distance = 2000; //just anyth not < 100
+			kill = false;
 		}
 		void UpdateMovement(double dt)
 		{
