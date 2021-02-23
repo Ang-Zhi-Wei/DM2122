@@ -213,10 +213,6 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 
-	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
-	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
-	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
-	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 	//light 0
 	//light[0].type = Light::LIGHT_POINT;
 	//light[0].position.Set(0, 7, 270);
@@ -279,6 +275,62 @@ void SceneSP2Room3::Init()
 		m_parameters[U_MATERIAL_SHININESS]);
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
+
+	//=============== UI stuff ===================
+	//camcorder
+	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("vision", 80, 60, 0);
+	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("camcorder", 80, 60, 0);
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
+	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
+
+	//player
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
+	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
+	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
+	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
+	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
+	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
+	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
+	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
+	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
+	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
+	meshList[GEO_ITEMIMAGE0] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE1] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE2] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE3] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE4] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE5] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE6] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMIMAGE7] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
+	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
+	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+
+	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+
+	itemImage[0] = meshList[GEO_ITEMIMAGE0];
+	itemImage[1] = meshList[GEO_ITEMIMAGE1];
+	itemImage[2] = meshList[GEO_ITEMIMAGE2];
+	itemImage[3] = meshList[GEO_ITEMIMAGE3];
+	itemImage[4] = meshList[GEO_ITEMIMAGE4];
+	itemImage[5] = meshList[GEO_ITEMIMAGE5];
+	itemImage[6] = meshList[GEO_ITEMIMAGE6];
+	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 	
 	//init update stuff
@@ -403,12 +455,8 @@ void SceneSP2Room3::Init()
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 	
-	//UI
-	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
-	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	
+
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -418,6 +466,10 @@ void SceneSP2Room3::Init()
 	
 	//Set boundary here
 	camera.SetBounds(-415, 415, -365, 360);
+
+	ghost = new Ghost;
+	inventory = new Inventory;
+
 	//camblink
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
@@ -615,6 +667,7 @@ void SceneSP2Room3::Update(double dt)
 	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -664,6 +717,78 @@ void SceneSP2Room3::Update(double dt)
 
 		glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	}
+
+
+	//inventory
+	if (Epressed)
+	{
+		inventory->open = !inventory->open;
+		Epressed = false;
+	}
+	if (inventory->open)
+	{
+		camera.can_move = false;
+		if (Apressed)
+		{
+			inventory->selected--;
+			if (inventory->selected == -1)
+			{
+				inventory->selected = 7;
+			}
+			Apressed = false;
+		}
+		else if (Dpressed)
+		{
+			inventory->selected++;
+			inventory->selected %= 8;
+			Dpressed = false;
+		}
+		else if (Rpressed)
+		{
+			if (inventory->items[inventory->selected] != nullptr)
+			{
+				UseItem(inventory->items[inventory->selected]->type);
+			}
+			//else warning that no item selected?
+			Rpressed = false;
+		}
+	}
+
+	//inventory
+	if (Epressed)
+	{
+		inventory->open = !inventory->open;
+		Epressed = false;
+	}
+	if (inventory->open)
+	{
+		camera.can_move = false;
+		if (Apressed)
+		{
+			inventory->selected--;
+			if (inventory->selected == -1)
+			{
+				inventory->selected = 7;
+			}
+			Apressed = false;
+		}
+		else if (Dpressed)
+		{
+			inventory->selected++;
+			inventory->selected %= 8;
+			Dpressed = false;
+		}
+		else if (Rpressed)
+		{
+			if (inventory->items[inventory->selected] != nullptr)
+			{
+				UseItem(inventory->items[inventory->selected]->type);
+			}
+			//else warning that no item selected?
+			Rpressed = false;
+		}
+	}
+
 	if (flashlight)
 	{
 		if (flashlight_lifetime >= 0)
@@ -1190,31 +1315,68 @@ void SceneSP2Room3::Render()
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
+
+	//inventor
+
 	//UI OVERLAY
-	//vision vignette
+
+	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->state == Ghost::CHASING)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//stamina
-	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	//INTERACTIONS
-	if (interact)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
-	}
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 
-	/*std::ostringstream test1;
-	test1 << "camera view: " << camera.view;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
-	test3 << "light[1]spotdirec: " << light[1].spotDirection;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);*/
-	//std::ostringstream test2;
-	//test2 << "camera view: " << camera.view;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
-	////checking
-	//std::cout << camera.position.x << std::endl;
-	//std::cout << camera.position.z << std::endl;
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//battery bar
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	//inventory
+	if (inventory->open)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (inventory->items[i] != nullptr)
+			{
+				//item icon in inventory
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
+				//number of item if more than 1
+				if (inventory->items[i]->count > 1)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f);
+				}
+			}
+		}
+
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
+		if (inventory->items[inventory->selected] != nullptr)
+		{
+			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
+		}
+
+	}
 }
 
 void SceneSP2Room3::Exit()
@@ -1273,6 +1435,58 @@ void SceneSP2Room3::RenderSkybox()
 
 
 
+
+bool SceneSP2Room3::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] != nullptr)
+		{
+			if (inventory->items[i]->name == item->name)
+			{
+				inventory->items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] == nullptr)
+		{
+			inventory->items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return true;
+		}
+	}
+	return false;
+}
+
+void SceneSP2Room3::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+		if (flashlight_lifetime < 20)
+		{
+			flashlight_lifetime = 90;
+
+			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		//else warning message?
+		break;
+	case Item::ITEM2:
+		break;
+	}
+}
 
 void SceneSP2Room3::RenderMesh(Mesh* mesh, bool enableLight)
 {
@@ -1395,6 +1609,70 @@ void SceneSP2Room3::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
 
+}
+
+void SceneSP2Room3::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit)
+{
+		if (!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 200, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+
+	//Change this line inside for loop
+	std::string toPrint;
+	if (signed(text.length()) > limit)
+	{
+		toPrint = text.substr(0, limit);
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], text.substr(limit, text.length()), color, size, x, y - 1, limit);
+	}
+	else
+	{
+		toPrint = text;
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+	}
+	
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSP2Room3::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)
