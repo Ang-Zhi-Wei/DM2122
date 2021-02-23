@@ -372,6 +372,7 @@ private:
 	double jumpscareTimer2;
 	int jumpscare2Counter;
 	bool jumpscare2Pass;
+	bool jumpscare2ActiveZone;
 	bool jumpscareActive2;
 
 	float campos_x;

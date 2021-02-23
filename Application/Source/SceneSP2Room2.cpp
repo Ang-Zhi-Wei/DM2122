@@ -258,6 +258,7 @@ void SceneSP2Room2::Init()
 	jumpscare2Pass = false;
 	jumpscareActive1 = false;
 	jumpscareActive2 = false;
+	jumpscare2ActiveZone = false;
 
 	//walls
 	school_walls[0].mid.Set(470, 20, 0); 
@@ -1119,22 +1120,18 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 	//Jumpscare 2
-	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
-	{
-		jumpscare2Pass = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	}
-	else
-	{
-		jumpscare2Pass = false;
-	}
-	if (jumpscare2Pass == true)
-	{
+
+	//redone:
+	if ((camera.position.y >= 0) && ((camera.position.x >= 550) && (camera.position.x <= 570)) && ((camera.position.z >= 20) && (camera.position.z <= 30)) && (jumpscare2Counter == 0))
 		jumpscare2Counter = 1;
-	}
-	if ((camera.position.y >= 0) && ((camera.position.x >= 11) && (camera.position.x <= 18)) && ((camera.position.z >= -100) && (camera.position.z <= -90)) && (jumpscare2Counter == 1) && (jumpscare2Pass == false) && (jumpscareTimer2 != 0))
+
+	if ((camera.position.y >= 0) && ((camera.position.x >= 540) && (camera.position.x <= 560)) && ((camera.position.z >= 10) && (camera.position.z <= 30)) && (jumpscare2Counter == 0))
+		jumpscare2Counter = 1;
+
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 1 ))
 	{
-		jumpscareActive1 = true;
+		jumpscareActive2 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	if (jumpscareActive2 == true)
 	{
@@ -1148,8 +1145,52 @@ void SceneSP2Room2::Update(double dt)
 	{
 		jumpscareActive2 = false;
 		jumpscare2Counter = 2;
+
 	}
-	
+
+
+	//This is broken
+
+	/*if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
+	{
+		jumpscare2Pass = true;
+
+	}
+	else
+	{
+		jumpscare2Pass = false;
+	}
+	if (jumpscare2Pass == true)
+	{
+		jumpscare2Counter = 1;
+	}
+	if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
+	{
+		jumpscare2ActiveZone = true;
+	}
+	else
+		jumpscare2ActiveZone = false;
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
+	{
+		jumpscareActive2 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	}
+	if (jumpscareActive2 == true)
+	{
+		jumpscareTimerActive2 = true;
+
+	}
+	if (jumpscareTimerActive2 == true)
+	{
+		jumpscareTimer2 -= dt;
+
+	}
+	if (jumpscareTimer2 <= 0)
+	{
+		jumpscareActive2 = false;
+		jumpscare2Counter = 2;
+	}
+	*/
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1548,6 +1589,8 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);
 }
 
 void SceneSP2Room2::Exit()
