@@ -1077,7 +1077,11 @@ void SceneSP2Main::SetBackground() {
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
-
+	if (!Heartbeat) {
+		Heartbeat = createIrrKlangDevice();
+		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav",true);
+	}
+	Heartbeat->setSoundVolume(0.f);
 	Effect->setSoundVolume(0.f);
 	Background->setSoundVolume(0.5f);//Volume control
 }
@@ -1092,6 +1096,23 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	
+	
+	//sounds when ghost get too close
+	if (ghost->distance < 7) {
+		Heartbeat->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 50) {
+		Heartbeat->setSoundVolume(1.0f);
+		Background->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+		Heartbeat->setSoundVolume(0.5f);
+		Background->setSoundVolume(0.f);
+	}
+	else {
+		Heartbeat->setSoundVolume(0.f);
+		Background->setSoundVolume(0.5f);
+	}
 
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
@@ -1348,6 +1369,7 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 		enterBuilding = false;
 
@@ -1358,6 +1380,7 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
 		enterBuilding = false;
 	}
@@ -1368,6 +1391,7 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
 		enterBuilding = false;
 	}
@@ -1377,6 +1401,7 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 		enterBuilding = false;
 	}
@@ -1629,12 +1654,14 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
 
 	}
@@ -1642,18 +1669,21 @@ void SceneSP2Main::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
 	}
 	if (Application::IsKeyPressed('9')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
 	if (Application::IsKeyPressed('0')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
 }

@@ -380,6 +380,9 @@ void SceneSP2Menu::SetBackground()
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
 	}
+	if (!Heartbeat) {
+		Heartbeat = createIrrKlangDevice();
+	}
 	Background->setSoundVolume(0.5f);//Volume control
 }
 
