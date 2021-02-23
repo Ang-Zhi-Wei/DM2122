@@ -1010,15 +1010,16 @@ void SceneSP2Main::Init()
 	inventory = new Inventory;
 
 	//test examples for item
-	test.Set("item2testAAAA", Item::ITEM2);
+	/*test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
-	battery.Set("Battery", Item::BATTERY);
-	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
-	PickUpItem(&test2); //to be called only in one frame.
-	PickUpItem(&battery);
-	PickUpItem(&test);
-	PickUpItem(&test2);
-	PickUpItem(&test2);
+	battery.Set("Battery", Item::BATTERY);*/
+	items[0] = new Item("battery1", Item::BATTERY, (0, 0, 0));
+	PickUpItem(items[0]); //to be called only in one frame. placed under init just for testing first
+	//PickUpItem(&test2); //to be called only in one frame.
+	//PickUpItem(&battery);
+	//PickUpItem(&test);
+	//PickUpItem(&test2);
+	//PickUpItem(&test2);
 	
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -1026,7 +1027,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
 
-
+	
 	
 }
 
@@ -1227,7 +1228,7 @@ void SceneSP2Main::Update(double dt)
 	if (nearBattery == true && Fpressed == true)
 	{
 		PickUpBattery = true;
-		PickUpItem(&battery);
+		//PickUpItem(&battery);
 		nearBattery = false;
 		Fpressed = false;
 	}
@@ -2482,6 +2483,7 @@ void SceneSP2Main::UseItem(int itemname)
 			}
 			else
 			{
+				delete inventory->items[inventory->selected];
 				inventory->items[inventory->selected] = nullptr; 
 			}
 		} 
