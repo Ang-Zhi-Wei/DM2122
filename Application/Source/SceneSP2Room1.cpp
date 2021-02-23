@@ -1031,7 +1031,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer1 <= 0)
 	{
-		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
@@ -1056,7 +1056,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer2 <= 0)
 	{
-		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive2 = true;
 		jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
@@ -1082,7 +1082,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer3 <= 0)
 	{
-		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive3 = true;	
 		jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
@@ -1109,7 +1109,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	if (jumpscareTimer4 <= 0)
 	{
-		Jumpscare->play2D("Sound\\Jumpscares\\341669__dangthaiduy007__jump-scare-sound-2.ogg", false);
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive4 = true;
 		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
