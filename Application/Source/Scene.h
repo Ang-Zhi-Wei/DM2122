@@ -198,6 +198,10 @@ public:
 	bool flashlight;
 	float flashlight_lifetime;
 	int ObjectivePhase;
+	int screwDriverFound;
+	int wrenchFound;
+	int hammerFound;
+	int SparkplugFound;
 	Mesh* itemImage[8];
 
 
