@@ -39,7 +39,7 @@ public:
 		{
 			count = 1;
 			type = BATTERY;
-			image = "Image//fountaintexture.tga";
+			image = "Assigment2Images//batteryicon.tga";
 			type = itemtype;
 			name = itemname;
 			this->pos = pos;
