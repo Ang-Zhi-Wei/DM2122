@@ -1394,7 +1394,7 @@ void SceneSP2Room1::Render()
 
 	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(-10, 10, 220);
+	modelStack.Translate(-10.5, 10, 220);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_WALL], true);
@@ -1473,7 +1473,6 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	//Door
-	//@door
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
@@ -1492,7 +1491,7 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_TOPHALFWALL], true);
 	modelStack.PopMatrix();
 	
-	//Left wall
+	//Right wall
 	modelStack.PushMatrix();
 	modelStack.Translate(52.5, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
@@ -1500,8 +1499,9 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();//Added collider
 
+	//Left wall
 	modelStack.PushMatrix();
-	modelStack.Translate(92.5, 10, 80);
+	modelStack.Translate(93, 10, 80);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(20, 1, 30);
 	RenderMesh(meshList[GEO_WALL], true);
