@@ -244,6 +244,9 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->textureID = LoadTGA("Image//desks.tga");
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
+	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
 	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
@@ -326,7 +329,10 @@ void SceneSP2Room4::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
-
+	flowerCounter = 0;
+	jumpscareTimerActive1 = false;
+	jumpscareTimer1 = 0.2;
+	jumpscareActive1 = false;
 
 
 
@@ -1018,7 +1024,9 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
+
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
 	{
@@ -1028,6 +1036,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
@@ -1038,6 +1047,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_l] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
@@ -1048,6 +1058,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_r] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
@@ -1057,7 +1068,8 @@ void SceneSP2Room4::Update(double dt)
 		interact_message = "Place Flower";
 		if (Fpressed)
 		{
-			itemplaced[body2_r] = true;
+			itemplaced[body2_r] = true;		
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
@@ -1068,6 +1080,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_r] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
@@ -1078,6 +1091,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body_op] = true;
+			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else
@@ -1090,7 +1104,24 @@ void SceneSP2Room4::Update(double dt)
 	{
 		doorunlocked = true;
     }
-
+	//flowerCounter = 0;
+	//jumpscareTimerActive1 = false;
+	//jumpscareTimer1 = 0.2;
+	//jumpscareActive1 = false;
+	if (flowerCounter == 7)
+	{
+		jumpscareActive1 = true;
+		jumpscareTimerActive1 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	}
+	if (jumpscareTimerActive1 == true)
+	{
+		jumpscareTimer1 -= dt;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = false;
+	}
 	doorRotate -= float(20 * dt);
 }
 
@@ -1636,6 +1667,8 @@ void SceneSP2Room4::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
+	RenderTextOnScreen(meshList[GEO_TEXT], "Flower Counter: "+ std::to_string(flowerCounter), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+
 	//UI OVERLAY
 	//vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
@@ -1663,6 +1696,10 @@ void SceneSP2Room4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 
 	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(camera.position.x) + " " + std::to_string(camera.position.y) + " " + std::to_string(camera.position.z), Color(0, 1, 0), 4, 0, 3);
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
 	//checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
