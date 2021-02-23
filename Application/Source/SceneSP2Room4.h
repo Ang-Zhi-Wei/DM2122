@@ -246,10 +246,10 @@ private:
 					  &lounge_walls[1], &lounge_walls[2], &classroom_walls[1]};
 
 
-
+	Door opRoom_door[2];
 	
 
-	int DS_main, DS_classroom, DS_lounge;
+	int DS_main, DS_opRoom, DS_lounge;
 	bool interact;
 	std::string interact_message;
 
