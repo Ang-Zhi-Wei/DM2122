@@ -388,8 +388,8 @@ void SceneSP2Room3::Init()
 	Colliderlist[12].Setposition(Vector3(25, 8, -94.5));
 	//Locker collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(3.9, 10, 4.3);
-	Colliderlist[12].Setposition(Vector3(Lockerlist[0].getpos()));
+	Colliderlist[13].setlength(3.9, 10, 4.3);
+	Colliderlist[13].Setposition(Vector3(Lockerlist[0].getpos()));
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
 
@@ -489,6 +489,12 @@ void SceneSP2Room3::Update(double dt)
 {
 	//mouse cursor show/hide
 	//Application::hidemousecursor(true);
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
 	//sounds when ghost get too close
 	if (ghost->distance < 7) {
 		Heartbeat->setSoundVolume(0.f);
@@ -906,12 +912,7 @@ void SceneSP2Room3::Update(double dt)
 	else {
 		camera.Setslow(false);
 	}
-	if (camera.movement) {
-		Effect->setSoundVolume(0.5f);
-	}
-	else {
-		Effect->setSoundVolume(0.f);
-	}
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1013,10 +1014,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
-	//RenderMesh(meshList[Colliderbox], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();

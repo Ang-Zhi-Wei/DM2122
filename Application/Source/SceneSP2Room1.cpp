@@ -513,6 +513,12 @@ void SceneSP2Room1::Update(double dt)
 {
 	// mouse cursor show / hide
 	Application::hidemousecursor(true);
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
 	//sounds when ghost get too close
 	if (ghost->distance < 7) {
 		Heartbeat->setSoundVolume(0.f);
@@ -1136,12 +1142,7 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive4 = true;
 		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}
-	if (camera.movement) {
-		Effect->setSoundVolume(0.5f);
-	}
-	else {
-		Effect->setSoundVolume(0.f);
-	}
+	
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
