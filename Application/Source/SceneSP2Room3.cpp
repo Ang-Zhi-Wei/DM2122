@@ -15,6 +15,7 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight_lifetime = 90;
 	inLocker = false;
 	exitGarage = false;
+	showSideBox = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -190,6 +191,15 @@ void SceneSP2Room3::Init()
 	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	meshList[barrels]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	/*meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver.obj");
+	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver.tga");
+	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
+
+	
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
 	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[workbench]->material.kAmbient.Set(0.35, 0.35, 0.35);
@@ -493,6 +503,7 @@ void SceneSP2Room3::Set(Scene* scene)
 	inventory = scene->inventory;
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
 
 	//other lights
@@ -1336,6 +1347,30 @@ void SceneSP2Room3::Render()
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
+
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+	}
+
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	}
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);

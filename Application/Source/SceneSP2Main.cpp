@@ -1008,8 +1008,32 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[130].setlength(3, 100, 3);
 	Colliderlist[130].Setposition(Vector3(-566, -2, -27));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[131].setlength(100, 100, 267);
+	Colliderlist[131].Setposition(Vector3(533, -1, -17.60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[132].setlength(5, 100, 5);
+	Colliderlist[132].Setposition(Vector3(469, -1, -148.25));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[133].setlength(5, 100, 5);
+	Colliderlist[133].Setposition(Vector3(469, -1, -107));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[134].setlength(5, 100, 5);
+	Colliderlist[134].Setposition(Vector3(469, -1, -55.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[135].setlength(5, 100, 5);
+	Colliderlist[135].Setposition(Vector3(469, -1, -3));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[136].setlength(5, 100, 5);
+	Colliderlist[136].Setposition(Vector3(469, -1, 57.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[137].setlength(5, 100, 5);
+	Colliderlist[137].Setposition(Vector3(469, -1, 113.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[138].setlength(70, 100, 105);
+	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[130].getxlength(), Colliderlist[130].getylength(), Colliderlist[130].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1749,6 +1773,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::hidemousecursor(false);
 		Application::pause(true);
 	}
 
@@ -1817,6 +1842,7 @@ void SceneSP2Main::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
 
@@ -1836,6 +1862,7 @@ void SceneSP2Main::PauseUpdate()
 		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
 		{
 			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
 			Application::pause(false);
 			gamepaused = false;
 		}
@@ -2049,10 +2076,10 @@ void SceneSP2Main::Render()
 
 	//colliderbox to check collider 
 	//@collider
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[130].getPosition().x, Colliderlist[130].getPosition().y, Colliderlist[130].getPosition().z);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 
@@ -2151,20 +2178,20 @@ void SceneSP2Main::Render()
 	modelStack.Scale(0.13f, 0.13f, 0.13f);
 	RenderMesh(meshList[HOUSE], true);
 	modelStack.PopMatrix();//Added collider
-	//@buildings
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-520, -2, 0);
 	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
-
+	//@buildings
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 510);
 	modelStack.Rotate(90, 0, 1, 0);
