@@ -21,10 +21,7 @@ SceneSP2Main::SceneSP2Main()
 	SpeakTimer = 0;
 	Interact_Num = 0;
 	manAppear = true;
-	nearBattery = false;
-	nearBattery1 = false;
-	nearBattery2 = false;
-	nearBattery3 = false;
+	nearBattery,nearBattery1,nearBattery2, nearBattery3, nearBattery4 = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;
@@ -1019,6 +1016,7 @@ void SceneSP2Main::Init()
 	items[1] = new Item("battery", Item::BATTERY, (60, -3, 0));
 	items[2] = new Item("battery", Item::BATTERY, (-60, -3, 100));
 	items[3] = new Item("battery", Item::BATTERY, (-200, -3, -200));
+	items[4] = new Item("battery", Item::BATTERY, (255, -3, -190));
 //to be called only in one frame. placed under init just for testing first
 	//PickUpItem(&test2); //to be called only in one frame.
 	//PickUpItem(&battery);
@@ -1269,6 +1267,15 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
+	if (nearBattery4 == true && Fpressed == true)
+	{
+		PickUpItem(items[4]);
+		nearBattery4 = false;
+		Fpressed = false;
+		items[4] = NULL;
+
+	}
+
 	
 
 
@@ -1389,6 +1396,15 @@ void SceneSP2Main::Update(double dt)
 		nearBattery3 = false;
 	}
 
+	if (campos_z < -178 && campos_z > -190 && campos_x > 240 && campos_x < 255 && items[4] != nullptr)
+	{
+
+		nearBattery4 = true;
+	}
+	else {
+		nearBattery4 = false;
+	}
+	
 
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
@@ -2267,12 +2283,13 @@ void SceneSP2Main::Render()
 		modelStack.PopMatrix();
 	}
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(200, -3, 0);
-	//modelStack.Scale(0.09, 0.09, 0.09);
-	//RenderMesh(meshList[BATTERY], true);
-	//modelStack.PopMatrix();*/
-
+	if (items[4] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(255, -3, -190);
+		modelStack.Scale(0.09, 0.09, 0.09);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 	//modelStack.PushMatrix();
 	//modelStack.Translate(30.f, -0.1f, 313.f);
 	//modelStack.Scale(750, 8, 30);
@@ -2349,7 +2366,7 @@ void SceneSP2Main::Render()
 
 
 
-	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true)
+	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true || nearBattery4 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
