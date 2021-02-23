@@ -235,6 +235,7 @@ public:
 	ISoundEngine* Background;
 	ISoundEngine* Jumpscare;
 	ISoundEngine* Effect;
+	ISoundEngine* Heartbeat;
 	bool flashlight;
 	float flashlight_lifetime;
 

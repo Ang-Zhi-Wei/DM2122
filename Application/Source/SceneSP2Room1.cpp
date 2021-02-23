@@ -498,8 +498,12 @@ void SceneSP2Room1::SetBackground()
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
 		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
-	
 	}
+	if (!Heartbeat) {
+		Heartbeat = createIrrKlangDevice();
+		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
 	
@@ -509,7 +513,28 @@ void SceneSP2Room1::Update(double dt)
 {
 	// mouse cursor show / hide
 	Application::hidemousecursor(true);
-
+	if (camera.movement) {
+		Effect->setSoundVolume(0.5f);
+	}
+	else {
+		Effect->setSoundVolume(0.f);
+	}
+	//sounds when ghost get too close
+	if (ghost->distance < 7) {
+		Heartbeat->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 50) {
+		Heartbeat->setSoundVolume(1.0f);
+		Background->setSoundVolume(0.f);
+	}
+	else if (ghost->distance < 100 || ghost->state == Ghost::CHASING) {
+		Heartbeat->setSoundVolume(0.5f);
+		Background->setSoundVolume(0.f);
+	}
+	else {
+		Heartbeat->setSoundVolume(0.f);
+		Background->setSoundVolume(0.5f);
+	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -717,6 +742,7 @@ void SceneSP2Room1::Update(double dt)
 				Background->setSoundVolume(0.f);
 				Effect->setSoundVolume(0.f);
 				Jumpscare->setSoundVolume(0.f);
+				Heartbeat->setSoundVolume(0.f);
 				Application::setscene(Scene_Main);
 			}
 		}
@@ -740,6 +766,7 @@ void SceneSP2Room1::Update(double dt)
 			Background->setSoundVolume(0.f);
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Main);
 		}
 		break;
@@ -922,6 +949,7 @@ void SceneSP2Room1::Update(double dt)
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 		exitHouse = false;
 	}*/
@@ -929,6 +957,7 @@ void SceneSP2Room1::Update(double dt)
 	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -1114,41 +1143,41 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive4 = true;
 		jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	}
-	if (camera.movement) {
-		Effect->setSoundVolume(0.5f);
-	}
-	else {
-		Effect->setSoundVolume(0.f);
-	}
+	
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_Main);
 	}
 	if (Application::IsKeyPressed('8')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
 	}
 	if (Application::IsKeyPressed('9')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 	}
 	if (Application::IsKeyPressed('0')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
 
@@ -1250,7 +1279,24 @@ void SceneSP2Room1::Render()
 		}
 	}
 
-
+	//ghost
+	modelStack.PushMatrix();
+	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
+	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -3, 0);
+	modelStack.Scale(4.2f, 4.2f, 4.2f);
+	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5, 10, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_SKULL], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-24.5, 0, -600);
@@ -1476,24 +1522,6 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[GEO_CEILING], true);
 	modelStack.PopMatrix();
 
-	//ghost
-	modelStack.PushMatrix();
-	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
-	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
-	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -3, 0);
-	modelStack.Scale(4.2f, 4.2f, 4.2f);
-	RenderMesh(meshList[GEO_MYSTERIOUSMAN], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(0.5, 10, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.5, 0.5, 0.5);
-	RenderMesh(meshList[GEO_SKULL], true);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
