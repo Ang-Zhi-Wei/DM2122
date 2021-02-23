@@ -44,7 +44,7 @@ SceneSP2Room1::SceneSP2Room1()
 	inLocker = false;
 	suffocationScale = 15;
 	suffocationScaleDir = 1;
-	suffocationTranslate = 14;
+	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
 	fps = 60;
 	itemImage[0] = meshList[GEO_ITEMIMAGE0];
@@ -359,23 +359,23 @@ void SceneSP2Room1::Init()
 	jumpscareActive1 = false;
 	jumpscareTimerActive1 = false;
 
-	//Jumpscare 2
-	jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
-	jumpscareEntrance2 = 0;
-	jumpscareActive2 = false;
-	jumpscareTimerActive2 = false;
+	////Jumpscare 2
+	//jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
+	//jumpscareEntrance2 = 0;
+	//jumpscareActive2 = false;
+	//jumpscareTimerActive2 = false;
 
-	//Jumpscare 3
-	jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
-	jumpscareEntrance3 = 0;
-	jumpscareActive3 = false;
-	jumpscareTimerActive3 = false;
+	////Jumpscare 3
+	//jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
+	//jumpscareEntrance3 = 0;
+	//jumpscareActive3 = false;
+	//jumpscareTimerActive3 = false;
 
-	//Jumpscare 4
-	jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
-	jumpscareEntrance4 = 0;
-	jumpscareActive4 = false;
-	jumpscareTimerActive4 = false;
+	////Jumpscare 4
+	//jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
+	//jumpscareEntrance4 = 0;
+	//jumpscareActive4 = false;
+	//jumpscareTimerActive4 = false;
 	//lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));
@@ -1077,7 +1077,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)) && (inLocker == false))
 	{
 		jumpscareTimerActive1 = true;
 	}
@@ -1098,7 +1098,7 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 		Jumpscare->setSoundVolume(1.f);
 		jumpscareActive1 = true;
-		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 5 + double(5);
+		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 90 + double(45);
 	}
 
 	////Jumpscare, living room
@@ -1585,7 +1585,10 @@ void SceneSP2Room1::Render()
 	}
 	//UI OVERLAY
 
-
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
 	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//warning overlay
@@ -1614,7 +1617,7 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
@@ -1651,33 +1654,30 @@ void SceneSP2Room1::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
-	if (jumpscareActive1 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
 
-	if (jumpscareActive2 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
 
-	if (jumpscareActive3 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
+	//if (jumpscareActive2 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
 
-	if (jumpscareActive4 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
+	//if (jumpscareActive3 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
+
+	//if (jumpscareActive4 == true)
+	//{
+	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	//}
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer4: " + std::to_string(jumpscareTimer4), Color(1, 1, 1), 3, 20, 2);
 
 
 	/*std::ostringstream test1;
@@ -1814,20 +1814,19 @@ void SceneSP2Room1::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
+		
+		flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				inventory->items[inventory->selected] = nullptr;
-			}
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
 		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+		
 		//else warning message?
 		break;
 	case Item::ITEM2:
