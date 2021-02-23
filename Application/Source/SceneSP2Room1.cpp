@@ -701,6 +701,12 @@ void SceneSP2Room1::Update(double dt)
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
+			else if (suffocationScale <= 0) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(temp);
+				glEnable(GL_CULL_FACE);
+				inLocker = false;
+			}
 		}
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
