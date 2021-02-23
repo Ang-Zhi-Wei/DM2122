@@ -1011,8 +1011,29 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[130].setlength(3, 100, 3);
 	Colliderlist[130].Setposition(Vector3(-566, -2, -27));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[131].setlength(100, 100, 267);
+	Colliderlist[131].Setposition(Vector3(533, -1, -17.60));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[132].setlength(5, 100, 5);
+	Colliderlist[132].Setposition(Vector3(469, -1, -148.25));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[133].setlength(5, 100, 5);
+	Colliderlist[133].Setposition(Vector3(469, -1, -107));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[134].setlength(5, 100, 5);
+	Colliderlist[134].Setposition(Vector3(469, -1, -55.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[135].setlength(5, 100, 5);
+	Colliderlist[135].Setposition(Vector3(469, -1, -3));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[136].setlength(5, 100, 5);
+	Colliderlist[136].Setposition(Vector3(469, -1, 57.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[137].setlength(5, 100, 5);
+	Colliderlist[137].Setposition(Vector3(469, -1, 113.5));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[130].getxlength(), Colliderlist[130].getylength(), Colliderlist[130].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[133].getxlength(), Colliderlist[133].getylength(), Colliderlist[133].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -2034,7 +2055,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[130].getPosition().x, Colliderlist[130].getPosition().y, Colliderlist[130].getPosition().z);
+	modelStack.Translate(Colliderlist[133].getPosition().x, Colliderlist[133].getPosition().y, Colliderlist[133].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -2135,13 +2156,13 @@ void SceneSP2Main::Render()
 	modelStack.Scale(0.13f, 0.13f, 0.13f);
 	RenderMesh(meshList[HOUSE], true);
 	modelStack.PopMatrix();//Added collider
-	//@buildings
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-520, -2, 0);
 	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	//@buildings
 	modelStack.PushMatrix();
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
