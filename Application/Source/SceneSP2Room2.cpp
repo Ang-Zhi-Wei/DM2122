@@ -54,7 +54,7 @@ void SceneSP2Room2::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(475, 9, 0), Vector3(495, 9, 0), Vector3(0, 1, 0));
 	////shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -581,6 +581,8 @@ void SceneSP2Room2::Set(Scene* scene)
 
 	camera.position.Set(475, 9, 0);
 	camera.rawTarget = camera.position;
+
+	Application::SetCursorPos(1440, camera.mousePosY);
 }
 
 void SceneSP2Room2::SetBackground()
@@ -1332,18 +1334,18 @@ void SceneSP2Room2::Render()
 	//schoolleft
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[0].mid.x, school_door[0].mid.y, school_door[0].mid.z);
-	modelStack.Translate(0.25, 0, -2.5);
+	modelStack.Translate(-0.25, 0, -2.5);
 	modelStack.Rotate(school_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, 2.5);
+	modelStack.Translate(0.25, 0, 2.5);
 	modelStack.Scale(school_door[0].lengthx, school_door[0].lengthy, school_door[0].lengthz);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 	//school right
 	modelStack.PushMatrix();
 	modelStack.Translate(school_door[1].mid.x, school_door[1].mid.y, school_door[1].mid.z);
-	modelStack.Translate(0.25, 0, 2.5);
+	modelStack.Translate(-0.25, 0, 2.5);
 	modelStack.Rotate(school_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-0.25, 0, -2.5);
+	modelStack.Translate(0.25, 0, -2.5);
 	modelStack.Scale(school_door[1].lengthx, school_door[1].lengthy, school_door[1].lengthz);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
@@ -1413,9 +1415,9 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
-	modelStack.Translate(560, 10, -60); // pos on map
-	modelStack.Translate(100, 0, 0); //move to origin
-	modelStack.Scale(0.4, 0.4, 0.4);
+	modelStack.Translate(540, 10, -100); // pos on map
+	modelStack.Translate(50, 0, 0); //move obj to origin
+	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[GEO_PIGEONHOLE], true);
 	modelStack.PopMatrix();
 	//ghost
