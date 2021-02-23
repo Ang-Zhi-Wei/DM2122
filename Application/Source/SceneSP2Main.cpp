@@ -1029,8 +1029,11 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[137].setlength(5, 100, 5);
 	Colliderlist[137].Setposition(Vector3(469, -1, 113.5));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[138].setlength(70, 100, 105);
+	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[133].getxlength(), Colliderlist[133].getylength(), Colliderlist[133].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -2071,7 +2074,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[133].getPosition().x, Colliderlist[133].getPosition().y, Colliderlist[133].getPosition().z);
+	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -2178,14 +2181,14 @@ void SceneSP2Main::Render()
 	modelStack.Scale(0.09f, 0.09f, 0.09f);
 	RenderMesh(meshList[HOSPITAL], true);
 	modelStack.PopMatrix();//Added collider
-	//@buildings
+
 	modelStack.PushMatrix();
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
-
+	//@buildings
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -4, 510);
 	modelStack.Rotate(90, 0, 1, 0);
