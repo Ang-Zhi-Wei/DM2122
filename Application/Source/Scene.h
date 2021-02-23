@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "irrKlang.h"
 
+
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") 
 class Scene
@@ -19,6 +20,14 @@ public:
 		
 	}
 	~Scene() {};
+	virtual void Init() = 0;
+	virtual void Update(double dt) = 0;
+	virtual void PauseUpdate() = 0;
+	virtual void Render() = 0;
+	virtual void Exit() = 0;
+	virtual void Set(Scene* scene) = 0;
+	virtual void SetBackground()=0;
+
 
 	struct Item
 	{
@@ -88,8 +97,10 @@ public:
 			UNSPAWNED,
 			NORMAL,
 			CHASING,
+			TOLOCKER,
 			WAITING,
 			SPEEDRUN,
+			SPIN,
 			DEATH,
 		};
 		int state;
@@ -109,7 +120,7 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(0, 0, -2000); //far far away so no one knows its there
+			pos.Set(100, 3, 0); //far far away so no one knows its there
 			rotateY = 0;
 			state = UNSPAWNED;
 			waitTime = 5;
@@ -175,64 +186,7 @@ public:
 			}
 			axis = facing.Cross(up).Normalized();
 		}
-		void UpdateState(Vector3 cameraPos, bool inLocker, double dt)
-		{
-			switch (state)
-			{
-			case NORMAL:
-				this->facing = cameraPos - this->pos;
-				this->facing.y = 0;
-				this->distance = this->facing.Length();
-				this->facing.Normalize();
-				this->UpdateMovement(dt);
-				
-				if (this->distance <= 50)
-				{
-					this->state = Ghost::CHASING;
-					this->speed = 25;
-				}
-				break;
-			case Ghost::CHASING:
-				this->facing = cameraPos - this->pos;
-				this->facing.y = 0;
-				this->distance = this->facing.Length();
-				this->facing.Normalize();
-				this->UpdateMovement(dt);
-				if (this->distance <= 15 && inLocker)
-				{
-					this->state = Ghost::WAITING;
-					this->waitTime = 5;
-				}
-				else if (this->distance <= 7)
-				{
-					this->state = Ghost::DEATH;
-				}
-				break;
-			case Ghost::WAITING:
-				this->waitTime -= float(dt);
-				if (this->waitTime <= 0)
-				{
-					this->state = Ghost::SPEEDRUN;
-					this->speed = 50;
-				}
-				break;
-			case Ghost::SPEEDRUN:
-				this->facing = this->pos - cameraPos;
-				this->facing.y = 0;
-				this->distance = this->facing.Length();
-				this->facing.Normalize();
-				this->UpdateMovement(dt);
-				if (this->distance > 500 || !inLocker)
-				{
-					this->state = Ghost::NORMAL;
-					this->speed = 5;
-				}
-				break;
-			default:
-				break;
-
-			}
-		}
+		
 	};
 	Inventory* inventory;
 	Ghost* ghost;
@@ -247,13 +201,6 @@ public:
 	Mesh* itemImage[8];
 
 
-	virtual void Init() = 0;
-	virtual void Update(double dt) = 0;
-	virtual void PauseUpdate() = 0;
-	virtual void Render() = 0;
-	virtual void Exit() = 0;
-	virtual void Set(Scene* scene) = 0;
-	virtual void SetBackground()=0;
 
 	
 };

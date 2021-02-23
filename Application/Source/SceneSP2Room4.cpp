@@ -880,14 +880,15 @@ void SceneSP2Room4::Update(double dt)
 
 
 
+	
 	//ghost
 	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
-
-		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing = camera.position - ghost->pos;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 
 		if (ghost->distance <= 50)
@@ -897,20 +898,26 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
+		if (ghost->distance <= 7 && inLocker)
 		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
 		}
-		else if (ghost->distance <= 1)
+		else if (ghost->distance <= 7)
 		{
-			//TBC
-			//end game condition met, either that or HP - 1
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
 		}
 		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
 		if (ghost->waitTime <= 0)
@@ -920,15 +927,48 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing = ghost->pos - camera.position;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 		if (ghost->distance > 500 || !inLocker)
 		{
 			ghost->state = Ghost::NORMAL;
 			ghost->speed = 5;
 		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
 		break;
 
 	}
