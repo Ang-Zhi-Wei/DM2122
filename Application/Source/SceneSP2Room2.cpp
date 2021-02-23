@@ -344,7 +344,7 @@ void SceneSP2Room2::Init()
 	//lengthy unset
 
 	//podium
-	podium.mid.Set(670, 1, 90);
+	podium.mid.Set(480, 1, 60);
 	podium.lengthx = 5;
 	podium.lengthz = 5;
 
@@ -763,6 +763,7 @@ void SceneSP2Room2::Update(double dt)
 	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -1098,6 +1099,7 @@ void SceneSP2Room2::Update(double dt)
 	if ((camera.position.y >= 0) && ((camera.position.x >= 510) && (camera.position.x <= 520)) && ((camera.position.z >= -10) && (camera.position.z <= -5)) && (jumpscareCounter1 == 0) && (jumpscareTimer1 != 0))
 	{
 		jumpscareActive1 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	if (jumpscareActive1 == true)
 	{
@@ -1117,6 +1119,7 @@ void SceneSP2Room2::Update(double dt)
 	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 0))
 	{
 		jumpscare2Pass = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 	}
 	else
 	{
@@ -1402,7 +1405,7 @@ void SceneSP2Room2::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(0.15, 0.15, 0.15);
+	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
 	modelStack.PopMatrix();
 	
@@ -1496,7 +1499,7 @@ void SceneSP2Room2::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(34 + i * 5), 3.f);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f);
 				}
 			}
 		}

@@ -50,7 +50,7 @@ public:
 			{
 			case BATTERY:
 				description = "Use to refill flashlight batteries aaaaaa idk";
-				image = "Image//fountaintexture.tga";
+				image = "Assigment2Images//batteryicon.tga";
 				//set image and description
 				break;
 			case ITEM2:

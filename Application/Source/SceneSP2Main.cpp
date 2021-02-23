@@ -1016,9 +1016,6 @@ void SceneSP2Main::Init()
 	PickUpItem(&test); //to be called only in one frame. placed under init just for testing first
 	PickUpItem(&test2); //to be called only in one frame.
 	PickUpItem(&battery);
-	PickUpItem(&test);
-	PickUpItem(&test2);
-	PickUpItem(&test2);
 	
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -2305,7 +2302,7 @@ void SceneSP2Main::Render()
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 
-		//stamina icon
+	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
@@ -2323,7 +2320,7 @@ void SceneSP2Main::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(34 + i * 5), 3.f);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f,1.f,1.f), 2.f, float(33.8 + i * 5), 3.f);
 				}
 			} 
 		}
