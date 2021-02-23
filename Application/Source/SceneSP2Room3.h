@@ -189,6 +189,7 @@ private:
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
+	bool nearScrewdriver;
 	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
@@ -196,6 +197,9 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	Item* garageItems[10];
+
 	struct Wall
 	{
 		Vector3 mid;

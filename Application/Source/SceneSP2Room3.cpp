@@ -15,6 +15,7 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight_lifetime = 90;
 	inLocker = false;
 	exitGarage = false;
+	nearScrewdriver = false;
 	showSideBox = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -221,6 +222,8 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//garagedoor.obj");
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
 
 
 	//light 0
@@ -621,6 +624,18 @@ void SceneSP2Room3::Update(double dt)
 		
 		Freleased = false;
 	}
+
+	if (nearScrewdriver == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[0]);
+		nearScrewdriver = false;
+		Fpressed = false;
+		garageItems[0] = NULL;
+		ObjectivePhase = 0;
+
+	}
+
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitGarage = true;
@@ -691,6 +706,15 @@ void SceneSP2Room3::Update(double dt)
 	else {
 		nearExit = false;
 		showChatbox = false;
+	}
+
+
+	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91)
+	{
+		nearScrewdriver = true;
+	}
+	else {
+		nearScrewdriver = false;
 	}
 
 	if (exitGarage == true && nearExit == true)
@@ -1314,7 +1338,7 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[garagedoor], true);
 	modelStack.PopMatrix();
 
-	if (ObjectivePhase == 2)
+	if (garageItems[0] != nullptr)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(-22, 7.8, -95);
@@ -1361,6 +1385,13 @@ void SceneSP2Room3::Render()
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+	}
+
+
+
+	if (nearScrewdriver == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
 	switch (ObjectivePhase)

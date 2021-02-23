@@ -25,6 +25,7 @@ public:
 		enum ITEM_TYPE
 		{
 			BATTERY,
+			Screwdriver,
 			ITEM2,
 			ITEM3,
 			//add more depending on whta u need, don forget set in Set function
@@ -54,6 +55,10 @@ public:
 			case ITEM2:
 				description = "TESTESTTESTETSESTESTESTETST>--|-o";
 				image = "Image//man1.tga";
+				break;
+			case Screwdriver:
+				description = "A screwdriver";
+				image = "Assigment2Images/screwdriver.tga";
 				break;
 			}
 		}
