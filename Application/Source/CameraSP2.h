@@ -5,6 +5,7 @@
 #include "ColliderBox.h"
 #include "Locker.h"
 #include <vector>
+
 class CameraSP2 : public Camera
 {
 public:

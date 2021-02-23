@@ -1475,9 +1475,9 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
-	modelStack.Translate(2.5, 0, -0.25);
+	modelStack.Translate(2.5, 0, 0.25);
 	modelStack.Rotate(rotateY[3], 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0.25);
+	modelStack.Translate(-2.5, 0, -0.25);
 
 	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
@@ -1747,7 +1747,6 @@ void SceneSP2Room1::RenderSkybox()
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
-
 
 
 //void SceneSP2Room1::RenderDeadTree(int x, int z,float rotate)

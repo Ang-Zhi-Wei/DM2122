@@ -1464,8 +1464,6 @@ void SceneSP2Room3::RenderSkybox()
 }
 
 
-
-
 bool SceneSP2Room3::PickUpItem(Item* item)
 {
 	//picking up item into inventory

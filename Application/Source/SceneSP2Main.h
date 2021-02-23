@@ -28,6 +28,7 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
+
 	int SpeakPhase;
 	double SpeakTimer;
 	int ObjectivePhase;

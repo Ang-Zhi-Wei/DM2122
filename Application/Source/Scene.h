@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "irrKlang.h"
 
+
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") 
 class Scene
@@ -18,6 +19,14 @@ public:
 		flashlight = true;
 	}
 	~Scene() {};
+	virtual void Init() = 0;
+	virtual void Update(double dt) = 0;
+	virtual void PauseUpdate() = 0;
+	virtual void Render() = 0;
+	virtual void Exit() = 0;
+	virtual void Set(Scene* scene) = 0;
+	virtual void SetBackground()=0;
+
 
 	struct Item
 	{
@@ -103,7 +112,7 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(0, 0, -2000); //far far away so no one knows its there
+			pos.Set(0, 0, -200); //far far away so no one knows its there
 			rotateY = 0;
 			state = UNSPAWNED;
 			waitTime = 5;
@@ -169,12 +178,12 @@ public:
 			}
 			axis = facing.Cross(up).Normalized();
 		}
-		void UpdateState(Vector3 cameraPos, bool inLocker, double dt)
+		void UpdateState(Vector3 camPos, bool inLocker, double dt)
 		{
 			switch (state)
 			{
 			case NORMAL:
-				this->facing = cameraPos - this->pos;
+				this->facing = camPos - this->pos;
 				this->facing.y = 0;
 				this->distance = this->facing.Length();
 				this->facing.Normalize();
@@ -187,17 +196,18 @@ public:
 				}
 				break;
 			case Ghost::CHASING:
-				this->facing = cameraPos - this->pos;
+				this->facing = camPos - this->pos;
 				this->facing.y = 0;
 				this->distance = this->facing.Length();
 				this->facing.Normalize();
 				this->UpdateMovement(dt);
-				if (this->distance <= 15 && inLocker)
+				if (this->distance <= 7 && inLocker)
 				{
+					
 					this->state = Ghost::WAITING;
 					this->waitTime = 5;
 				}
-				else if (this->distance <= 7)
+				else if (this->distance <= 5)
 				{
 					this->state = Ghost::DEATH;
 				}
@@ -211,7 +221,7 @@ public:
 				}
 				break;
 			case Ghost::SPEEDRUN:
-				this->facing = this->pos - cameraPos;
+				this->facing = this->pos - camPos;
 				this->facing.y = 0;
 				this->distance = this->facing.Length();
 				this->facing.Normalize();
@@ -241,13 +251,6 @@ public:
 	Mesh* itemImage[8];
 
 
-	virtual void Init() = 0;
-	virtual void Update(double dt) = 0;
-	virtual void PauseUpdate() = 0;
-	virtual void Render() = 0;
-	virtual void Exit() = 0;
-	virtual void Set(Scene* scene) = 0;
-	virtual void SetBackground()=0;
 
 	
 };

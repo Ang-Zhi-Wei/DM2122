@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+
 	//struct Item
 	//{
 	//	enum ITEM_TYPE

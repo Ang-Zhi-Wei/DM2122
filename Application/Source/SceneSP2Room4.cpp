@@ -875,57 +875,8 @@ void SceneSP2Room4::Update(double dt)
 
 
 	//ghost
-	switch (ghost->state)
-	{
-	case Ghost::NORMAL:
+	ghost->UpdateState(camera.position, inLocker, dt);
 
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-
-		if (ghost->distance <= 50)
-		{
-			ghost->state = Ghost::CHASING;
-			ghost->speed = 25;
-		}
-		break;
-	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
-		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
-		}
-		else if (ghost->distance <= 1)
-		{
-			//TBC
-			//end game condition met, either that or HP - 1
-		}
-		break;
-	case Ghost::WAITING:
-		ghost->waitTime -= float(dt);
-		if (ghost->waitTime <= 0)
-		{
-			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
-		}
-		break;
-	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
-		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
-		ghost->UpdateMovement(dt);
-		if (ghost->distance > 500 || !inLocker)
-		{
-			ghost->state = Ghost::NORMAL;
-			ghost->speed = 5;
-		}
-		break;
-
-	}
 	//Locker
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
