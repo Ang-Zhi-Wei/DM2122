@@ -240,7 +240,7 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 	bool NearGarage;
-	bool nearBattery, nearBattery1, nearBattery2, nearBattery3;
+	bool nearBattery, nearBattery1, nearBattery2, nearBattery3, nearBattery4;
 	bool NearHouse;
 	bool NearSchool;
 	bool NearHospital;
