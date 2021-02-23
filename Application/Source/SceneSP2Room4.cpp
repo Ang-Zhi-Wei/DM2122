@@ -1722,6 +1722,56 @@ void SceneSP2Room4::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
+void SceneSP2Room4::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+
+		flashlight_lifetime = 90;
+
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
+		}
+
+		//else warning message?
+		break;
+	case Item::ITEM2:
+		break;
+	}
+}
+
+bool SceneSP2Room4::PickUpItem(Item* item)
+{
+	//picking up item into inventory
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] != nullptr)
+		{
+			if (inventory->items[i]->name == item->name)
+			{
+				inventory->items[i]->count++;
+				return true;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (inventory->items[i] == nullptr)
+		{
+			inventory->items[i] = item;
+			itemImage[i]->textureID = LoadTGA(item->image);
+			return true;
+		}
+	}
+	return false;
+}
 
 void SceneSP2Room4::RenderMesh(Mesh* mesh, bool enableLight)
 {
