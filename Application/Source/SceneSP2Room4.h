@@ -86,6 +86,8 @@ public:
 		oplight,
 		frontdesk,
 		sparkplug,
+		BATTERY,
+		deadbody,
 
 		//UI tings
 		GEO_TEXT,
@@ -94,6 +96,11 @@ public:
 		GEO_BAR, //stamina
 		GEO_JUMPSCARE1,
 		GEO_REDDOT,
+		GEO_DEATH,
+		GEO_WARNING2,
+		GEO_WARNING1,
+		GEO_STAMINA,
+		GEO_BATTERY,
 
 		//trap
 		GEO_BEARTRAP,
@@ -183,6 +190,7 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -302,6 +310,7 @@ private:
 	bool placeitem;
 	bool itemplaced[7];
 	bool doorunlocked;
+	bool bruhmoment;
 
 	//@pause 
 	bool PKeypressed, PKeyreleased;

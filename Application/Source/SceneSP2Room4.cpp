@@ -31,6 +31,7 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOff = true;
 	placeitem = false;
 	doorunlocked = false;
+	bruhmoment = false;
 
 	//@pause
 	gamepaused = false;
@@ -264,6 +265,14 @@ void SceneSP2Room4::Init()
 	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
 	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[deadbody] = MeshBuilder::GenerateOBJ("easter egg", "OBJ/DeadBody.obj");
+	meshList[deadbody]->textureID = LoadTGA("Image//deadbody.tga");
+	meshList[deadbody]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
@@ -363,6 +372,8 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
+	items[1] = new Item("battery", Item::BATTERY, (0, 6.3, -69.6));
+	items[2] = new Item("battery", Item::BATTERY, (17, 6.5, -13));
 
 
 	
@@ -486,7 +497,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -521,11 +532,17 @@ void SceneSP2Room4::Init()
 
 	//lockercollider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[27].setlength(3.9, 10, 4.3);
-	Colliderlist[27].Setposition(Vector3(Lockerlist[0].getpos()));
+	Colliderlist[28].setlength(3.9, 10, 4.3);
+	Colliderlist[28].Setposition(Vector3(Lockerlist[0].getpos()));
+
+	//easter egg collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[29].setlength(10, 6, 10);
+	Colliderlist[29].Setposition(Vector3(-45, 0, -9));
+
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[26].getxlength(), Colliderlist[26].getylength(), Colliderlist[26].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[29].getxlength(), Colliderlist[29].getylength(), Colliderlist[29].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -540,6 +557,9 @@ void SceneSP2Room4::Init()
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//hos_door_R.tga");
 	
 	//UI
+	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
@@ -547,6 +567,12 @@ void SceneSP2Room4::Init()
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
 	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
+	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
+	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
+	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
+	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
 
 	//@pause
 	//pause menu
@@ -586,22 +612,22 @@ void SceneSP2Room4::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		if (flashlight_lifetime < 20)
-		{
-			flashlight_lifetime = 90;
 
-			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-			if (inventory->items[inventory->selected]->count > 1)
-			{
-				inventory->items[inventory->selected]->count--;
-			}
-			else
-			{
-				delete inventory->items[inventory->selected];
-				inventory->items[inventory->selected] = nullptr;
-			}
+		flashlight_lifetime = 90;
+
+		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			inventory->items[inventory->selected] = nullptr;
 		}
 
+		//else warning message?
+		break;
+	case Item::ITEM2:
 		break;
 	}
 }
@@ -745,6 +771,25 @@ void SceneSP2Room4::Update(double dt)
 		Fpressed = false;
 	}
 
+
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(items[1]);
+		nearBattery = false;
+		Fpressed = false;
+		items[1] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(items[2]);
+		nearBattery2 = false;
+		Fpressed = false;
+		items[2] = NULL;
+
+	}
+
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -808,6 +853,23 @@ void SceneSP2Room4::Update(double dt)
 	else {
 		nearExit = false;
 		showChatbox = false;
+	}
+
+
+	if (campos_x < 4 && campos_x > -4 && campos_z < -64 && campos_z > -76 && items[1] != nullptr)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	if (campos_x < 21 && campos_x > 18  && campos_z < -10 && campos_z > -15 && items[2] != nullptr)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
 	}
 
 	if (exitHospital == true && nearExit == true)
@@ -1285,6 +1347,22 @@ void SceneSP2Room4::Update(double dt)
 		}
 	}
 
+	//easter egg jumpscare
+	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
+	{
+		interact = true;
+		interact_message = "Press f to pay respects"; 
+		if (Fpressed)
+		{
+			//jumpscare code here
+			bruhmoment = true;
+		}
+	} 
+	else
+	{
+		interact = false;
+	}
+
 }
 
 
@@ -1341,8 +1419,11 @@ void SceneSP2Room4::PauseUpdate()
 			std::cout << "qMenu Hit!" << std::endl;
 			gamepaused = false;
 			Application::pause(false);
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Menu);
-			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
@@ -1556,6 +1637,13 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-45, 0, -9);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(6, 6, 6);
+	RenderMesh(meshList[deadbody], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(-40, 3, -22);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.04, 0.04, 0.04);
@@ -1654,7 +1742,7 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[26].getPosition().x, Colliderlist[26].getPosition().y, Colliderlist[26].getPosition().z);
+	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -1902,6 +1990,24 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_SKULL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
+
+	if (items[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 6.3, -69.6);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+	
+	if (items[2] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(17, 6.5, -13);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
@@ -1928,7 +2034,10 @@ void SceneSP2Room4::Render()
 
 
 
-	
+	if (nearBattery == true || nearBattery2 == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
 
 
 	if (nearExit == true) {
@@ -1939,16 +2048,38 @@ void SceneSP2Room4::Render()
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Flower Counter: "+ std::to_string(flowerCounter), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 
 	//UI OVERLAY
-	//vision vignette
+
+	//Vision vignette
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->state == Ghost::CHASING)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
 	//camera dot
 	if (camBlinkOn) {
 		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
 	}
-	//stamina
-	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//battery bar
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
+
+
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
@@ -2066,8 +2197,6 @@ void SceneSP2Room4::Render()
 void SceneSP2Room4::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

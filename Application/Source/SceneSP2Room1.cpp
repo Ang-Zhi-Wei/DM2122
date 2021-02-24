@@ -351,7 +351,7 @@ void SceneSP2Room1::Init()
 
 	houseItems[0] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
 	houseItems[1] = new Item("battery", Item::BATTERY, (35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, (35, 1, -435));
+	houseItems[2] = new Item("battery", Item::BATTERY, (52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -497,6 +497,8 @@ void SceneSP2Room1::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
+	DS_MAIN = OPEN;
+	rotateY[0] = 90;
 	if (flashlight)
 	{
 		light[1].power = 2;
@@ -794,6 +796,7 @@ void SceneSP2Room1::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
+				ghost->lockerIndex = i;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1205,7 +1208,7 @@ void SceneSP2Room1::Update(double dt)
 		{
 
 			ghost->state = Ghost::TOLOCKER;
-			ghost->waitTime = 5;
+			ghost->waitTime = 3;
 		}
 		else if (ghost->distance <= 7)
 		{
@@ -1215,9 +1218,31 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
+		ghost->facing = Lockerlist[ghost->lockerIndex].getfront() - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->facing.Normalize();
+		while (Colliderlist[15 + ghost->lockerIndex].iscollide(ghost->pos + 5 * ghost->facing))
+		{
+			//change facing
+			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+		}
+
+		ghost->UpdateMovement(dt);
+		ghost->rawPos = ghost->pos;
+		ghost->rawPos.y = 0;
+		if ((ghost->rawPos - Lockerlist[ghost->lockerIndex].getfront()).Length() <= 0.5)
+		{
+			ghost->facing = camera.position - ghost->pos;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+			ghost->state = Ghost::WAITING;
+		}
+		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -1270,7 +1295,6 @@ void SceneSP2Room1::Update(double dt)
 		break;
 
 	}
-
 
 	//Jumpscare, Entrance hallway
 	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)) && (inLocker == false))
@@ -1470,8 +1494,11 @@ void SceneSP2Room1::PauseUpdate()
 			std::cout << "qMenu Hit!" << std::endl;
 			gamepaused = false;
 			Application::pause(false);
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Menu);
-			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
@@ -1965,7 +1992,7 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	//inventory
 	if (inventory->open)
 	{
@@ -2047,8 +2074,6 @@ void SceneSP2Room1::Render()
 void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
