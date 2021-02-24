@@ -64,7 +64,7 @@ void SceneSP2Room2::Init()
 	////shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
-	
+
 	//light 0
 	m_parameters[U_LIGHT0_TYPE] =
 		glGetUniformLocation(m_programID, "lights[0].type");
@@ -124,7 +124,7 @@ void SceneSP2Room2::Init()
 	m_parameters[U_LIGHT5_POWER] =
 		glGetUniformLocation(m_programID, "lights[5].power");
 
-	
+
 	//num lights
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID,
 		"numLights");
@@ -164,7 +164,7 @@ void SceneSP2Room2::Init()
 	meshList[LightSphere] = MeshBuilder::Generatesphere("LightBall", 1, 1, 1, White);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("Reference", 1, 1, 1);
 	//skybox texture
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front",1,1,White);
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", 1, 1, White);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Night//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", 1, 1, White);
 	meshList[GEO_BACK]->textureID = LoadTGA("Night//back.tga");
@@ -183,7 +183,7 @@ void SceneSP2Room2::Init()
 
 	schoolItems[0] = new Item("battery", Item::BATTERY, (500, 4.5, -102));
 	schoolItems[1] = new Item("battery", Item::BATTERY, (491, 4.5, 85));
-	
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
 	//light 0
@@ -239,7 +239,7 @@ void SceneSP2Room2::Init()
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
-	
+
 
 	//Set Material locations
 	Mesh::SetMaterialLoc(m_parameters[U_MATERIAL_AMBIENT],
@@ -249,7 +249,7 @@ void SceneSP2Room2::Init()
 	//number of lights
 	glUniform1i(m_parameters[U_NUMLIGHTS], 6);
 
-	
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = false;
@@ -274,13 +274,13 @@ void SceneSP2Room2::Init()
 	jumpscare2ActiveZone = false;
 
 	//walls
-	school_walls[0].mid.Set(470, 20, 0); 
+	school_walls[0].mid.Set(470, 20, 0);
 	school_walls[1].mid.Set(470, 12.5, -57.5);
-	school_walls[2].mid.Set(470, 12.5, 57.5); 
+	school_walls[2].mid.Set(470, 12.5, 57.5);
 	school_walls[3].mid.Set(570, 12.5, 0); //back
 	school_walls[4].mid.Set(520, 12.5, -110);
 	school_walls[5].mid.Set(520, 12.5, 110);
-	
+
 	school_walls[1].lengthz = 105;
 	school_walls[2].lengthz = 105;
 	school_walls[4].lengthx = school_walls[5].lengthx = 100;
@@ -311,7 +311,7 @@ void SceneSP2Room2::Init()
 	classroom_walls[1].lengthy = 25;
 	classroom_walls[0].lengthy = 10;
 	lounge_walls[0].lengthy = 10;
-	
+
 
 
 
@@ -334,7 +334,7 @@ void SceneSP2Room2::Init()
 	}
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
-	
+
 	//chairs/table
 	for (int row = 0; row < 4; row++)
 	{
@@ -375,32 +375,32 @@ void SceneSP2Room2::Init()
 	//wall colliders
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(school_walls[1].lengthx+2.5, school_walls[1].lengthy, school_walls[1].lengthz);
+	Colliderlist[0].setlength(school_walls[1].lengthx + 2.5, school_walls[1].lengthy, school_walls[1].lengthz);
 	Colliderlist[0].Setposition(Vector3(school_walls[1].mid.x, school_walls[1].mid.y, school_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(school_walls[2].lengthx+2.5, school_walls[2].lengthy, school_walls[2].lengthz);
+	Colliderlist[1].setlength(school_walls[2].lengthx + 2.5, school_walls[2].lengthy, school_walls[2].lengthz);
 	Colliderlist[1].Setposition(Vector3(school_walls[2].mid.x, school_walls[2].mid.y, school_walls[2].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(school_walls[3].lengthx+2.5, school_walls[3].lengthy, school_walls[3].lengthz);
+	Colliderlist[2].setlength(school_walls[3].lengthx + 2.5, school_walls[3].lengthy, school_walls[3].lengthz);
 	Colliderlist[2].Setposition(Vector3(school_walls[3].mid.x, school_walls[3].mid.y, school_walls[3].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(school_walls[4].lengthx, school_walls[4].lengthy, school_walls[4].lengthz+2.5);
+	Colliderlist[3].setlength(school_walls[4].lengthx, school_walls[4].lengthy, school_walls[4].lengthz + 2.5);
 	Colliderlist[3].Setposition(Vector3(school_walls[4].mid.x, school_walls[4].mid.y, school_walls[4].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(school_walls[5].lengthx, school_walls[5].lengthy, school_walls[5].lengthz+2.5);
+	Colliderlist[4].setlength(school_walls[5].lengthx, school_walls[5].lengthy, school_walls[5].lengthz + 2.5);
 	Colliderlist[4].Setposition(Vector3(school_walls[5].mid.x, school_walls[5].mid.y, school_walls[5].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(classroom_walls[1].lengthx,classroom_walls[1].lengthy,classroom_walls[1].lengthz+2.5);
-	Colliderlist[5].Setposition(Vector3(classroom_walls[1].mid.x,classroom_walls[1].mid.y,classroom_walls[1].mid.z));
+	Colliderlist[5].setlength(classroom_walls[1].lengthx, classroom_walls[1].lengthy, classroom_walls[1].lengthz + 2.5);
+	Colliderlist[5].Setposition(Vector3(classroom_walls[1].mid.x, classroom_walls[1].mid.y, classroom_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(lounge_walls[1].lengthx,lounge_walls[1].lengthy,lounge_walls[1].lengthz+2.5);
-	Colliderlist[6].Setposition(Vector3(lounge_walls[1].mid.x,lounge_walls[1].mid.y,lounge_walls[1].mid.z));
+	Colliderlist[6].setlength(lounge_walls[1].lengthx, lounge_walls[1].lengthy, lounge_walls[1].lengthz + 2.5);
+	Colliderlist[6].Setposition(Vector3(lounge_walls[1].mid.x, lounge_walls[1].mid.y, lounge_walls[1].mid.z));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz+2.5);
+	Colliderlist[7].setlength(lounge_walls[2].lengthx, lounge_walls[2].lengthy, lounge_walls[2].lengthz + 2.5);
 	Colliderlist[7].Setposition(Vector3(lounge_walls[2].mid.x, lounge_walls[2].mid.y, lounge_walls[2].mid.z));
 	//Locker colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(4.3,10,3.9);
+	Colliderlist[8].setlength(4.3, 10, 3.9);
 	Colliderlist[8].Setposition(Lockerlist[0].getpos());
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[9].setlength(3.9, 10, 4.3);
@@ -410,22 +410,22 @@ void SceneSP2Room2::Init()
 	Colliderlist[10].Setposition(Lockerlist[2].getpos());
 	//Door colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(school_door[0].lengthx+2.5,school_door[0].lengthy,school_door[0].lengthz);
+	Colliderlist[11].setlength(school_door[0].lengthx + 2.5, school_door[0].lengthy, school_door[0].lengthz);
 	Colliderlist[11].Setposition(school_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(school_door[1].lengthx+2.5, school_door[1].lengthy, school_door[1].lengthz);
+	Colliderlist[12].setlength(school_door[1].lengthx + 2.5, school_door[1].lengthy, school_door[1].lengthz);
 	Colliderlist[12].Setposition(school_door[1].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(classroom_door[0].lengthx,classroom_door[0].lengthy,classroom_door[0].lengthz+2.5);
+	Colliderlist[13].setlength(classroom_door[0].lengthx, classroom_door[0].lengthy, classroom_door[0].lengthz + 2.5);
 	Colliderlist[13].Setposition(classroom_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz+2.5);
+	Colliderlist[14].setlength(classroom_door[1].lengthx, classroom_door[1].lengthy, classroom_door[1].lengthz + 2.5);
 	Colliderlist[14].Setposition(classroom_door[1].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(lounge_door[0].lengthx,lounge_door[0].lengthy,lounge_door[0].lengthz+2.5);
+	Colliderlist[15].setlength(lounge_door[0].lengthx, lounge_door[0].lengthy, lounge_door[0].lengthz + 2.5);
 	Colliderlist[15].Setposition(lounge_door[0].mid);
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz+2.5);
+	Colliderlist[16].setlength(lounge_door[1].lengthx, lounge_door[1].lengthy, lounge_door[1].lengthz + 2.5);
 	Colliderlist[16].Setposition(lounge_door[1].mid);
 	//chair colliders
 	for (int row = 0; row < 4; row++)
@@ -452,14 +452,14 @@ void SceneSP2Room2::Init()
 	//podium collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[57].setlength(4, 10, 4);
-	Colliderlist[57].Setposition(Vector3(podium.mid.x-1.15,podium.mid.y,podium.mid.z));
+	Colliderlist[57].Setposition(Vector3(podium.mid.x - 1.15, podium.mid.y, podium.mid.z));
 	//pigeonhole collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[58].setlength(37.5, 20, 7);
 	Colliderlist[58].Setposition(Vector3(540, 10, -100));
 	//longtable collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[59].setlength(15,5,10);
+	Colliderlist[59].setlength(15, 5, 10);
 	Colliderlist[59].Setposition(lounge_table.mid);
 	//colliderbox for checking any collider(just one)
 	//@collider
@@ -561,7 +561,7 @@ void SceneSP2Room2::Init()
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 	//list of colliders
 	camera.setchecker(Colliderlist);
-	
+
 	//Set boundary here
 	camera.SetBounds(-415, 1500, -365, 360);
 	//camblink
@@ -570,7 +570,7 @@ void SceneSP2Room2::Init()
 	camBlinkOn = false;
 	camBlinkOff = true;
 	//door state
-	DS_classroom =CLOSED;
+	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	//trap mesh
@@ -582,7 +582,7 @@ void SceneSP2Room2::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(525, 0, 100)));
 	traplist.push_back(trap(trap::beartrap, Vector3(510, 0, -15)));
 	traplist.push_back(trap(trap::beartrap, Vector3(540, 0, 5)));
-	
+
 }
 
 void SceneSP2Room2::Set(Scene* scene)
@@ -636,12 +636,12 @@ void SceneSP2Room2::SetBackground()
 	if (!Background) {
 		Background = createIrrKlangDevice();
 		Background->play2D("Sound\\Background\\529750__banzai-bonsai__looping-horror-groaning.wav", true);
-	
+
 	}
 	if (!Effect) {
 		Effect = createIrrKlangDevice();
 		Effect->play2D("Sound\\Effects\\58453__sinatra314__footsteps-fast-on-pavement-loop.wav", true);
-	
+
 	}
 	if (!Jumpscare) {
 		Jumpscare = createIrrKlangDevice();
@@ -653,7 +653,7 @@ void SceneSP2Room2::SetBackground()
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
-	
+
 }
 
 void SceneSP2Room2::Update(double dt)
@@ -667,7 +667,7 @@ void SceneSP2Room2::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -681,7 +681,7 @@ void SceneSP2Room2::Update(double dt)
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else if(ghost->kill == false){
+	else if (ghost->kill == false) {
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -806,7 +806,7 @@ void SceneSP2Room2::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_x > 497  && campos_z < 503 && campos_z < -96 && schoolItems[0] != nullptr)
+	if (campos_x > 497 && campos_z < 503 && campos_z < -96 && schoolItems[0] != nullptr)
 	{
 		nearBattery = true;
 	}
@@ -842,7 +842,7 @@ void SceneSP2Room2::Update(double dt)
 		exitSchool = false;
 	}*/
 
-	
+
 
 	//fps
 	fps = 1.f / float(dt);
@@ -853,7 +853,7 @@ void SceneSP2Room2::Update(double dt)
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].spotDirection = -1 * camera.view;
-	
+
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -1150,7 +1150,7 @@ void SceneSP2Room2::Update(double dt)
 				Colliderlist[14].setactive(true);
 				camera.setchecker(Colliderlist);
 
-				
+
 			}
 		}
 		break;
@@ -1166,7 +1166,7 @@ void SceneSP2Room2::Update(double dt)
 				Colliderlist[13].setactive(false);
 				Colliderlist[14].setactive(false);
 				camera.setchecker(Colliderlist);
-				
+
 			}
 		}
 		break;
@@ -1182,7 +1182,7 @@ void SceneSP2Room2::Update(double dt)
 	case CLOSING:
 		classroom_door[0].rotateY -= 20 * float(dt);
 		classroom_door[1].rotateY += 20 * float(dt);
-	
+
 		if (classroom_door[0].rotateY <= 0)
 		{
 			classroom_door[0].rotateY = 0;
@@ -1251,8 +1251,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	}
-	
-	
+
+
 	//Locker
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
@@ -1263,7 +1263,7 @@ void SceneSP2Room2::Update(double dt)
 				inLocker = false;
 			}
 		}
-		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				camera.teleport(Lockerlist[i].getpos());
@@ -1281,7 +1281,7 @@ void SceneSP2Room2::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-				
+
 			}
 			break;
 		}
@@ -1322,7 +1322,7 @@ void SceneSP2Room2::Update(double dt)
 	if ((camera.position.y >= 0) && ((camera.position.x >= 540) && (camera.position.x <= 560)) && ((camera.position.z >= 10) && (camera.position.z <= 30)) && (jumpscare2Counter == 0))
 		jumpscare2Counter = 1;
 
-	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 1 ))
+	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && (jumpscare2Counter == 1))
 	{
 		jumpscareActive2 = true;
 		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
@@ -1703,7 +1703,7 @@ void SceneSP2Room2::Render()
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
 	modelStack.PopMatrix();//Added collider
-	
+
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
 	modelStack.Translate(540, 10, -100); // pos on map
@@ -1773,10 +1773,53 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
+
 	if (nearBattery == true || nearBattery2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
+
+
+
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	//UI OVERLAY
+
+	//Vision vignette
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 50)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (inLocker == true)
+	{
+		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
+	}
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//battery bar
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -1828,45 +1871,6 @@ void SceneSP2Room2::Render()
 			break;
 		}
 	}
-
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
-	//UI OVERLAY
-
-	//Vision vignette
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//warning overlay
-	if (ghost->state == Ghost::DEATH)
-	{
-		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 50)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 100)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
-	}
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//breathing icon
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	if (inLocker == true)
-	{
-		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
-	}
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
 	if (inventory->open)
 	{
@@ -1949,41 +1953,41 @@ void SceneSP2Room2::RenderSkybox()
 {
 	//scale, translate, rotate
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, 2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, 2.0f + camera.position.z);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 0+camera.position.y, -2.0f+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 0 + camera.position.y, -2.0f + camera.position.z);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-2.0f+camera.position.x, 0+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(-2.0f + camera.position.x, 0 + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x,-3.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, -3.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Rotate(180, 1, 0, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0+camera.position.x, 2.0f+camera.position.y, 0+camera.position.z);
+	modelStack.Translate(0 + camera.position.x, 2.0f + camera.position.y, 0 + camera.position.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(2000, 2000, 2000);
 	RenderMesh(meshList[GEO_BOTTOM], false);
@@ -1995,7 +1999,7 @@ void SceneSP2Room2::UseItem(int itemname)
 	switch (itemname)
 	{
 	case Item::BATTERY:
-		
+
 		flashlight_lifetime = 90;
 
 		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
@@ -2007,7 +2011,7 @@ void SceneSP2Room2::UseItem(int itemname)
 		{
 			inventory->items[inventory->selected] = nullptr;
 		}
-		
+
 		//else warning message?
 		break;
 	case Item::ITEM2:
