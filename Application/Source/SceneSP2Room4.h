@@ -86,6 +86,7 @@ public:
 		oplight,
 		frontdesk,
 		sparkplug,
+		BATTERY,
 
 		//UI tings
 		GEO_TEXT,
@@ -183,6 +184,7 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
