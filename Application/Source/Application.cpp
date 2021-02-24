@@ -165,6 +165,7 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
+	sceneMain->Exit();
 	delete scene1;
 	delete scene2;
 	delete scene3;
@@ -199,8 +200,6 @@ void Application::hidemousecursor(bool hide)
 	
 }
 
-
-
 int Application::GetWindowWidth()
 {
 	return m_width;
@@ -213,11 +212,12 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
-	Application::SetCursorPos(960, 540);
+
 	switch (scenetype)
 	{
 	case Scene_Main:
 		hidemousecursor(true);
+		Application::SetCursorPos(960, 540);
 		if (!mainInit)
 		{
 			sceneMain->Init();
@@ -233,28 +233,41 @@ void Application::setscene(int scenenum)
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
-		scene->Exit();
-		scene->Init();
+		
+		scene1->Exit();
+		scene2->Exit();
+		scene3->Exit();
+		scene4->Exit();
+		sceneMain->Exit();
+		scene1->Init();
+		scene2->Init();
+		scene3->Init();
+		scene4->Init();
+		
 		sceneMenu->SetBackground();
 		sceneMenu->Init();
 		scene = sceneMenu;
 		break;
 	case Scene_1:
+		Application::SetCursorPos(960, 540);
 		scene1->Set(scene);
 		scene1->SetBackground();
 		scene = scene1;
 		break;
 	case Scene_2:
+		Application::SetCursorPos(960, 540);
 		scene2->Set(scene);
 		scene2->SetBackground();
 		scene = scene2;
 		break;
 	case Scene_3:
+		Application::SetCursorPos(960, 540);
 		scene3->Set(scene);
 		scene3->SetBackground();
 		scene = scene3;
 		break;
 	case Scene_4:
+		Application::SetCursorPos(960, 540);
 		scene4->Set(scene);
 		scene4->SetBackground();
 		scene = scene4;

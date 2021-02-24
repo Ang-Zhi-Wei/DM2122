@@ -1801,10 +1801,9 @@ void SceneSP2Main::Update(double dt)
 			ghost->state = Ghost::SPIN;
 		}
 		break;
-	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -1978,8 +1977,11 @@ void SceneSP2Main::PauseUpdate()
 			std::cout << "qMenu Hit!" << std::endl;
 			gamepaused = false;
 			Application::pause(false);
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Menu);
-			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
@@ -2562,7 +2564,7 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	//inventory
 	if (inventory->open)
 	{
@@ -2724,9 +2726,9 @@ void SceneSP2Main::Render()
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
-	std::ostringstream test1;
+	/*std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);*/
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
@@ -2738,8 +2740,16 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
+	if (ghost != nullptr)
+	{
+		delete ghost;
+		ghost = nullptr;
+	}
+	if (inventory != nullptr)
+	{
+		delete inventory;
+		inventory = nullptr;
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

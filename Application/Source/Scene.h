@@ -114,11 +114,13 @@ public:
 		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction
+		Vector3 rawPos;
 		Vector3 axis;
 		float speed; //TBC normal - 5, chasing - 25, speedrunning away - 50; //player is 20 normal and 40 sprinting
 		float distance;
 		float waitTime;
 		float rotateY;
+		int lockerIndex;
 
 		Ghost()
 		{
@@ -127,13 +129,15 @@ public:
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
 			pos.Set(100, 3, 0); //far far away so no one knows its there
+			rawPos.Set(100, 0, 0);
 			rotateY = 0;
 			state = UNSPAWNED;
-			waitTime = 5;
+			waitTime = 3;
 			distance = 2000; //just anyth not < 100
 			kill = false;
+			lockerIndex = -1; //wtvr any number first
 		}
-		void UpdateMovement(double dt)
+		bool UpdateRotation(double dt)
 		{
 			float newangle = Math::RadianToDegree(atan(facing.x / facing.z)); //facing is vector that player/char shud be facing
 																				//newangle is angle of rotation for playerr/char based on the vector
@@ -185,8 +189,16 @@ public:
 					dir *= -1;
 				}
 				rotateY += float(dir * 100 * dt);
+				return true;
 			}
-			else 
+			else
+			{
+				return false;
+			}
+		}
+		void UpdateMovement(double dt)
+		{
+			if (!UpdateRotation(dt))
 			{
 				pos += facing * speed * float(dt);
 			}
