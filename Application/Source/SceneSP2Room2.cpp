@@ -181,8 +181,8 @@ void SceneSP2Room2::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	schoolItems[0] = new Item("battery", Item::BATTERY, (500, 4.5, -102));
-	schoolItems[1] = new Item("battery", Item::BATTERY, (491, 4.5, 85));
+	schoolItems[0] = new Item("battery", Item::BATTERY, Vector3(500, 4.5, -102));
+	schoolItems[1] = new Item("battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -466,7 +466,7 @@ void SceneSP2Room2::Init()
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[59].getxlength(), Colliderlist[59].getylength(), Colliderlist[59].getzlength());
 
 	//terrain
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateCubeT("floor/ceiling", 1, 1, 1, 0, 0, 1, 2.1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
 	meshList[GEO_WALL1] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 22, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL1]->textureID = LoadTGA("Image//schoolwall.tga");/////////////////////////////////////////////////////////
@@ -726,23 +726,24 @@ void SceneSP2Room2::Update(double dt)
 		Freleased = false;
 	}
 
-
-	if (nearBattery == true && Fpressed == true)
+	//items - batteries
+	pickUpBattery = false;
+	for (int i = 0; i < 2; i++)
 	{
-		PickUpItem(schoolItems[0]);
-		nearBattery = false;
-		Fpressed = false;
-		schoolItems[0] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(schoolItems[1]);
-		nearBattery2 = false;
-		Fpressed = false;
-		schoolItems[1] = NULL;
-
+		if (schoolItems[i] != nullptr)
+		{
+			if (camera.position.z > schoolItems[i]->pos.z - 10 && camera.position.z < schoolItems[i]->pos.z + 10
+				&& camera.position.x > schoolItems[i]->pos.x - 10 && camera.position.x > schoolItems[i]->pos.x - 10)
+			{
+				pickUpBattery = true;
+				if (Fpressed)
+				{
+					PickUpItem(schoolItems[i]);
+					Fpressed = false;
+					schoolItems[i] = nullptr;
+				}
+			}
+		}
 	}
 
 	if (!Application::IsKeyPressed('E'))
@@ -801,22 +802,7 @@ void SceneSP2Room2::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_x > 497 && campos_z < 503 && campos_z < -96 && schoolItems[0] != nullptr)
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
-
-	if (campos_x < 493 && campos_x > 488 && campos_z < 92 && campos_z > 78 && schoolItems[1] != nullptr)
-	{
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
-
+	
 
 	/*if (campos_x < 480 && campos_z > -4 && campos_z < 4)
 	{
@@ -880,7 +866,7 @@ void SceneSP2Room2::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -1289,6 +1275,7 @@ void SceneSP2Room2::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1756,24 +1743,20 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	if (schoolItems[0] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(500, 4.5, -102);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.03, 0.03, 0.03);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
+	//items
+	for (int i = 0; i < 2; i++)
+	{
+		if (schoolItems[i] != nullptr)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(schoolItems[i]->pos.x, schoolItems[i]->pos.y, schoolItems[i]->pos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.03, 0.03, 0.03);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	if (schoolItems[1] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(491, 4.5, 85);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.03, 0.03, 0.03);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-
-	}
+	
 
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -1800,7 +1783,7 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 
 
-	if (nearBattery == true || nearBattery2 == true)
+	if (pickUpBattery)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -1968,6 +1951,13 @@ void SceneSP2Room2::Render()
 void SceneSP2Room2::Exit()
 {
 	// Cleanup VBO here
+	for (int i = 0; i < 2; i++)
+	{
+		if (schoolItems[i] != nullptr)
+		{
+			delete schoolItems[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -2032,6 +2022,7 @@ void SceneSP2Room2::UseItem(int itemname)
 		}
 		else
 		{
+			delete inventory->items[inventory->selected];
 			inventory->items[inventory->selected] = nullptr;
 		}
 

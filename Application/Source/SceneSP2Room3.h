@@ -191,11 +191,10 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
-	bool nearBattery, nearBattery2;
+	bool pickUpItem;
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
-	bool nearScrewdriver;
 	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
