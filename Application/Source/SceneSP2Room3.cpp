@@ -1277,6 +1277,7 @@ void SceneSP2Room3::Update(double dt)
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
 				camera.teleport(Lockerlist[i].getpos());
+				camera.facefrontlocker(Lockerlist[i].getdirection());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
 				Fpressed = false;

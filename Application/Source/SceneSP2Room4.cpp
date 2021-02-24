@@ -1171,6 +1171,7 @@ void SceneSP2Room4::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				camera.teleport(Lockerlist[i].getpos());
+				camera.facefrontlocker(Lockerlist[i].getdirection());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
 				Fpressed = false;

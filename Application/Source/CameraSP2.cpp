@@ -380,6 +380,45 @@ void CameraSP2::Setslow(bool slow)
 	slowed = slow;
 }
 
+void CameraSP2::facefrontlocker(Vector3 lockerview)
+{
+	static const float viewY = 0.9f;
+	float angle;
+	lockerview.y = 0;
+	Vector3 temp;
+	temp = view;
+	temp.y = 0;
+	Application::SetCursorPos(mousePosX, 540);
+	while (true) {
+		angle = Math::RadianToDegree(acos(lockerview.Dot(temp) / (lockerview.Length() * temp.Length())));
+		if (!(angle>-1 &&angle<1)) {
+			SetCursorPos(mousePosX - 0.1, 540);
+			if (mousePosX > 1900)
+			{
+				Application::SetCursorPos(960, mousePosY);
+				offsetX += 940;
+			}
+			else if (mousePosX < 20)
+			{
+				Application::SetCursorPos(960, mousePosY);
+				offsetX -= 940;
+				//something i added
+			}
+			Application::GetCursorPos(&mousePosX, &mousePosY);
+			viewTarget.x = -1 * sin(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
+			viewTarget.z = cos(Math::DegreeToRadian(float(mousePosX + offsetX) * (3.0f / 16)));
+			viewTarget.y = viewY * cos(Math::DegreeToRadian(float(mousePosY) * (1.0f / 6.f)));
+			target = rawTarget + viewTarget;
+			temp = (target - position).Normalized();
+			temp.y = 0;
+		}
+		else {
+			break;
+		}
+	}
+	
+}
+
 
 
 
