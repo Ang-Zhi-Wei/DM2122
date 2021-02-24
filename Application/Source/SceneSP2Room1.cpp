@@ -564,7 +564,7 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
