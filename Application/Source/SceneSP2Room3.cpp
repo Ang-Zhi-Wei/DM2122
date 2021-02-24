@@ -1769,6 +1769,13 @@ void SceneSP2Room3::Render()
 void SceneSP2Room3::Exit()
 {
 	// Cleanup VBO here
+	for (int i = 0; i < 3; i++)
+	{
+		if (garageItems[i] != nullptr)
+		{
+			delete garageItems[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
