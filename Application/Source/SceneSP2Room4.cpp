@@ -260,9 +260,9 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 
-	//meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
-	//meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
-	//meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
+	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
+	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
@@ -1554,12 +1554,12 @@ void SceneSP2Room4::RenderRightRoom()
 	RenderMesh(meshList[corpse], true);
 	modelStack.PopMatrix();
 
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	modelStack.Translate(-39, translateobj, -22);
 	modelStack.Rotate(rotateobj, 0, 1, 0);
 	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[sparkplug], true);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-28, 1, -24);

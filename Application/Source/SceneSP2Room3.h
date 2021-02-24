@@ -188,6 +188,7 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
+	bool nearBattery, nearBattery2;
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
