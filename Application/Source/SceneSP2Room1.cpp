@@ -61,6 +61,11 @@ SceneSP2Room1::SceneSP2Room1()
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
 	//======
+
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 SceneSP2Room1::~SceneSP2Room1()
@@ -387,6 +392,20 @@ void SceneSP2Room1::Init()
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+
+	//puzzle items
+	meshList[leverbase] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.f, 0.f));
+	meshList[leverbase]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[leverhandle] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 1.0f, 0.0f));
+	meshList[leverhandle]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[painting] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 0.f, 1.0f));
+	meshList[painting]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[safe] = MeshBuilder::GenerateOBJ("Building", "OBJ//safe.obj");
+	meshList[safe]->textureID = LoadTGA("Image//metal1.tga");
+	meshList[safe]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//init update stuff
 	LSPEED = 10.F;
@@ -1342,6 +1361,8 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 90 + double(45);
 	}
 
+
+
 	////Jumpscare, living room
 	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
 	//{
@@ -1419,7 +1440,43 @@ void SceneSP2Room1::Update(double dt)
 	//	jumpscareActive4 = true;
 	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	//}
-	
+
+	//lever rotation
+	//rotate_lever += 40 * float(dt);
+
+	//puzzles
+	//lever pulling logic 
+	switch (leverIsPulled)
+	{
+	case(yes):
+		if (rotate_painting < 180)
+		{
+			rotate_painting += 40 * float(dt);
+		}
+		if (move_safe > 61.5 && rotate_painting >= 180)
+		{
+			move_safe -= 1.5 * float(dt);
+		}
+		break;
+	case(no):
+		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
+		{
+			interact = true;
+			interact_message = "pull lever";
+			if (Fpressed)
+			{
+				leverIsPulled = pulling;
+			}
+		}
+		break;
+	case(pulling):
+		if (rotate_lever < 60)
+			rotate_lever += 60 * float(dt);
+		else if (rotate_lever >= 60)
+			leverIsPulled = yes;
+	}
+
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1536,6 +1593,51 @@ void SceneSP2Room1::PauseUpdate()
 	}
 }
 
+
+void SceneSP2Room1::RenderPuzzleItems()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 95.5);
+	modelStack.Scale(2, 3, 0.5);
+	RenderMesh(meshList[leverbase], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 96.7);
+	modelStack.Translate(0, 0, -1.4);
+	modelStack.Rotate(rotate_lever, 1, 0, 0);
+	modelStack.Translate(0, 0, 1.4);
+	modelStack.Scale(0.5, 0.5, 2);
+	RenderMesh(meshList[leverhandle], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(66, 9.5, 150);
+	modelStack.Translate(-2, 0, 0);
+	modelStack.Rotate(rotate_painting, 0, 1, 0);
+	modelStack.Translate(2, 0, 0);
+	modelStack.Scale(4, 5, 0.5);
+	RenderMesh(meshList[painting], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(move_safe, 7.5, 150);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[safe], true);
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(37.5, 7.2, -44);
+	//modelStack.Translate(2.5, 0, 0);
+	//modelStack.Rotate(110, 0, 1, 0);
+	//modelStack.Translate(-2.5, 0, 0);
+	//modelStack.Scale(5, 15.5, 1);
+	//RenderMesh(meshList[GEO_LEFTDOOR], true);
+	//modelStack.PopMatrix();
+}
+
+
 void SceneSP2Room1::Render()
 {
 
@@ -1638,9 +1740,12 @@ void SceneSP2Room1::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-24.5, 0, -600);
+
+
+	//render puzzle items
+	RenderPuzzleItems();
 	
 	//Main door
-
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
 

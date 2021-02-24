@@ -83,6 +83,14 @@ public:
 		BATTERY,
 		
 
+		//puzzle items
+		leverbase,
+		leverhandle,
+		painting,
+		safe,
+		key,
+
+
 		//@pause
 		GEO_PAUSEMENU,
 
@@ -276,6 +284,18 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 
+	//puzzle animation factors and logic
+	float rotate_painting;
+	float rotate_lever;
+	float move_safe;
+	enum leverPulled
+	{
+		yes,
+		no,
+		pulling,
+	};
+	leverPulled leverIsPulled;
+
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
@@ -287,6 +307,6 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderPuzzleItems();
 };
-
 #endif
