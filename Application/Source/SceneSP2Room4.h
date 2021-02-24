@@ -95,6 +95,11 @@ public:
 		GEO_BAR, //stamina
 		GEO_JUMPSCARE1,
 		GEO_REDDOT,
+		GEO_DEATH,
+		GEO_WARNING2,
+		GEO_WARNING1,
+		GEO_STAMINA,
+		GEO_BATTERY,
 
 		//trap
 		GEO_BEARTRAP,
