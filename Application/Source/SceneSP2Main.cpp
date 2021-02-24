@@ -733,6 +733,7 @@ void SceneSP2Main::Init()
 	Colliderlist[39].Setposition(Vector3(308, -7, -295));
 	Colliderlist[39].setlength(52, 50, 10);
 	//left/right fence
+	//@fence
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[40].setlength(10, 50, 52);
 	Colliderlist[40].Setposition(Vector3(-335, -7, 271));
@@ -750,7 +751,7 @@ void SceneSP2Main::Init()
 	Colliderlist[44].Setposition(Vector3(-335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[45].setlength(10, 50, 52);
-	Colliderlist[45].Setposition(Vector3(-335, -7, 35));
+	Colliderlist[45].Setposition(Vector3(-335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[46].setlength(10, 50, 52);
 	Colliderlist[46].Setposition(Vector3(-335, -7, -271));
@@ -768,7 +769,7 @@ void SceneSP2Main::Init()
 	Colliderlist[50].Setposition(Vector3(-335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[51].setlength(10, 50, 52);
-	Colliderlist[51].Setposition(Vector3(-335, -7, -35));
+	Colliderlist[51].Setposition(Vector3(-335, -7, -45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[52].setlength(10, 50, 52);
 	Colliderlist[52].Setposition(Vector3(335, -7, 271));
@@ -786,7 +787,7 @@ void SceneSP2Main::Init()
 	Colliderlist[56].Setposition(Vector3(335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[57].setlength(10, 50, 52);
-	Colliderlist[57].Setposition(Vector3(335, -7, 35));
+	Colliderlist[57].Setposition(Vector3(335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[58].setlength(10, 50, 52);
 	Colliderlist[58].Setposition(Vector3(335, -7, -271));
@@ -804,7 +805,7 @@ void SceneSP2Main::Init()
 	Colliderlist[62].Setposition(Vector3(335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[63].setlength(10, 50, 52);
-	Colliderlist[63].Setposition(Vector3(335, -7, -35));
+	Colliderlist[63].Setposition(Vector3(335, -7, -45.5));
 	//Tree colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[64].setlength(10, 20, 10);
@@ -1037,7 +1038,7 @@ void SceneSP2Main::Init()
 	Colliderlist[138].setlength(70, 100, 105);
 	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[45].getxlength(), Colliderlist[45].getylength(), Colliderlist[45].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -2171,7 +2172,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
+	modelStack.Translate(Colliderlist[45].getPosition().x, Colliderlist[45].getPosition().y, Colliderlist[45].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
