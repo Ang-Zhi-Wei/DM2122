@@ -71,6 +71,7 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		BATTERY,
 
 		//@pause
 		GEO_PAUSEMENU,
@@ -195,10 +196,12 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
+	Item* houseItems[4];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
 	bool camBlinkOff;
+	bool nearBattery, nearBattery2, nearBattery3;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
