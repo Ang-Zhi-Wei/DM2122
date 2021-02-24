@@ -73,7 +73,7 @@ public:
 				break;
 			case Screwdriver:
 				description = "A screwdriver";
-				image = "Assigment2Images/screwdriver.tga";
+				image = "Assigment2Images/screwdrivericon.tga";
 				break;
 			}
 		}

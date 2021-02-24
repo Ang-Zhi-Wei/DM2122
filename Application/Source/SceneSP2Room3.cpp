@@ -197,9 +197,6 @@ void SceneSP2Room3::Init()
 	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	meshList[barrels]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	/*meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
-	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
-	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
 
 	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver2.obj");
 	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver2.tga");
@@ -228,7 +225,13 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
+	garageItems[1] = new Item("battery", Item::BATTERY, (-20, 7.5, -60));
+	garageItems[2] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
 
 
 	//light 0
@@ -650,6 +653,24 @@ void SceneSP2Room3::Update(double dt)
 
 	}
 
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[1]);
+		nearBattery = false;
+		Fpressed = false;
+		garageItems[1] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[2]);
+		nearBattery2 = false;
+		Fpressed = false;
+		garageItems[2] = NULL;
+
+	}
+
 
 	if (nearExit == true && Fpressed == true)
 	{
@@ -730,6 +751,24 @@ void SceneSP2Room3::Update(double dt)
 	}
 	else {
 		nearScrewdriver = false;
+	}
+
+
+	if (campos_x < -15 && campos_z < -56 && campos_z > -63)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	//18 -63
+	if (campos_x > 18 && campos_x < 23 && campos_z > -64 && campos_z < -54)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
 	}
 
 	if (exitGarage == true && nearExit == true)
@@ -1543,6 +1582,25 @@ void SceneSP2Room3::Render()
 	}
 
 
+	//batteries
+	if (garageItems[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 7.5, -60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+	if (garageItems[2] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(25, 0, -60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.06, 0.06, 0.06);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
@@ -1583,7 +1641,7 @@ void SceneSP2Room3::Render()
 
 
 
-	if (nearScrewdriver == true)
+	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
