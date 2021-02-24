@@ -196,12 +196,12 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
-	Item* houseItems[4];
+	Item* houseItems[3];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
 	bool camBlinkOff;
-	bool nearBattery, nearBattery2, nearBattery3;
+	bool pickUpBattery;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;

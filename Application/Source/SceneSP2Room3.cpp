@@ -15,7 +15,6 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight_lifetime = 90;
 	inLocker = false;
 	exitGarage = false;
-	nearScrewdriver = false;
 	showSideBox = true;
 	SpeakTimer = 0;
 	Qpressed = Qreleased = false;
@@ -231,54 +230,12 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
-	garageItems[1] = new Item("battery", Item::BATTERY, (-20, 7.5, -60));
-	garageItems[2] = new Item("battery", Item::BATTERY, (25, 0, -60));
+	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-22, 7.8, -95));
+	garageItems[1] = new Item("battery", Item::BATTERY, Vector3(-20, 7.5, -60));
+	garageItems[2] = new Item("battery", Item::BATTERY, Vector3(25, 0, -60));
 
 
-	//light 0
-	//light[0].type = Light::LIGHT_POINT;
-	//light[0].position.Set(0, 7, 270);
-	//light[0].color.Set(White);
-	//light[0].power = 1;
-	//light[0].kC = 1.f;
-	//light[0].kL = 0.01f;
-	//light[0].kQ = 0.001f;
-	//light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	//light[0].cosInner = cos(Math::DegreeToRadian(30));
-	//light[0].exponent = 3.f;
-	//light[0].spotDirection.Set(0.f, 1.f, 0.f);
-	//glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1,&light[0].color.r);
-	//glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
-	//glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
-	//glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
-	//glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
-	//glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
-	//glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
-	//glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
-	//glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
-	//light 1
-	//light[1].type = Light::LIGHT_SPOT;
-	//light[1].position.Set(0, 3, 270);
-	//light[1].color.Set(White);
-	//light[1].power = 2; 
-	//light[1].kC = 1.f;
-	//light[1].kL = 0.01f;
-	//light[1].kQ = 0.001f;
-	//light[1].cosCutoff = cos(Math::DegreeToRadian(7));
-	//light[1].cosInner = cos(Math::DegreeToRadian(1));
-	//light[1].exponent = 3.f;
-	//light[1].spotDirection.Set(0.f, -1.f, 0.f);
-	//glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1,
-	//	&light[1].color.r);
-	//glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
-	//glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
-	//glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
-	//glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
-	//glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
-	//glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
-	//glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
-	//glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
+	
 	
 	//other lights
 	light[2].power = 0;
@@ -666,32 +623,24 @@ void SceneSP2Room3::Update(double dt)
 		Freleased = false;
 	}
 
-	if (nearScrewdriver == true && Fpressed == true)
+	//items - batteries
+	pickUpItem = false;
+	for (int i = 0; i < 3; i++)
 	{
-		PickUpItem(garageItems[0]);
-		nearScrewdriver = false;
-		Fpressed = false;
-		garageItems[0] = NULL;
-		screwDriverFound = 1;
-
-	}
-
-	if (nearBattery == true && Fpressed == true)
-	{
-		PickUpItem(garageItems[1]);
-		nearBattery = false;
-		Fpressed = false;
-		garageItems[1] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(garageItems[2]);
-		nearBattery2 = false;
-		Fpressed = false;
-		garageItems[2] = NULL;
-
+		if (garageItems[i] != nullptr)
+		{
+			if (camera.position.z > garageItems[i]->pos.z - 10 && camera.position.z < garageItems[i]->pos.z + 10
+				&& camera.position.x > garageItems[i]->pos.x - 10 && camera.position.x > garageItems[i]->pos.x - 10)
+			{
+				pickUpItem = true;
+				if (Fpressed)
+				{
+					PickUpItem(garageItems[i]);
+					Fpressed = false;
+					garageItems[i] = nullptr;
+				}
+			}
+		}
 	}
 
 
@@ -768,31 +717,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91 && garageItems[0] != nullptr)
-	{
-		nearScrewdriver = true;
-	}
-	else {
-		nearScrewdriver = false;
-	}
-
-
-	if (campos_x < -15 && campos_z < -56 && campos_z > -63 && garageItems[1] != nullptr)
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
-
-	//18 -63
-	if (campos_x > 18 && campos_x < 23 && campos_z > -64 && campos_z < -54 && garageItems[2] != nullptr)
-	{
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
+	
 
 	if (exitGarage == true && nearExit == true)
 	{
@@ -848,7 +773,7 @@ void SceneSP2Room3::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -1276,7 +1201,9 @@ void SceneSP2Room3::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
+				camera.facefrontlocker(Lockerlist[i].getdirection());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
 				Fpressed = false;
@@ -1471,10 +1398,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[14].getPosition().x, Colliderlist[14].getPosition().y, Colliderlist[14].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
@@ -1707,7 +1634,7 @@ void SceneSP2Room3::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
 
-	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
+	if (pickUpItem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -1843,6 +1770,13 @@ void SceneSP2Room3::Render()
 void SceneSP2Room3::Exit()
 {
 	// Cleanup VBO here
+	for (int i = 0; i < 3; i++)
+	{
+		if (garageItems[i] != nullptr)
+		{
+			delete garageItems[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -1934,6 +1868,7 @@ void SceneSP2Room3::UseItem(int itemname)
 		}
 		else
 		{
+			delete inventory->items[inventory->selected];
 			inventory->items[inventory->selected] = nullptr;
 		}
 		

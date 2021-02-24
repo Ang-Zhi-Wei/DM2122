@@ -349,9 +349,9 @@ void SceneSP2Room1::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
-	houseItems[0] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
-	houseItems[1] = new Item("battery", Item::BATTERY, (35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, (52, 1, -496));
+	houseItems[0] = new Item("battery", Item::BATTERY, Vector3(-22, 7.8, -95));
+	houseItems[1] = new Item("battery", Item::BATTERY, Vector3(35, 1, -435));
+	houseItems[2] = new Item("battery", Item::BATTERY, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -662,31 +662,24 @@ void SceneSP2Room1::Update(double dt)
 		Freleased = false;
 	}
 
-	if (nearBattery == true && Fpressed == true)
+	//items - batteries
+	pickUpBattery = false;
+	for (int i = 0; i < 3; i++)
 	{
-		PickUpItem(houseItems[0]);
-		nearBattery = false;
-		Fpressed = false;
-		houseItems[0] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(houseItems[1]);
-		nearBattery2 = false;
-		Fpressed = false;
-		houseItems[1] = NULL;
-
-	}
-
-	if (nearBattery3 == true && Fpressed == true)
-	{
-		PickUpItem(houseItems[2]);
-		nearBattery3 = false;
-		Fpressed = false;
-		houseItems[2] = NULL;
-
+		if (houseItems[i] != nullptr)
+		{
+			if (camera.position.z > houseItems[i]->pos.z - 10 && camera.position.z < houseItems[i]->pos.z + 10
+				&& camera.position.x > houseItems[i]->pos.x - 10 && camera.position.x > houseItems[i]->pos.x - 10)
+			{
+				pickUpBattery = true;
+				if (Fpressed)
+				{
+					PickUpItem(houseItems[i]);
+					Fpressed = false;
+					houseItems[i] = nullptr;
+				}
+			}
+		}
 	}
 
 	if (!Application::IsKeyPressed('E'))
@@ -745,29 +738,7 @@ void SceneSP2Room1::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_x < -15 && campos_x > -22 && campos_z < -416 && campos_z > -428 && houseItems[0] != nullptr)
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
-
-	if (campos_x > 27 && campos_x < 38 && campos_z < -431 && campos_z > -438 && houseItems[1] != nullptr)
-	{
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
-
-	if (campos_x > 49 && campos_x < 60 && campos_z < -486 && campos_z > -502 && houseItems[2] != nullptr)
-	{
-		nearBattery3 = true;
-	}
-	else {
-		nearBattery3 = false;
-	}
+	
 	//Locker
 
 
@@ -790,7 +761,9 @@ void SceneSP2Room1::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
+				camera.facefrontlocker(Lockerlist[i].getdirection());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
 				Fpressed = false;
@@ -1095,7 +1068,7 @@ void SceneSP2Room1::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -1840,33 +1813,19 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 
-	if (houseItems[0] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(-20, 1, -421);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.06, 0.06, 0.06);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
+	//items
+	for (int i = 0; i < 3; i++)
+	{
+		if (houseItems[i] != nullptr)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(houseItems[i]->pos.x, houseItems[i]->pos.y, houseItems[i]->pos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.03, 0.03, 0.03);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	if (houseItems[1] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(35, 1, -435);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.06, 0.06, 0.06);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-
-	if (houseItems[2] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(52, 1, -496);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.06, 0.06, 0.06);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-
 
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -1934,7 +1893,7 @@ void SceneSP2Room1::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 
-	if (nearBattery == true || nearBattery2 == true || nearBattery3 == true)
+	if (pickUpBattery)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2073,6 +2032,14 @@ void SceneSP2Room1::Render()
 void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (houseItems[i] != nullptr)
+		{
+			delete houseItems[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
@@ -2197,6 +2164,7 @@ void SceneSP2Room1::UseItem(int itemname)
 		}
 		else
 		{
+			delete inventory->items[inventory->selected];
 			inventory->items[inventory->selected] = nullptr;
 		}
 		
