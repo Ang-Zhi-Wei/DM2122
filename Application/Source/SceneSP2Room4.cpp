@@ -1358,10 +1358,7 @@ void SceneSP2Room4::Update(double dt)
 			bruhmoment = true;
 		}
 	} 
-	else
-	{
-		interact = false;
-	}
+
 
 }
 
