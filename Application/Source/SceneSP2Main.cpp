@@ -2211,9 +2211,30 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
-
+	//Main sign / garage building
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 9, 270);
+	modelStack.Translate(20, -3, 300);
+	modelStack.Scale(5, 5, 3);
+	RenderMesh(meshList[GEO_SIGN], true);
+	modelStack.PopMatrix();
+
+	//
+	modelStack.PushMatrix();
+	modelStack.Translate(320, 0, 10);
+	modelStack.Scale(10, 10, 1);
+	RenderMesh(meshList[GEO_SIGN], true);
+	modelStack.PopMatrix();
+	
+	//House
+	modelStack.PushMatrix();
+	modelStack.Translate(20, 0, -300);
+	modelStack.Scale(10, 10, 1);
+	RenderMesh(meshList[GEO_SIGN], true);
+	modelStack.PopMatrix();
+
+	//
+	modelStack.PushMatrix();
+	modelStack.Translate(-320, 0, 10);
 	modelStack.Scale(10, 10, 1);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
