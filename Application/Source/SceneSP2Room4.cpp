@@ -1375,14 +1375,31 @@ void SceneSP2Room4::Update(double dt)
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
 		interact = true;
-		interact_message = "Press f to pay respects"; 
+		interact_message = "Press f to pay respects";
 		if (Fpressed)
 		{
+
+			jumpscareActive1 = true;
+			jumpscareTimerActive1 = true;
+			Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+
+
 			//jumpscare code here
 			bruhmoment = true;
 		}
-	} 
 
+	}
+	else
+	{
+		if (jumpscareTimerActive1 == true)
+		{
+			jumpscareTimer1 -= dt;
+		}
+		if (jumpscareTimer1 <= 0)
+		{
+			jumpscareActive1 = false;
+		}
+	}
 
 }
 
