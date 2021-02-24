@@ -7,7 +7,6 @@
 #include <sstream>
 #include <iostream>
 
-#include <filesystem>
 
 
 
@@ -396,6 +395,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_TRUCK]->textureID = LoadTGA("Image//Silver.tga");
 	meshList[GEO_TRUCK]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[GEO_END] = MeshBuilder::GenerateQuad2("End", 1, 1, 0);
+	meshList[GEO_END]->textureID = LoadTGA("Image//WinEndingScreen.tga");
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -602,6 +603,9 @@ void SceneSP2Main::Init()
 	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
+
+	NearCar = false;
+	WinLevel = 0;
 
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -1171,7 +1175,26 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	
-	
+
+	//At the car
+	//Car coord:
+	if ((camera.position.x <= 60) && (camera.position.x >= 10) && (camera.position.z <= 370) && (camera.position.z >= 345))
+	{
+		NearCar = true;
+		if (Fpressed) //Insert win conditions after this as parameters
+		{
+			WinLevel = 1;
+		}
+		else
+		{
+			WinLevel = 2;
+		}
+	}
+	else
+	{
+		NearCar = false;
+		WinLevel = 0;
+	}
 	//sounds when ghost get too close
 	if (ghost->kill==false && ghost->state==Ghost::SPIN) {
 		ghost->kill = true;
@@ -1942,6 +1965,7 @@ void SceneSP2Main::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
 }
 
 void SceneSP2Main::PauseUpdate()
@@ -2627,7 +2651,7 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Ah, Hello! I didn't notice you were behind me.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 5:
-		RenderTextOnScreen(meshList[GEO_TEXT], "I didn't know people still come to this place...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "I didn't know people still came to this place...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 6:
 		RenderTextOnScreen(meshList[GEO_TEXT], "I heard rumors about this place. Are they true sir?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -2645,7 +2669,7 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "There are stuff lying around in the buildings.. ", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 11:
-		RenderTextOnScreen(meshList[GEO_TEXT], "But be  CAREFUL...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "But be CAREFUL...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 12:
 		RenderTextOnScreen(meshList[GEO_TEXT], "What? Why?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -2655,7 +2679,13 @@ void SceneSP2Main::Render()
 		break;
 	}
 
+	if (WinLevel == 1)
+	{
+		RenderMeshOnScreen(meshList[GEO_END], 40, 30, 100, 100);
+	}
 
+	if (WinLevel == 2) //If player doesn't have everything yet
+		RenderTextOnScreen(meshList[GEO_TEXT], "I... Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 
 	//interaction sentences
 	switch (Interact_Num)

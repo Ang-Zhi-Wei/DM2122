@@ -109,6 +109,7 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		GEO_END,
 
 		//pause
         GEO_PAUSEMENU,
@@ -310,6 +311,10 @@ private:
 	float suffocationTranslateDir;
 	float suffocationScale;
 	float suffocationScaleDir;
+
+	//Win conditions
+	bool NearCar;
+	int WinLevel;
 
 	//Irrklang sound
 	ISoundEngine* Background;
