@@ -236,6 +236,12 @@ void SceneSP2Room1::Init()
 	meshList[SHELVES] = MeshBuilder::GenerateOBJ("man npc", "OBJ//bookshelf.obj");
 	meshList[SHELVES]->textureID = LoadTGA("Assigment2Images//shelf.tga");
 	meshList[SHELVES]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[BOOKSHELF] = MeshBuilder::GenerateOBJ("man npc", "OBJ//Bookshelf2.obj");
+	meshList[BOOKSHELF]->textureID = LoadTGA("Assigment2Images//bookshelf.tga");
+	meshList[BOOKSHELF]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[WOODENTABLE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//table2.obj");
+	meshList[WOODENTABLE]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
+	meshList[WOODENTABLE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	
 
@@ -1826,29 +1832,42 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(10, 1, -480);
-	modelStack.Scale(0.07, 0.07, 0.07);
+	modelStack.Translate(0, 1, -480);
+	modelStack.Scale(1.9, 1.9, 1.9);
 	RenderMesh(meshList[SOFA], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(15, 9, -450);
+	modelStack.Translate(0, 9, -450);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[TELEVISION], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(10, 4, -450);
+	modelStack.Translate(0, 4, -450);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.03, 0.03, 0.03);
 	RenderMesh(meshList[TV_STAND], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 6, -500);
-	modelStack.Scale(8, 8, 8);
+	modelStack.Translate(0, 4, -460);
+	modelStack.Scale(1, 1, 1);
+	RenderMesh(meshList[WOODENTABLE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 8.5, -500);
+	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(30, 4, -470);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(0.04, 0.04, 0.04);
+	RenderMesh(meshList[BOOKSHELF], true);
 	modelStack.PopMatrix();
 
 
