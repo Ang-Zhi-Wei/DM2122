@@ -17,7 +17,6 @@ SceneSP2Room3::SceneSP2Room3()
 	exitGarage = false;
 	nearScrewdriver = false;
 	showSideBox = true;
-	SpeakPhase = 0;
 	SpeakTimer = 0;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -59,6 +58,7 @@ void SceneSP2Room3::Init()
 	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
+	SpeakTimer = 0;
 	//...
 	
 	//light 0
@@ -970,20 +970,19 @@ void SceneSP2Room3::Update(double dt)
 		}
 	}
 
-	switch (SpeakPhase)
-	{
-		//default
-
-	case 0:
-		showChatbox = false;
-		SpeakTimer = 0;
-	case 14:
-		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-			SpeakTimer = 0;
-			SpeakPhase = 0;
-		}
-	}
+	//switch (SpeakPhase)
+	//{
+	//	//default
+	//case 0:
+	//	showChatbox = false;
+	//	SpeakTimer = 0;
+	//case 14:
+	//	SpeakTimer += dt;
+	//	if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+	//		SpeakTimer = 0;
+	//		SpeakPhase = 0;
+	//	}
+	//}
 
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
@@ -1699,9 +1698,13 @@ void SceneSP2Room3::Render()
 
 
 
-	if (garageItems[0] == nullptr)
-	{
-		SpeakPhase = 14;
+	//if (garageItems[0] == nullptr && SpeakPhase != 0)
+	//{
+	//	SpeakPhase = 14;
+	//}
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
 
 	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
@@ -1709,9 +1712,6 @@ void SceneSP2Room3::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 	
-
-
-
 	if (nearExit == true) {
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -1750,9 +1750,7 @@ void SceneSP2Room3::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
@@ -1798,15 +1796,15 @@ void SceneSP2Room3::Render()
 			break;
 		}
 	}
-	switch (SpeakPhase)
-	{
-	case 0:
-		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
-		break;
-	case 14:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Got the screwdriver..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
-		break;
-	}
+	//switch (SpeakPhase)
+	//{
+	//case 0:
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+	//	break;
+	//case 14:
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Got the screwdriver..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+	//	break;
+	//}
 	//inventory
 	if (inventory->open)
 	{
