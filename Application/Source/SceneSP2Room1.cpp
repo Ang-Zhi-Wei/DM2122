@@ -484,7 +484,6 @@ void SceneSP2Room1::Init()
 	Colliderlist[16].setlength(3.9, 10, 4.3);
 	Colliderlist[16].Setposition(Lockerlist[1].getpos());
 	//door colliders
-	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[17].setlength(5, 15, 3);
 	Colliderlist[17].Setposition(Vector3(-32, 7.5, -430));
@@ -494,8 +493,28 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[19].setlength(5, 15, 3);
 	Colliderlist[19].Setposition(Vector3(65.5, 7.5, -505));
+	//House obj colliders
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[20].setlength(15, 15, 10);
+	Colliderlist[20].Setposition(Vector3(0, 1, -480));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[21].setlength(22, 15, 8);
+	Colliderlist[21].Setposition(Vector3(0, 9, -450));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[22].setlength(17, 15, 7);
+	Colliderlist[22].Setposition(Vector3(0, -0.5, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[23].setlength(10, 15, 4);
+	Colliderlist[23].Setposition(Vector3(0, 8.5, -500));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[24].setlength(4.5, 15, 20);
+	Colliderlist[24].Setposition(Vector3(30.5, 4, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[25].setlength(5.5, 15, 10);
+	Colliderlist[25].Setposition(Vector3(30, 4, -470));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[25].getxlength(), Colliderlist[25].getylength(), Colliderlist[25].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -1576,10 +1595,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Colliderlist[19].getPosition().x, Colliderlist[19].getPosition().y, Colliderlist[19].getPosition().z);
-	//RenderMesh(meshList[Colliderbox], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[25].getPosition().x, Colliderlist[25].getPosition().y, Colliderlist[25].getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();
 
 	
 	//trap rendering
@@ -1845,15 +1864,15 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, 1, -480);
 	modelStack.Scale(1.9, 1.9, 1.9);
 	RenderMesh(meshList[SOFA], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 9, -450);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[TELEVISION], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 4, -450);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -1865,14 +1884,14 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, -0.5, -470);
 	modelStack.Scale(2.1, 2.1, 2.1);
 	RenderMesh(meshList[WOODENTABLE], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 8.5, -500);
 	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, -470);
 	modelStack.Rotate(180, 0, 1, 0);
