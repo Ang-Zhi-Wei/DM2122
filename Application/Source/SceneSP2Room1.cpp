@@ -1487,14 +1487,7 @@ void SceneSP2Room1::Render()
 	//RenderMesh(meshList[Colliderbox], false);
 	//modelStack.PopMatrix();
 
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
+	
 	//trap rendering
 	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
@@ -1753,7 +1746,14 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
-
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);

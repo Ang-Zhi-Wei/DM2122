@@ -1734,15 +1734,7 @@ void SceneSP2Room4::Render()
 			break;
 		}
 	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
+	
 	
 	
 
@@ -1896,7 +1888,15 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_SKULL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
