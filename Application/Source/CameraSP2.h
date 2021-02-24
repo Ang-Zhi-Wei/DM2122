@@ -46,6 +46,7 @@ public:
 	void SetBounds(float X1, float X2, float Z1, float Z2);
 	void teleport(Vector3 position);
 	void Setslow(bool slow);
+	void facefrontlocker(Vector3 lockerview);
 };
 
 #endif

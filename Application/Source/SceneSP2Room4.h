@@ -88,6 +88,7 @@ public:
 		sparkplug,
 		BATTERY,
 		deadbody,
+		rose,
 
 		//UI tings
 		GEO_TEXT,
@@ -311,6 +312,7 @@ private:
 	bool itemplaced[7];
 	bool doorunlocked;
 	bool bruhmoment;
+	bool flowerstaken;
 
 	//@pause 
 	bool PKeypressed, PKeyreleased;
@@ -319,6 +321,7 @@ private:
 	double MposX, MposY;
 
 	float doorRotate;
+
 	enum bodynumber
 	{
 		body1_r,
@@ -330,6 +333,7 @@ private:
 		body_op,
 
 	};
+
 };
 
 #endif

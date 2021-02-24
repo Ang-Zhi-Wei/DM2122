@@ -1203,6 +1203,7 @@ void SceneSP2Room3::Update(double dt)
 				ghost->lockerIndex = i;
 				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
+				camera.facefrontlocker(Lockerlist[i].getdirection());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
 				Fpressed = false;
@@ -1397,10 +1398,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[14].getPosition().x, Colliderlist[14].getPosition().y, Colliderlist[14].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
