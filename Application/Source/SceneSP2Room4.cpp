@@ -36,7 +36,6 @@ SceneSP2Room4::SceneSP2Room4()
 	//@pause
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
-	//======
 
 	//inventory icons
 	itemImage[0] = meshList[GEO_SPARKPLUGICON];
@@ -971,7 +970,6 @@ void SceneSP2Room4::Update(double dt)
 		}
 		PKeyreleased = false;
 	}
-	//================================================================
 
 	//@pause
 	if (PKeypressed)
