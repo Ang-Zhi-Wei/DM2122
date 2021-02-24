@@ -17,6 +17,8 @@ SceneSP2Room3::SceneSP2Room3()
 	exitGarage = false;
 	nearScrewdriver = false;
 	showSideBox = true;
+	SpeakPhase = 0;
+	SpeakTimer = 0;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -506,6 +508,9 @@ void SceneSP2Room3::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+
+
+
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -607,6 +612,11 @@ void SceneSP2Room3::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
+
+	double SPEECH_LENGTH_FAST = 2;
+	double SPEECH_LENGTH_SHORT = 3;
+	double SPEECH_LENGTH_MEDIUM = 5;
+	double SPEECH_LENGTH_LONG = 8;
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -953,6 +963,21 @@ void SceneSP2Room3::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+		}
+	}
+
+	switch (SpeakPhase)
+	{
+		//default
+
+	case 0:
+		showChatbox = false;
+		SpeakTimer = 0;
+	case 14:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase = 0;
 		}
 	}
 
@@ -1644,6 +1669,10 @@ void SceneSP2Room3::Render()
 
 
 
+	if (garageItems[0] == nullptr)
+	{
+		SpeakPhase = 14;
+	}
 
 	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
 	{
@@ -1738,6 +1767,15 @@ void SceneSP2Room3::Render()
 
 			break;
 		}
+	}
+	switch (SpeakPhase)
+	{
+	case 0:
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+		break;
+	case 14:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Got the screwdriver..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		break;
 	}
 	//inventory
 	if (inventory->open)

@@ -1684,8 +1684,6 @@ void SceneSP2Main::Update(double dt)
 			SpeakPhase = 0;
 			ObjectivePhase = 2;
 		}
-
-
 		break;
 	}
 	//light
