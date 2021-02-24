@@ -231,7 +231,7 @@ void SceneSP2Room3::Init()
 
 	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
 	garageItems[1] = new Item("battery", Item::BATTERY, (-20, 7.5, -60));
-	garageItems[2] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
+	garageItems[2] = new Item("battery", Item::BATTERY, (25, 0, -60));
 
 
 	//light 0
@@ -754,7 +754,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91)
+	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91 && garageItems[0] != nullptr)
 	{
 		nearScrewdriver = true;
 	}
@@ -763,7 +763,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (campos_x < -15 && campos_z < -56 && campos_z > -63)
+	if (campos_x < -15 && campos_z < -56 && campos_z > -63 && garageItems[1] != nullptr)
 	{
 		nearBattery = true;
 	}
@@ -772,7 +772,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 	//18 -63
-	if (campos_x > 18 && campos_x < 23 && campos_z > -64 && campos_z < -54)
+	if (campos_x > 18 && campos_x < 23 && campos_z > -64 && campos_z < -54 && garageItems[2] != nullptr)
 	{
 		nearBattery2 = true;
 	}

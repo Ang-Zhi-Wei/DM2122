@@ -207,7 +207,7 @@ private:
 	double Mousex, Mousey;
 	double MposX, MposY;
 
-	Item* garageItems[10];
+	Item* garageItems[3];
 
 	struct Wall
 	{
