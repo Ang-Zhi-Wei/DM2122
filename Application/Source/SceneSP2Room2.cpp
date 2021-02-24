@@ -842,8 +842,6 @@ void SceneSP2Room2::Update(double dt)
 		exitSchool = false;
 	}*/
 
-
-
 	//fps
 	fps = 1.f / float(dt);
 	//camera
@@ -999,7 +997,7 @@ void SceneSP2Room2::Update(double dt)
 		{
 
 			ghost->state = Ghost::TOLOCKER;
-			ghost->waitTime = 5;
+			ghost->waitTime = 3;
 		}
 		else if (ghost->distance <= 7)
 		{
@@ -1009,9 +1007,31 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
+		ghost->facing = Lockerlist[ghost->lockerIndex].getfront() - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->facing.Normalize();
+		while (Colliderlist[8 + ghost->lockerIndex].iscollide(ghost->pos +  5 * ghost->facing))
+		{
+			//change facing
+			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+		}
+
+		ghost->UpdateMovement(dt);
+		ghost->rawPos = ghost->pos;
+		ghost->rawPos.y = 0;
+		if ((ghost->rawPos - Lockerlist[ghost->lockerIndex].getfront()).Length() <= 0.5)
+		{
+			ghost->facing = camera.position - ghost->pos;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+			ghost->state = Ghost::WAITING;
+		}
+		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -1266,6 +1286,7 @@ void SceneSP2Room2::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
+				ghost->lockerIndex = i;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1905,14 +1926,14 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
 	std::ostringstream test1;
-	test1 << "ghost pos: " << ghost->pos;
+	test1 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	//std::ostringstream test3;
-	//test3 << "ghost distance: " << ghost->distance;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	//std::ostringstream test2;
-	//test2 << "ghost stat: " << ghost->state;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	std::ostringstream test3;
+	test3 << "ghost facing: " << ghost->facing;
+	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	std::ostringstream test2;
+	test2 << "ghost pos: " << ghost->pos;
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
