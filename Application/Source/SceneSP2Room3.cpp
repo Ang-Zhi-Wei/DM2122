@@ -1685,7 +1685,7 @@ void SceneSP2Room3::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
-	//inventor
+	//inventory
 
 	//UI OVERLAY
 
@@ -1717,7 +1717,7 @@ void SceneSP2Room3::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}

@@ -233,8 +233,13 @@ void Application::setscene(int scenenum)
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
+		
 		scene->Exit();
-		scene->Init();
+		if (scene != sceneMain)
+		{
+			scene->Init();
+		}
+		
 		sceneMenu->SetBackground();
 		sceneMenu->Init();
 		scene = sceneMenu;

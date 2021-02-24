@@ -2561,7 +2561,7 @@ void SceneSP2Main::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	//inventory
 	if (inventory->open)
 	{
@@ -2723,9 +2723,9 @@ void SceneSP2Main::Render()
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
-	std::ostringstream test1;
+	/*std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);*/
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);

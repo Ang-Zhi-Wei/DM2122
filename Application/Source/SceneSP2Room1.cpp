@@ -1987,7 +1987,7 @@ void SceneSP2Room1::Render()
 		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	//inventory
 	if (inventory->open)
 	{
