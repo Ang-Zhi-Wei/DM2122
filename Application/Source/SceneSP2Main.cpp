@@ -2741,6 +2741,13 @@ void SceneSP2Main::Exit()
 		delete inventory;
 		inventory = nullptr;
 	}
+	for (int i = 0; i < 5; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			delete items[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
