@@ -1641,10 +1641,7 @@ void SceneSP2Room3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
-	}
+
 
 
 
@@ -1652,7 +1649,55 @@ void SceneSP2Room3::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
+	
 
+
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+
+	//inventor
+
+	//UI OVERLAY
+
+	//Vision vignette
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->state == Ghost::CHASING)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//battery bar
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
 	switch (ObjectivePhase)
 	{
 	case 0:
@@ -1694,49 +1739,6 @@ void SceneSP2Room3::Render()
 			break;
 		}
 	}
-
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
-
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
-
-	//inventor
-
-	//UI OVERLAY
-
-	//Vision vignette
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//warning overlay
-	if (ghost->state == Ghost::DEATH)
-	{
-		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
-	}
-	else if (ghost->state == Ghost::CHASING)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 100)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
-	}
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//breathing icon
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
 	//inventory
 	if (inventory->open)
 	{

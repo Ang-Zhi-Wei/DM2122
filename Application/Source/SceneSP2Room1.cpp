@@ -1775,6 +1775,44 @@ void SceneSP2Room1::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 	
+	
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	//UI OVERLAY
+
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
+	//Vision vignette
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 50)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
@@ -1824,43 +1862,6 @@ void SceneSP2Room1::Render()
 			break;
 		}
 	}
-
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
-	//UI OVERLAY
-
-	if (jumpscareActive1 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
-	//Vision vignette
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//warning overlay
-	if (ghost->state == Ghost::DEATH)
-	{
-		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 50)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 100)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
-	}
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//breathing icon
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (inLocker == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
