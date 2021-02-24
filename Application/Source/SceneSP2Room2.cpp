@@ -1965,8 +1965,6 @@ void SceneSP2Room2::Render()
 
 void SceneSP2Room2::Exit()
 {
-	delete ghost;
-	delete inventory;
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
