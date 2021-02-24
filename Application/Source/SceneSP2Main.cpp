@@ -30,7 +30,6 @@ SceneSP2Main::SceneSP2Main()
 	screwDriverFound = 0;
 	Interact_Num = 0;
 	manAppear = true;
-	nearBattery,nearBattery1,nearBattery2, nearBattery3, nearBattery4 = false;
 	canTalk_man = true;
 	rotate_Man = 90;
 	ObjectivePhase = 0;

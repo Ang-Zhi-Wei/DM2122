@@ -40,6 +40,7 @@ public:
 			SPARK_PLUG
 			//add more depending on whta u need, don forget set in Set function
 		};
+	
 		Vector3 pos; //only if u plan to reuse struct for rendering
 		const char* image; //image of item in inventory
 		int count; 
@@ -77,6 +78,7 @@ public:
 				break;
 			}
 		}
+		
 	};
 
 	struct Inventory
