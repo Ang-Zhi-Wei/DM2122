@@ -260,6 +260,7 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 	
 	bool PKeypressed, PKeyreleased;
 	bool is_talking;

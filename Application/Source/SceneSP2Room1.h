@@ -266,6 +266,7 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 
 	float campos_x;
 	float campos_y;

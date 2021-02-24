@@ -877,6 +877,7 @@ void SceneSP2Room3::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::GetCursorPos(&Mousetempx, &Mousetempy);
 		Application::pause(true);
 	}
 
@@ -1295,6 +1296,7 @@ void SceneSP2Room3::PauseUpdate()
 		PKeypressed = false;
 		gamepaused = false;
 		Application::hidemousecursor(true);
+		Application::SetCursorPos(Mousetempx, Mousetempy);
 		Application::pause(false);
 	}
 
@@ -1315,6 +1317,7 @@ void SceneSP2Room3::PauseUpdate()
 		{
 			std::cout << "Cont Hit!" << std::endl;
 			Application::hidemousecursor(true);
+			Application::SetCursorPos(Mousetempx, Mousetempy);
 			Application::pause(false);
 			gamepaused = false;
 		}
