@@ -1014,6 +1014,8 @@ void SceneSP2Room2::Update(double dt)
 		{
 			//change facing
 			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
 		}
 
 		ghost->UpdateMovement(dt);

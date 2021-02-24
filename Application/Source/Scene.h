@@ -195,7 +195,6 @@ public:
 			{
 				return false;
 			}
-			axis = facing.Cross(up).Normalized();
 		}
 		void UpdateMovement(double dt)
 		{
@@ -203,6 +202,7 @@ public:
 			{
 				pos += facing * speed * float(dt);
 			}
+			axis = facing.Cross(up).Normalized();
 		}
 		
 	};

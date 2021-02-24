@@ -1801,10 +1801,9 @@ void SceneSP2Main::Update(double dt)
 			ghost->state = Ghost::SPIN;
 		}
 		break;
-	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
