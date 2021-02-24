@@ -630,7 +630,7 @@ void SceneSP2Room3::Update(double dt)
 		if (garageItems[i] != nullptr)
 		{
 			if (camera.position.z > garageItems[i]->pos.z - 10 && camera.position.z < garageItems[i]->pos.z + 10
-				&& camera.position.x > garageItems[i]->pos.x - 10 && camera.position.x > garageItems[i]->pos.x - 10)
+				&& camera.position.x > garageItems[i]->pos.x - 10 && camera.position.x < garageItems[i]->pos.x + 10)
 			{
 				pickUpItem = true;
 				if (Fpressed)
