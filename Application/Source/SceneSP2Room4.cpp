@@ -497,7 +497,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
