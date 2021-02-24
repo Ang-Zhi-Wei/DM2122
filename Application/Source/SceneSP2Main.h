@@ -13,6 +13,8 @@
 #include <vector>
 #include "Locker.h"
 #include "SceneSP2Room2.h"
+#include <filesystem>
+
 class SceneSP2Main : public Scene
 {
 public:
@@ -242,7 +244,7 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 	bool NearGarage;
-	bool nearBattery, nearBattery1, nearBattery2, nearBattery3, nearBattery4;
+	bool pickUpBattery;
 	bool NearHouse;
 	bool NearSchool;
 	bool NearHospital;
@@ -263,10 +265,7 @@ private:
 	bool is_talking;
 
 	//Trying to yank username
-	//BOOL GetUserNameA(
-	//	LPSTR   lpBuffer,
-	//	LPDWORD pcbBuffer
-	//);
+	
 
 	struct trap {
 		enum traptype {
@@ -316,7 +315,7 @@ private:
 	ISoundEngine* Background;
 	ISoundEngine* Effect;
 
-	Item* items[10];
+	Item* items[5];
 
 
 	Vector3 temp;
