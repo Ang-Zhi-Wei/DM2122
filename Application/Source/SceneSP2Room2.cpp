@@ -442,9 +442,21 @@ void SceneSP2Room2::Init()
 			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
 		}
 	}
+	//podium collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[57].setlength(4, 10, 4);
+	Colliderlist[57].Setposition(Vector3(podium.mid.x-1.15,podium.mid.y,podium.mid.z));
+	//pigeonhole collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[58].setlength(37.5, 20, 7);
+	Colliderlist[58].Setposition(Vector3(540, 10, -100));
+	//longtable collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[59].setlength(15,5,10);
+	Colliderlist[59].Setposition(lounge_table.mid);
 	//colliderbox for checking any collider(just one)
 	//@collider
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[59].getxlength(), Colliderlist[59].getylength(), Colliderlist[59].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -1491,10 +1503,10 @@ void SceneSP2Room2::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[59].getPosition().x, Colliderlist[59].getPosition().y, Colliderlist[59].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();
@@ -1628,6 +1640,7 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
@@ -1635,19 +1648,21 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
 	//podium
+
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
+	
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
 	modelStack.Translate(540, 10, -100); // pos on map
 	modelStack.Translate(50, 0, 0); //move obj to origin
 	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[GEO_PIGEONHOLE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
