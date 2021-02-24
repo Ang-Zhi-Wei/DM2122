@@ -351,7 +351,7 @@ void SceneSP2Room1::Init()
 
 	houseItems[0] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
 	houseItems[1] = new Item("battery", Item::BATTERY, (35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, (35, 1, -435));
+	houseItems[2] = new Item("battery", Item::BATTERY, (52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);

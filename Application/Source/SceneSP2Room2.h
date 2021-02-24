@@ -222,6 +222,7 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		BATTERY,
 
 		//@pause
 		GEO_PAUSEMENU,
@@ -316,6 +317,8 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 
+	Item* schoolItems[3];
+	bool nearBattery, nearBattery2;
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];
 	CameraSP2 camera;

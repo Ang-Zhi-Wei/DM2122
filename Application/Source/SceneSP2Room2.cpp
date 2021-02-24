@@ -176,6 +176,13 @@ void SceneSP2Room2::Init()
 	meshList[GEO_TOP]->textureID = LoadTGA("Night//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", 1, 1, White);
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Night//bottom.tga");
+
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	schoolItems[0] = new Item("battery", Item::BATTERY, (500, 4.5, -102));
+	schoolItems[1] = new Item("battery", Item::BATTERY, (491, 4.5, 85));
 	
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -719,6 +726,25 @@ void SceneSP2Room2::Update(double dt)
 		Freleased = false;
 	}
 
+
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(schoolItems[0]);
+		nearBattery = false;
+		Fpressed = false;
+		schoolItems[0] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(schoolItems[1]);
+		nearBattery2 = false;
+		Fpressed = false;
+		schoolItems[1] = NULL;
+
+	}
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitSchool = true;
@@ -780,6 +806,21 @@ void SceneSP2Room2::Update(double dt)
 		Rreleased = false;
 	}
 
+	if (campos_x > 497  && campos_z < 503 && campos_z < -96 && schoolItems[0] != nullptr)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	if (campos_x < 493 && campos_x > 488 && campos_z < 92 && campos_z > 78 && schoolItems[1] != nullptr)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
+	}
 
 
 	/*if (campos_x < 480 && campos_z > -4 && campos_z < 4)
@@ -1689,6 +1730,25 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	if (schoolItems[0] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(500, 4.5, -102);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+	if (schoolItems[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(491, 4.5, 85);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+
+	}
+
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
@@ -1712,6 +1772,11 @@ void SceneSP2Room2::Render()
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
+
+	if (nearBattery == true || nearBattery2 == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
