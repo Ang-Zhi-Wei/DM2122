@@ -43,6 +43,12 @@ public:
 		GEO_CEILING,
 		GEO_FLOOR,
 		GEO_RIGHTDOOR,
+		SOFA,
+		TELEVISION,
+		TV_STAND,
+		WOODENTABLE,
+		BOOKSHELF,
+		SHELVES,
 
 		//ground mesh
 		Ground_Mesh,
@@ -72,6 +78,7 @@ public:
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		BATTERY,
+		
 
 		//@pause
 		GEO_PAUSEMENU,

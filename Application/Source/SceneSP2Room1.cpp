@@ -208,11 +208,11 @@ void SceneSP2Room1::Init()
 	meshList[Ground_Mesh] = MeshBuilder::GenerateQuadRepeat("Hell", 1, 1, White);
 	//terrain
 	meshList[GEO_WALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[GEO_WALL]->textureID = LoadTGA("Image//StoneWalls.tga");
+	meshList[GEO_WALL]->textureID = LoadTGA("Assigment2Images//housewall.tga");
 	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 1.0f / 22, 0.6, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//StoneWalls.tga");
+	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Assigment2Images//housewall.tga");
 	meshList[GEO_CEILING] = MeshBuilder::GenerateCubeT("Ceiling", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[GEO_CEILING]->textureID = LoadTGA("Image//CementWalls.tga");
+	meshList[GEO_CEILING]->textureID = LoadTGA("Assigment2Images//housewall.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
@@ -224,6 +224,20 @@ void SceneSP2Room1::Init()
 	meshList[GEO_MYSTERIOUSMAN] = MeshBuilder::GenerateOBJ("man npc", "OBJ//man1.obj");
 	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
 	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[SOFA] = MeshBuilder::GenerateOBJ("man npc", "OBJ//sofa2.obj");
+	meshList[SOFA]->textureID = LoadTGA("Assigment2Images//sofa2.tga");
+	meshList[SOFA]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[TELEVISION] = MeshBuilder::GenerateOBJ("man npc", "OBJ//Tele.obj");
+	meshList[TELEVISION]->textureID = LoadTGA("Assigment2Images//tvtexture.tga");
+	meshList[TELEVISION]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[TV_STAND] = MeshBuilder::GenerateOBJ("man npc", "OBJ//tvstand.obj");
+	meshList[TV_STAND]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
+	meshList[TV_STAND]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[SHELVES] = MeshBuilder::GenerateOBJ("man npc", "OBJ//bookshelf.obj");
+	meshList[SHELVES]->textureID = LoadTGA("Assigment2Images//shelf.tga");
+	meshList[SHELVES]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	
 
 
 	//Text
@@ -1838,6 +1852,34 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 1, -480);
+	modelStack.Scale(0.07, 0.07, 0.07);
+	RenderMesh(meshList[SOFA], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(15, 9, -450);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(1, 1, 1);
+	RenderMesh(meshList[TELEVISION], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 4, -450);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(0.03, 0.03, 0.03);
+	RenderMesh(meshList[TV_STAND], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 6, -500);
+	modelStack.Scale(8, 8, 8);
+	RenderMesh(meshList[SHELVES], true);
+	modelStack.PopMatrix();
+
+
 
 
 	if (houseItems[0] != nullptr) {
