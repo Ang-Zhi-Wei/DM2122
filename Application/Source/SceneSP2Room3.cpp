@@ -1398,10 +1398,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[14].getPosition().x, Colliderlist[14].getPosition().y, Colliderlist[14].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//skybox
 	//RenderSkybox();
