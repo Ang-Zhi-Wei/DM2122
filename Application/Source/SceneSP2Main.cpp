@@ -2738,8 +2738,16 @@ void SceneSP2Main::Render()
 void SceneSP2Main::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
+	if (ghost != nullptr)
+	{
+		delete ghost;
+		ghost = nullptr;
+	}
+	if (inventory != nullptr)
+	{
+		delete inventory;
+		inventory = nullptr;
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
