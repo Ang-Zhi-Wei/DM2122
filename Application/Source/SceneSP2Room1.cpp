@@ -1853,7 +1853,7 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -0.5, -460);
+	modelStack.Translate(0, -0.5, -470);
 	modelStack.Scale(2.1, 2.1, 2.1);
 	RenderMesh(meshList[WOODENTABLE], true);
 	modelStack.PopMatrix();
