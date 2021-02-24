@@ -32,6 +32,7 @@ SceneSP2Room4::SceneSP2Room4()
 	placeitem = false;
 	doorunlocked = false;
 	bruhmoment = false;
+	flowerstaken = false;
 
 	//@pause
 	gamepaused = false;
@@ -272,10 +273,14 @@ void SceneSP2Room4::Init()
 	meshList[deadbody]->textureID = LoadTGA("Image//deadbody.tga");
 	meshList[deadbody]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[rose] = MeshBuilder::GenerateOBJ("easter egg", "OBJ/Rose.obj");
+	meshList[rose]->textureID = LoadTGA("Image//rose.tga");
+	meshList[rose]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
-
+	
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
 	//meshList[metalcabinet]->textureID = LoadTGA("Assigment2Images//cabinettexture.tga");
@@ -496,7 +501,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -1031,7 +1036,7 @@ void SceneSP2Room4::Update(double dt)
 				camera.setchecker(Colliderlist);
 			}
 		}
-		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked)
+		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
 		{
 			interact = true;
 			interact_message = "Locked";
@@ -1239,112 +1244,132 @@ void SceneSP2Room4::Update(double dt)
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
 
+	//check if flowers are taken
+	if (camera.position.x >= 6 && camera.position.x <= 13 && camera.position.z >= -75 && camera.position.z <= -68 && !flowerstaken)
+	{
+		interact = true;
+		interact_message = "Take flowers";
+		if (Fpressed)
+		{
+			flowerstaken = true;
+			//add to inventory code here
+		}
+	}
 
 	//check if placed flowers on bed
-	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
+	if (flowerstaken)
 	{
-		//left body top
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
+		if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
 		{
-			itemplaced[body1_l] = true;
-		}
-
-	}
-	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
-	{
-		//left body med
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body2_l] = true;
-		}
-	}
-	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body3_l] = true;
-		}
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
-	{
-		//left body top
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body1_r] = true;
-		}
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
-	{
-		//left body med
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body2_r] = true;		
-		}
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body3_r] = true;
-		}
-	}
-	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-		if (Fpressed)
-		{
-			itemplaced[body_op] = true;
-		}
-	}
-	else
-	{
-		placeitem = false;
-	}
-
-	//if all placed, unlock door
-	if (itemplaced[0] && itemplaced[1] && itemplaced[2] && itemplaced[3] && itemplaced[4] && itemplaced[5])
-	{
-		doorunlocked = true;
-    }
-
-	//if final item placed, give sparkplug
-	if (itemplaced[6])
-	{
-		if (translateobj <= 7)
-		{
-			translateobj += float(0.5 * dt);
-		}
-		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
-		{
+			//left body top
 			interact = true;
-			interact_message = "take spark plug";
+			interact_message = "Place Flower";
 			if (Fpressed)
 			{
-				translateobj = 100;
-				takenspark = true;
-				PickUpItem(items[0]);
-				items[0] = NULL;
-				std::cout << "taken spark plug" << std::endl;
+				// remove from inventory code here
+				itemplaced[body1_l] = true;
+			}
+
+		}
+		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
+		{
+			//left body med
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body2_l] = true;
+			}
+		}
+		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body3_l] = true;
+			}
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
+		{
+			//left body top
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body1_r] = true;
+			}
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
+		{
+			//left body med
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body2_r] = true;
+			}
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body3_r] = true;
+			}
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+			if (Fpressed)
+			{
+				// remove from inventory code here
+				itemplaced[body_op] = true;
+			}
+		}
+		else
+		{
+			placeitem = false;
+		}
+
+		//if all placed, unlock door
+		if (itemplaced[0] && itemplaced[1] && itemplaced[2] && itemplaced[3] && itemplaced[4] && itemplaced[5])
+		{
+			doorunlocked = true;
+		}
+
+		//if final item placed, give sparkplug
+		if (itemplaced[6])
+		{
+			if (translateobj <= 7.5)
+			{
+				translateobj += float(0.5 * dt);
+			}
+			else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+			{
+				interact = true;
+				interact_message = "take spark plug";
+				if (Fpressed)
+				{
+					translateobj = 100;
+					takenspark = true;
+					PickUpItem(items[0]);
+					items[0] = NULL;
+					std::cout << "taken spark plug" << std::endl;
+				}
 			}
 		}
 	}
-
 	//easter egg jumpscare
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
@@ -1356,8 +1381,6 @@ void SceneSP2Room4::Update(double dt)
 			bruhmoment = true;
 		}
 	} 
-
-
 }
 
 
@@ -1606,6 +1629,68 @@ void SceneSP2Room4::RenderLeftRoom()
 	modelStack.Scale(8, 8, 8);
 	RenderMesh(meshList[metalcabinet], true);
 	modelStack.PopMatrix();
+
+	//render flowers
+
+	if (itemplaced[0])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(23, 4.4, -5);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
+
+	if (itemplaced[1])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(23, 4.4, -20);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
+	
+	if (itemplaced[2])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(23, 4.4, -35);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
+
+	if (itemplaced[3])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(52, 4.4, -5);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
+
+	if (itemplaced[4])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(52, 4.4, -20);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
+
+	if (itemplaced[5])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(52, 4.4, -35);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneSP2Room4::RenderRightRoom()
@@ -1650,6 +1735,16 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.Scale(0.06, 0.06, 0.06);
 	RenderMesh(meshList[corpse], true);
 	modelStack.PopMatrix();
+
+	if (itemplaced[6])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-40.2, 6.8, -22);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-39, translateobj, -22);
@@ -1842,6 +1937,23 @@ void SceneSP2Room4::Render()
 	modelStack.Scale(0.1, 0.15, 0.1);
 	RenderMesh(meshList[frontdesk], true);
 	modelStack.PopMatrix();
+
+	//roses on front desk
+	if (!flowerstaken)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(7, 6.5, -73);
+		modelStack.Rotate(40, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(9, 6.5, -73);
+		modelStack.Rotate(-30, 0, 1, 0);
+		modelStack.Scale(0.05, 0.05, 0.05);
+		RenderMesh(meshList[rose], true);
+		modelStack.PopMatrix();
+	}
 
 	//left and right main walls
 	modelStack.PushMatrix();
