@@ -18,7 +18,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOnSec = 0;
 	showSideBox = true;
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -306,7 +306,7 @@ void SceneSP2Room1::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -353,7 +353,7 @@ void SceneSP2Room1::Init()
 
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -489,7 +489,16 @@ void SceneSP2Room1::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;

@@ -10,7 +10,7 @@ SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -245,7 +245,7 @@ void SceneSP2Room2::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -504,7 +504,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -592,7 +592,16 @@ void SceneSP2Room2::Set(Scene* scene)
 	DS_school = OPEN;
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
