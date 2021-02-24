@@ -394,24 +394,7 @@ void SceneSP2Menu::Update(double dt)
 	Application::GetCursorPos(&Mousex, &Mousey);
 	MposX = Mousex / 80;
 	MposY = Mousey / 60;
-	//Title scaling
-	titleScaleX += (float)(titleScaleXDir * dt);
-	if (titleScaleX >= 42)
-		titleScaleXDir *= -1;
-	if (titleScaleX <= 40)
-		titleScaleXDir *= -1;
 
-	titleScaleY += (float)(titleScaleYDir * dt);
-	if (titleScaleY >= 10)
-		titleScaleYDir *= -1;
-	if (titleScaleY <= 8)
-		titleScaleYDir *= -1;
-
-	titlePosY += (float)(titlePosYDir * dt);
-	if (titlePosY >= 30)
-		titlePosYDir *= -1;
-	if (titlePosY <= 29)
-		titlePosYDir *= -1;
 	//check for button coords
 	if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11)
 		ButtonNum = 0;
@@ -459,7 +442,34 @@ void SceneSP2Menu::Update(double dt)
 		std::cout << "LBUTTON UP" << std::endl;
 	}
 
+	//Title scaling
+	titleScaleX += (float)(titleScaleXDir * dt);
+	if (titleScaleX >= 42)
+		titleScaleXDir *= -1;
+	if (titleScaleX <= 40)
+		titleScaleXDir *= -1;
 
+	titleScaleY += (float)(titleScaleYDir * dt);
+	if (titleScaleY >= 10)
+		titleScaleYDir *= -1;
+	if (titleScaleY <= 8)
+		titleScaleYDir *= -1;
+
+	titlePosY += (float)(titlePosYDir * dt);
+	if (titlePosY >= 30)
+		titlePosYDir *= -1;
+	if (titlePosY <= 29)
+		titlePosYDir *= -1;
+
+	if ((titlePosY > 31) || (titlePosY < 28) || (titleScaleY > 11) || (titleScaleY < 7) || (titleScaleX > 43) || (titleScaleX < 39))
+	{
+		titleScaleX = 40;
+		titleScaleXDir = 1;
+		titleScaleY = 8;
+		titleScaleYDir = 1;
+		titlePosY = 29;
+		titlePosYDir = 0.5;
+	}
 	//key input
 	//if (Application::IsKeyPressed('1')) {
 	//	glEnable(GL_CULL_FACE);
@@ -475,7 +485,7 @@ void SceneSP2Menu::Update(double dt)
 	//}
 	
 	//fps
-	fps = 1.f / float(dt);
+	fps = /*1.f / */float(dt);
 	//camera
 	camera.Update(dt);
 	//light

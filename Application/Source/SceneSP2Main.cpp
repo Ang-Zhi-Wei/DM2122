@@ -66,7 +66,12 @@ SceneSP2Main::SceneSP2Main()
 SceneSP2Main::~SceneSP2Main()
 {
 }
-
+//Function for getting username
+//BOOL SceneSP2Main::GetUserNameA(LPSTR lpBuffer, LPDWORD pcbBuffer)
+//{
+//
+//	return 0;
+//}
 
 void SceneSP2Main::Init()
 {
@@ -83,6 +88,7 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -1059,6 +1065,8 @@ void SceneSP2Main::Init()
 
 	ghost = new Ghost;
 	inventory = new Inventory;
+
+
 
 	//test examples for item
 	/*test.Set("item2testAAAA", Item::ITEM2);
@@ -2795,6 +2803,7 @@ bool SceneSP2Main::PickUpItem(Item* item)
 	}
 	return false;
 }
+
 
 void SceneSP2Main::RenderSkybox()
 {

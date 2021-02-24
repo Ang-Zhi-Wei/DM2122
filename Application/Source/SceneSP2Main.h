@@ -262,6 +262,12 @@ private:
 	bool PKeypressed, PKeyreleased;
 	bool is_talking;
 
+	//Trying to yank username
+	//BOOL GetUserNameA(
+	//	LPSTR   lpBuffer,
+	//	LPDWORD pcbBuffer
+	//);
+
 	struct trap {
 		enum traptype {
 			beartrap,
