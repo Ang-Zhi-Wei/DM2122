@@ -426,19 +426,19 @@ void SceneSP2Room3::Init()
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(3, 25, 100);
+	Colliderlist[0].setlength(5, 25, 100);
 	Colliderlist[0].Setposition(Vector3(30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(3, 25, 100);
+	Colliderlist[1].setlength(5, 25, 100);
 	Colliderlist[1].Setposition(Vector3(-30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(100, 25, 3);
+	Colliderlist[2].setlength(100, 25, 5);
 	Colliderlist[2].Setposition(Vector3(0, 12, -100));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(20, 30, 3);
+	Colliderlist[3].setlength(20, 30, 5);
 	Colliderlist[3].Setposition(Vector3(-25, 12, 2));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(20, 30, 3);
+	Colliderlist[4].setlength(20, 30, 5);
 	Colliderlist[4].Setposition(Vector3(25, 12, 2));
 	//random objects colliders
 	Colliderlist.push_back(ColliderBox());
@@ -469,8 +469,12 @@ void SceneSP2Room3::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(3.9, 10, 4.3);
 	Colliderlist[13].Setposition(Vector3(Lockerlist[0].getpos()));
+	//Garage door collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(30, 10, 5);
+	Colliderlist[14].Setposition(Vector3(0, 2.1, 2));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[14].getxlength(), Colliderlist[14].getylength(), Colliderlist[14].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -1417,10 +1421,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[14].getPosition().x, Colliderlist[14].getPosition().y, Colliderlist[14].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();
