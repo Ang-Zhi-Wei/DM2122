@@ -390,7 +390,7 @@ void SceneSP2Room4::Init()
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setpos(Vector3(-58.f, -0.2f, -80.f));
 
 	//wall colliders
 	//@collider
@@ -518,6 +518,11 @@ void SceneSP2Room4::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[27].setlength(165, 25, 1);
 	Colliderlist[27].Setposition(Vector3(0, 12, 0));
+
+	//lockercollider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(3.9, 10, 4.3);
+	Colliderlist[27].Setposition(Vector3(Lockerlist[0].getpos()));
 
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[26].getxlength(), Colliderlist[26].getylength(), Colliderlist[26].getzlength());
