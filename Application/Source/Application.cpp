@@ -154,8 +154,11 @@ void Application::Run()
 			scene->Update(m_timer.getElapsedTime());
 
 		//pause screen update
-		if(ispaused)
+		if (ispaused)
+		{
 			scene->PauseUpdate();
+			m_timer.getElapsedTime();
+		}
 
 		scene->Render();
 		//Swap buffers
