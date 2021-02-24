@@ -497,6 +497,8 @@ void SceneSP2Room1::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
+	DS_MAIN = OPEN;
+	rotateY[0] = 90;
 	if (flashlight)
 	{
 		light[1].power = 2;
