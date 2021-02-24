@@ -10,7 +10,7 @@ SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -245,7 +245,7 @@ void SceneSP2Room2::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -442,9 +442,21 @@ void SceneSP2Room2::Init()
 			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
 		}
 	}
+	//podium collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[57].setlength(4, 10, 4);
+	Colliderlist[57].Setposition(Vector3(podium.mid.x-1.15,podium.mid.y,podium.mid.z));
+	//pigeonhole collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[58].setlength(37.5, 20, 7);
+	Colliderlist[58].Setposition(Vector3(540, 10, -100));
+	//longtable collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[59].setlength(15,5,10);
+	Colliderlist[59].Setposition(lounge_table.mid);
 	//colliderbox for checking any collider(just one)
 	//@collider
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[59].getxlength(), Colliderlist[59].getylength(), Colliderlist[59].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -492,7 +504,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -580,7 +592,16 @@ void SceneSP2Room2::Set(Scene* scene)
 	DS_school = OPEN;
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
@@ -1492,7 +1513,7 @@ void SceneSP2Room2::Render()
 	//colliderbox for checking
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	modelStack.Translate(Colliderlist[59].getPosition().x, Colliderlist[59].getPosition().y, Colliderlist[59].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -1628,6 +1649,7 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
@@ -1635,19 +1657,21 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
 	//podium
+
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
+	
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
 	modelStack.Translate(540, 10, -100); // pos on map
 	modelStack.Translate(50, 0, 0); //move obj to origin
 	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[GEO_PIGEONHOLE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);

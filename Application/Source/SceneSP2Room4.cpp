@@ -11,7 +11,7 @@ SceneSP2Room4::SceneSP2Room4()
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
 	interact = false;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -342,7 +342,7 @@ void SceneSP2Room4::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -538,7 +538,7 @@ void SceneSP2Room4::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 
 	//@pause
@@ -610,7 +610,16 @@ void SceneSP2Room4::Set(Scene* scene)
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else 
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
@@ -1734,15 +1743,7 @@ void SceneSP2Room4::Render()
 			break;
 		}
 	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
+	
 	
 	
 
@@ -1896,7 +1897,15 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_SKULL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);

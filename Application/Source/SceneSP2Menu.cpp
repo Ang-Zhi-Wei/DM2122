@@ -309,7 +309,7 @@ void SceneSP2Menu::Init()
 	light[2].type = Light::LIGHT_SPOT;
 	light[2].position.Set(-40, 30, -34);
 	light[2].color.Set(Yellow);
-	light[2].power = 2;
+	light[2].power = 0;
 	light[2].kC = 1.f;
 	light[2].kL = 0.01f;
 	light[2].kQ = 0.001f;

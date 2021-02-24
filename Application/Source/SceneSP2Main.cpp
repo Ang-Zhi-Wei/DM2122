@@ -31,7 +31,7 @@ SceneSP2Main::SceneSP2Main()
 	ObjectivePhase = 0;
 	is_talking = false;
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	NearGarage = false;
@@ -419,7 +419,7 @@ void SceneSP2Main::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
-	light[1].power = 2;
+	light[1].power = 0;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -554,7 +554,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -594,7 +594,7 @@ void SceneSP2Main::Init()
 
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 
@@ -733,6 +733,7 @@ void SceneSP2Main::Init()
 	Colliderlist[39].Setposition(Vector3(308, -7, -295));
 	Colliderlist[39].setlength(52, 50, 10);
 	//left/right fence
+	//@fence
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[40].setlength(10, 50, 52);
 	Colliderlist[40].Setposition(Vector3(-335, -7, 271));
@@ -750,7 +751,7 @@ void SceneSP2Main::Init()
 	Colliderlist[44].Setposition(Vector3(-335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[45].setlength(10, 50, 52);
-	Colliderlist[45].Setposition(Vector3(-335, -7, 35));
+	Colliderlist[45].Setposition(Vector3(-335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[46].setlength(10, 50, 52);
 	Colliderlist[46].Setposition(Vector3(-335, -7, -271));
@@ -768,7 +769,7 @@ void SceneSP2Main::Init()
 	Colliderlist[50].Setposition(Vector3(-335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[51].setlength(10, 50, 52);
-	Colliderlist[51].Setposition(Vector3(-335, -7, -35));
+	Colliderlist[51].Setposition(Vector3(-335, -7, -45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[52].setlength(10, 50, 52);
 	Colliderlist[52].Setposition(Vector3(335, -7, 271));
@@ -786,7 +787,7 @@ void SceneSP2Main::Init()
 	Colliderlist[56].Setposition(Vector3(335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[57].setlength(10, 50, 52);
-	Colliderlist[57].Setposition(Vector3(335, -7, 35));
+	Colliderlist[57].Setposition(Vector3(335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[58].setlength(10, 50, 52);
 	Colliderlist[58].Setposition(Vector3(335, -7, -271));
@@ -804,7 +805,7 @@ void SceneSP2Main::Init()
 	Colliderlist[62].Setposition(Vector3(335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[63].setlength(10, 50, 52);
-	Colliderlist[63].Setposition(Vector3(335, -7, -35));
+	Colliderlist[63].Setposition(Vector3(335, -7, -45.5));
 	//Tree colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[64].setlength(10, 20, 10);
@@ -1037,7 +1038,7 @@ void SceneSP2Main::Init()
 	Colliderlist[138].setlength(70, 100, 105);
 	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[45].getxlength(), Colliderlist[45].getylength(), Colliderlist[45].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1101,7 +1102,16 @@ void SceneSP2Main::Set(Scene* scene)
 	}
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 
 	//other lights
 	light[2].power = 2;
@@ -2171,7 +2181,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
+	modelStack.Translate(Colliderlist[45].getPosition().x, Colliderlist[45].getPosition().y, Colliderlist[45].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 

@@ -16,7 +16,7 @@ public:
 		ghost = nullptr;
 		inventory = nullptr;
 		flashlight_lifetime = 60;
-		flashlight = true;
+		flashlight = false;
 		
 	}
 	~Scene() {};
