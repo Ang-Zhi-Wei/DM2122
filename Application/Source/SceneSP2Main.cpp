@@ -366,6 +366,9 @@ void SceneSP2Main::Init()
 	meshList[GEO_MYSTERIOUSMAN]->textureID = LoadTGA("Image//man1.tga");
 	meshList[GEO_MYSTERIOUSMAN]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[GEO_SIGN] = MeshBuilder::GenerateOBJ("Wooden Signs", "OBJ//WoodenSignBlend.obj");
+	meshList[GEO_SIGN]->textureID = LoadTGA("Image//BrownWood.tga");
+
 	//meshList[GEO_BUILDING]->material.kAmbient.Set(0.35, 0.35, 0.35);
 
 	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
@@ -2083,6 +2086,11 @@ void SceneSP2Main::Render()
 
 	RenderBuilding();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 9, 270);
+	modelStack.Scale(10, 10, 1);
+	RenderMesh(meshList[GEO_SIGN], true);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -15.5, -351);
