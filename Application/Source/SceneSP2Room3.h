@@ -208,6 +208,7 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 
 	Item* garageItems[3];
 

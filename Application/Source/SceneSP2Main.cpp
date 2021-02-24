@@ -1921,6 +1921,7 @@ void SceneSP2Main::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::GetCursorPos(&Mousetempx, &Mousetempy);
 		Application::hidemousecursor(false);
 		Application::pause(true);
 	}
@@ -1991,6 +1992,7 @@ void SceneSP2Main::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::SetCursorPos(Mousetempx, Mousetempy);
 		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
@@ -2012,6 +2014,7 @@ void SceneSP2Main::PauseUpdate()
 		{
 			std::cout << "Cont Hit!" << std::endl;
 			Application::hidemousecursor(true);
+			Application::SetCursorPos(Mousetempx, Mousetempy);
 			Application::pause(false);
 			gamepaused = false;
 		}
