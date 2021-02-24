@@ -86,6 +86,7 @@ public:
 		oplight,
 		frontdesk,
 		sparkplug,
+		BATTERY,
 
 		//UI tings
 		GEO_TEXT,
@@ -93,7 +94,12 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_JUMPSCARE1,
-
+		GEO_REDDOT,
+		GEO_DEATH,
+		GEO_WARNING2,
+		GEO_WARNING1,
+		GEO_STAMINA,
+		GEO_BATTERY,
 
 		//trap
 		GEO_BEARTRAP,
@@ -183,6 +189,7 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
+	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;

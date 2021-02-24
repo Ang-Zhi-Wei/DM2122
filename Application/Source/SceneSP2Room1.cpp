@@ -330,6 +330,10 @@ void SceneSP2Room1::Init()
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
+
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//@pause
 	//pause menu
 	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
@@ -344,6 +348,10 @@ void SceneSP2Room1::Init()
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
+
+	houseItems[0] = new Item("battery", Item::BATTERY, (-22, 7.8, -95));
+	houseItems[1] = new Item("battery", Item::BATTERY, (35, 1, -435));
+	houseItems[2] = new Item("battery", Item::BATTERY, (52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -556,7 +564,7 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -580,7 +588,6 @@ void SceneSP2Room1::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -595,7 +602,6 @@ void SceneSP2Room1::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 
 	//trap detection
@@ -654,6 +660,33 @@ void SceneSP2Room1::Update(double dt)
 			Fpressed = true;
 		}
 		Freleased = false;
+	}
+
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(houseItems[0]);
+		nearBattery = false;
+		Fpressed = false;
+		houseItems[0] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(houseItems[1]);
+		nearBattery2 = false;
+		Fpressed = false;
+		houseItems[1] = NULL;
+
+	}
+
+	if (nearBattery3 == true && Fpressed == true)
+	{
+		PickUpItem(houseItems[2]);
+		nearBattery3 = false;
+		Fpressed = false;
+		houseItems[2] = NULL;
+
 	}
 
 	if (nearExit == true && Fpressed == true)
@@ -715,6 +748,30 @@ void SceneSP2Room1::Update(double dt)
 
 		}
 		Rreleased = false;
+	}
+
+	if (campos_x < -15 && campos_x > -22 && campos_z < -416 && campos_z > -428 && houseItems[0] != nullptr)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	if (campos_x > 27 && campos_x < 38 && campos_z < -431 && campos_z > -438 && houseItems[1] != nullptr)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
+	}
+
+	if (campos_x > 49 && campos_x < 60 && campos_z < -486 && campos_z > -502 && houseItems[2] != nullptr)
+	{
+		nearBattery3 = true;
+	}
+	else {
+		nearBattery3 = false;
 	}
 	//Locker
 
@@ -1755,6 +1812,36 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
+
+
+	if (houseItems[0] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 1, -421);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.06, 0.06, 0.06);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+	if (houseItems[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(35, 1, -435);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.06, 0.06, 0.06);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+	if (houseItems[2] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(52, 1, -496);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.06, 0.06, 0.06);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
@@ -1763,6 +1850,7 @@ void SceneSP2Room1::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
+
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
@@ -1777,6 +1865,52 @@ void SceneSP2Room1::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 	
+
+	
+
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	//UI OVERLAY
+
+	if (jumpscareActive1 == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
+	}
+	//Vision vignette
+	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
+	//warning overlay
+	if (ghost->state == Ghost::DEATH)
+	{
+		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 50)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
+	}
+	else if (ghost->distance <= 100)
+	{
+		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
+	}
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
+	//camcorder
+	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//breathing icon
+	//stamina bar
+	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	//stamina icon
+	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+
+	if (nearBattery == true || nearBattery2 == true || nearBattery3 == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
+
+
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
@@ -1826,43 +1960,6 @@ void SceneSP2Room1::Render()
 			break;
 		}
 	}
-
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
-	//UI OVERLAY
-
-	if (jumpscareActive1 == true)
-	{
-		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
-	}
-	//Vision vignette
-	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
-	//warning overlay
-	if (ghost->state == Ghost::DEATH)
-	{
-		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 50)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING2], 40, 30, 1, 1);
-	}
-	else if (ghost->distance <= 100)
-	{
-		RenderMeshOnScreen(meshList[GEO_WARNING1], 40, 30, 1, 1);
-	}
-	//camera dot
-	if (camBlinkOn) {
-		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
-	}
-	//camcorder
-	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
-	//breathing icon
-	//stamina bar
-	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
-	//stamina icon
-	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	if (inLocker == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
