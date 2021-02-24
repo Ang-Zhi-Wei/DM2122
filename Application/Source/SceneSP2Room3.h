@@ -26,6 +26,9 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
+	int SpeakPhase;
+	double SpeakTimer;
+
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,

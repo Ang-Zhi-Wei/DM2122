@@ -36,7 +36,6 @@ SceneSP2Room4::SceneSP2Room4()
 	//@pause
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
-	//======
 
 	//inventory icons
 	itemImage[0] = meshList[GEO_SPARKPLUGICON];
@@ -497,7 +496,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -926,7 +925,7 @@ void SceneSP2Room4::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -971,7 +970,6 @@ void SceneSP2Room4::Update(double dt)
 		}
 		PKeyreleased = false;
 	}
-	//================================================================
 
 	//@pause
 	if (PKeypressed)
@@ -1094,7 +1092,7 @@ void SceneSP2Room4::Update(double dt)
 		{
 
 			ghost->state = Ghost::TOLOCKER;
-			ghost->waitTime = 5;
+			ghost->waitTime = 3;
 		}
 		else if (ghost->distance <= 7)
 		{
@@ -1104,9 +1102,31 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
+		ghost->facing = Lockerlist[ghost->lockerIndex].getfront() - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->facing.Normalize();
+		while (Colliderlist[28 + ghost->lockerIndex].iscollide(ghost->pos + 5 * ghost->facing))
+		{
+			//change facing
+			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+		}
+
+		ghost->UpdateMovement(dt);
+		ghost->rawPos = ghost->pos;
+		ghost->rawPos.y = 0;
+		if ((ghost->rawPos - Lockerlist[ghost->lockerIndex].getfront()).Length() <= 0.5)
+		{
+			ghost->facing = camera.position - ghost->pos;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+			ghost->state = Ghost::WAITING;
+		}
+		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -1159,6 +1179,8 @@ void SceneSP2Room4::Update(double dt)
 		break;
 
 	}
+
+
 	//Locker
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
@@ -1172,6 +1194,8 @@ void SceneSP2Room4::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
+				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1358,10 +1382,7 @@ void SceneSP2Room4::Update(double dt)
 			bruhmoment = true;
 		}
 	} 
-	else
-	{
-		interact = false;
-	}
+
 
 }
 
@@ -2031,7 +2052,9 @@ void SceneSP2Room4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 
 	if (nearBattery == true || nearBattery2 == true)
@@ -2042,7 +2065,7 @@ void SceneSP2Room4::Render()
 
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Flower Counter: "+ std::to_string(flowerCounter), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -2080,9 +2103,7 @@ void SceneSP2Room4::Render()
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);

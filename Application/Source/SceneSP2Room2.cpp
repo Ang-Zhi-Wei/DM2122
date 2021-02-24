@@ -466,7 +466,7 @@ void SceneSP2Room2::Init()
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[59].getxlength(), Colliderlist[59].getylength(), Colliderlist[59].getzlength());
 
 	//terrain
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateCubeT("floor/ceiling", 1, 1, 1, 0, 0, 1, 2.1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
 	meshList[GEO_WALL1] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 22, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL1]->textureID = LoadTGA("Image//schoolwall.tga");/////////////////////////////////////////////////////////
@@ -745,11 +745,6 @@ void SceneSP2Room2::Update(double dt)
 
 	}
 
-	if (nearExit == true && Fpressed == true)
-	{
-		exitSchool = true;
-		Fpressed = false;
-	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -885,7 +880,7 @@ void SceneSP2Room2::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -1101,28 +1096,35 @@ void SceneSP2Room2::Update(double dt)
 		}
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x <= 480 && camera.position.x >= 471)
 		{
-			interact = true;
-			interact_message = "Exit School";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
+				nearExit = false;
 				Background->setSoundVolume(0.f);
 				Effect->setSoundVolume(0.f);
 				Jumpscare->setSoundVolume(0.f);
 				Application::setscene(Scene_Main);
 			}
 		}
+		else {
+			nearExit = false;
+			showChatbox = false;
+		}
 		break;
 	case CLOSED:
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x >= 471 && camera.position.x <= 480)
 		{
-			interact = true;
-			interact_message = "Exit School";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
 				DS_school = OPENING;
 			}
+		}
+		else {
+			nearExit = false;
+			showChatbox = false;
 		}
 		break;
 	case OPENING:
@@ -1287,6 +1289,7 @@ void SceneSP2Room2::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1804,11 +1807,14 @@ void SceneSP2Room2::Render()
 	}
 
 
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	//UI OVERLAY
 
@@ -1844,10 +1850,7 @@ void SceneSP2Room2::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//batterybar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
-
+	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
@@ -1862,7 +1865,7 @@ void SceneSP2Room2::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
 			break;
 		}
 	case 2:

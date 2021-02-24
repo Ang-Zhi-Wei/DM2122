@@ -17,6 +17,7 @@ SceneSP2Room3::SceneSP2Room3()
 	exitGarage = false;
 	nearScrewdriver = false;
 	showSideBox = true;
+	SpeakTimer = 0;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
@@ -57,6 +58,7 @@ void SceneSP2Room3::Init()
 	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
+	SpeakTimer = 0;
 	//...
 	
 	//light 0
@@ -510,6 +512,9 @@ void SceneSP2Room3::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+
+
+
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -611,6 +616,11 @@ void SceneSP2Room3::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
+
+	double SPEECH_LENGTH_FAST = 2;
+	double SPEECH_LENGTH_SHORT = 3;
+	double SPEECH_LENGTH_MEDIUM = 5;
+	double SPEECH_LENGTH_LONG = 8;
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -838,7 +848,7 @@ void SceneSP2Room3::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -959,6 +969,20 @@ void SceneSP2Room3::Update(double dt)
 			glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 		}
 	}
+
+	//switch (SpeakPhase)
+	//{
+	//	//default
+	//case 0:
+	//	showChatbox = false;
+	//	SpeakTimer = 0;
+	//case 14:
+	//	SpeakTimer += dt;
+	//	if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+	//		SpeakTimer = 0;
+	//		SpeakPhase = 0;
+	//	}
+	//}
 
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
@@ -1252,6 +1276,7 @@ void SceneSP2Room3::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1674,18 +1699,23 @@ void SceneSP2Room3::Render()
 
 
 
+	//if (garageItems[0] == nullptr && SpeakPhase != 0)
+	//{
+	//	SpeakPhase = 14;
+	//}
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 	
-
-
-
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
 	//inventory
@@ -1721,9 +1751,7 @@ void SceneSP2Room3::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
@@ -1737,7 +1765,7 @@ void SceneSP2Room3::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
 			break;
 		}
 	case 2:
@@ -1769,6 +1797,15 @@ void SceneSP2Room3::Render()
 			break;
 		}
 	}
+	//switch (SpeakPhase)
+	//{
+	//case 0:
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+	//	break;
+	//case 14:
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Got the screwdriver..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+	//	break;
+	//}
 	//inventory
 	if (inventory->open)
 	{

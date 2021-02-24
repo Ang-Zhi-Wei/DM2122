@@ -497,8 +497,6 @@ void SceneSP2Room1::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
-	DS_MAIN = OPEN;
-	rotateY[0] = 90;
 	if (flashlight)
 	{
 		light[1].power = 2;
@@ -691,11 +689,6 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	if (nearExit == true && Fpressed == true)
-	{
-		exitHouse = true;
-		Fpressed = false;
-	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -797,6 +790,7 @@ void SceneSP2Room1::Update(double dt)
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
+				flashlight = false;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -839,8 +833,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
-			interact = true;
-			interact_message = "Exit House";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
@@ -851,17 +844,24 @@ void SceneSP2Room1::Update(double dt)
 				Application::setscene(Scene_Main);
 			}
 		}
+		else {
+			nearExit = false;
+			showChatbox = false;
+		}
 		break;
 	case CLOSED:
 		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
-			interact = true;
-			interact_message = "Exit House";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
 				DS_MAIN = OPENING;
 			}
+		}
+		else {
+			nearExit = false;
+			showChatbox = false;
 		}
 		break;
 	case OPENING:
@@ -1096,7 +1096,7 @@ void SceneSP2Room1::Update(double dt)
 			light[1].power = 0;
 			meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 		}
-		else if (flashlight_lifetime > 0)
+		else if (flashlight_lifetime > 0 && !inLocker)
 		{
 			flashlight = true;
 			light[1].power = 2;
@@ -1893,11 +1893,14 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 	
 
-	
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	//UI OVERLAY
 
@@ -1938,9 +1941,6 @@ void SceneSP2Room1::Render()
 	}
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
 
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
@@ -1956,7 +1956,7 @@ void SceneSP2Room1::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
 			break;
 		}
 	case 2:

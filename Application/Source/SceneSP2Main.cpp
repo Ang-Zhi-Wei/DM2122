@@ -1069,11 +1069,13 @@ void SceneSP2Main::Init()
 	/*test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
 	battery.Set("Battery", Item::BATTERY);*/
-	items[0] = new Item("battery", Item::BATTERY, (0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, (60, -3, 0));
-	items[2] = new Item("battery", Item::BATTERY, (-60, -3, 100));
-	items[3] = new Item("battery", Item::BATTERY, (-200, -3, -200));
-	items[4] = new Item("battery", Item::BATTERY, (255, -3, -190));
+	items[0] = new Item("battery", Item::BATTERY, Vector3(0, -3, 340));
+	items[1] = new Item("battery", Item::BATTERY, Vector3(60, -3, 0));
+	items[2] = new Item("battery", Item::BATTERY, Vector3(-60, -3, 100));
+	items[3] = new Item("battery", Item::BATTERY, Vector3(-185, -3, -200));
+	items[4] = new Item("battery", Item::BATTERY, Vector3(255, -3, -190));
+
+
 //to be called only in one frame. placed under init just for testing first
 	//PickUpItem(&test2); //to be called only in one frame.
 	//PickUpItem(&battery);
@@ -1301,54 +1303,6 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (nearBattery == true && Fpressed == true)
-	{
-		PickUpItem(items[0]);
-		nearBattery = false;
-		Fpressed = false;
-		items[0] = NULL;
-		
-	}
-
-	if (nearBattery1 == true && Fpressed == true)
-	{
-		PickUpItem(items[1]);
-		nearBattery1 = false;
-		Fpressed = false;
-		items[1] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(items[2]);
-		nearBattery2 = false;
-		Fpressed = false;
-		items[2] = NULL;
-
-	}
-
-	if (nearBattery3 == true && Fpressed == true)
-	{
-		PickUpItem(items[3]);
-		nearBattery3 = false;
-		Fpressed = false;
-		items[3] = NULL;
-
-	}
-
-	if (nearBattery4 == true && Fpressed == true)
-	{
-		PickUpItem(items[4]);
-		nearBattery4 = false;
-		Fpressed = false;
-		items[4] = NULL;
-
-	}
-
-	
-
-
 	
 	if (!Application::IsKeyPressed('E'))
 	{
@@ -1428,6 +1382,69 @@ void SceneSP2Main::Update(double dt)
 		}
 
 	}
+	//items - batteries
+	pickUpBattery = false;
+	for (int i = 0; i < 5; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
+				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+			{
+				pickUpBattery = true;
+				if (Fpressed)
+				{
+					PickUpItem(items[i]);
+					Fpressed = false;
+					items[i] = nullptr;
+				}
+			}
+		}
+	}
+	/*if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(items[0]);
+		nearBattery = false;
+		Fpressed = false;
+		items[0] = NULL;
+		
+	}
+
+	if (nearBattery1 == true && Fpressed == true)
+	{
+		PickUpItem(items[1]);
+		nearBattery1 = false;
+		Fpressed = false;
+		items[1] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(items[2]);
+		nearBattery2 = false;
+		Fpressed = false;
+		items[2] = NULL;
+
+	}
+
+	if (nearBattery3 == true && Fpressed == true)
+	{
+		PickUpItem(items[3]);
+		nearBattery3 = false;
+		Fpressed = false;
+		items[3] = NULL;
+
+	}
+
+	if (nearBattery4 == true && Fpressed == true)
+	{
+		PickUpItem(items[4]);
+		nearBattery4 = false;
+		Fpressed = false;
+		items[4] = NULL;
+
+	}
 
 	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
 	{
@@ -1474,7 +1491,7 @@ void SceneSP2Main::Update(double dt)
 	else {
 		nearBattery4 = false;
 	}
-	
+	*/
 
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
@@ -1689,8 +1706,6 @@ void SceneSP2Main::Update(double dt)
 			SpeakPhase = 0;
 			ObjectivePhase = 2;
 		}
-
-
 		break;
 	}
 	//light
@@ -2420,51 +2435,19 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[GEO_TRUCK], true);
 	modelStack.PopMatrix();//Added collider
 
-	if (items[0] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -3, 340);
-		modelStack.Scale(0.09, 0.09, 0.09);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
+	//items - batteries
+	for (int i = 0; i < 5; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(items[i]->pos.x, items[i]->pos.y, items[i]->pos.z);
+			modelStack.Scale(0.09, 0.09, 0.09);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	if (items[1] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(60, -3, 0);
-		modelStack.Scale(0.09, 0.09, 0.09);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-
-	if (items[2] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(-60, -3, 100);
-		modelStack.Scale(0.09, 0.09, 0.09);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-
-	if (items[3] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(-185, -3, -200);
-		modelStack.Scale(0.09, 0.09, 0.09);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-
-	if (items[4] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(255, -3, -190);
-		modelStack.Scale(0.09, 0.09, 0.09);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-	//modelStack.PushMatrix();
-	//modelStack.Translate(30.f, -0.1f, 313.f);
-	//modelStack.Scale(750, 8, 30);
-	//RenderMesh(meshList[GEO_PAVEMENT], true);
-	//modelStack.PopMatrix();
-
+	
 	//ground mesh 2
 
 	modelStack.PushMatrix();
@@ -2535,7 +2518,7 @@ void SceneSP2Main::Render()
 	
 
 
-	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true || nearBattery4 == true)
+	if (pickUpBattery)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2752,6 +2735,13 @@ void SceneSP2Main::Exit()
 	{
 		delete inventory;
 		inventory = nullptr;
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			delete items[i];
+		}
 	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
