@@ -1901,7 +1901,7 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[FRIDGE], true);
 	modelStack.PopMatrix();
 
-
+	
 
 	//items
 	for (int i = 0; i < 3; i++)
