@@ -3,6 +3,7 @@
 Locker::Locker()
 {
 	Position = (0.f, 0.f, 0.f);
+	direction = (0, 0, 3);
 	hidden = false;
 	yaw = 0;
 }
@@ -57,6 +58,9 @@ bool Locker::gethidden()
 
 void Locker::setyaw(float yaw)
 {
+	Mtx44 rotation;
+	rotation.SetToRotation(yaw, 0, 1, 0);
+	direction = rotation * direction;
 	this->yaw = yaw;
 }
 
@@ -64,4 +68,16 @@ float Locker::getyaw()
 {
 	return yaw;
 }
+
+Vector3 Locker::getdirection()
+{
+	return direction;
+}
+
+Vector3 Locker::getfront()
+{
+	return (front=Position+direction);
+}
+
+
 

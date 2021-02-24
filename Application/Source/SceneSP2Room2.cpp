@@ -10,7 +10,7 @@ SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -37,6 +37,11 @@ SceneSP2Room2::SceneSP2Room2()
 	itemImage[5] = meshList[GEO_ITEMIMAGE5];
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];*/
+
+	//@pause
+	gamepaused = false;
+	PKeypressed = PKeyreleased = false;
+	//======
 }
 
 SceneSP2Room2::~SceneSP2Room2()
@@ -240,7 +245,7 @@ void SceneSP2Room2::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -358,6 +363,7 @@ void SceneSP2Room2::Init()
 	Lockerlist[1].setpos(Vector3(472.1, 0.f, 50));
 	Lockerlist.push_back(Locker());
 	Lockerlist[2].setpos(Vector3(568, 0, -70));
+	Lockerlist[2].setyaw(180);
 
 	//wall colliders
 
@@ -436,20 +442,32 @@ void SceneSP2Room2::Init()
 			Colliderlist[(row * 5 + col) + 37].Setposition(classroom_tables[row * 5 + col].mid);
 		}
 	}
+	//podium collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[57].setlength(4, 10, 4);
+	Colliderlist[57].Setposition(Vector3(podium.mid.x-1.15,podium.mid.y,podium.mid.z));
+	//pigeonhole collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[58].setlength(37.5, 20, 7);
+	Colliderlist[58].Setposition(Vector3(540, 10, -100));
+	//longtable collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[59].setlength(15,5,10);
+	Colliderlist[59].Setposition(lounge_table.mid);
 	//colliderbox for checking any collider(just one)
 	//@collider
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[7].getxlength(), Colliderlist[7].getylength(), Colliderlist[7].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[59].getxlength(), Colliderlist[59].getylength(), Colliderlist[59].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//schoolfloor.tga");//this one was in render cousing memory leak
-	meshList[GEO_WALL1] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL1] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 22, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL1]->textureID = LoadTGA("Image//schoolwall.tga");/////////////////////////////////////////////////////////
-	meshList[GEO_WALL2] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL2] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 10, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL2]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_WALL3] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_WALL3] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 4.5, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_WALL3]->textureID = LoadTGA("Image//schoolwall.tga");
-	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0, 1.f/22.f, 10.f/25.f, Color(1.f, 0.1f, 0.1f));
+	meshList[GEO_TOPHALFWALL] = MeshBuilder::GenerateCubeT("walls", 1, 1, 1, 0, 0.5, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_TOPHALFWALL]->textureID = LoadTGA("Image//schoolwall.tga");
 	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
 	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
@@ -486,7 +504,7 @@ void SceneSP2Room2::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -509,6 +527,11 @@ void SceneSP2Room2::Init()
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
+	//@pause
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
 
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
@@ -560,12 +583,25 @@ void SceneSP2Room2::Set(Scene* scene)
 	inventory = scene->inventory;
 	ghost = scene->ghost;
 	ObjectivePhase = scene->ObjectivePhase;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
 	DS_school = OPEN;
 	school_door[0].rotateY = -90;
 	school_door[1].rotateY = 90;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
@@ -624,7 +660,7 @@ void SceneSP2Room2::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -783,7 +819,6 @@ void SceneSP2Room2::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -798,7 +833,6 @@ void SceneSP2Room2::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
 
@@ -872,8 +906,123 @@ void SceneSP2Room2::Update(double dt)
 		}
 	}
 
+	//@pause
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
+
+	//@pause
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
+	}
+
 	//ghost
-	ghost->UpdateState(camera.position, inLocker, dt);
+	switch (ghost->state)
+	{
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
+		break;
+
+	}
 
 
 
@@ -1068,7 +1217,7 @@ void SceneSP2Room2::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1076,10 +1225,10 @@ void SceneSP2Room2::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1239,7 +1388,71 @@ void SceneSP2Room2::Update(double dt)
 
 void SceneSP2Room2::PauseUpdate()
 {
+	//@pause
 	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::hidemousecursor(true);
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+			Background->drop();
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Room2::Render()
@@ -1298,7 +1511,7 @@ void SceneSP2Room2::Render()
 	//colliderbox for checking
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[7].getPosition().x, Colliderlist[7].getPosition().y, Colliderlist[7].getPosition().z);
+	modelStack.Translate(Colliderlist[59].getPosition().x, Colliderlist[59].getPosition().y, Colliderlist[59].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -1315,15 +1528,6 @@ void SceneSP2Room2::Render()
 			modelStack.PopMatrix();
 			break;
 		}
-	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
 	}
 	//all walls
 	for (int i = 0; i < 3; i++)
@@ -1443,6 +1647,7 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 	//longtable in faculty lounge
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(lounge_table.mid.x, 0, lounge_table.mid.z);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
@@ -1450,23 +1655,25 @@ void SceneSP2Room2::Render()
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
 	//podium
+
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_PODIUM], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
+	
 	//pigeon hole in lounge
 	modelStack.PushMatrix();
 	modelStack.Translate(540, 10, -100); // pos on map
 	modelStack.Translate(50, 0, 0); //move obj to origin
 	modelStack.Scale(0.2, 0.2, 0.2);
 	RenderMesh(meshList[GEO_PIGEONHOLE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
-	modelStack.Rotate(-20, ghost->axis.x, 0, ghost->axis.z);
+	modelStack.Rotate(-10, ghost->axis.x, 0, ghost->axis.z);
 	modelStack.Rotate(ghost->rotateY - 90, 0, 1, 0);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -3, 0);
@@ -1482,6 +1689,15 @@ void SceneSP2Room2::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	std::stringstream posx;
@@ -1497,33 +1713,7 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
-
-	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
-	}
-	//objectives
-	switch (ObjectivePhase)
-	{
-	case 0:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
-			break;
-		}
-	case 1:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
-			break;
-		}
-	case 2:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
-			break;
-		}
-	}
+	
 
 	if (nearExit == true) {
 		showChatbox = true;
@@ -1563,6 +1753,56 @@ void SceneSP2Room2::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+	//objectives
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
+	}
 	//inventory
 	if (inventory->open)
 	{
@@ -1597,14 +1837,14 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
 	std::ostringstream test1;
-	test1 << "camera facing: " << camera.view;
+	test1 << "ghost pos: " << ghost->pos;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
-	test3 << "ghost distance: " << ghost->distance;
-	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
-	std::ostringstream test2;
-	test2 << "ghost stat: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	//std::ostringstream test3;
+	//test3 << "ghost distance: " << ghost->distance;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
+	//std::ostringstream test2;
+	//test2 << "ghost stat: " << ghost->state;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -1624,7 +1864,12 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
-	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);\
+
+	//@pause
+	//pause menu, place all the way at the bottom in render
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
 
 void SceneSP2Room2::Exit()
@@ -1941,5 +2186,3 @@ void SceneSP2Room2::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-
-

@@ -19,6 +19,10 @@ SceneSP2Main::SceneSP2Main()
 	showSideBox = true;
 	SpeakPhase = 1;
 	SpeakTimer = 0;
+	SparkplugFound = 0;
+	hammerFound = 0;
+	wrenchFound = 0;
+	screwDriverFound = 0;
 	Interact_Num = 0;
 	manAppear = true;
 	nearBattery,nearBattery1,nearBattery2, nearBattery3, nearBattery4 = false;
@@ -27,7 +31,7 @@ SceneSP2Main::SceneSP2Main()
 	ObjectivePhase = 0;
 	is_talking = false;
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	NearGarage = false;
@@ -418,7 +422,7 @@ void SceneSP2Main::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 5, 270);
 	light[1].color.Set(White);
-	light[1].power = 2;
+	light[1].power = 0;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -553,7 +557,7 @@ void SceneSP2Main::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -593,7 +597,7 @@ void SceneSP2Main::Init()
 
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 
@@ -732,6 +736,7 @@ void SceneSP2Main::Init()
 	Colliderlist[39].Setposition(Vector3(308, -7, -295));
 	Colliderlist[39].setlength(52, 50, 10);
 	//left/right fence
+	//@fence
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[40].setlength(10, 50, 52);
 	Colliderlist[40].Setposition(Vector3(-335, -7, 271));
@@ -749,7 +754,7 @@ void SceneSP2Main::Init()
 	Colliderlist[44].Setposition(Vector3(-335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[45].setlength(10, 50, 52);
-	Colliderlist[45].Setposition(Vector3(-335, -7, 35));
+	Colliderlist[45].Setposition(Vector3(-335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[46].setlength(10, 50, 52);
 	Colliderlist[46].Setposition(Vector3(-335, -7, -271));
@@ -767,7 +772,7 @@ void SceneSP2Main::Init()
 	Colliderlist[50].Setposition(Vector3(-335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[51].setlength(10, 50, 52);
-	Colliderlist[51].Setposition(Vector3(-335, -7, -35));
+	Colliderlist[51].Setposition(Vector3(-335, -7, -45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[52].setlength(10, 50, 52);
 	Colliderlist[52].Setposition(Vector3(335, -7, 271));
@@ -785,7 +790,7 @@ void SceneSP2Main::Init()
 	Colliderlist[56].Setposition(Vector3(335, -7, 75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[57].setlength(10, 50, 52);
-	Colliderlist[57].Setposition(Vector3(335, -7, 35));
+	Colliderlist[57].Setposition(Vector3(335, -7, 45.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[58].setlength(10, 50, 52);
 	Colliderlist[58].Setposition(Vector3(335, -7, -271));
@@ -803,7 +808,7 @@ void SceneSP2Main::Init()
 	Colliderlist[62].Setposition(Vector3(335, -7, -75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[63].setlength(10, 50, 52);
-	Colliderlist[63].Setposition(Vector3(335, -7, -35));
+	Colliderlist[63].Setposition(Vector3(335, -7, -45.5));
 	//Tree colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[64].setlength(10, 20, 10);
@@ -1036,7 +1041,7 @@ void SceneSP2Main::Init()
 	Colliderlist[138].setlength(70, 100, 105);
 	Colliderlist[138].Setposition(Vector3(0, -4, 510));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[138].getxlength(), Colliderlist[138].getylength(), Colliderlist[138].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[45].getxlength(), Colliderlist[45].getylength(), Colliderlist[45].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1084,10 +1089,14 @@ void SceneSP2Main::Init()
 
 void SceneSP2Main::Set(Scene* scene)
 {
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	inventory = scene->inventory;
 	if (ghost->state == Ghost::UNSPAWNED)
 	{
-		ghost->pos.Set(0, 0, -1000);
+		//ghost->pos.Set(0, 0, -1000);
 		ghost->state = Ghost::NORMAL;
 	}
 	else
@@ -1096,7 +1105,16 @@ void SceneSP2Main::Set(Scene* scene)
 	}
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 
 	//other lights
 	light[2].power = 2;
@@ -1149,7 +1167,7 @@ void SceneSP2Main::Update(double dt)
 	
 	
 	//sounds when ghost get too close
-	if (ghost->kill==false && ghost->state==Ghost::DEATH) {
+	if (ghost->kill==false && ghost->state==Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -1406,7 +1424,7 @@ void SceneSP2Main::Update(double dt)
 
 	}
 
-	if (campos_z > 340 && campos_z < 355 && campos_x > -4 && campos_x < 4 && items[0] != nullptr )
+	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
 	{
 		nearBattery = true;
 	}
@@ -1749,13 +1767,99 @@ void SceneSP2Main::Update(double dt)
 	
 
 	//ghost
-	if (!is_talking)
+	switch (ghost->state)
 	{
-		ghost->UpdateState(camera.position, inLocker, dt);
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+		
+		
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+	
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+		
+		break;
+	default:
+		break;
+
 	}
 
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;
@@ -1824,9 +1928,9 @@ void SceneSP2Main::Update(double dt)
 
 void SceneSP2Main::PauseUpdate()
 {
-	//Application::hidemousecursor(false);
+	Application::hidemousecursor(false);
 
-	if (!Application::IsKeyPressed('P'))
+	if (!Application::IsKeyPressed(VK_ESCAPE))
 	{
 		PKeyreleased = true;
 		PKeypressed = false;
@@ -2080,7 +2184,7 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[138].getPosition().x, Colliderlist[138].getPosition().y, Colliderlist[138].getPosition().z);
+	modelStack.Translate(Colliderlist[45].getPosition().x, Colliderlist[45].getPosition().y, Colliderlist[45].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -2421,7 +2525,7 @@ void SceneSP2Main::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-
+	
 
 
 	if (nearBattery == true || nearBattery1 == true || nearBattery2 == true || nearBattery3 == true || nearBattery4 == true)
@@ -2563,8 +2667,8 @@ void SceneSP2Main::Render()
 
 	//objectives screen
 	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2576,12 +2680,36 @@ void SceneSP2Main::Render()
 		}
 	case 1:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
 			break;
 		}
 	case 2:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
 			break;
 		}
 	}
@@ -2597,14 +2725,14 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 	std::ostringstream test1;
-	test1 << "ghost distance: " << ghost->distance;
+	test1 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
-	std::ostringstream test3;
+	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 }
 
 void SceneSP2Main::Exit()
@@ -4058,5 +4186,4 @@ void SceneSP2Main::RenderTrees()
 	modelStack.PopMatrix();//Added collider
 
 }
-
 

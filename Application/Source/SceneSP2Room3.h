@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -85,6 +86,7 @@ public:
 		GEO_ITEMIMAGE5,
 		GEO_ITEMIMAGE6,
 		GEO_ITEMIMAGE7,
+
 		
 		//locker
 		locker,
@@ -186,9 +188,11 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
+	bool nearBattery, nearBattery2;
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
+	bool nearScrewdriver;
 	bool showChatbox;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
@@ -196,6 +200,15 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
+
+	Item* garageItems[3];
+
 	struct Wall
 	{
 		Vector3 mid;
@@ -235,7 +248,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 

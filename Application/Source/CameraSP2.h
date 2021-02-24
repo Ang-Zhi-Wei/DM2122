@@ -5,6 +5,7 @@
 #include "ColliderBox.h"
 #include "Locker.h"
 #include <vector>
+
 class CameraSP2 : public Camera
 {
 public:
@@ -18,6 +19,7 @@ public:
 	Vector3 defaultUp;
 	Vector3 defaultview;
 	Vector3 rawTarget, viewTarget;
+	Vector3 newTarget, lockedTarget;
 
 	std::vector<ColliderBox>Checker;
 

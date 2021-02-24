@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+
 	//struct Item
 	//{
 	//	enum ITEM_TYPE
@@ -222,6 +223,9 @@ public:
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 
+		//@pause
+		GEO_PAUSEMENU,
+
 		GEO_INVENTORY,
 		GEO_BATTERY,
 		GEO_SELECT,
@@ -374,6 +378,12 @@ private:
 	bool jumpscare2Pass;
 	bool jumpscare2ActiveZone;
 	bool jumpscareActive2;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	float campos_x;
 	float campos_y;

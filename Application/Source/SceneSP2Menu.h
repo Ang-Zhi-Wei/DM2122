@@ -29,6 +29,7 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
+
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,

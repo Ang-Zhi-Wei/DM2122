@@ -11,10 +11,11 @@ SceneSP2Room3::SceneSP2Room3()
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
 	interact = false;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	exitGarage = false;
+	nearScrewdriver = false;
 	showSideBox = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -30,6 +31,11 @@ SceneSP2Room3::SceneSP2Room3()
 	DS_school = OPEN;
 	camBlinkOn = false;
 	camBlinkOff = true;
+
+	//@pause
+	gamepaused = false;
+	PKeypressed = PKeyreleased = false;
+	//======
 }
 
 SceneSP2Room3::~SceneSP2Room3()
@@ -191,13 +197,10 @@ void SceneSP2Room3::Init()
 	meshList[barrels]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	meshList[barrels]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	/*meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
-	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
-	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver.obj");
-	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver.tga");
-	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);*/
+	meshList[screwdriver] = MeshBuilder::GenerateOBJ("Building", "OBJ//screwdriver2.obj");
+	meshList[screwdriver]->textureID = LoadTGA("Assigment2Images//screwdriver2.tga");
+	meshList[screwdriver]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
@@ -221,6 +224,14 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//garagedoor.obj");
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
+	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
+	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, (-22, 7.8, -95));
+	garageItems[1] = new Item("battery", Item::BATTERY, (-20, 7.5, -60));
+	garageItems[2] = new Item("battery", Item::BATTERY, (25, 0, -60));
 
 
 	//light 0
@@ -306,7 +317,7 @@ void SceneSP2Room3::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_WARNING1] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
 	meshList[GEO_WARNING1]->textureID = LoadTGA("Image//pinktint.tga");
 	meshList[GEO_WARNING2] = MeshBuilder::GenerateQuad2("warning overlay", 80, 60, 0);
@@ -328,6 +339,11 @@ void SceneSP2Room3::Init()
 	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
 	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
 
+	//@pause
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
+
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -345,7 +361,7 @@ void SceneSP2Room3::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -406,6 +422,7 @@ void SceneSP2Room3::Init()
 	//list of lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setyaw(180);
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
@@ -503,9 +520,22 @@ void SceneSP2Room3::Set(Scene* scene)
 	inventory = scene->inventory;
 	ghost = scene->ghost;
 	flashlight = scene->flashlight;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
@@ -559,7 +589,7 @@ void SceneSP2Room3::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -621,6 +651,36 @@ void SceneSP2Room3::Update(double dt)
 		
 		Freleased = false;
 	}
+
+	if (nearScrewdriver == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[0]);
+		nearScrewdriver = false;
+		Fpressed = false;
+		garageItems[0] = NULL;
+		screwDriverFound = 1;
+
+	}
+
+	if (nearBattery == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[1]);
+		nearBattery = false;
+		Fpressed = false;
+		garageItems[1] = NULL;
+
+	}
+
+	if (nearBattery2 == true && Fpressed == true)
+	{
+		PickUpItem(garageItems[2]);
+		nearBattery2 = false;
+		Fpressed = false;
+		garageItems[2] = NULL;
+
+	}
+
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitGarage = true;
@@ -693,6 +753,33 @@ void SceneSP2Room3::Update(double dt)
 		showChatbox = false;
 	}
 
+
+	if (campos_x < -15 && campos_x > -24 && campos_z < -87 && campos_z > -91 && garageItems[0] != nullptr)
+	{
+		nearScrewdriver = true;
+	}
+	else {
+		nearScrewdriver = false;
+	}
+
+
+	if (campos_x < -15 && campos_z < -56 && campos_z > -63 && garageItems[1] != nullptr)
+	{
+		nearBattery = true;
+	}
+	else {
+		nearBattery = false;
+	}
+
+	//18 -63
+	if (campos_x > 18 && campos_x < 23 && campos_z > -64 && campos_z < -54 && garageItems[2] != nullptr)
+	{
+		nearBattery2 = true;
+	}
+	else {
+		nearBattery2 = false;
+	}
+
 	if (exitGarage == true && nearExit == true)
 	{
 		Background->setSoundVolume(0.f);
@@ -720,7 +807,6 @@ void SceneSP2Room3::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -735,7 +821,6 @@ void SceneSP2Room3::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
 
@@ -828,6 +913,32 @@ void SceneSP2Room3::Update(double dt)
 			//else warning that no item selected?
 			Rpressed = false;
 		}
+	}
+
+	//@pause
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
+
+	//@pause
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
 	}
 
 	if (flashlight)
@@ -1011,13 +1122,102 @@ void SceneSP2Room3::Update(double dt)
 		break;
 	}
 	//ghost
-	ghost->UpdateState(camera.position, inLocker, dt);
+	switch (ghost->state)
+	{
+	case Ghost::NORMAL:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+
+		if (ghost->distance <= 50)
+		{
+			ghost->state = Ghost::CHASING;
+			ghost->speed = 25;
+		}
+		break;
+	case Ghost::CHASING:
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance <= 7 && inLocker)
+		{
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
+		}
+		else if (ghost->distance <= 7)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
+		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
+	case Ghost::WAITING:
+		ghost->waitTime -= float(dt);
+		if (ghost->waitTime <= 0)
+		{
+			ghost->state = Ghost::SPEEDRUN;
+			ghost->speed = 50;
+		}
+		break;
+	case Ghost::SPEEDRUN:
+		ghost->facing = ghost->pos - camera.position;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
+		ghost->UpdateMovement(dt);
+		if (ghost->distance > 500 || !inLocker)
+		{
+			ghost->state = Ghost::NORMAL;
+			ghost->speed = 5;
+		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
+		break;
+
+	}
 	//Locker
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -1025,10 +1225,10 @@ void SceneSP2Room3::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1094,7 +1294,71 @@ void SceneSP2Room3::Update(double dt)
 
 void SceneSP2Room3::PauseUpdate()
 {
+	//@pause
 	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::hidemousecursor(true);
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+			Background->drop();
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Room3::Render()
@@ -1172,15 +1436,7 @@ void SceneSP2Room3::Render()
 			break;
 		}
 	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
+	
 	
 	
 
@@ -1314,6 +1570,35 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[garagedoor], true);
 	modelStack.PopMatrix();
 
+	if (garageItems[0] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-22, 7.8, -95);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.27, 0.27, 0.27);
+		RenderMesh(meshList[screwdriver], true);
+		modelStack.PopMatrix();
+	}
+
+
+	//batteries
+	if (garageItems[1] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 7.5, -60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
+
+	if (garageItems[2] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(25, 0, -60);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.06, 0.06, 0.06);
+		RenderMesh(meshList[BATTERY], true);
+		modelStack.PopMatrix();
+	}
 
 	//ghost
 	modelStack.PushMatrix();
@@ -1333,7 +1618,15 @@ void SceneSP2Room3::Render()
 	RenderMesh(meshList[GEO_SKULL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
@@ -1348,33 +1641,17 @@ void SceneSP2Room3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-	if (showSideBox == true) {
-		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 35.f, 1.f, 1.2f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.5f, 1.f, 10.1f);
-	}
 
-	switch (ObjectivePhase)
+
+
+
+	if (nearScrewdriver == true || nearBattery == true || nearBattery2 == true)
 	{
-	case 0:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
-			break;
-		}
-	case 1:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
-			break;
-		}
-	case 2:
-		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "Find screwdriver in a building", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
-			break;
-		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
+	
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+
 
 	if (nearExit == true) {
 		showChatbox = true;
@@ -1414,6 +1691,54 @@ void SceneSP2Room3::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 3.f, 1.2f, 10.3f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
+	}
 	//inventory
 	if (inventory->open)
 	{
@@ -1442,6 +1767,11 @@ void SceneSP2Room3::Render()
 		}
 
 	}
+
+	//@pause
+	//pause menu, place all the way at the bottom in render
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
 
 void SceneSP2Room3::Exit()
@@ -1497,8 +1827,6 @@ void SceneSP2Room3::RenderSkybox()
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
-
-
 
 
 bool SceneSP2Room3::PickUpItem(Item* item)

@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+	
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
@@ -70,6 +71,10 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		BATTERY,
+
+		//@pause
+		GEO_PAUSEMENU,
 
 		GEO_INVENTORY,
 		GEO_BATTERY,
@@ -175,7 +180,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 	void RenderSkybox();
@@ -191,10 +196,12 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
+	Item* houseItems[4];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
 	bool camBlinkOff;
+	bool nearBattery, nearBattery2, nearBattery3;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
@@ -243,6 +250,12 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	float campos_x;
 	float campos_y;

@@ -11,10 +11,11 @@ SceneSP2Room4::SceneSP2Room4()
 	//if you see anything from here missing in init just copy and paste them 
 	LSPEED = 10.F;
 	interact = false;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
+	showSideBox = true;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
@@ -31,6 +32,13 @@ SceneSP2Room4::SceneSP2Room4()
 	placeitem = false;
 	doorunlocked = false;
 
+	//@pause
+	gamepaused = false;
+	PKeypressed = PKeyreleased = false;
+	//======
+
+	//inventory icons
+	itemImage[0] = meshList[GEO_SPARKPLUGICON];
 }
 
 SceneSP2Room4::~SceneSP2Room4()
@@ -170,11 +178,18 @@ void SceneSP2Room4::Init()
 	
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
-
+	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
+	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
+	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
+	meshList[GEO_SELECT]->textureID = LoadTGA("Image//highlight.tga");
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+	meshList[GEO_ITEMDISPLAY] = MeshBuilder::GenerateQuad2("item details popup", 1.5, 1, White);
+	meshList[GEO_ITEMDISPLAY]->textureID = LoadTGA("Image//itemdisplay.tga");
+
+	meshList[GEO_SPARKPLUGICON] = MeshBuilder::GenerateQuad2("item image", 1, 1, White);
 
 	//meshList[workbench] = MeshBuilder::GenerateOBJ("Building", "OBJ//Workbench.obj");
 	////meshList[workbench]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
@@ -244,8 +259,14 @@ void SceneSP2Room4::Init()
 	meshList[frontdesk]->textureID = LoadTGA("Image//desks.tga");
 	meshList[frontdesk]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+
+	meshList[sparkplug] = MeshBuilder::GenerateOBJ("desk", "OBJ//sparkplug.obj");
+	meshList[sparkplug]->textureID = LoadTGA("Image//sparkplug.tga");
+	meshList[sparkplug]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
+
 
 
 	/*meshList[garagedoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//door.obj");*/
@@ -255,6 +276,7 @@ void SceneSP2Room4::Init()
 	//meshList[rolldoor] = MeshBuilder::GenerateOBJ("Building", "OBJ//RollDoor.obj");
 	////meshList[rolldoor]->textureID = LoadTGA("Assigment2Images//barreltexture.tga");
 	//meshList[rolldoor]->material.kAmbient.Set(0.35, 0.35, 0.35);
+
 	//light 0
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 7, 270);
@@ -320,7 +342,7 @@ void SceneSP2Room4::Init()
 	
 	//init update stuff
 	LSPEED = 10.F;
-	flashlight = true;
+	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
 	Qpressed = Qreleased = false;
@@ -329,15 +351,18 @@ void SceneSP2Room4::Init()
 	Apressed = Areleased = false;
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
+
+
+	translateobj = 6;
+
 	flowerCounter = 0;
 	jumpscareTimerActive1 = false;
 	jumpscareTimer1 = 0.2;
 	jumpscareActive1 = false;
 
 
-
-	
-
+	//scene items
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
 
 
 	
@@ -365,7 +390,7 @@ void SceneSP2Room4::Init()
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setpos(Vector3(-58.f, -0.2f, -80.f));
 
 	//wall colliders
 	//@collider
@@ -431,10 +456,6 @@ void SceneSP2Room4::Init()
 	Colliderlist[13].setlength(165, 25, 1);
 	Colliderlist[13].Setposition(Vector3(0, 12, -100));
 
-	//front wall
-	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(165, 25, 1);
-	Colliderlist[13].Setposition(Vector3(0, 12, 0));
 
 	//entrance walls
 	Colliderlist.push_back(ColliderBox());
@@ -480,8 +501,31 @@ void SceneSP2Room4::Init()
 	Colliderlist[23].setlength(5, 12, 24);
 	Colliderlist[23].Setposition(Vector3(16, 0, -18));
 
+	//left room doors
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[24].setlength(5, 15.5, 4);
+	Colliderlist[24].Setposition(Vector3(32, 7.2, -42.5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[25].setlength(2, 15.5, 4);
+	Colliderlist[25].Setposition(Vector3(41, 7.2, -42.5));
+
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[26].setlength(22, 15.5, 7.5);
+	Colliderlist[26].Setposition(Vector3(0, 3, -72));
+
+	//front wall
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(165, 25, 1);
+	Colliderlist[27].Setposition(Vector3(0, 12, 0));
+
+	//lockercollider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(3.9, 10, 4.3);
+	Colliderlist[27].Setposition(Vector3(Lockerlist[0].getpos()));
+
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[22].getxlength(), Colliderlist[22].getylength(), Colliderlist[22].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[26].getxlength(), Colliderlist[26].getylength(), Colliderlist[26].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -499,8 +543,16 @@ void SceneSP2Room4::Init()
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
-	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
-	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
+	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
+	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
+	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
+
+	//@pause
+	//pause menu
+	meshList[GEO_PAUSEMENU] = MeshBuilder::GenerateQuad2("pause", 1, 1, 0);
+	meshList[GEO_PAUSEMENU]->textureID = LoadTGA("Image//pause.tga");
+
 	//Locker mesh
 	meshList[locker] = MeshBuilder::GenerateOBJ("Locker", "OBJ//locker.obj");
 	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -529,13 +581,52 @@ void SceneSP2Room4::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
 }
 
+void SceneSP2Room4::UseItem(int itemname)
+{
+	switch (itemname)
+	{
+	case Item::BATTERY:
+		if (flashlight_lifetime < 20)
+		{
+			flashlight_lifetime = 90;
+
+			//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+
+		break;
+	}
+}
+
 void SceneSP2Room4::Set(Scene* scene)
 {
 	inventory = scene->inventory;
 	ghost = scene->ghost;
+	screwDriverFound = scene->screwDriverFound;
+	hammerFound = scene->hammerFound;
+	wrenchFound = scene->wrenchFound;
+	SparkplugFound = scene->SparkplugFound;
+	ObjectivePhase = scene->ObjectivePhase;
 	flashlight = scene->flashlight;
 	flashlight_lifetime = scene->flashlight_lifetime;
-
+	if (flashlight)
+	{
+		light[1].power = 2;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONON.tga");
+	}
+	else 
+	{
+		light[1].power = 0;
+		meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
+	}
 	//other lights
 	light[2].power = 0;
 	light[3].power = 0;
@@ -578,8 +669,6 @@ void SceneSP2Room4::SetBackground()
 	
 }
 
-
-
 void SceneSP2Room4::Update(double dt)
 {
 	//mouse cursor show/hide
@@ -591,7 +680,7 @@ void SceneSP2Room4::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::DEATH) {
+	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -632,7 +721,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Qreleased)
 		{
 			Qpressed = true;
-
 		}
 		Qreleased = false;
 	}
@@ -737,6 +825,7 @@ void SceneSP2Room4::Update(double dt)
 	fps = 1.f / float(dt);
 	//camera
 	camera.Update(dt);
+	camera.can_move = true;
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -748,7 +837,6 @@ void SceneSP2Room4::Update(double dt)
 		camBlinkOn = true;
 		camBlinkOff = false;
 		camBlinkOffSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder.tga");
 	}
 	if (camBlinkOn)
 	{
@@ -763,7 +851,6 @@ void SceneSP2Room4::Update(double dt)
 		camBlinkOff = true;
 		camBlinkOn = false;
 		camBlinkOnSec = 0;
-		meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	}
 	//toggle flashlight on/off
 
@@ -806,8 +893,31 @@ void SceneSP2Room4::Update(double dt)
 	Vector3 origin(0, 5, 0);
 
 
+	//@pause
+	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
 
+		}
+		PKeyreleased = false;
+	}
+	//================================================================
 
+	//@pause
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = true;
+		Application::pause(true);
+	}
 
 	//door states
 	switch (DS_main)
@@ -877,17 +987,33 @@ void SceneSP2Room4::Update(double dt)
 		break;
 	}
 
+	//rotate sparkplug
+	rotateobj += float(40 * dt);
 
-
-
+	//check for jumpscare
+	/*if (itemplaced[6])
+	{
+		jumpscareActive1 = true;
+		jumpscareTimerActive1 = true;
+		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	}
+	if (jumpscareTimerActive1 == true)
+	{
+		jumpscareTimer1 -= dt;
+	}
+	if (jumpscareTimer1 <= 0)
+	{
+		jumpscareActive1 = false;
+	}*/
+	
 	//ghost
 	switch (ghost->state)
 	{
 	case Ghost::NORMAL:
-
-		ghost->facing = (camera.position - ghost->pos).Normalized();
+		ghost->facing = camera.position - ghost->pos;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 
 		if (ghost->distance <= 50)
@@ -897,20 +1023,26 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::CHASING:
-		ghost->facing = (camera.position - ghost->pos).Normalized();
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->facing = camera.position - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
-		if (ghost->distance <= 3 && inLocker)
+		if (ghost->distance <= 7 && inLocker)
 		{
-			ghost->state = Ghost::WAITING;
-			ghost->waitTime = 3;
+
+			ghost->state = Ghost::TOLOCKER;
+			ghost->waitTime = 5;
 		}
-		else if (ghost->distance <= 1)
+		else if (ghost->distance <= 7)
 		{
-			//TBC
-			//end game condition met, either that or HP - 1
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
 		}
 		break;
+	case Ghost::TOLOCKER:
+		ghost->state = Ghost::WAITING;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
 		if (ghost->waitTime <= 0)
@@ -920,15 +1052,48 @@ void SceneSP2Room4::Update(double dt)
 		}
 		break;
 	case Ghost::SPEEDRUN:
-		ghost->facing = (ghost->pos - camera.position).Normalized();
+		ghost->facing = ghost->pos - camera.position;
 		ghost->facing.y = 0;
-		ghost->distance = (camera.position - ghost->pos).Length();
+		ghost->distance = ghost->facing.Length();
+		ghost->facing.Normalize();
 		ghost->UpdateMovement(dt);
 		if (ghost->distance > 500 || !inLocker)
 		{
 			ghost->state = Ghost::NORMAL;
 			ghost->speed = 5;
 		}
+		break;
+	case Ghost::SPIN:
+		camera.can_move = false;
+
+
+		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.target = camera.newTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		if ((camera.lockedTarget - camera.target).Length() < 0.1)
+		{
+			camera.target = camera.lockedTarget;
+			ghost->state = Ghost::DEATH;
+		}
+
+		break;
+	case Ghost::DEATH:
+		camera.can_move = false;
+
+		camera.target = camera.lockedTarget;
+		camera.view = (camera.target - camera.position).Normalized();
+
+		camera.up = camera.defaultUp;
+		camera.right = camera.view.Cross(camera.up).Normalized();
+		camera.up = camera.right.Cross(camera.view).Normalized();
+
+		break;
+	default:
 		break;
 
 	}
@@ -937,7 +1102,7 @@ void SceneSP2Room4::Update(double dt)
 		if (Lockerlist[i].gethidden() == true) {
 			if (Fpressed) {
 				Lockerlist[i].Sethidden(false);
-				camera.teleport(temp);
+				camera.teleport(Lockerlist[i].getfront());
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
@@ -945,10 +1110,10 @@ void SceneSP2Room4::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
-				temp.Set(camera.position.x, camera.position.y, camera.position.z);
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
+				Fpressed = false;
 			}
 		}
 	}
@@ -1024,7 +1189,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 
 	}
@@ -1036,7 +1200,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
@@ -1047,7 +1210,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_l] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
@@ -1058,7 +1220,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body1_r] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
@@ -1069,7 +1230,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body2_r] = true;		
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
@@ -1080,7 +1240,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body3_r] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
@@ -1091,7 +1250,6 @@ void SceneSP2Room4::Update(double dt)
 		if (Fpressed)
 		{
 			itemplaced[body_op] = true;
-			flowerCounter = flowerCounter + 1;
 		}
 	}
 	else
@@ -1104,30 +1262,99 @@ void SceneSP2Room4::Update(double dt)
 	{
 		doorunlocked = true;
     }
-	//flowerCounter = 0;
-	//jumpscareTimerActive1 = false;
-	//jumpscareTimer1 = 0.2;
-	//jumpscareActive1 = false;
-	if (flowerCounter == 7)
+
+	//if final item placed, give sparkplug
+	if (itemplaced[6])
 	{
-		jumpscareActive1 = true;
-		jumpscareTimerActive1 = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+		if (translateobj <= 7)
+		{
+			translateobj += float(0.5 * dt);
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+		{
+			interact = true;
+			interact_message = "take spark plug";
+			if (Fpressed)
+			{
+				translateobj = 100;
+				takenspark = true;
+				PickUpItem(items[0]);
+				items[0] = NULL;
+				std::cout << "taken spark plug" << std::endl;
+			}
+		}
 	}
-	if (jumpscareTimerActive1 == true)
-	{
-		jumpscareTimer1 -= dt;
-	}
-	if (jumpscareTimer1 <= 0)
-	{
-		jumpscareActive1 = false;
-	}
-	doorRotate -= float(20 * dt);
+
 }
+
 
 void SceneSP2Room4::PauseUpdate()
 {
+	//@pause
 	Application::hidemousecursor(false);
+
+	if (!Application::IsKeyPressed(VK_ESCAPE))
+	{
+		PKeyreleased = true;
+		PKeypressed = false;
+	}
+	else
+	{
+		if (PKeyreleased)
+		{
+			PKeypressed = true;
+
+		}
+		PKeyreleased = false;
+	}
+
+	if (PKeypressed)
+	{
+		PKeypressed = false;
+		gamepaused = false;
+		Application::hidemousecursor(true);
+		Application::pause(false);
+	}
+
+	//get mouse positional coords
+	Application::GetCursorPos(&Mousex, &Mousey);
+	MposX = Mousex / 80;
+	MposY = Mousey / 60;
+	//get mouse input
+
+	static bool bLButtonState = false;
+	if (!bLButtonState && Application::IsMousePressed(0))
+	{
+		bLButtonState = true;
+		std::cout << "LBUTTON DOWN" << std::endl;
+		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
+
+		if (MposX > 10.8 && MposX < 13.3 && MposY >5.7 && MposY < 6.5)
+		{
+			std::cout << "Cont Hit!" << std::endl;
+			Application::hidemousecursor(true);
+			Application::pause(false);
+			gamepaused = false;
+		}
+		else if (MposX > 10.8 && MposX < 13.3 && MposY >7.6 && MposY < 8.6)
+		{
+			std::cout << "qMenu Hit!" << std::endl;
+			gamepaused = false;
+			Application::pause(false);
+			Application::setscene(Scene_Menu);
+			Background->drop();
+		}
+		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
+		{
+			std::cout << "quit Hit!" << std::endl;
+			Application::quit(true);
+		}
+	}
+	else if (bLButtonState && !Application::IsMousePressed(0))
+	{
+		bLButtonState = false;
+		std::cout << "LBUTTON UP" << std::endl;
+	}
 }
 
 void SceneSP2Room4::RenderLeftRoom()
@@ -1342,6 +1569,13 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-39, translateobj, -22);
+	modelStack.Rotate(rotateobj, 0, 1, 0);
+	modelStack.Scale(0.2, 0.2, 0.2);
+	RenderMesh(meshList[sparkplug], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(-28, 1, -24);
 	modelStack.Rotate(30, 0, 1, 0);
 	modelStack.Scale(0.08, 0.08, 0.08);
@@ -1420,9 +1654,44 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[22].getPosition().x, Colliderlist[22].getPosition().y, Colliderlist[22].getPosition().z);
+	modelStack.Translate(Colliderlist[26].getPosition().x, Colliderlist[26].getPosition().y, Colliderlist[26].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
+
+	//inventory
+	if (Epressed)
+	{
+		inventory->open = !inventory->open;
+		Epressed = false;
+	}
+	if (inventory->open)
+	{
+		camera.can_move = false;
+		if (Apressed)
+		{
+			inventory->selected--;
+			if (inventory->selected == -1)
+			{
+				inventory->selected = 7;
+			}
+			Apressed = false;
+		}
+		else if (Dpressed)
+		{
+			inventory->selected++;
+			inventory->selected %= 8;
+			Dpressed = false;
+		}
+		else if (Rpressed)
+		{
+			if (inventory->items[inventory->selected] != nullptr)
+			{
+				UseItem(inventory->items[inventory->selected]->type);
+			}
+			//else warning that no item selected?
+			Rpressed = false;
+		}
+	}
 
 
 	//@doors
@@ -1479,15 +1748,7 @@ void SceneSP2Room4::Render()
 			break;
 		}
 	}
-	//lockers
-	for (int i = 0; i < signed(Lockerlist.size()); i++) {
-		modelStack.PushMatrix();
-		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
-		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[locker], true);
-		modelStack.PopMatrix();
-	}
+	
 	
 	
 
@@ -1623,8 +1884,6 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 
 
-
-
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
@@ -1643,7 +1902,15 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[GEO_SKULL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
+	//lockers
+	for (int i = 0; i < signed(Lockerlist.size()); i++) {
+		modelStack.PushMatrix();
+		modelStack.Translate(Lockerlist[i].getpos().x, Lockerlist[i].getpos().y, Lockerlist[i].getpos().z);
+		modelStack.Rotate(Lockerlist[i].getyaw(), 0, 1, 0);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[locker], true);
+		modelStack.PopMatrix();
+	}
 	modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
@@ -1658,9 +1925,11 @@ void SceneSP2Room4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+
+
+
+	
+
 
 	if (nearExit == true) {
 		showChatbox = true;
@@ -1674,13 +1943,97 @@ void SceneSP2Room4::Render()
 	RenderMeshOnScreen(meshList[GEO_OVERLAY], 40, 30, 1, 1);
 	//camcorder
 	RenderMeshOnScreen(meshList[GEO_OVERLAY2], 40, 30, 1, 1);
+	//camera dot
+	if (camBlinkOn) {
+		RenderMeshOnScreen(meshList[GEO_REDDOT], 73.5, 52.5, 2.5, 3.5);
+	}
 	//stamina
 	RenderMeshOnScreen(meshList[GEO_BAR], 10 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (showSideBox == true) {
+		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+	}
+
+	switch (ObjectivePhase)
+	{
+	case 0:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(1.f, 1.f, 0.f), 2.f, 0.8f, 7.9f);
+			break;
+		}
+	case 1:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "Talk to the man at the fountain", Color(1.f, 1.f, 0.f), 2.5f, 1.2f, 11.7f);
+			break;
+		}
+	case 2:
+		if (showSideBox == true) {
+
+			modelStack.PushMatrix();
+			std::stringstream screwdriver;
+			screwdriver << "Screwdriver:" << screwDriverFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], screwdriver.str(), Color(1, 1, 0), 2.5f, 1.2f, 12.8f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream hammer;
+			hammer << "Hammer:" << hammerFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream wrench;
+			wrench << "Wrench:" << wrenchFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], wrench.str(), Color(1, 1, 0), 2.5f, 1.2f, 10.4f);
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+			std::stringstream sparkplug;
+			sparkplug << "Sparkplug:" << SparkplugFound;
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			modelStack.PopMatrix();
+
+			break;
+		}
+	}
 	//INTERACTIONS
 	if (interact)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
+
+	//inventory
+	if (inventory->open)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVENTORY], 40, 8, 7, 7);
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (inventory->items[i] != nullptr)
+			{
+				//item icon in inventory
+				RenderMeshOnScreen(itemImage[i], float(25.9 + i * double(4)), 7.9f, 3.5f, 3.5f);
+				//number of item if more than 1
+				if (inventory->items[i]->count > 1)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f, 0);
+				}
+			}
+		}
+
+		RenderMeshOnScreen(meshList[GEO_SELECT], float(25.9 + inventory->selected * double(4)), 7.9f, 4.f, 4.f);
+		if (inventory->items[inventory->selected] != nullptr)
+		{
+			RenderMeshOnScreen(meshList[GEO_ITEMDISPLAY], 55, 17, 10, 10);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->name, Color(0, 0, 0), 3, 40, 6);
+			RenderTextOnScreen(meshList[GEO_TEXT], inventory->items[inventory->selected]->description, Color(0, 0, 0), 2, 60, 8, 35);
+		}
+
+	}
+
 	/*if (placeitem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Place Flower", Color(1, 1, 0), 4, 22, 5);
@@ -1703,6 +2056,11 @@ void SceneSP2Room4::Render()
 	//checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
+
+	//@pause
+	//pause menu, place all the way at the bottom in render
+	if (gamepaused)
+		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 }
 
 void SceneSP2Room4::Exit()
@@ -1759,30 +2117,6 @@ void SceneSP2Room4::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-void SceneSP2Room4::UseItem(int itemname)
-{
-	switch (itemname)
-	{
-	case Item::BATTERY:
-
-		flashlight_lifetime = 90;
-
-		//for each item, if use condition is true and item is used pls rmb to set inventory item ptr to nullptr aka copy paste this if else
-		if (inventory->items[inventory->selected]->count > 1)
-		{
-			inventory->items[inventory->selected]->count--;
-		}
-		else
-		{
-			inventory->items[inventory->selected] = nullptr;
-		}
-
-		//else warning message?
-		break;
-	case Item::ITEM2:
-		break;
-	}
-}
 
 bool SceneSP2Room4::PickUpItem(Item* item)
 {
@@ -1931,6 +2265,70 @@ void SceneSP2Room4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
 
+}
+
+void SceneSP2Room4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit)
+{
+	if (!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 200, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+
+	//Change this line inside for loop
+	std::string toPrint;
+	if (signed(text.length()) > limit)
+	{
+		toPrint = text.substr(0, limit);
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], text.substr(limit, text.length()), color, size, x, y - 1, limit);
+	}
+	else
+	{
+		toPrint = text;
+		for (unsigned i = 0; i < toPrint.length(); ++i)
+		{
+			Mtx44 characterSpacing;
+			characterSpacing.SetToTranslation(0.5f + i * 0.5f, 0.5f, 0);
+			Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+			glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+			mesh->Render((unsigned)text[i] * 6, 6);
+		}
+	}
+
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSP2Room4::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey)

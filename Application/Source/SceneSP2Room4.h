@@ -25,6 +25,7 @@ public:
 	virtual void Exit();
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -42,6 +43,9 @@ public:
 		//UI
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+
+		//@pause
+		GEO_PAUSEMENU,
 
 		//terrain
 		GEO_TOPHALFWALL,
@@ -81,6 +85,7 @@ public:
 		xtable,
 		oplight,
 		frontdesk,
+		sparkplug,
 
 		//UI tings
 		GEO_TEXT,
@@ -88,10 +93,16 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_JUMPSCARE1,
-
+		GEO_REDDOT,
 
 		//trap
 		GEO_BEARTRAP,
+
+		GEO_INVENTORY,
+		GEO_ITEMIMAGE1,
+		GEO_SELECT,
+		GEO_ITEMDISPLAY,
+		GEO_SPARKPLUGICON,
 		
 		NUM_GEOMETRY,
 	};
@@ -178,8 +189,9 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+	bool showSideBox;
 
-
+	Item* items[10];
 
 	float campos_x;
 	float campos_y;
@@ -188,12 +200,18 @@ private:
 	bool nearExit;
 	bool showChatbox;
 
+	float rotateobj;
+	float translateobj;
+	bool takenspark;
+
+
 	//Jumpscare
 	int flowerCounter = 0;
 	bool jumpscareTimerActive1;
 	double jumpscareTimer1;
 	int jumpscareCounter1;
 	bool jumpscareActive1;
+
 
 	struct Wall
 	{
@@ -234,7 +252,7 @@ private:
 			Vector3 temp = TrapPosition;
 			temp.y = 0;
 			Vector3 distance = temp - CameraPosition;
-			return(distance.Length() < 2);
+			return(distance.Length() < 3);
 		}
 	};
 
@@ -270,6 +288,7 @@ private:
 	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 	void RenderLeftRoom();
@@ -281,8 +300,14 @@ private:
 
 	int bodyNum;
 	bool placeitem;
-	bool itemplaced[5];
+	bool itemplaced[7];
 	bool doorunlocked;
+
+	//@pause 
+	bool PKeypressed, PKeyreleased;
+	bool gamepaused;
+	double Mousex, Mousey;
+	double MposX, MposY;
 
 	float doorRotate;
 	enum bodynumber
