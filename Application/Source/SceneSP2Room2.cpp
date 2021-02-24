@@ -745,11 +745,6 @@ void SceneSP2Room2::Update(double dt)
 
 	}
 
-	if (nearExit == true && Fpressed == true)
-	{
-		exitSchool = true;
-		Fpressed = false;
-	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -1101,28 +1096,35 @@ void SceneSP2Room2::Update(double dt)
 		}
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x <= 480 && camera.position.x >= 471)
 		{
-			interact = true;
-			interact_message = "Exit School";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
+				nearExit = false;
 				Background->setSoundVolume(0.f);
 				Effect->setSoundVolume(0.f);
 				Jumpscare->setSoundVolume(0.f);
 				Application::setscene(Scene_Main);
 			}
 		}
+		else {
+			nearExit = false;
+			showChatbox = false;
+		}
 		break;
 	case CLOSED:
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x >= 471 && camera.position.x <= 480)
 		{
-			interact = true;
-			interact_message = "Exit School";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
 				DS_school = OPENING;
 			}
+		}
+		else {
+			nearExit = false;
+			showChatbox = false;
 		}
 		break;
 	case OPENING:
@@ -1804,11 +1806,14 @@ void SceneSP2Room2::Render()
 	}
 
 
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	//UI OVERLAY
 
@@ -1844,10 +1849,7 @@ void SceneSP2Room2::Render()
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//batterybar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
-
+	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);

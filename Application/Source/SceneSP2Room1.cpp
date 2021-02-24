@@ -497,8 +497,6 @@ void SceneSP2Room1::Set(Scene* scene)
 	flashlight = scene->flashlight;
 	ObjectivePhase = scene->ObjectivePhase;
 	flashlight_lifetime = scene->flashlight_lifetime;
-	DS_MAIN = OPEN;
-	rotateY[0] = 90;
 	if (flashlight)
 	{
 		light[1].power = 2;
@@ -691,11 +689,6 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	if (nearExit == true && Fpressed == true)
-	{
-		exitHouse = true;
-		Fpressed = false;
-	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -839,8 +832,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
-			interact = true;
-			interact_message = "Exit House";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
@@ -851,17 +843,24 @@ void SceneSP2Room1::Update(double dt)
 				Application::setscene(Scene_Main);
 			}
 		}
+		else {
+			nearExit = false;
+			showChatbox = false;
+		}
 		break;
 	case CLOSED:
 		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
-			interact = true;
-			interact_message = "Exit House";
+			nearExit = true;
 			if (Fpressed)
 			{
 				Fpressed = false;
 				DS_MAIN = OPENING;
 			}
+		}
+		else {
+			nearExit = false;
+			showChatbox = false;
 		}
 		break;
 	case OPENING:
@@ -1893,11 +1892,14 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 	
 
-	
+
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
 
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	//UI OVERLAY
 
@@ -1938,9 +1940,6 @@ void SceneSP2Room1::Render()
 	}
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
 
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
