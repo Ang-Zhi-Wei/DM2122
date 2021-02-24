@@ -7,6 +7,11 @@
 #include <sstream>
 #include <iostream>
 
+#include <filesystem>
+
+
+
+
 
 using namespace irrklang;
 
@@ -66,12 +71,6 @@ SceneSP2Main::SceneSP2Main()
 SceneSP2Main::~SceneSP2Main()
 {
 }
-//Function for getting username
-//BOOL SceneSP2Main::GetUserNameA(LPSTR lpBuffer, LPDWORD pcbBuffer)
-//{
-//
-//	return 0;
-//}
 
 void SceneSP2Main::Init()
 {
@@ -390,8 +389,6 @@ void SceneSP2Main::Init()
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[Ground_Mesh]->textureID = LoadTGA("Image//PathTexture.tga");
 	meshList[Ground_Mesh]->material.kAmbient.Set(0.f, 0.20f, 0.13f);
-
-
 
 
 
@@ -2601,8 +2598,6 @@ void SceneSP2Main::Render()
 		}
 		
 	}
-
-	
 
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
