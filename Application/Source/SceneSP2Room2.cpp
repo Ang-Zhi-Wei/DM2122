@@ -578,10 +578,10 @@ void SceneSP2Room2::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(480, 0, -57)));
-	traplist.push_back(trap(trap::beartrap, Vector3(525, 0, 100)));
-	traplist.push_back(trap(trap::beartrap, Vector3(510, 0, -15)));
-	traplist.push_back(trap(trap::beartrap, Vector3(540, 0, 5)));
+	traplist.push_back(trap(trap::beartrap, Vector3(480, 0.5, -57)));
+	traplist.push_back(trap(trap::beartrap, Vector3(525, 0.5, 100)));
+	traplist.push_back(trap(trap::beartrap, Vector3(510, 0.5, -15)));
+	traplist.push_back(trap(trap::beartrap, Vector3(540, 0.5, 5)));
 
 }
 
