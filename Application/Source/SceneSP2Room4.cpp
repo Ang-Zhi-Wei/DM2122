@@ -31,6 +31,7 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOff = true;
 	placeitem = false;
 	doorunlocked = false;
+	bruhmoment = false;
 
 	//@pause
 	gamepaused = false;
@@ -268,6 +269,10 @@ void SceneSP2Room4::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[deadbody] = MeshBuilder::GenerateOBJ("easter egg", "OBJ/DeadBody.obj");
+	meshList[deadbody]->textureID = LoadTGA("Image//deadbody.tga");
+	meshList[deadbody]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	meshList[GEO_JUMPSCARE1] = MeshBuilder::GenerateQuad2("Jumpscare1", 1, 1, 0);
 	meshList[GEO_JUMPSCARE1]->textureID = LoadTGA("Image//skulljumpscare.tga");
 
@@ -492,7 +497,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -527,11 +532,17 @@ void SceneSP2Room4::Init()
 
 	//lockercollider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[27].setlength(3.9, 10, 4.3);
-	Colliderlist[27].Setposition(Vector3(Lockerlist[0].getpos()));
+	Colliderlist[28].setlength(3.9, 10, 4.3);
+	Colliderlist[28].Setposition(Vector3(Lockerlist[0].getpos()));
+
+	//easter egg collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[29].setlength(10, 6, 10);
+	Colliderlist[29].Setposition(Vector3(-45, 0, -9));
+
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[26].getxlength(), Colliderlist[26].getylength(), Colliderlist[26].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[29].getxlength(), Colliderlist[29].getylength(), Colliderlist[29].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -1336,6 +1347,22 @@ void SceneSP2Room4::Update(double dt)
 		}
 	}
 
+	//easter egg jumpscare
+	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
+	{
+		interact = true;
+		interact_message = "Press f to pay respects"; 
+		if (Fpressed)
+		{
+			//jumpscare code here
+			bruhmoment = true;
+		}
+	} 
+	else
+	{
+		interact = false;
+	}
+
 }
 
 
@@ -1607,6 +1634,13 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-45, 0, -9);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(6, 6, 6);
+	RenderMesh(meshList[deadbody], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(-40, 3, -22);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.04, 0.04, 0.04);
@@ -1705,7 +1739,7 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[26].getPosition().x, Colliderlist[26].getPosition().y, Colliderlist[26].getPosition().z);
+	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 

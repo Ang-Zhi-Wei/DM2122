@@ -87,6 +87,7 @@ public:
 		frontdesk,
 		sparkplug,
 		BATTERY,
+		deadbody,
 
 		//UI tings
 		GEO_TEXT,
@@ -309,6 +310,7 @@ private:
 	bool placeitem;
 	bool itemplaced[7];
 	bool doorunlocked;
+	bool bruhmoment;
 
 	//@pause 
 	bool PKeypressed, PKeyreleased;
