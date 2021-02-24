@@ -501,7 +501,7 @@ void SceneSP2Room4::Init()
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(10, 25, 1);
-	Colliderlist[20].Setposition(Vector3(-55, 12, -44));
+	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
@@ -1055,13 +1055,7 @@ void SceneSP2Room4::Update(double dt)
 	//rotate sparkplug
 	rotateobj += float(40 * dt);
 
-	//check for jumpscare
-	/*if (itemplaced[6])
-	{
-		jumpscareActive1 = true;
-		jumpscareTimerActive1 = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	}
+
 	if (jumpscareTimerActive1 == true)
 	{
 		jumpscareTimer1 -= dt;
@@ -1069,7 +1063,7 @@ void SceneSP2Room4::Update(double dt)
 	if (jumpscareTimer1 <= 0)
 	{
 		jumpscareActive1 = false;
-	}*/
+	}
 	
 	//ghost
 	switch (ghost->state)
@@ -1410,7 +1404,6 @@ void SceneSP2Room4::Update(double dt)
 			Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
 
 
-			//jumpscare code here
 			bruhmoment = true;
 		}
 	} 
