@@ -1160,7 +1160,7 @@ void SceneSP2Room3::Update(double dt)
 		ghost->facing = Lockerlist[ghost->lockerIndex].getfront() - ghost->pos;
 		ghost->facing.y = 0;
 		ghost->facing.Normalize();
-		while (Colliderlist[8 + ghost->lockerIndex].iscollide(ghost->pos + 5 * ghost->facing))
+		while (Colliderlist[13 + ghost->lockerIndex].iscollide(ghost->pos + 5 * ghost->facing))
 		{
 			//change facing
 			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
