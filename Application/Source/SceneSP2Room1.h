@@ -49,6 +49,9 @@ public:
 		WOODENTABLE,
 		BOOKSHELF,
 		SHELVES,
+		KITCHENSINK,
+		STOVE,
+		FRIDGE,
 
 		//ground mesh
 		Ground_Mesh,
