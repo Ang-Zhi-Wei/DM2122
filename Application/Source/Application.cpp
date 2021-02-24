@@ -199,8 +199,6 @@ void Application::hidemousecursor(bool hide)
 	
 }
 
-
-
 int Application::GetWindowWidth()
 {
 	return m_width;
@@ -233,8 +231,17 @@ void Application::setscene(int scenenum)
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
-		scene->Exit();
-		scene->Init();
+		
+		scene1->Exit();
+		scene2->Exit();
+		scene3->Exit();
+		scene4->Exit();
+		sceneMain->Exit();
+		scene1->Init();
+		scene2->Init();
+		scene3->Init();
+		scene4->Init();
+		
 		sceneMenu->SetBackground();
 		sceneMenu->Init();
 		scene = sceneMenu;

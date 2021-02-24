@@ -428,19 +428,19 @@ void SceneSP2Room3::Init()
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(3, 25, 100);
+	Colliderlist[0].setlength(5, 25, 100);
 	Colliderlist[0].Setposition(Vector3(30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(3, 25, 100);
+	Colliderlist[1].setlength(5, 25, 100);
 	Colliderlist[1].Setposition(Vector3(-30, 12, -50));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(100, 25, 3);
+	Colliderlist[2].setlength(100, 25, 5);
 	Colliderlist[2].Setposition(Vector3(0, 12, -100));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(20, 30, 3);
+	Colliderlist[3].setlength(20, 30, 5);
 	Colliderlist[3].Setposition(Vector3(-25, 12, 2));
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(20, 30, 3);
+	Colliderlist[4].setlength(20, 30, 5);
 	Colliderlist[4].Setposition(Vector3(25, 12, 2));
 	//random objects colliders
 	Colliderlist.push_back(ColliderBox());
@@ -471,8 +471,12 @@ void SceneSP2Room3::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(3.9, 10, 4.3);
 	Colliderlist[13].Setposition(Vector3(Lockerlist[0].getpos()));
+	//Garage door collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[14].setlength(30, 10, 5);
+	Colliderlist[14].Setposition(Vector3(0, 2.1, 2));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[12].getxlength(), Colliderlist[12].getylength(), Colliderlist[12].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[14].getxlength(), Colliderlist[14].getylength(), Colliderlist[14].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -1172,7 +1176,7 @@ void SceneSP2Room3::Update(double dt)
 		{
 
 			ghost->state = Ghost::TOLOCKER;
-			ghost->waitTime = 5;
+			ghost->waitTime = 3;
 		}
 		else if (ghost->distance <= 7)
 		{
@@ -1182,9 +1186,31 @@ void SceneSP2Room3::Update(double dt)
 		}
 		break;
 	case Ghost::TOLOCKER:
-		ghost->state = Ghost::WAITING;
+		ghost->facing = Lockerlist[ghost->lockerIndex].getfront() - ghost->pos;
+		ghost->facing.y = 0;
+		ghost->facing.Normalize();
+		while (Colliderlist[13 + ghost->lockerIndex].iscollide(ghost->pos + 5 * ghost->facing))
+		{
+			//change facing
+			ghost->facing += (ghost->facing.Cross(ghost->up).Normalized()) * 1 * dt;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+		}
+
+		ghost->UpdateMovement(dt);
+		ghost->rawPos = ghost->pos;
+		ghost->rawPos.y = 0;
+		if ((ghost->rawPos - Lockerlist[ghost->lockerIndex].getfront()).Length() <= 0.5)
+		{
+			ghost->facing = camera.position - ghost->pos;
+			ghost->facing.y = 0;
+			ghost->facing.Normalize();
+			ghost->state = Ghost::WAITING;
+		}
+		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
+		ghost->UpdateRotation(dt);
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
@@ -1250,6 +1276,7 @@ void SceneSP2Room3::Update(double dt)
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
+				ghost->lockerIndex = i;
 				camera.teleport(Lockerlist[i].getpos());
 				glDisable(GL_CULL_FACE);//To see the inside of the locker
 				inLocker = true;
@@ -1370,8 +1397,11 @@ void SceneSP2Room3::PauseUpdate()
 			std::cout << "qMenu Hit!" << std::endl;
 			gamepaused = false;
 			Application::pause(false);
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Menu);
-			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
@@ -1442,10 +1472,10 @@ void SceneSP2Room3::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[12].getPosition().x, Colliderlist[12].getPosition().y, Colliderlist[12].getPosition().z);
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[14].getPosition().x, Colliderlist[14].getPosition().y, Colliderlist[14].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 	//skybox
 	//RenderSkybox();
@@ -1687,7 +1717,7 @@ void SceneSP2Room3::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to go outside?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
-	//inventor
+	//inventory
 
 	//UI OVERLAY
 
@@ -1719,7 +1749,7 @@ void SceneSP2Room3::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
@@ -1815,8 +1845,6 @@ void SceneSP2Room3::Render()
 void SceneSP2Room3::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

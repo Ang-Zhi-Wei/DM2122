@@ -1392,8 +1392,11 @@ void SceneSP2Room4::PauseUpdate()
 			std::cout << "qMenu Hit!" << std::endl;
 			gamepaused = false;
 			Application::pause(false);
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
 			Application::setscene(Scene_Menu);
-			Background->drop();
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
 		{
@@ -2040,7 +2043,7 @@ void SceneSP2Room4::Render()
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	//battery bar
-	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.5f + (4.5f - flashlight_lifetime * 0.025f), 6.4f, flashlight_lifetime * 0.05f, 2);
+	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 
 
 	if (showChatbox == true) {
@@ -2160,8 +2163,6 @@ void SceneSP2Room4::Render()
 void SceneSP2Room4::Exit()
 {
 	// Cleanup VBO here
-	delete ghost;
-	delete inventory;
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
