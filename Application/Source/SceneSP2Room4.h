@@ -93,7 +93,7 @@ public:
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
 		GEO_JUMPSCARE1,
-
+		GEO_REDDOT,
 
 		//trap
 		GEO_BEARTRAP,
