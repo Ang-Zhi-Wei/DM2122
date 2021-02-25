@@ -259,6 +259,9 @@ void SceneSP2Room1::Init()
 	meshList[DRESSER] = MeshBuilder::GenerateOBJ("man npc", "OBJ//cabinet.obj");
 	meshList[DRESSER]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
 	meshList[DRESSER]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[WRENCH] = MeshBuilder::GenerateOBJ("man npc", "OBJ//wrench.obj");
+	meshList[WRENCH]->textureID = LoadTGA("Assigment2Images//wrench.tga");
+	meshList[WRENCH]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	
 
 
@@ -2091,6 +2094,13 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[DRESSER], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 7.4, -478);
+	//modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.03, 0.03, 0.03);
+	RenderMesh(meshList[WRENCH], true);
+	modelStack.PopMatrix();
+
 	
 
 	//items
@@ -2168,6 +2178,8 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//suffocation icon
+	//RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
 	
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
