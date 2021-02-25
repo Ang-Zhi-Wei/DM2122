@@ -16,6 +16,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
 	nearKey = false;
+	nearWrench = false;
 	camBlinkOnSec = 0;
 	showSideBox = true;
 	LSPEED = 10.F;
@@ -394,6 +395,7 @@ void SceneSP2Room1::Init()
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
 	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
 	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
+	houseItems[4] = new Item("Key", Item::Wrench, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -761,6 +763,17 @@ void SceneSP2Room1::Update(double dt)
 		PickUpItem(houseItems[3]);
 		houseItems[3] = NULL;
 		Fpressed = false;
+		nearKey = false;
+
+	}
+
+	if (Fpressed == true && nearWrench == true)
+	{
+		PickUpItem(houseItems[4]);
+		houseItems[4] = NULL;
+		Fpressed = false;
+		nearWrench = false;
+		wrenchFound = 1;
 
 	}
 
@@ -770,6 +783,14 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else {
 		nearKey = false;
+	}
+
+	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr)
+	{
+		nearWrench = true;
+	}
+	else {
+		nearWrench = false;
 	}
 
 	//items - batteries
@@ -2104,12 +2125,14 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[DRESSER], true);
 	modelStack.PopMatrix();//Added collider
 
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 7.4, -478);
-	//modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(0.03, 0.03, 0.03);
-	RenderMesh(meshList[WRENCH], true);
-	modelStack.PopMatrix();
+	if (houseItems[4] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(50, 7.4, -478);
+		//modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[WRENCH], true);
+		modelStack.PopMatrix();
+	}
 
 	
 
@@ -2200,7 +2223,7 @@ void SceneSP2Room1::Render()
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
-	if (pickUpBattery || nearKey)
+	if (pickUpBattery || nearKey || nearWrench)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
