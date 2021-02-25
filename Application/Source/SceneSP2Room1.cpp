@@ -221,7 +221,9 @@ void SceneSP2Room1::Init()
 	meshList[GEO_CEILING]->textureID = LoadTGA("Assigment2Images//housewall.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
-
+	meshList[KITCHENFLOOR] = MeshBuilder::GenerateQuadRepeat("pavement", 1, 1, White);
+	meshList[KITCHENFLOOR]->textureID = LoadTGA("Assigment2Images//kitchenfloor.tga");
+	meshList[KITCHENFLOOR]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
@@ -1816,6 +1818,14 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, 0, 220);
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//kitchen floor
+
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 1.5, 75);
+	modelStack.Scale(40, 1, 40);
+	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
 
 	//door
