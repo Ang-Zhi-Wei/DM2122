@@ -95,9 +95,11 @@ public:
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
+		GEO_BAR2, //suffocation
 		GEO_JUMPSCARE1,
 		GEO_REDDOT,
 		GEO_DEATH,
+		SUFFOCATION,
 		GEO_WARNING2,
 		GEO_WARNING1,
 		GEO_STAMINA,
