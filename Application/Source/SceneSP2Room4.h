@@ -95,9 +95,11 @@ public:
 		GEO_OVERLAY, //vision
 		GEO_OVERLAY2, //Camcorder
 		GEO_BAR, //stamina
+		GEO_BAR2, //suffocation
 		GEO_JUMPSCARE1,
 		GEO_REDDOT,
 		GEO_DEATH,
+		SUFFOCATION,
 		GEO_WARNING2,
 		GEO_WARNING1,
 		GEO_STAMINA,
@@ -191,7 +193,6 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -200,7 +201,7 @@ private:
 	bool Rpressed, Rreleased;
 	bool showSideBox;
 
-	Item* Hospitalitems[10];
+	Item* items[4];
 
 	float campos_x;
 	float campos_y;
@@ -212,6 +213,7 @@ private:
 	float rotateobj;
 	float translateobj;
 	bool takenspark;
+	
 
 
 	//Jumpscare
@@ -282,6 +284,7 @@ private:
 
 
 	Door opRoom_door[2];
+	Door main_door[2];
 	
 
 	int DS_main, DS_opRoom, DS_lounge;

@@ -50,8 +50,10 @@ public:
 		GEO_PAUSEMENU,
 		GEO_WARNING2,
 		GEO_DEATH,
+		SUFFOCATION,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
+		GEO_BAR2, //suffocation
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
 		GEO_PLAYGROUND,

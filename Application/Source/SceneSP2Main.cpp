@@ -86,6 +86,14 @@ void SceneSP2Main::Init()
 	ObjectivePhase = 0;
 	is_talking = false;
 
+	Sign = 0;
+	GarageSign = 0; //1
+	HospitalSign = 0; //2
+	HouseSign = 0; //3
+	SchoolSign = 0; //4
+	SignTimer = 2;
+	
+
 	// Init VBO here
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -310,6 +318,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
 	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
+	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
+	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Building", "OBJ//road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Assigment2Images//road.tga");
 	meshList[GEO_ROAD]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -397,6 +409,9 @@ void SceneSP2Main::Init()
 
 	meshList[GEO_END] = MeshBuilder::GenerateQuad2("End", 1, 1, 0);
 	meshList[GEO_END]->textureID = LoadTGA("Image//WinEndingScreen.tga");
+	meshList[GEO_ENDBACK] = MeshBuilder::GenerateQuad2("EndBack", 1, 1, 0);
+	meshList[GEO_ENDBACK]->textureID = LoadTGA("Image//WinScreenBack.tga");
+
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -606,6 +621,10 @@ void SceneSP2Main::Init()
 
 	NearCar = false;
 	WinLevel = 0;
+	winTimerActive = false;
+	winTimer = 30;
+	translateWinY = -10;
+	translateWinYDir = 0;
 
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
@@ -1184,6 +1203,27 @@ void SceneSP2Main::Update(double dt)
 		if (Fpressed) //Insert win conditions after this as parameters
 		{
 			WinLevel = 1;
+			translateWinY += (float)(translateWinYDir * dt);
+			winTimerActive = true;
+			if (winTimerActive == true);
+			{
+				winTimer -= dt;
+				if (winTimer >= 27)
+				{
+					translateWinYDir = 0;
+				}
+				if (winTimer < 27)
+				{
+					translateWinYDir = 5;
+				}
+				if (winTimer <= 0)
+				{
+					winTimerActive = false;
+					winTimer = 30;
+					translateWinYDir = 0;
+					translateWinY = -10;
+				}
+			}
 		}
 		else
 		{
@@ -1404,6 +1444,8 @@ void SceneSP2Main::Update(double dt)
 		}
 
 	}
+	
+
 	//items - batteries
 	pickUpBattery = false;
 	for (int i = 0; i < 5; i++)
@@ -1423,7 +1465,8 @@ void SceneSP2Main::Update(double dt)
 			}
 		}
 	}
-	/*if (nearBattery == true && Fpressed == true)
+	/*
+	{if (nearBattery == true && Fpressed == true)
 	{
 		PickUpItem(items[0]);
 		nearBattery = false;
@@ -1512,6 +1555,7 @@ void SceneSP2Main::Update(double dt)
 	}
 	else {
 		nearBattery4 = false;
+	}
 	}
 	*/
 
@@ -1849,7 +1893,7 @@ void SceneSP2Main::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1935,6 +1979,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('7')) {
@@ -1966,6 +2011,29 @@ void SceneSP2Main::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
+
+	//Signs
+	if ((camera.position.y > 0) && (camera.position.z >= 300) && (camera.position.z <= 320) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
+	{
+		Sign = 1;
+	}
+
+	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 340) && (camera.position.x <= 360)) //School
+	{
+		Sign = 2;
+	}
+
+	if ((camera.position.z >= -320) && (camera.position.z <= -300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
+	{
+		Sign = 3;
+	}
+
+	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -360) && (camera.position.x <= -340)) //Hospital
+	{
+		Sign = 4;
+	}
+	else
+		Sign = 0;
 
 }
 
@@ -2027,6 +2095,7 @@ void SceneSP2Main::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
@@ -2040,6 +2109,8 @@ void SceneSP2Main::PauseUpdate()
 		bLButtonState = false;
 		std::cout << "LBUTTON UP" << std::endl;
 	}
+
+
 }
 
 void SceneSP2Main::Render()
@@ -2237,31 +2308,34 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
-	//Main sign / garage building
+	// Main sign / garage building
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, 300);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
-	//
+	// School
 	modelStack.PushMatrix();
-	modelStack.Translate(320, 0, 10);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(340, -3, 10);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 	
-	//House
+	// House
 	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -300);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(20, -3, -300);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
-	//
+	// Hospital
 	modelStack.PushMatrix();
-	modelStack.Translate(-320, 0, 10);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(-340, -3, 10);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
@@ -2370,6 +2444,13 @@ void SceneSP2Main::Render()
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
+	modelStack.PopMatrix();//Added collider
+
+	modelStack.PushMatrix();
+	modelStack.Translate(486.1, 13, -20);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(17.0f, 34.0f, 1.0f);
+	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();//Added collider
 
 	//@buildings
@@ -2663,13 +2744,13 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "You shouldn't be here.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 8:
-		RenderTextOnScreen(meshList[GEO_TEXT], "My car broke down..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "My car broke down.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Is there any way i can fix it?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Do you any way I could fix it?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 10:
-		RenderTextOnScreen(meshList[GEO_TEXT], "There are stuff lying around in the buildings.. ", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "There's some stuff lying around in the buildings.. ", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	case 11:
 		RenderTextOnScreen(meshList[GEO_TEXT], "But be CAREFUL...", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
@@ -2681,15 +2762,6 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Something awaits you..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
 		break;
 	}
-
-	if (WinLevel == 1)
-	{
-		RenderMeshOnScreen(meshList[GEO_END], 40, 30, 100, 100);
-	}
-
-	if (WinLevel == 2) //If player doesn't have everything yet
-		RenderTextOnScreen(meshList[GEO_TEXT], "I... Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-
 	//interaction sentences
 	switch (Interact_Num)
 	{
@@ -2709,7 +2781,7 @@ void SceneSP2Main::Render()
 	//objectives screen
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2753,6 +2825,11 @@ void SceneSP2Main::Render()
 
 			break;
 		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
+			break;
+		}
 	}
 
 
@@ -2774,6 +2851,24 @@ void SceneSP2Main::Render()
 	std::ostringstream test2;
 	test2 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
+
+	if (WinLevel == 1)
+	{
+		RenderMeshOnScreen(meshList[GEO_ENDBACK], 40, 30, 80, 60);
+		RenderMeshOnScreen(meshList[GEO_END], 40, translateWinY, 45, 100);
+	}
+
+	if ((WinLevel == 2) && (ObjectivePhase == 1))
+	{
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "... My car broke down... Maybe that man can help me?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}//If player doesn't have everything yet
+	if ((WinLevel == 2) && (ObjectivePhase >= 2))
+	{
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 }
 
 void SceneSP2Main::Exit()
@@ -2821,7 +2916,7 @@ void SceneSP2Main::UseItem(int itemname)
 		 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

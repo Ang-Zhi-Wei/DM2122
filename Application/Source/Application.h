@@ -25,16 +25,18 @@ public:
 	static void setscene(int scenenum);
 	static void quit(bool quit);
 	static void pause(bool pause);
+	static void Load();
 	
 private:
 	//Declare a window object
 	StopWatch m_timer;
 	static int scenetype;
 	static Scene* scene;
-	static Scene* sceneMain, *sceneMenu, *scene1, *scene2,* scene3, *scene4;
+	static Scene* sceneMain,*sceneLoading ,*sceneMenu, *scene1, *scene2,* scene3, *scene4;
 	static bool isquit;
 	static bool ispaused;
 	static bool mainInit;
+
 };
 enum Scenemanager {
 	

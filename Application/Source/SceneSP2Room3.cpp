@@ -231,8 +231,8 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-22, 7.8, -95));
-	garageItems[1] = new Item("battery", Item::BATTERY, Vector3(-20, 7.5, -60));
-	garageItems[2] = new Item("battery", Item::BATTERY, Vector3(25, 0, -60));
+	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(-20, 7.5, -60));
+	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(25, 0, -60));
 
 
 	
@@ -270,10 +270,13 @@ void SceneSP2Room3::Init()
 
 	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
+	meshList[GEO_BAR2] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[SUFFOCATION] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[SUFFOCATION]->textureID = LoadTGA("Assigment2Images//suffocation.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
@@ -638,6 +641,10 @@ void SceneSP2Room3::Update(double dt)
 					PickUpItem(garageItems[i]);
 					Fpressed = false;
 					garageItems[i] = nullptr;
+					if (garageItems[0] == nullptr)
+					{
+						screwDriverFound = 1;
+					}
 				}
 			}
 		}
@@ -1139,7 +1146,7 @@ void SceneSP2Room3::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1263,6 +1270,7 @@ void SceneSP2Room3::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
@@ -1356,6 +1364,7 @@ void SceneSP2Room3::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
@@ -1659,19 +1668,14 @@ void SceneSP2Room3::Render()
 	//	SpeakPhase = 14;
 	//}
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 	if (pickUpItem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 	
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 
 	//inventory
 
@@ -1704,12 +1708,23 @@ void SceneSP2Room3::Render()
 
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//suffocation icon
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[SUFFOCATION], 6, 50, 2, 2);
+	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
-	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	switch (ObjectivePhase)
 	{
@@ -1791,7 +1806,7 @@ void SceneSP2Room3::Render()
 	}
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//@pause
 	//pause menu, place all the way at the bottom in render
@@ -1906,7 +1921,7 @@ void SceneSP2Room3::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

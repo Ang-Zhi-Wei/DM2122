@@ -63,6 +63,13 @@ public:
 		//locker
 		locker,
 
+		//puzzle items
+		lunchbox,
+		notebook,
+		mysobj,
+		lunchboxplace,
+		notebookplace,
+		mysobjplace,
 
 		//game tings
 		GEO_SKULL,
@@ -77,9 +84,11 @@ public:
 		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
+		GEO_BAR2, //suffocation
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
 		GEO_PLAYGROUND,
+		SUFFOCATION,
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
@@ -172,13 +181,15 @@ public:
 private:
 
 
-
+	bool itemPlaced[3];
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 
 	Item* schoolItems[2];
+	Item* PuzzleItems[3];
+	Item* ShelfItems[3];
 	bool pickUpBattery;
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];
@@ -242,6 +253,9 @@ private:
 	bool jumpscare2Pass;
 	bool jumpscare2ActiveZone;
 	bool jumpscareActive2;
+
+	float rotateobj1;
+	float rotateobj2;
 
 	//@pause 
 	bool PKeypressed, PKeyreleased;
@@ -307,6 +321,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderPuzzleObjects();
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;

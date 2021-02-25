@@ -53,6 +53,10 @@ public:
 		KITCHENSINK,
 		STOVE,
 		FRIDGE,
+		BED,
+		DRESSER,
+		WRENCH,
+
 
 		//ground mesh
 		Ground_Mesh,
@@ -75,7 +79,8 @@ public:
 		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
-		GEO_BREATHINGBAR, // breathing
+		GEO_BAR2,
+		SUFFOCATION,
 		GEO_STAMINA,
 		GEO_PLAYGROUND,
 		GEO_LIVES,
@@ -225,6 +230,7 @@ private:
 	double camBlinkOffSec;
 	bool inLocker;
 	bool nearKey;
+	bool nearWrench;
 	bool interact;
 	std::string interact_message;
 //	Mesh* itemImage[8];

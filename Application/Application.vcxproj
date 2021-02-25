@@ -158,6 +158,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SceneSP2Loading.cpp" />
     <ClCompile Include="Source\SceneSP2Main.cpp" />
     <ClCompile Include="Source\SceneSP2Menu.cpp" />
     <ClCompile Include="Source\SceneSP2Room1.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneSP2Loading.h" />
     <ClInclude Include="Source\SceneSP2Main.h" />
     <ClInclude Include="Source\SceneSP2Menu.h" />
     <ClInclude Include="Source\SceneSP2Room1.h" />

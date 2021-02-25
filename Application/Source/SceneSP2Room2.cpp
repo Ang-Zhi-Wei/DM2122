@@ -29,6 +29,9 @@ SceneSP2Room2::SceneSP2Room2()
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	fps = 60;
+
+	rotateobj1 = 28;
+	rotateobj2 = 90;
 	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
 	itemImage[2] = meshList[GEO_ITEMIMAGE2];
@@ -181,8 +184,38 @@ void SceneSP2Room2::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	schoolItems[0] = new Item("battery", Item::BATTERY, Vector3(500, 4.5, -102));
-	schoolItems[1] = new Item("battery", Item::BATTERY, Vector3(491, 4.5, 85));
+	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
+	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
+
+	PuzzleItems[0] = new Item("lunchbox", Item::ItemA, Vector3(505, 5, -102));
+	PuzzleItems[1] = new Item("notebook", Item::Notebook, Vector3(491, 4.5, 85));
+	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(491, 4.5, 85));
+
+
+	//puzzle items
+	meshList[lunchbox] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
+	meshList[lunchbox] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[lunchbox]->textureID = LoadTGA("Image//metal1.tga");
+
+	meshList[notebook] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
+	meshList[notebook]->textureID = LoadTGA("Image//booktex.tga");
+	meshList[notebook]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[mysobj] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
+	meshList[mysobj]->textureID = LoadTGA("Image//bloody.tga");
+	meshList[mysobj]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[lunchboxplace] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
+	meshList[lunchboxplace] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[lunchboxplace]->textureID = LoadTGA("Image//metal.tga");
+
+	meshList[notebookplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
+	meshList[notebookplace]->textureID = LoadTGA("Image//metal.tga");
+	meshList[notebookplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[mysobjplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
+	meshList[mysobjplace]->textureID = LoadTGA("Image//metal.tga");
+	meshList[mysobjplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -505,10 +538,12 @@ void SceneSP2Room2::Init()
 	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
 	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
-	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
+	meshList[GEO_BAR2] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[SUFFOCATION] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[SUFFOCATION]->textureID = LoadTGA("Assigment2Images//suffocation.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
@@ -655,6 +690,7 @@ void SceneSP2Room2::SetBackground()
 	Effect->setSoundVolume(0.f);
 
 }
+
 
 void SceneSP2Room2::Update(double dt)
 {
@@ -1017,7 +1053,7 @@ void SceneSP2Room2::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1242,8 +1278,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case OPENING:
-		lounge_door[0].rotateY += float(20 * dt);
-		lounge_door[1].rotateY -= float(20 * dt);
+		lounge_door[0].rotateY += float(40 * dt);
+		lounge_door[1].rotateY -= float(40 * dt);
 		if (lounge_door[0].rotateY >= 90)
 		{
 			lounge_door[0].rotateY = 90;
@@ -1251,8 +1287,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		lounge_door[0].rotateY -= float(20 * dt);
-		lounge_door[1].rotateY += float(20 * dt);
+		lounge_door[0].rotateY -= float(40 * dt);
+		lounge_door[1].rotateY += float(40 * dt);
 		if (lounge_door[0].rotateY <= 0)
 		{
 			lounge_door[0].rotateY = 0;
@@ -1384,52 +1420,43 @@ void SceneSP2Room2::Update(double dt)
 
 	//This is broken
 
-	/*if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
-	{
-		jumpscare2Pass = true;
+	//if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
+	//{
+	//	jumpscare2Pass = true;
 
-	}
-	else
-	{
-		jumpscare2Pass = false;
-	}
-	if (jumpscare2Pass == true)
-	{
-		jumpscare2Counter = 1;
-	}
-	if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
-	{
-		jumpscare2ActiveZone = true;
-	}
-	else
-		jumpscare2ActiveZone = false;
-	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
-	{
-		jumpscareActive2 = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	}
-	if (jumpscareActive2 == true)
-	{
-		jumpscareTimerActive2 = true;
+	//}
+	//else
+	//{
+	//	jumpscare2Pass = false;
+	//}
+	//if (jumpscare2Pass == true)
+	//{
+	//	jumpscare2Counter = 1;
+	//}
+	//if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
+	//{
+	//	jumpscare2ActiveZone = true;
+	//}
+	//else
+	//	jumpscare2ActiveZone = false;
+	//if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
+	//{
+	//	jumpscareActive2 = true;
+	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
+	//}
+	//if (jumpscareActive2 == true)
+	//{
+	//	jumpscareTimerActive2 = true;
+	//}
 
-	}
-	if (jumpscareTimerActive2 == true)
-	{
-		jumpscareTimer2 -= dt;
 
-	}
-	if (jumpscareTimer2 <= 0)
-	{
-		jumpscareActive2 = false;
-		jumpscare2Counter = 2;
-	}
-	*/
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
@@ -1525,6 +1552,7 @@ void SceneSP2Room2::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
@@ -1540,10 +1568,63 @@ void SceneSP2Room2::PauseUpdate()
 	}
 }
 
+void SceneSP2Room2::RenderPuzzleObjects()
+{
+	if (PuzzleItems[0] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(505, 5, -102);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMesh(meshList[lunchbox], true);
+		modelStack.PopMatrix();
+	}
+	if (PuzzleItems[1] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(478, 7.7, 60);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(28, 0, 0, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[notebook], true);
+		modelStack.PopMatrix();
+	}
+	if (PuzzleItems[2] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(495, 5, -102);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[mysobj], true);
+		modelStack.PopMatrix();
+	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(525, 6, -99); // pos on map
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[lunchboxplace], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(532, 6, -99); // pos on map
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[notebookplace], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(540, 6, -99); // pos on map
+	modelStack.Scale(1.5, 1.5, 1.5);
+	modelStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[mysobjplace], false);
+	modelStack.PopMatrix();
+}
+
 void SceneSP2Room2::Render()
 {
 
-	// Render VBO here
+	 //Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
@@ -1662,6 +1743,8 @@ void SceneSP2Room2::Render()
 		modelStack.PopMatrix();
 	}
 
+	RenderPuzzleObjects();
+
 	//all doors
 	//schoolleft
 	modelStack.PushMatrix();
@@ -1731,6 +1814,7 @@ void SceneSP2Room2::Render()
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
+
 	//longtable in faculty lounge
 	//@obj
 	modelStack.PushMatrix();
@@ -1739,8 +1823,8 @@ void SceneSP2Room2::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
-	//podium
 
+	//podium
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
@@ -1820,15 +1904,10 @@ void SceneSP2Room2::Render()
 	}
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	//Vision vignette
@@ -1855,18 +1934,30 @@ void SceneSP2Room2::Render()
 	//breathing icon
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (inLocker == true)
 	{
 		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
 	}
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//suffocation icon
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[SUFFOCATION], 6, 50, 2, 2);
+	}
 	//batterybar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -1945,7 +2036,7 @@ void SceneSP2Room2::Render()
 	}
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
@@ -2063,7 +2154,7 @@ void SceneSP2Room2::UseItem(int itemname)
 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }
