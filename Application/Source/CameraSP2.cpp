@@ -104,13 +104,13 @@ void CameraSP2::Update(double dt)
 	up = right.Cross(view).Normalized();
 	movement = false;
 	if (can_move)
-	{
+	{ //playerStamina -= 2.5 * dt; (the 2.5 can be changed to other numbers so that the player stamina's shortened or lengthened.
 		if (Application::IsKeyPressed('W'))
 		{
 			if (Application::IsKeyPressed(160) && playerStamina > 0 &&!slowed)
 			{
 				CAMERA_SPEED += 20;
-				playerStamina -= 5 * dt;
+				playerStamina -= 2.5 * dt;
 				cooldown = 1;
 			}
 			position.x += float(view.x * CAMERA_SPEED * dt);
@@ -142,7 +142,7 @@ void CameraSP2::Update(double dt)
 			if (Application::IsKeyPressed(160) && playerStamina > 0)
 			{
 				CAMERA_SPEED += 20;
-				playerStamina -= 5 * dt;
+				playerStamina -= 2.5 * dt;
 				cooldown = 1;
 			}
 			position.x -= float(right.x * CAMERA_SPEED * dt);
@@ -173,7 +173,7 @@ void CameraSP2::Update(double dt)
 			if (Application::IsKeyPressed(160) && playerStamina > 0)
 			{
 				CAMERA_SPEED += 20;
-				playerStamina -= 5 * dt;
+				playerStamina -= 2.5 * dt;
 				cooldown = 1;
 			}
 			position.x -= float(view.x * CAMERA_SPEED * dt);
@@ -204,7 +204,7 @@ void CameraSP2::Update(double dt)
 			if (Application::IsKeyPressed(160) && playerStamina > 0)
 			{
 				CAMERA_SPEED += 20;
-				playerStamina -= 5 * dt;
+				playerStamina -= 2.5 * dt;
 				cooldown = 1;
 			}
 			position.x += float(right.x * CAMERA_SPEED * dt);
