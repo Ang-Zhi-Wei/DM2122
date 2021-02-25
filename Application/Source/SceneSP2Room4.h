@@ -191,7 +191,6 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -200,7 +199,7 @@ private:
 	bool Rpressed, Rreleased;
 	bool showSideBox;
 
-	Item* Hospitalitems[10];
+	Item* items[4];
 
 	float campos_x;
 	float campos_y;

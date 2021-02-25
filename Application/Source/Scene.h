@@ -35,7 +35,7 @@ public:
 		{
 			BATTERY,
 			Screwdriver,
-			ITEM2,
+			FLOWER,
 			ITEM3,
 			SPARK_PLUG,
 			Key,
@@ -69,9 +69,10 @@ public:
 				image = "Image//sparkplug_icon.tga";
 				//set image and description
 				break;
-			case ITEM2:
-				description = "TESTESTTESTETSESTESTESTETST>--|-o";
-				image = "Image//man1.tga";
+			case FLOWER:
+				description = "A rose stalk. I wonder what it could be for?";
+				image = "Image//rosestalk.tga";
+				count = 7;
 				break;
 			case Screwdriver:
 				description = "A screwdriver";

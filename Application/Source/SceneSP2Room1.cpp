@@ -49,14 +49,6 @@ SceneSP2Room1::SceneSP2Room1()
 	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
 	fps = 60;
-	itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 	//@pause
 	gamepaused = false;
@@ -2440,7 +2432,7 @@ void SceneSP2Room1::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

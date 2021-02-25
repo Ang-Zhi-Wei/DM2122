@@ -1404,6 +1404,8 @@ void SceneSP2Main::Update(double dt)
 		}
 
 	}
+	
+
 	//items - batteries
 	pickUpBattery = false;
 	for (int i = 0; i < 5; i++)
@@ -2821,7 +2823,7 @@ void SceneSP2Main::UseItem(int itemname)
 		 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }
