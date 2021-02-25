@@ -194,8 +194,8 @@ void SceneSP2Room2::Init()
 
 	//puzzle items
 	meshList[lunchbox] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
-	meshList[lunchbox] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[lunchbox]->textureID = LoadTGA("Image//metal1.tga");
+	//meshList[lunchbox] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[lunchbox]->textureID = LoadTGA("Image//lunchbox.tga");
 
 	meshList[notebook] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
 	meshList[notebook]->textureID = LoadTGA("Image//booktex.tga");
@@ -206,7 +206,7 @@ void SceneSP2Room2::Init()
 	meshList[mysobj]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[lunchboxplace] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
-	meshList[lunchboxplace] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	//meshList[lunchboxplace] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[lunchboxplace]->textureID = LoadTGA("Image//yellow.tga");
 
 	meshList[notebookplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
@@ -1566,9 +1566,9 @@ void SceneSP2Room2::RenderPuzzleObjects()
 	if (PuzzleItems[0] != nullptr)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(505, 5, -102);
+		modelStack.Translate(505, 5.5, -102);
 		modelStack.Scale(1, 1, 1);
-		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[lunchbox], true);
 		modelStack.PopMatrix();
 	}
