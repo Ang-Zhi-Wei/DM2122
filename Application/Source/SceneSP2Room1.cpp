@@ -546,8 +546,11 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[27].setlength(12, 15, 5);
 	Colliderlist[27].Setposition(Vector3(52, 0.7, -532));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[28].setlength(6, 15, 6);
+	Colliderlist[28].Setposition(Vector3(67, 6.5, -520));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[27].getxlength(), Colliderlist[27].getylength(), Colliderlist[27].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[28].getxlength(), Colliderlist[28].getylength(), Colliderlist[28].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -1740,7 +1743,7 @@ void SceneSP2Room1::Render()
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[27].getPosition().x, Colliderlist[27].getPosition().y, Colliderlist[27].getPosition().z);
+	modelStack.Translate(Colliderlist[28].getPosition().x, Colliderlist[28].getPosition().y, Colliderlist[28].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -2052,14 +2055,14 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(4.7, 4.7, 4.7);
 	RenderMesh(meshList[KITCHENSINK], true);
 	modelStack.PopMatrix();//Added collider
-	//@obj
+
 	modelStack.PushMatrix();
 	modelStack.Translate(52, 0.7, -532);
 	//modelStack.Rotate(, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 6.5, -520);
 	modelStack.Rotate(180, 0, 1, 0);
