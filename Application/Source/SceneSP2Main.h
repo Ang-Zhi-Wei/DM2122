@@ -110,6 +110,7 @@ public:
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		GEO_END,
+		GEO_ENDBACK,
 
 		//pause
         GEO_PAUSEMENU,
@@ -316,6 +317,10 @@ private:
 	//Win conditions
 	bool NearCar;
 	int WinLevel;
+	bool winTimerActive;
+	double winTimer;
+	float translateWinY;
+	float translateWinYDir;
 
 	//Irrklang sound
 	ISoundEngine* Background;

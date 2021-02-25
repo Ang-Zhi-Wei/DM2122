@@ -55,6 +55,7 @@ public:
 		FRIDGE,
 		BED,
 		DRESSER,
+		WRENCH,
 
 
 		//ground mesh
