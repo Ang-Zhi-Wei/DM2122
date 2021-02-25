@@ -267,7 +267,13 @@ private:
 	bool PKeypressed, PKeyreleased;
 	bool is_talking;
 
-	//Trying to yank username
+	//signs
+	int Sign;
+	int GarageSign; //1
+	int HospitalSign; //2
+	int HouseSign; //3
+	int SchoolSign; //4
+	double SignTimer;
 	
 
 	struct trap {
