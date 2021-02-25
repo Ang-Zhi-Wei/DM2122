@@ -230,6 +230,7 @@ private:
 	double camBlinkOffSec;
 	bool inLocker;
 	bool nearKey;
+	bool nearWrench;
 	bool interact;
 	std::string interact_message;
 //	Mesh* itemImage[8];

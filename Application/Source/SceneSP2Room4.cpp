@@ -831,7 +831,7 @@ void SceneSP2Room4::Update(double dt)
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else if(ghost->kill == false ){
+	else if (ghost->kill == false) {
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1051,11 +1051,16 @@ void SceneSP2Room4::Update(double dt)
 		Application::pause(true);
 	}
 
-	
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitHospital = true;
 		Fpressed = false;
+	}
+
+	if (Fpressed == true && items[0] == nullptr)
+	{
+		SparkplugFound = 1;
 	}
 
 	//items
@@ -1128,7 +1133,7 @@ void SceneSP2Room4::Update(double dt)
 				camera.setchecker(Colliderlist);
 			}
 		}
-		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
+		else if (camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
 		{
 			interact = true;
 			interact_message = "Locked";
@@ -1156,7 +1161,7 @@ void SceneSP2Room4::Update(double dt)
 	{
 		jumpscareActive1 = false;
 	}
-	
+
 	//ghost
 	switch (ghost->state)
 	{
@@ -1288,7 +1293,7 @@ void SceneSP2Room4::Update(double dt)
 				inLocker = false;
 			}
 		}
-		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
@@ -1340,7 +1345,7 @@ void SceneSP2Room4::Update(double dt)
 		camera.Setslow(false);
 	}
 
-	
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1419,7 +1424,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 	//check if placed flowers on bed
-	
+
 	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
 	{
 		//left body top
@@ -1490,7 +1495,7 @@ void SceneSP2Room4::Update(double dt)
 			}
 		}
 	}
-	
+
 	//easter egg jumpscare
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
@@ -1506,7 +1511,7 @@ void SceneSP2Room4::Update(double dt)
 
 			bruhmoment = true;
 		}
-	} 
+	}
 
 
 }
