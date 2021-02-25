@@ -2288,7 +2288,7 @@ void SceneSP2Room4::Render()
 	}
 	if (nearExit == true) {
 		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	
 	if (showSideBox == true) {
