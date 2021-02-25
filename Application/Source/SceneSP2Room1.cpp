@@ -936,7 +936,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case OPENING:
-		rotateY[0] += float(20 * dt);
+		rotateY[0] += float(40 * dt);
 		if (rotateY[0] >= 90)
 		{
 			Background->setSoundVolume(0.f);
@@ -947,7 +947,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		rotateY[0] -= 20 * float(dt);
+		rotateY[0] -= 40 * float(dt);
 		if (rotateY[0] <= 0)
 		{
 			DS_MAIN = CLOSED;
@@ -1318,7 +1318,7 @@ void SceneSP2Room1::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:

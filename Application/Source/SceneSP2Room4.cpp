@@ -1218,7 +1218,7 @@ void SceneSP2Room4::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -2391,6 +2391,13 @@ void SceneSP2Room4::Render()
 void SceneSP2Room4::Exit()
 {
 	// Cleanup VBO here
+	for (int i = 0; i < 4; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			delete items[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

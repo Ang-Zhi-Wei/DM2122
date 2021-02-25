@@ -1017,7 +1017,7 @@ void SceneSP2Room2::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1242,8 +1242,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case OPENING:
-		lounge_door[0].rotateY += float(20 * dt);
-		lounge_door[1].rotateY -= float(20 * dt);
+		lounge_door[0].rotateY += float(40 * dt);
+		lounge_door[1].rotateY -= float(40 * dt);
 		if (lounge_door[0].rotateY >= 90)
 		{
 			lounge_door[0].rotateY = 90;
@@ -1251,8 +1251,8 @@ void SceneSP2Room2::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		lounge_door[0].rotateY -= float(20 * dt);
-		lounge_door[1].rotateY += float(20 * dt);
+		lounge_door[0].rotateY -= float(40 * dt);
+		lounge_door[1].rotateY += float(40 * dt);
 		if (lounge_door[0].rotateY <= 0)
 		{
 			lounge_door[0].rotateY = 0;
@@ -1382,48 +1382,7 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 
-	//This is broken
 
-	/*if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
-	{
-		jumpscare2Pass = true;
-
-	}
-	else
-	{
-		jumpscare2Pass = false;
-	}
-	if (jumpscare2Pass == true)
-	{
-		jumpscare2Counter = 1;
-	}
-	if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
-	{
-		jumpscare2ActiveZone = true;
-	}
-	else
-		jumpscare2ActiveZone = false;
-	if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
-	{
-		jumpscareActive2 = true;
-		Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	}
-	if (jumpscareActive2 == true)
-	{
-		jumpscareTimerActive2 = true;
-
-	}
-	if (jumpscareTimerActive2 == true)
-	{
-		jumpscareTimer2 -= dt;
-
-	}
-	if (jumpscareTimer2 <= 0)
-	{
-		jumpscareActive2 = false;
-		jumpscare2Counter = 2;
-	}
-	*/
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
