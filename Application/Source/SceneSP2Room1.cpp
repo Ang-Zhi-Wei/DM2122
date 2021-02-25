@@ -380,10 +380,10 @@ void SceneSP2Room1::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
-	houseItems[0] = new Item("battery", Item::BATTERY, Vector3(-22, 7.8, -95));
-	houseItems[1] = new Item("battery", Item::BATTERY, Vector3(35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("key", Item::Key, Vector3(52, 1, -496));
+	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
+	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
+	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
+	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);

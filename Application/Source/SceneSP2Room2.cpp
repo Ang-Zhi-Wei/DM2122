@@ -181,8 +181,8 @@ void SceneSP2Room2::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	schoolItems[0] = new Item("battery", Item::BATTERY, Vector3(500, 4.5, -102));
-	schoolItems[1] = new Item("battery", Item::BATTERY, Vector3(491, 4.5, 85));
+	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
+	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
