@@ -35,7 +35,7 @@ public:
 		{
 			BATTERY,
 			Screwdriver,
-			ITEM2,
+			FLOWER,
 			ITEM3,
 			SPARK_PLUG
 			//add more depending on whta u need, don forget set in Set function
@@ -68,14 +68,15 @@ public:
 				image = "Image//sparkplug_icon.tga";
 				//set image and description
 				break;
-			case ITEM2:
-				description = "TESTESTTESTETSESTESTESTETST>--|-o";
+			case FLOWER:
+				description = "Rose";
 				image = "Image//man1.tga";
 				break;
 			case Screwdriver:
 				description = "A screwdriver";
 				image = "Assigment2Images/screwdrivericon.tga";
 				break;
+				
 			}
 		}
 		

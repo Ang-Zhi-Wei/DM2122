@@ -375,9 +375,9 @@ void SceneSP2Room4::Init()
 
 
 	//scene items
-	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, (0, 6.3, -69.6));
-	items[2] = new Item("battery", Item::BATTERY, (17, 6.5, -13));
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
+	items[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
+	items[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
 
 
 	
@@ -631,7 +631,7 @@ void SceneSP2Room4::UseItem(int itemname)
 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }
@@ -775,25 +775,25 @@ void SceneSP2Room4::Update(double dt)
 		Fpressed = false;
 	}
 
-
-	if (nearBattery == true && Fpressed == true)
+	//items
+	pickUpItem = false;
+	for (int i = 0; i < 3; i++)
 	{
-		PickUpItem(items[1]);
-		nearBattery = false;
-		Fpressed = false;
-		items[1] = NULL;
-
+		if (items[i] != nullptr)
+		{
+			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
+				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+			{
+				pickUpItem = true;
+				if (Fpressed)
+				{
+					PickUpItem(items[i]);
+					Fpressed = false;
+					items[i] = nullptr;
+				}
+			}
+		}
 	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(items[2]);
-		nearBattery2 = false;
-		Fpressed = false;
-		items[2] = NULL;
-
-	}
-
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -860,22 +860,9 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (campos_x < 4 && campos_x > -4 && campos_z < -64 && campos_z > -76 && items[1] != nullptr)
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
+	
 
-	if (campos_x < 21 && campos_x > 18  && campos_z < -10 && campos_z > -15 && items[2] != nullptr)
-	{
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
-
+	
 	if (exitHospital == true && nearExit == true)
 	{
 		Background->setSoundVolume(0.f);
@@ -2171,9 +2158,9 @@ void SceneSP2Room4::Render()
 	}
 
 
-	if (nearBattery == true || nearBattery2 == true)
+	if (interact)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
 

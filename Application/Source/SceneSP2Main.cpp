@@ -2788,7 +2788,7 @@ void SceneSP2Main::UseItem(int itemname)
 		 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

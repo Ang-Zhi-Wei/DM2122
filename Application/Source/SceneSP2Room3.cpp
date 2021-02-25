@@ -1874,7 +1874,7 @@ void SceneSP2Room3::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }
