@@ -1823,7 +1823,7 @@ void SceneSP2Room1::Render()
 	//kitchen floor
 
 	modelStack.PushMatrix();
-	modelStack.Translate(71, 1.5, 75);
+	modelStack.Translate(72.4, 1.1, 75);
 	modelStack.Scale(40, 1, 40);
 	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
