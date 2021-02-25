@@ -2189,7 +2189,7 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	if (Hospitalitems[1] != nullptr) {
+	if (items[1] != nullptr) {
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 6.3, -69.6);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -2198,7 +2198,7 @@ void SceneSP2Room4::Render()
 		modelStack.PopMatrix();
 	}
 	
-	if (Hospitalitems[2] != nullptr) {
+	if (items[2] != nullptr) {
 		modelStack.PushMatrix();
 		modelStack.Translate(17, 6.5, -13);
 		modelStack.Rotate(90, 0, 1, 0);

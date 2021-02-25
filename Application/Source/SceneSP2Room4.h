@@ -191,7 +191,6 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-	bool pickUpItem;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
