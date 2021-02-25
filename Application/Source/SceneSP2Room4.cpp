@@ -1069,7 +1069,7 @@ void SceneSP2Room4::Update(double dt)
 		if (items[i] != nullptr)
 		{
 			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
-				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x < items[i]->pos.x + 10)
 			{
 				interact = true;
 				interact_message = "F to pick up " + items[i]->name;
