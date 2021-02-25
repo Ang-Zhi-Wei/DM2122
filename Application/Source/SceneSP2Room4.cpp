@@ -566,7 +566,7 @@ void SceneSP2Room4::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
