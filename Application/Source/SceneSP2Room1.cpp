@@ -61,6 +61,11 @@ SceneSP2Room1::SceneSP2Room1()
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
 	//======
+
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 SceneSP2Room1::~SceneSP2Room1()
@@ -242,6 +247,15 @@ void SceneSP2Room1::Init()
 	meshList[WOODENTABLE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//table2.obj");
 	meshList[WOODENTABLE]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
 	meshList[WOODENTABLE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[KITCHENSINK] = MeshBuilder::GenerateOBJ("man npc", "OBJ//sink.obj");
+	meshList[KITCHENSINK]->textureID = LoadTGA("Assigment2Images//sink.tga");
+	meshList[KITCHENSINK]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[STOVE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//kitchenstove.obj");
+	meshList[STOVE]->textureID = LoadTGA("Assigment2Images//stove.tga");
+	meshList[STOVE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[FRIDGE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//Frigo.obj");
+	meshList[FRIDGE]->textureID = LoadTGA("Assigment2Images//fridge.tga");
+	meshList[FRIDGE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	
 
@@ -379,6 +393,20 @@ void SceneSP2Room1::Init()
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
+	//puzzle items
+	meshList[leverbase] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.f, 0.f));
+	meshList[leverbase]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[leverhandle] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 1.0f, 0.0f));
+	meshList[leverhandle]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[painting] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 0.f, 1.0f));
+	meshList[painting]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[safe] = MeshBuilder::GenerateOBJ("Building", "OBJ//safe.obj");
+	meshList[safe]->textureID = LoadTGA("Image//metal1.tga");
+	meshList[safe]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = false;
@@ -475,7 +503,6 @@ void SceneSP2Room1::Init()
 	Colliderlist[16].setlength(3.9, 10, 4.3);
 	Colliderlist[16].Setposition(Lockerlist[1].getpos());
 	//door colliders
-	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[17].setlength(5, 15, 3);
 	Colliderlist[17].Setposition(Vector3(-32, 7.5, -430));
@@ -485,8 +512,28 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[19].setlength(5, 15, 3);
 	Colliderlist[19].Setposition(Vector3(65.5, 7.5, -505));
+	//House obj colliders
+	//@collider
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[20].setlength(15, 15, 10);
+	Colliderlist[20].Setposition(Vector3(0, 1, -480));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[21].setlength(22, 15, 8);
+	Colliderlist[21].Setposition(Vector3(0, 9, -450));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[22].setlength(17, 15, 7);
+	Colliderlist[22].Setposition(Vector3(0, -0.5, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[23].setlength(10, 15, 4);
+	Colliderlist[23].Setposition(Vector3(0, 8.5, -500));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[24].setlength(4.5, 15, 20);
+	Colliderlist[24].Setposition(Vector3(30.5, 4, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[25].setlength(5.5, 15, 10);
+	Colliderlist[25].Setposition(Vector3(30, 4, -470));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[19].getxlength(), Colliderlist[19].getylength(), Colliderlist[19].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[25].getxlength(), Colliderlist[25].getylength(), Colliderlist[25].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -1135,6 +1182,7 @@ void SceneSP2Room1::Update(double dt)
 	{
 		PKeypressed = false;
 		gamepaused = true;
+		Application::GetCursorPos(&Mousetempx, &Mousetempy);
 		Application::pause(true);
 	}
 	
@@ -1313,6 +1361,8 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 90 + double(45);
 	}
 
+
+
 	////Jumpscare, living room
 	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
 	//{
@@ -1390,7 +1440,43 @@ void SceneSP2Room1::Update(double dt)
 	//	jumpscareActive4 = true;
 	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	//}
-	
+
+	//lever rotation
+	//rotate_lever += 40 * float(dt);
+
+	//puzzles
+	//lever pulling logic 
+	switch (leverIsPulled)
+	{
+	case(yes):
+		if (rotate_painting < 180)
+		{
+			rotate_painting += 40 * float(dt);
+		}
+		if (move_safe > 61.5 && rotate_painting >= 180)
+		{
+			move_safe -= 1.5 * float(dt);
+		}
+		break;
+	case(no):
+		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
+		{
+			interact = true;
+			interact_message = "pull lever";
+			if (Fpressed)
+			{
+				leverIsPulled = pulling;
+			}
+		}
+		break;
+	case(pulling):
+		if (rotate_lever < 60)
+			rotate_lever += 60 * float(dt);
+		else if (rotate_lever >= 60)
+			leverIsPulled = yes;
+	}
+
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1457,6 +1543,7 @@ void SceneSP2Room1::PauseUpdate()
 	{
 		PKeypressed = false;
 		gamepaused = false;
+		Application::SetCursorPos(Mousetempx, Mousetempy);
 		Application::hidemousecursor(true);
 		Application::pause(false);
 	}
@@ -1478,6 +1565,7 @@ void SceneSP2Room1::PauseUpdate()
 		{
 			std::cout << "Cont Hit!" << std::endl;
 			Application::hidemousecursor(true);
+			Application::SetCursorPos(Mousetempx, Mousetempy);
 			Application::pause(false);
 			gamepaused = false;
 		}
@@ -1504,6 +1592,51 @@ void SceneSP2Room1::PauseUpdate()
 		std::cout << "LBUTTON UP" << std::endl;
 	}
 }
+
+
+void SceneSP2Room1::RenderPuzzleItems()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 95.5);
+	modelStack.Scale(2, 3, 0.5);
+	RenderMesh(meshList[leverbase], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 96.7);
+	modelStack.Translate(0, 0, -1.4);
+	modelStack.Rotate(rotate_lever, 1, 0, 0);
+	modelStack.Translate(0, 0, 1.4);
+	modelStack.Scale(0.5, 0.5, 2);
+	RenderMesh(meshList[leverhandle], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(66, 9.5, 150);
+	modelStack.Translate(-2, 0, 0);
+	modelStack.Rotate(rotate_painting, 0, 1, 0);
+	modelStack.Translate(2, 0, 0);
+	modelStack.Scale(4, 5, 0.5);
+	RenderMesh(meshList[painting], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(move_safe, 7.5, 150);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[safe], true);
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(37.5, 7.2, -44);
+	//modelStack.Translate(2.5, 0, 0);
+	//modelStack.Rotate(110, 0, 1, 0);
+	//modelStack.Translate(-2.5, 0, 0);
+	//modelStack.Scale(5, 15.5, 1);
+	//RenderMesh(meshList[GEO_LEFTDOOR], true);
+	//modelStack.PopMatrix();
+}
+
 
 void SceneSP2Room1::Render()
 {
@@ -1567,10 +1700,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Colliderlist[19].getPosition().x, Colliderlist[19].getPosition().y, Colliderlist[19].getPosition().z);
-	//RenderMesh(meshList[Colliderbox], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[25].getPosition().x, Colliderlist[25].getPosition().y, Colliderlist[25].getPosition().z);
+	RenderMesh(meshList[Colliderbox], false);
+	modelStack.PopMatrix();
 
 	
 	//trap rendering
@@ -1607,9 +1740,12 @@ void SceneSP2Room1::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-24.5, 0, -600);
+
+
+	//render puzzle items
+	RenderPuzzleItems();
 	
 	//Main door
-
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
 
@@ -1836,15 +1972,15 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, 1, -480);
 	modelStack.Scale(1.9, 1.9, 1.9);
 	RenderMesh(meshList[SOFA], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 9, -450);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[TELEVISION], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 4, -450);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -1856,14 +1992,14 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, -0.5, -470);
 	modelStack.Scale(2.1, 2.1, 2.1);
 	RenderMesh(meshList[WOODENTABLE], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 8.5, -500);
 	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, -470);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -1871,8 +2007,28 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[BOOKSHELF], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(40, 3.7, -532);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(4.7, 4.7, 4.7);
+	RenderMesh(meshList[KITCHENSINK], true);
+	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(52, 0.7, -532);
+	//modelStack.Rotate(, 0, 1, 0);
+	modelStack.Scale(7, 7, 7);
+	RenderMesh(meshList[STOVE], true);
+	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(65, 4, -520);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(2.4, 2.4, 2.4);
+	RenderMesh(meshList[FRIDGE], true);
+	modelStack.PopMatrix();
+
+	
 
 	//items
 	for (int i = 0; i < 3; i++)

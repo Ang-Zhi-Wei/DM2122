@@ -109,6 +109,7 @@ public:
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
+		GEO_END,
 
 		//pause
         GEO_PAUSEMENU,
@@ -260,6 +261,7 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 	
 	bool PKeypressed, PKeyreleased;
 	bool is_talking;
@@ -310,6 +312,10 @@ private:
 	float suffocationTranslateDir;
 	float suffocationScale;
 	float suffocationScaleDir;
+
+	//Win conditions
+	bool NearCar;
+	int WinLevel;
 
 	//Irrklang sound
 	ISoundEngine* Background;

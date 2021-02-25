@@ -202,12 +202,17 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
-
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 
 	Item* garageItems[3];
 

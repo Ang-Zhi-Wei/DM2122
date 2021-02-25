@@ -248,6 +248,7 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
+	double Mousetempx, Mousetempy;
 
 	float campos_x;
 	float campos_y;
@@ -257,7 +258,11 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 
-
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
 	//game related vars
 	bool inLocker;
 

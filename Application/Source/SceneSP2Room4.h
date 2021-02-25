@@ -319,9 +319,13 @@ private:
 	bool gamepaused;
 	double Mousex, Mousey;
 	double MposX, MposY;
-
+	double Mousetempx, Mousetempy;
 	float doorRotate;
-
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
 	enum bodynumber
 	{
 		body1_r,
