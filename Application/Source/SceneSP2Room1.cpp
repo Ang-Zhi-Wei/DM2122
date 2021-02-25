@@ -548,8 +548,14 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[28].setlength(6, 15, 6);
 	Colliderlist[28].Setposition(Vector3(67, 6.5, -520));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[29].setlength(10.5, 15, 15);
+	Colliderlist[29].Setposition(Vector3(52, 0, -452.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[30].setlength(3, 15, 12);
+	Colliderlist[30].Setposition(Vector3(50, 0, -480));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[28].getxlength(), Colliderlist[28].getylength(), Colliderlist[28].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[30].getxlength(), Colliderlist[30].getylength(), Colliderlist[30].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -1741,10 +1747,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[28].getPosition().x, Colliderlist[28].getPosition().y, Colliderlist[28].getPosition().z);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[30].getPosition().x, Colliderlist[30].getPosition().y, Colliderlist[30].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	
 	//trap rendering
@@ -2069,27 +2075,27 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
 	modelStack.PopMatrix();//Added collider
-	//@obj
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 6.5, -520);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.06, 0.07,0.06);
 	RenderMesh(meshList[FRIDGE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(56, 0, -460);
 //	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(4, 4, 4);
 	RenderMesh(meshList[BED], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(50, 0, -480);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.05, 0.05, 0.05);
 	RenderMesh(meshList[DRESSER], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	
 
