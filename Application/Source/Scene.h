@@ -90,7 +90,7 @@ public:
 				image = "Assigment2Images/keyicon.tga";
 				break;
 			case ItemA:
-				description = "item to be decided";
+				description = "A rusty lunchbox";
 				image = "Image//man1.tga";
 				break;
 			case Notebook:

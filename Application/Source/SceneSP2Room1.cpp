@@ -440,23 +440,6 @@ void SceneSP2Room1::Init()
 	jumpscareActive1 = false;
 	jumpscareTimerActive1 = false;
 
-	////Jumpscare 2
-	//jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
-	//jumpscareEntrance2 = 0;
-	//jumpscareActive2 = false;
-	//jumpscareTimerActive2 = false;
-
-	////Jumpscare 3
-	//jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
-	//jumpscareEntrance3 = 0;
-	//jumpscareActive3 = false;
-	//jumpscareTimerActive3 = false;
-
-	////Jumpscare 4
-	//jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
-	//jumpscareEntrance4 = 0;
-	//jumpscareActive4 = false;
-	//jumpscareTimerActive4 = false;
 	//lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));

@@ -188,8 +188,8 @@ void SceneSP2Room2::Init()
 	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
 	PuzzleItems[0] = new Item("lunchbox", Item::ItemA, Vector3(505, 5, -102));
-	PuzzleItems[1] = new Item("notebook", Item::Notebook, Vector3(491, 4.5, 85));
-	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(491, 4.5, 85));
+	PuzzleItems[1] = new Item("notebook", Item::Notebook, Vector3(478, 7.7, 60));
+	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
 
 
 	//puzzle items
@@ -207,14 +207,14 @@ void SceneSP2Room2::Init()
 
 	meshList[lunchboxplace] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
 	meshList[lunchboxplace] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
-	meshList[lunchboxplace]->textureID = LoadTGA("Image//metal.tga");
+	meshList[lunchboxplace]->textureID = LoadTGA("Image//yellow.tga");
 
 	meshList[notebookplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
-	meshList[notebookplace]->textureID = LoadTGA("Image//metal.tga");
+	meshList[notebookplace]->textureID = LoadTGA("Image//yellow.tga");
 	meshList[notebookplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[mysobjplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
-	meshList[mysobjplace]->textureID = LoadTGA("Image//metal.tga");
+	meshList[mysobjplace]->textureID = LoadTGA("Image//yellow.tga");
 	meshList[mysobjplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -768,8 +768,8 @@ void SceneSP2Room2::Update(double dt)
 	{
 		if (schoolItems[i] != nullptr)
 		{
-			if (camera.position.z > schoolItems[i]->pos.z - 10 && camera.position.z < schoolItems[i]->pos.z + 10
-				&& camera.position.x > schoolItems[i]->pos.x - 10 && camera.position.x < schoolItems[i]->pos.x + 10)
+			if (camera.position.z > schoolItems[i]->pos.z - 5 && camera.position.z < schoolItems[i]->pos.z + 5
+				&& camera.position.x > schoolItems[i]->pos.x - 5 && camera.position.x < schoolItems[i]->pos.x + 5)
 			{
 				pickUpBattery = true;
 				if (Fpressed)
@@ -777,6 +777,27 @@ void SceneSP2Room2::Update(double dt)
 					PickUpItem(schoolItems[i]);
 					Fpressed = false;
 					schoolItems[i] = nullptr;
+				}
+			}
+		}
+	}
+
+	//puzzle items
+	puzzleitem = false;
+	for (int i = 0; i < 3; i++)
+	{
+		if (PuzzleItems[i] != nullptr)
+		{
+			if (camera.position.z > PuzzleItems[i]->pos.z - 6 && camera.position.z < PuzzleItems[i]->pos.z + 6
+				&& camera.position.x > PuzzleItems[i]->pos.x - 6 && camera.position.x < PuzzleItems[i]->pos.x + 6)
+			{
+				puzzleitem = true;
+				interact_message = "F to pick up " + PuzzleItems[i]->name;
+				if (Fpressed)
+				{
+					PickUpItem(PuzzleItems[i]);
+					Fpressed = false;
+					PuzzleItems[i] = nullptr;
 				}
 			}
 		}
@@ -1418,37 +1439,6 @@ void SceneSP2Room2::Update(double dt)
 	}
 
 
-	//This is broken
-
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)))
-	//{
-	//	jumpscare2Pass = true;
-
-	//}
-	//else
-	//{
-	//	jumpscare2Pass = false;
-	//}
-	//if (jumpscare2Pass == true)
-	//{
-	//	jumpscare2Counter = 1;
-	//}
-	//if ((jumpscare2Pass == false) && (jumpscare2Counter = 1))
-	//{
-	//	jumpscare2ActiveZone = true;
-	//}
-	//else
-	//	jumpscare2ActiveZone = false;
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 560) && (camera.position.x <= 570)) && ((camera.position.z >= 10) && (camera.position.z <= 15)) && jumpscare2ActiveZone == true)
-	//{
-	//	jumpscareActive2 = true;
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//}
-	//if (jumpscareActive2 == true)
-	//{
-	//	jumpscareTimerActive2 = true;
-	//}
-
 
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
@@ -1491,6 +1481,9 @@ void SceneSP2Room2::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
+
+	rotateobj += 20 * float(dt);
+
 }
 
 void SceneSP2Room2::PauseUpdate()
@@ -1584,7 +1577,7 @@ void SceneSP2Room2::RenderPuzzleObjects()
 		modelStack.PushMatrix();
 		modelStack.Translate(478, 7.7, 60);
 		modelStack.Scale(1, 1, 1);
-		modelStack.Rotate(28, 0, 0, 1);
+		modelStack.Rotate(27.5, 0, 0, 1);
 		modelStack.Rotate(90, 1, 0, 0);
 		RenderMesh(meshList[notebook], true);
 		modelStack.PopMatrix();
@@ -1592,7 +1585,7 @@ void SceneSP2Room2::RenderPuzzleObjects()
 	if (PuzzleItems[2] != nullptr)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(495, 5, -102);
+		modelStack.Translate(540, 1, -108);
 		modelStack.Scale(1.5, 1.5, 1.5);
 		modelStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[mysobj], true);
@@ -1600,23 +1593,23 @@ void SceneSP2Room2::RenderPuzzleObjects()
 	}
 
 	modelStack.PushMatrix();
-	modelStack.Translate(525, 6, -99); // pos on map
+	modelStack.Translate(525, 7, -99); // pos on map
 	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(rotateobj, 0, 1, 0);
 	RenderMesh(meshList[lunchboxplace], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(532, 6, -99); // pos on map
+	modelStack.Translate(532, 7, -99); // pos on map
 	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(rotateobj, 0, 1, 0);
 	RenderMesh(meshList[notebookplace], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(540, 6, -99); // pos on map
 	modelStack.Scale(1.5, 1.5, 1.5);
-	modelStack.Rotate(0, 0, 1, 0);
+	modelStack.Rotate(rotateobj, 0, 1, 0);
 	RenderMesh(meshList[mysobjplace], false);
 	modelStack.PopMatrix();
 }
@@ -1903,9 +1896,11 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
-
+	if (puzzleitem)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
 	
-
 
 	
 	//UI OVERLAY
@@ -2034,6 +2029,7 @@ void SceneSP2Room2::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
+
 	if (inLocker == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);

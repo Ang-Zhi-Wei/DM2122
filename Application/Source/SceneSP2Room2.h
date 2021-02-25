@@ -267,6 +267,8 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
+	float rotateobj;
+	bool puzzleitem;
 	bool exitSchool;
 	bool nearExit;
 	bool showChatbox;
