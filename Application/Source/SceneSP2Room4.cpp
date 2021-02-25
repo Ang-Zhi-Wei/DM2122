@@ -411,19 +411,19 @@ void SceneSP2Room4::Init()
 	//@collider
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(1, 17, 12);
+	Colliderlist[0].setlength(3, 17, 12);
 	Colliderlist[0].Setposition(Vector3(-59, 7, -65));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(1, 17, 12);
+	Colliderlist[1].setlength(3, 17, 12);
 	Colliderlist[1].Setposition(Vector3(59, 7, -65));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(1, 25, 100);
+	Colliderlist[2].setlength(3, 25, 100);
 	Colliderlist[2].Setposition(Vector3(-60, 12, -50));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(1, 25, 100);
+	Colliderlist[3].setlength(3, 25, 100);
 	Colliderlist[3].Setposition(Vector3(60, 12, -50));
 
 	//@bedcolliders
@@ -468,13 +468,13 @@ void SceneSP2Room4::Init()
 
 	//back wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(165, 25, 1);
+	Colliderlist[13].setlength(165, 25, 3);
 	Colliderlist[13].Setposition(Vector3(0, 12, -100));
 
 
 	//entrance walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(1, 25, 43);
+	Colliderlist[14].setlength(3, 25, 43);
 	Colliderlist[14].Setposition(Vector3(-15, 12, -22));
 
 	Colliderlist.push_back(ColliderBox());
@@ -483,24 +483,24 @@ void SceneSP2Room4::Init()
 
 	//room front walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(20, 25, 1);
+	Colliderlist[16].setlength(20, 25, 3);
 	Colliderlist[16].Setposition(Vector3(20, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(20, 25, 1);
+	Colliderlist[17].setlength(20, 25, 3);
 	Colliderlist[17].Setposition(Vector3(50, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(20, 25, 1);
+	Colliderlist[18].setlength(20, 25, 3);
 	Colliderlist[18].Setposition(Vector3(-20, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(20, 25, 1);
+	Colliderlist[19].setlength(20, 25, 3);
 	Colliderlist[19].Setposition(Vector3(-50, 12, -44));
 
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[20].setlength(10, 25, 1);
+	Colliderlist[20].setlength(10, 25, 3);
 	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
@@ -531,7 +531,7 @@ void SceneSP2Room4::Init()
 
 	//front wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[27].setlength(165, 25, 1);
+	Colliderlist[27].setlength(165, 25, 3);
 	Colliderlist[27].Setposition(Vector3(0, 12, 0));
 
 	//lockercollider
@@ -1886,10 +1886,10 @@ void SceneSP2Room4::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//inventory
 	if (Epressed)
