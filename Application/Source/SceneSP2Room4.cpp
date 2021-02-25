@@ -379,8 +379,8 @@ void SceneSP2Room4::Init()
 	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
-	main_door[0].mid.Set(-470, 7.75, 2.5);
-	main_door[1].mid.Set(-470, 7.75, -2.5);
+	main_door[0].mid.Set(-470, 7.69, 4.1);
+	main_door[1].mid.Set(-470, 7.79, -4.1);
 	main_door[0].lengthz = main_door[1].lengthz = 5;
 
 
@@ -1984,7 +1984,7 @@ void SceneSP2Room4::Render()
 	modelStack.Translate(main_door[0].mid.x, main_door[0].mid.y, main_door[0].mid.z);
 
 
-	modelStack.Scale(1, 15.5, 5);
+	modelStack.Scale(1, 15, 8.2);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
@@ -1992,7 +1992,7 @@ void SceneSP2Room4::Render()
 	modelStack.Translate(main_door[1].mid.x, main_door[1].mid.y, main_door[1].mid.z);
 
 
-	modelStack.Scale(1, 15.5, 5);
+	modelStack.Scale(1, 15, 8.2);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 
