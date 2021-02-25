@@ -200,7 +200,7 @@ private:
 	bool Rpressed, Rreleased;
 	bool showSideBox;
 
-	Item* items[10];
+	Item* Hospitalitems[10];
 
 	float campos_x;
 	float campos_y;
@@ -306,7 +306,7 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-
+	bool pickUpItem;
 	int bodyNum;
 	bool placeitem;
 	bool itemplaced[7];

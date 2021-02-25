@@ -375,9 +375,9 @@ void SceneSP2Room4::Init()
 
 
 	//scene items
-	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, (0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, (0, 6.3, -69.6));
-	items[2] = new Item("battery", Item::BATTERY, (17, 6.5, -13));
+	Hospitalitems[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
+	Hospitalitems[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
+	Hospitalitems[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
 
 
 	
@@ -776,22 +776,24 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (nearBattery == true && Fpressed == true)
+	//items
+	pickUpItem = false;
+	for (int i = 1; i < 3; i++)
 	{
-		PickUpItem(items[1]);
-		nearBattery = false;
-		Fpressed = false;
-		items[1] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(items[2]);
-		nearBattery2 = false;
-		Fpressed = false;
-		items[2] = NULL;
-
+		if (Hospitalitems[i] != nullptr)
+		{
+			if (camera.position.z > Hospitalitems[i]->pos.z - 10 && camera.position.z < Hospitalitems[i]->pos.z + 10
+				&& camera.position.x > Hospitalitems[i]->pos.x - 10 && camera.position.x < Hospitalitems[i]->pos.x + 10)
+			{
+				pickUpItem = true;
+				if (Fpressed)
+				{
+					PickUpItem(Hospitalitems[i]);
+					Fpressed = false;
+					Hospitalitems[i] = nullptr;
+				}
+			}
+		}
 	}
 
 	if (!Application::IsKeyPressed('E'))
@@ -859,22 +861,6 @@ void SceneSP2Room4::Update(double dt)
 		showChatbox = false;
 	}
 
-
-	if (campos_x < 4 && campos_x > -4 && campos_z < -64 && campos_z > -76 && items[1] != nullptr)
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
-
-	if (campos_x < 21 && campos_x > 18  && campos_z < -10 && campos_z > -15 && items[2] != nullptr)
-	{
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
 
 	if (exitHospital == true && nearExit == true)
 	{
@@ -1410,8 +1396,8 @@ void SceneSP2Room4::Update(double dt)
 				{
 					translateobj = 100;
 					takenspark = true;
-					PickUpItem(items[0]);
-					items[0] = NULL;
+					PickUpItem(Hospitalitems[0]);
+					Hospitalitems[0] = nullptr;
 					std::cout << "taken spark plug" << std::endl;
 				}
 			}
@@ -2153,7 +2139,7 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	if (items[1] != nullptr) {
+	if (Hospitalitems[1] != nullptr) {
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 6.3, -69.6);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -2162,7 +2148,7 @@ void SceneSP2Room4::Render()
 		modelStack.PopMatrix();
 	}
 	
-	if (items[2] != nullptr) {
+	if (Hospitalitems[2] != nullptr) {
 		modelStack.PushMatrix();
 		modelStack.Translate(17, 6.5, -13);
 		modelStack.Rotate(90, 0, 1, 0);
@@ -2198,7 +2184,7 @@ void SceneSP2Room4::Render()
 	}
 
 
-	if (nearBattery == true || nearBattery2 == true)
+	if (pickUpItem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2312,7 +2298,7 @@ void SceneSP2Room4::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f, 0);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f);
 				}
 			}
 		}
