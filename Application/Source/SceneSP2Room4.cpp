@@ -376,8 +376,8 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	Hospitalitems[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
-	Hospitalitems[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
-	Hospitalitems[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
+	Hospitalitems[1] = new Item("Battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
+	Hospitalitems[2] = new Item("Battery", Item::BATTERY, Vector3(17, 6.5, -13));
 
 
 	
@@ -1391,7 +1391,7 @@ void SceneSP2Room4::Update(double dt)
 			else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
 			{
 				interact = true;
-				interact_message = "take spark plug";
+				interact_message = "Take spark plug";
 				if (Fpressed)
 				{
 					translateobj = 100;

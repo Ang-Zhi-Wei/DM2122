@@ -60,12 +60,12 @@ public:
 			switch (type)
 			{
 			case BATTERY:
-				description = "Use to refill flashlight batteries aaaaaa idk";
+				description = "Use to refill flashlight batteries";
 				image = "Assigment2Images//batteryicon.tga";
 				//set image and description
 				break;
 			case SPARK_PLUG:
-				description = "A spark plug used for delivery current to the combustion chamber in a car's engine ";
+				description = "A spark plug used for delivery current to the combustion chamber in a car's engine";
 				image = "Image//sparkplug_icon.tga";
 				//set image and description
 				break;
