@@ -638,6 +638,10 @@ void SceneSP2Room3::Update(double dt)
 					PickUpItem(garageItems[i]);
 					Fpressed = false;
 					garageItems[i] = nullptr;
+					if (garageItems[0] == nullptr)
+					{
+						screwDriverFound = 1;
+					}
 				}
 			}
 		}

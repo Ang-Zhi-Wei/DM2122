@@ -791,6 +791,10 @@ void SceneSP2Room4::Update(double dt)
 					PickUpItem(Hospitalitems[i]);
 					Fpressed = false;
 					Hospitalitems[i] = nullptr;
+					if (Hospitalitems[0] == nullptr)
+					{
+						SparkplugFound = 1;
+					}
 				}
 			}
 		}

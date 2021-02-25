@@ -261,7 +261,12 @@ void SceneSP2Room1::Init()
 	meshList[FRIDGE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//fridge2.obj");
 	meshList[FRIDGE]->textureID = LoadTGA("Assigment2Images//fridge2.tga");
 	meshList[FRIDGE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-
+	meshList[BED] = MeshBuilder::GenerateOBJ("man npc", "OBJ//bed.obj");
+	meshList[BED]->textureID = LoadTGA("Assigment2Images//bedtexture.tga");
+	meshList[BED]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[DRESSER] = MeshBuilder::GenerateOBJ("man npc", "OBJ//cabinet.obj");
+	meshList[DRESSER]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
+	meshList[DRESSER]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	
 
 
@@ -1826,7 +1831,7 @@ void SceneSP2Room1::Render()
 	//kitchen floor
 
 	modelStack.PushMatrix();
-	modelStack.Translate(70, 1.5, 75);
+	modelStack.Translate(71, 1.5, 75);
 	modelStack.Scale(40, 1, 40);
 	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
@@ -2078,6 +2083,20 @@ void SceneSP2Room1::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.06, 0.07,0.06);
 	RenderMesh(meshList[FRIDGE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(56, 0, -460);
+//	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[BED], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 0, -480);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.05, 0.05, 0.05);
+	RenderMesh(meshList[DRESSER], true);
 	modelStack.PopMatrix();
 
 	
