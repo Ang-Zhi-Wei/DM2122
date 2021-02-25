@@ -137,18 +137,18 @@ Scene* Application::scene = sceneMenu;
 
 void Application::Run()
 {
-		//Main Loop
-		m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-		sceneLoading->Init();
-		sceneLoading->Render();
-		glfwSwapBuffers(m_window);
-		sceneMenu->Init();
-		//sceneMain->Init();
-		scene1->Init();
-		scene2->Init();
-		scene3->Init();
-		scene4->Init();
-		sceneMenu->SetBackground();
+	//Main Loop
+	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+	sceneLoading->Init();
+	sceneLoading->Render();
+	glfwSwapBuffers(m_window);
+	sceneMenu->Init();
+	//sceneMain->Init();
+	scene1->Init();
+	scene2->Init();
+	scene3->Init();
+	scene4->Init();
+	sceneMenu->SetBackground();
 	
 
 	
