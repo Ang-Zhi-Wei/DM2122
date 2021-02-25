@@ -378,9 +378,9 @@ void SceneSP2Room4::Init()
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
 	items[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
 	items[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
+	items[3] = new Item("Roses", Item::FLOWER, Vector3(8, 6.5, -73));
 
 
-	
 	
 	//chairs/table
 	for (int row = 0; row < 4; row++)
@@ -632,6 +632,110 @@ void SceneSP2Room4::UseItem(int itemname)
 		//else warning message?
 		break;
 	case Item::FLOWER:
+		if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
+		{
+			//left body top
+			
+			itemplaced[body1_l] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
+		{
+			//left body med
+			
+			itemplaced[body2_l] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
+		{
+		
+			itemplaced[body3_l] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+			
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
+		{
+			
+			itemplaced[body1_r] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+			
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
+		{
+		
+			itemplaced[body2_r] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+			
+		}
+		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
+		{
+			
+			itemplaced[body3_r] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+			
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
+		{
+			
+			itemplaced[body_op] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				inventory->items[inventory->selected] = nullptr;
+			}
+			
+		}
+
+		//if all placed, unlock door
+		if (itemplaced[0] && itemplaced[1] && itemplaced[2] && itemplaced[3] && itemplaced[4] && itemplaced[5])
+		{
+			doorunlocked = true;
+		}
 		break;
 	}
 }
@@ -769,31 +873,6 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (nearExit == true && Fpressed == true)
-	{
-		exitHospital = true;
-		Fpressed = false;
-	}
-
-	//items
-	pickUpItem = false;
-	for (int i = 0; i < 3; i++)
-	{
-		if (items[i] != nullptr)
-		{
-			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
-				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
-			{
-				pickUpItem = true;
-				if (Fpressed)
-				{
-					PickUpItem(items[i]);
-					Fpressed = false;
-					items[i] = nullptr;
-				}
-			}
-		}
-	}
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -850,6 +929,7 @@ void SceneSP2Room4::Update(double dt)
 		Rreleased = false;
 	}
 
+
 	if (campos_z > -9 && campos_x > -4 && campos_x < 4)
 	{
 		nearExit = true;
@@ -860,9 +940,6 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	
-
-	
 	if (exitHospital == true && nearExit == true)
 	{
 		Background->setSoundVolume(0.f);
@@ -945,7 +1022,6 @@ void SceneSP2Room4::Update(double dt)
 	interact = false;
 	Vector3 origin(0, 5, 0);
 
-
 	//@pause
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
 	if (!Application::IsKeyPressed(VK_ESCAPE))
@@ -970,6 +1046,33 @@ void SceneSP2Room4::Update(double dt)
 		gamepaused = true;
 		Application::GetCursorPos(&Mousetempx, &Mousetempy);
 		Application::pause(true);
+	}
+
+	
+	if (nearExit == true && Fpressed == true)
+	{
+		exitHospital = true;
+		Fpressed = false;
+	}
+
+	//items
+	for (int i = 0; i < 4; i++)
+	{
+		if (items[i] != nullptr)
+		{
+			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
+				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+			{
+				interact = true;
+				interact_message = "F to pick up" + items[i]->name;
+				if (Fpressed)
+				{
+					PickUpItem(items[i]);
+					Fpressed = false;
+					items[i] = nullptr;
+				}
+			}
+		}
 	}
 
 	//door states
@@ -1006,8 +1109,6 @@ void SceneSP2Room4::Update(double dt)
 		break;*/
 		break;
 	}
-
-
 
 	switch (DS_opRoom)
 	{
@@ -1278,132 +1379,115 @@ void SceneSP2Room4::Update(double dt)
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
 
-	//check if flowers are taken
-	if (camera.position.x >= 6 && camera.position.x <= 13 && camera.position.z >= -75 && camera.position.z <= -68 && !flowerstaken)
+
+	//inventory
+	if (Epressed)
 	{
-		interact = true;
-		interact_message = "Take flowers";
-		if (Fpressed)
+		inventory->open = !inventory->open;
+		Epressed = false;
+	}
+	if (inventory->open)
+	{
+		camera.can_move = false;
+		if (Apressed)
 		{
-			flowerstaken = true;
-			//add to inventory code here
+			inventory->selected--;
+			if (inventory->selected == -1)
+			{
+				inventory->selected = 7;
+			}
+			Apressed = false;
+		}
+		else if (Dpressed)
+		{
+			inventory->selected++;
+			inventory->selected %= 8;
+			Dpressed = false;
+		}
+		else if (Rpressed)
+		{
+			if (inventory->items[inventory->selected] != nullptr)
+			{
+				UseItem(inventory->items[inventory->selected]->type);
+			}
+			//else warning that no item selected?
+			Rpressed = false;
 		}
 	}
 
 	//check if placed flowers on bed
-	if (flowerstaken)
+	
+	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
 	{
-		if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
-		{
-			//left body top
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body1_l] = true;
-			}
+		//left body top
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
+	{
+		//left body med
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
+	{
+		//left body bottom
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
+	{
+		//left body top
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
+	{
+		//left body med
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
+	{
+		//left body bottom
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
+	{
+		//left body bottom
+		interact = true;
+		interact_message = "Place Flower";
+	}
+	else
+	{
+		placeitem = false;
+	}
 
-		}
-		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
-		{
-			//left body med
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body2_l] = true;
-			}
-		}
-		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
-		{
-			//left body bottom
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body3_l] = true;
-			}
-		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
-		{
-			//left body top
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body1_r] = true;
-			}
-		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
-		{
-			//left body med
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body2_r] = true;
-			}
-		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
-		{
-			//left body bottom
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body3_r] = true;
-			}
-		}
-		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
-		{
-			//left body bottom
-			interact = true;
-			interact_message = "Place Flower";
-			if (Fpressed)
-			{
-				// remove from inventory code here
-				itemplaced[body_op] = true;
-			}
-		}
-		else
-		{
-			placeitem = false;
-		}
 
-		//if all placed, unlock door
-		if (itemplaced[0] && itemplaced[1] && itemplaced[2] && itemplaced[3] && itemplaced[4] && itemplaced[5])
-		{
-			doorunlocked = true;
-		}
 
-		//if final item placed, give sparkplug
-		if (itemplaced[6])
+	//if final item placed, give sparkplug
+	if (itemplaced[6])
+	{
+		if (translateobj <= 7.5)
 		{
-			if (translateobj <= 7.5)
+			translateobj += float(0.5 * dt);
+		}
+		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+		{
+			interact = true;
+			interact_message = "take spark plug";
+			if (Fpressed)
 			{
-				translateobj += float(0.5 * dt);
-			}
-			else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
-			{
-				interact = true;
-				interact_message = "take spark plug";
-				if (Fpressed)
-				{
-					translateobj = 100;
-					takenspark = true;
-					PickUpItem(items[0]);
-					items[0] = NULL;
-					std::cout << "taken spark plug" << std::endl;
-				}
+				translateobj = 100;
+				takenspark = true;
+				PickUpItem(items[0]);
+				items[0] = NULL;
+				std::cout << "taken spark plug" << std::endl;
 			}
 		}
 	}
+	
 	//easter egg jumpscare
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
@@ -1878,41 +1962,6 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
-	//inventory
-	if (Epressed)
-	{
-		inventory->open = !inventory->open;
-		Epressed = false;
-	}
-	if (inventory->open)
-	{
-		camera.can_move = false;
-		if (Apressed)
-		{
-			inventory->selected--;
-			if (inventory->selected == -1)
-			{
-				inventory->selected = 7;
-			}
-			Apressed = false;
-		}
-		else if (Dpressed)
-		{
-			inventory->selected++;
-			inventory->selected %= 8;
-			Dpressed = false;
-		}
-		else if (Rpressed)
-		{
-			if (inventory->items[inventory->selected] != nullptr)
-			{
-				UseItem(inventory->items[inventory->selected]->type);
-			}
-			//else warning that no item selected?
-			Rpressed = false;
-		}
-	}
-
 
 	//@doors
 	//left room doors
@@ -1981,7 +2030,7 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 
 	//roses on front desk
-	if (!flowerstaken)
+	if (items[3] != nullptr)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(7, 6.5, -73);
@@ -2185,10 +2234,6 @@ void SceneSP2Room4::Render()
 	}
 
 
-	if (interact)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
-	}
 
 
 	if (nearExit == true) {
@@ -2299,7 +2344,7 @@ void SceneSP2Room4::Render()
 				//number of item if more than 1
 				if (inventory->items[i]->count > 1)
 				{
-					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f, 0);
+					RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(inventory->items[i]->count), Color(1.f, 1.f, 1.f), 2.f, float(33.8 + i * 5), 3.f);
 				}
 			}
 		}
@@ -2317,10 +2362,7 @@ void SceneSP2Room4::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
-	/*if (placeitem)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Place Flower", Color(1, 1, 0), 4, 22, 5);
-	}*/
+
 	/*std::ostringstream test1;
 	test1 << "camera up: " << camera.up;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);

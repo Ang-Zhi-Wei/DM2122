@@ -200,7 +200,7 @@ private:
 	bool Rpressed, Rreleased;
 	bool showSideBox;
 
-	Item* items[3];
+	Item* items[4];
 
 	float campos_x;
 	float campos_y;
