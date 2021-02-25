@@ -16,6 +16,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
 	nearKey = false;
+	nearWrench = false;
 	camBlinkOnSec = 0;
 	showSideBox = true;
 	LSPEED = 10.F;
@@ -259,6 +260,9 @@ void SceneSP2Room1::Init()
 	meshList[DRESSER] = MeshBuilder::GenerateOBJ("man npc", "OBJ//cabinet.obj");
 	meshList[DRESSER]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
 	meshList[DRESSER]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[WRENCH] = MeshBuilder::GenerateOBJ("man npc", "OBJ//wrench.obj");
+	meshList[WRENCH]->textureID = LoadTGA("Assigment2Images//wrench.tga");
+	meshList[WRENCH]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	
 
 
@@ -336,10 +340,12 @@ void SceneSP2Room1::Init()
 	meshList[GEO_REDDOT]->textureID = LoadTGA("Image//redDot.tga");
 	//player
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Yellow);
-	meshList[GEO_BREATHINGBAR] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
+	meshList[GEO_BAR2] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[SUFFOCATION] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[SUFFOCATION]->textureID = LoadTGA("Assigment2Images//suffocation.tga");
 	meshList[GEO_LIVES] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_LIVES]->textureID = LoadTGA("Assigment2Images//livesicon.tga");
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
@@ -389,6 +395,7 @@ void SceneSP2Room1::Init()
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
 	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
 	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
+	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -548,8 +555,14 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[28].setlength(6, 15, 6);
 	Colliderlist[28].Setposition(Vector3(67, 6.5, -520));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[29].setlength(10.5, 15, 15);
+	Colliderlist[29].Setposition(Vector3(52, 0, -452.75));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[30].setlength(3, 15, 12);
+	Colliderlist[30].Setposition(Vector3(50, 0, -480));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[28].getxlength(), Colliderlist[28].getylength(), Colliderlist[28].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[30].getxlength(), Colliderlist[30].getylength(), Colliderlist[30].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -750,6 +763,17 @@ void SceneSP2Room1::Update(double dt)
 		PickUpItem(houseItems[3]);
 		houseItems[3] = NULL;
 		Fpressed = false;
+		nearKey = false;
+
+	}
+
+	if (Fpressed == true && nearWrench == true)
+	{
+		PickUpItem(houseItems[4]);
+		houseItems[4] = NULL;
+		Fpressed = false;
+		nearWrench = false;
+		wrenchFound = 1;
 
 	}
 
@@ -759,6 +783,14 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else {
 		nearKey = false;
+	}
+
+	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr)
+	{
+		nearWrench = true;
+	}
+	else {
+		nearWrench = false;
 	}
 
 	//items - batteries
@@ -1515,6 +1547,7 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
@@ -1610,6 +1643,7 @@ void SceneSP2Room1::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
@@ -1741,10 +1775,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[28].getPosition().x, Colliderlist[28].getPosition().y, Colliderlist[28].getPosition().z);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Colliderlist[30].getPosition().x, Colliderlist[30].getPosition().y, Colliderlist[30].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	
 	//trap rendering
@@ -1823,7 +1857,7 @@ void SceneSP2Room1::Render()
 	//kitchen floor
 
 	modelStack.PushMatrix();
-	modelStack.Translate(71, 1.5, 75);
+	modelStack.Translate(72.4, 1.1, 75);
 	modelStack.Scale(40, 1, 40);
 	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
@@ -2069,27 +2103,36 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
 	modelStack.PopMatrix();//Added collider
-	//@obj
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 6.5, -520);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.06, 0.07,0.06);
 	RenderMesh(meshList[FRIDGE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(56, 0, -460);
 //	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(4, 4, 4);
 	RenderMesh(meshList[BED], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(50, 0, -480);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.05, 0.05, 0.05);
 	RenderMesh(meshList[DRESSER], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
+
+	if (houseItems[4] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(50, 7.4, -478);
+		//modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.03, 0.03, 0.03);
+		RenderMesh(meshList[WRENCH], true);
+		modelStack.PopMatrix();
+	}
 
 	
 
@@ -2168,6 +2211,10 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//suffocation icon
+	if (inLocker == true) {
+		RenderMeshOnScreen(meshList[SUFFOCATION], 6, 50, 2, 2);
+	}
 	
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
@@ -2176,7 +2223,7 @@ void SceneSP2Room1::Render()
 		showChatbox = true;
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
-	if (pickUpBattery || nearKey)
+	if (pickUpBattery || nearKey || nearWrench)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2230,7 +2277,7 @@ void SceneSP2Room1::Render()
 	}
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);

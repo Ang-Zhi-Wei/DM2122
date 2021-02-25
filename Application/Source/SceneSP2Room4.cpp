@@ -376,8 +376,8 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
+	items[2] = new Item("Battery", Item::BATTERY, Vector3(17, 6.5, -13));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(8, 6.5, -73));
 
 
@@ -564,9 +564,12 @@ void SceneSP2Room4::Init()
 	meshList[GEO_BATTERY] = MeshBuilder::GenerateQuad2("flashlight lifetime bar", 1, 1, White);
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
+	meshList[SUFFOCATION] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[SUFFOCATION]->textureID = LoadTGA("Assigment2Images//suffocation.tga");
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
 	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
+	meshList[GEO_BAR2] = MeshBuilder::GenerateQuad2("stamina bar", 1, 1, Red);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
@@ -828,7 +831,7 @@ void SceneSP2Room4::Update(double dt)
 		Heartbeat->setSoundVolume(0.5f);
 		Background->setSoundVolume(0.f);
 	}
-	else if(ghost->kill == false ){
+	else if (ghost->kill == false) {
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
@@ -1048,11 +1051,16 @@ void SceneSP2Room4::Update(double dt)
 		Application::pause(true);
 	}
 
-	
+
 	if (nearExit == true && Fpressed == true)
 	{
 		exitHospital = true;
 		Fpressed = false;
+	}
+
+	if (Fpressed == true && items[0] == nullptr)
+	{
+		SparkplugFound = 1;
 	}
 
 	//items
@@ -1061,10 +1069,10 @@ void SceneSP2Room4::Update(double dt)
 		if (items[i] != nullptr)
 		{
 			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
-				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x < items[i]->pos.x + 10)
 			{
 				interact = true;
-				interact_message = "F to pick up" + items[i]->name;
+				interact_message = "F to pick up " + items[i]->name;
 				if (Fpressed)
 				{
 					PickUpItem(items[i]);
@@ -1125,7 +1133,7 @@ void SceneSP2Room4::Update(double dt)
 				camera.setchecker(Colliderlist);
 			}
 		}
-		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
+		else if (camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
 		{
 			interact = true;
 			interact_message = "Locked";
@@ -1153,7 +1161,7 @@ void SceneSP2Room4::Update(double dt)
 	{
 		jumpscareActive1 = false;
 	}
-	
+
 	//ghost
 	switch (ghost->state)
 	{
@@ -1285,7 +1293,7 @@ void SceneSP2Room4::Update(double dt)
 				inLocker = false;
 			}
 		}
-		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
+		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
 				Lockerlist[i].Sethidden(true);
 				ghost->lockerIndex = i;
@@ -1337,13 +1345,14 @@ void SceneSP2Room4::Update(double dt)
 		camera.Setslow(false);
 	}
 
-	
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
@@ -1416,7 +1425,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 	//check if placed flowers on bed
-	
+
 	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
 	{
 		//left body top
@@ -1476,23 +1485,23 @@ void SceneSP2Room4::Update(double dt)
 		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
 		{
 			interact = true;
-			interact_message = "take spark plug";
+			interact_message = "Take spark plug";
 			if (Fpressed)
 			{
 				translateobj = 100;
 				takenspark = true;
 				PickUpItem(items[0]);
 				items[0] = NULL;
-				std::cout << "taken spark plug" << std::endl;
+				std::cout << "Taken spark plug" << std::endl;
 			}
 		}
 	}
-	
+
 	//easter egg jumpscare
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
 		interact = true;
-		interact_message = "Press f to pay respects";
+		interact_message = "Press F to pay respects";
 		if (Fpressed)
 		{
 
@@ -1503,7 +1512,7 @@ void SceneSP2Room4::Update(double dt)
 
 			bruhmoment = true;
 		}
-	} 
+	}
 
 
 }
@@ -1567,6 +1576,7 @@ void SceneSP2Room4::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)
@@ -2267,6 +2277,10 @@ void SceneSP2Room4::Render()
 
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
+	//suffocation icon
+	if (inLocker == true) {
+		RenderMeshOnScreen(meshList[SUFFOCATION], 6, 50, 2, 2);
+	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
 	if (showChatbox == true) {
@@ -2360,7 +2374,7 @@ void SceneSP2Room4::Render()
 	}
 	if (inLocker == true)
 	{
-		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 
 	/*std::ostringstream test1;

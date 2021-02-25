@@ -39,6 +39,7 @@ public:
 			ITEM3,
 			SPARK_PLUG,
 			Key,
+			Wrench,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -81,6 +82,10 @@ public:
 			case Key:
 				description = "A key";
 				image = "Assigment2Images/keyicon.tga";
+				break;
+			case Wrench:
+				description = "A Wrench";
+				image = "Assigment2Images/wrenchicon.tga";
 				break;
 			}
 		}
