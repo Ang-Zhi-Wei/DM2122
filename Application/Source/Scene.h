@@ -37,7 +37,8 @@ public:
 			Screwdriver,
 			FLOWER,
 			ITEM3,
-			SPARK_PLUG
+			SPARK_PLUG,
+			Key,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -77,7 +78,10 @@ public:
 				description = "A screwdriver";
 				image = "Assigment2Images/screwdrivericon.tga";
 				break;
-				
+			case Key:
+				description = "A key";
+				image = "Assigment2Images/keyicon.tga";
+				break;
 			}
 		}
 		

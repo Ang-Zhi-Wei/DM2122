@@ -42,6 +42,7 @@ public:
 		GEO_WALL,
 		GEO_CEILING,
 		GEO_FLOOR,
+		KITCHENFLOOR,
 		GEO_RIGHTDOOR,
 		SOFA,
 		TELEVISION,
@@ -214,7 +215,7 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
-	Item* houseItems[3];
+	Item* houseItems[5];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
@@ -223,6 +224,7 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
+	bool nearKey;
 	bool interact;
 	std::string interact_message;
 //	Mesh* itemImage[8];

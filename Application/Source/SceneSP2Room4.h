@@ -306,7 +306,7 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-
+	bool pickUpItem;
 	int bodyNum;
 	bool placeitem;
 	bool itemplaced[7];
