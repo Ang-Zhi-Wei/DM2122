@@ -1344,6 +1344,7 @@ void SceneSP2Room4::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Application::Load();
 		Application::setscene(Scene_Menu);
 	}
 	if (Application::IsKeyPressed('6')) {
@@ -1567,6 +1568,7 @@ void SceneSP2Room4::PauseUpdate()
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Menu);
 		}
 		else if (MposX > 11.3 && MposX < 12.7 && MposY >9.6 && MposY < 10.6)

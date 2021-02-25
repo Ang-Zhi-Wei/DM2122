@@ -10,6 +10,7 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
+#include "SceneSP2Loading.h"
 #include "SceneSP2Menu.h"
 #include "SceneSP2Main.h"
 #include "SceneSP2Room1.h"
@@ -122,8 +123,6 @@ bool Application::mainInit = false;
 //initialise functions
 bool Application::isquit = false;
 bool Application::ispaused = false;
-
-
 //Don't change anything here,use the buttons 5-9 to switch scenes when your in main
 int Application::scenetype = Scene_Menu;
 Scene* Application::sceneMain = new SceneSP2Main;
@@ -132,18 +131,24 @@ Scene* Application::scene2 = new SceneSP2Room2;
 Scene* Application::scene3 = new SceneSP2Room3;
 Scene* Application::scene4 = new SceneSP2Room4;
 Scene* Application::sceneMenu = new SceneSP2Menu;
+Scene* Application::sceneLoading = new SceneSP2Loading;
 Scene* Application::scene = sceneMenu;
 
 
 void Application::Run()
 {
-	sceneMenu->Init();
-	//sceneMain->Init();
-	scene1->Init();
-	scene2->Init();
-	scene3->Init();
-	scene4->Init();
-	sceneMenu->SetBackground();
+		sceneLoading->Init();
+		sceneLoading->Render();
+		glfwSwapBuffers(m_window);
+		sceneMenu->Init();
+		//sceneMain->Init();
+		scene1->Init();
+		scene2->Init();
+		scene3->Init();
+		scene4->Init();
+		scene = sceneMenu;
+		sceneMenu->SetBackground();
+	
 
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -159,8 +164,8 @@ void Application::Run()
 			scene->PauseUpdate();
 			m_timer.getElapsedTime();
 		}
+			scene->Render();
 
-		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -168,7 +173,7 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
 	} //Check if the ESC key had been pressed or if the window had been closed
-	sceneMain->Exit();
+	scene->Exit();
 	delete scene1;
 	delete scene2;
 	delete scene3;
@@ -215,10 +220,10 @@ int Application::GetWindowHeight()
 void Application::setscene(int scenenum)
 {
 	scenetype = scenenum;
-
 	switch (scenetype)
 	{
 	case Scene_Main:
+		
 		hidemousecursor(true);
 		Application::SetCursorPos(960, 540);
 		if (!mainInit)
@@ -236,7 +241,7 @@ void Application::setscene(int scenenum)
 	case Scene_Menu:
 		mainInit = false;
 		hidemousecursor(false);
-		
+		sceneMenu->Exit();
 		scene1->Exit();
 		scene2->Exit();
 		scene3->Exit();
@@ -288,6 +293,17 @@ void Application::pause(bool pause)
 {
 	ispaused = pause;
 }
+
+void Application::Load()
+{
+	sceneLoading->Render();
+	glfwSwapBuffers(m_window);
+}
+
+
+
+
+
 
 
 

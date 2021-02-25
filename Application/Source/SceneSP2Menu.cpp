@@ -417,6 +417,7 @@ void SceneSP2Menu::Update(double dt)
 			Background->setSoundVolume(0.f);
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
+			Application::Load();
 			Application::setscene(Scene_Main);
 			menuScreen = false;
 		}
