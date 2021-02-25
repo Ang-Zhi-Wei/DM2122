@@ -110,6 +110,7 @@ public:
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
 		GEO_END,
+		GEO_ENDBACK,
 
 		//pause
         GEO_PAUSEMENU,
@@ -266,7 +267,13 @@ private:
 	bool PKeypressed, PKeyreleased;
 	bool is_talking;
 
-	//Trying to yank username
+	//signs
+	int Sign;
+	int GarageSign; //1
+	int HospitalSign; //2
+	int HouseSign; //3
+	int SchoolSign; //4
+	double SignTimer;
 	
 
 	struct trap {
@@ -316,6 +323,10 @@ private:
 	//Win conditions
 	bool NearCar;
 	int WinLevel;
+	bool winTimerActive;
+	double winTimer;
+	float translateWinY;
+	float translateWinYDir;
 
 	//Irrklang sound
 	ISoundEngine* Background;

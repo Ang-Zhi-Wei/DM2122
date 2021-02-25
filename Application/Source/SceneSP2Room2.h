@@ -77,9 +77,11 @@ public:
 		GEO_DEATH,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
+		GEO_BAR2, //suffocation
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
 		GEO_PLAYGROUND,
+		SUFFOCATION,
 		GEO_LIVES,
 		GEO_CHATBOX,
 		GEO_SIDEBOX,
