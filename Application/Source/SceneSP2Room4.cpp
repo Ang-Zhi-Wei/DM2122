@@ -375,8 +375,8 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(-130, -3, 0));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(-539.6, 6.3, 0));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(-483, 6.5, -17));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(-539.6, 6.3, 0));
+	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
 	main_door[0].mid.Set(-470, 7.75, 2.5);
