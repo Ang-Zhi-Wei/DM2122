@@ -137,6 +137,8 @@ Scene* Application::scene = sceneMenu;
 
 void Application::Run()
 {
+		//Main Loop
+		m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 		sceneLoading->Init();
 		sceneLoading->Render();
 		glfwSwapBuffers(m_window);
@@ -146,12 +148,10 @@ void Application::Run()
 		scene2->Init();
 		scene3->Init();
 		scene4->Init();
-		scene = sceneMenu;
 		sceneMenu->SetBackground();
 	
 
-	//Main Loop
-	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+	
 	while (!glfwWindowShouldClose(m_window)  && isquit==false)
 	{
 		//scene update
