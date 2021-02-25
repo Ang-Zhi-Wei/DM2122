@@ -102,6 +102,21 @@ public:
 			open = false;
 			selected = 0;
 		}
+
+		bool isInside(Item* itemptr)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				if (items[i] != nullptr)
+				{
+					if (items[i]->name == itemptr->name)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	};
 
 	struct Ghost
