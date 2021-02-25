@@ -191,7 +191,6 @@ private:
 	CameraSP2 camera;
 	float LSPEED;
 	float fps;
-	bool nearBattery, nearBattery2;
 	bool Fpressed, Freleased;
 	bool Epressed, Ereleased;
 	bool Qpressed, Qreleased;
@@ -200,7 +199,7 @@ private:
 	bool Rpressed, Rreleased;
 	bool showSideBox;
 
-	Item* items[10];
+	Item* items[4];
 
 	float campos_x;
 	float campos_y;
@@ -306,7 +305,7 @@ private:
 	bool camBlinkOff;
 	double camBlinkOnSec;
 	double camBlinkOffSec;
-
+	bool pickUpItem;
 	int bodyNum;
 	bool placeitem;
 	bool itemplaced[7];
@@ -321,7 +320,11 @@ private:
 	double MposX, MposY;
 	double Mousetempx, Mousetempy;
 	float doorRotate;
-
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
 	enum bodynumber
 	{
 		body1_r,

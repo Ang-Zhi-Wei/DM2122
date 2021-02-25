@@ -35,9 +35,10 @@ public:
 		{
 			BATTERY,
 			Screwdriver,
-			ITEM2,
+			FLOWER,
 			ITEM3,
-			SPARK_PLUG
+			SPARK_PLUG,
+			Key,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -59,22 +60,27 @@ public:
 			switch (type)
 			{
 			case BATTERY:
-				description = "Use to refill flashlight batteries aaaaaa idk";
+				description = "Use to refill flashlight batteries";
 				image = "Assigment2Images//batteryicon.tga";
 				//set image and description
 				break;
 			case SPARK_PLUG:
-				description = "A spark plug used for delivery current to the combustion chamber in a car's engine ";
+				description = "A spark plug used for delivery current to the combustion chamber in a car's engine";
 				image = "Image//sparkplug_icon.tga";
 				//set image and description
 				break;
-			case ITEM2:
-				description = "TESTESTTESTETSESTESTESTETST>--|-o";
-				image = "Image//man1.tga";
+			case FLOWER:
+				description = "A rose stalk. I wonder what it could be for?";
+				image = "Image//rosestalk.tga";
+				count = 7;
 				break;
 			case Screwdriver:
 				description = "A screwdriver";
 				image = "Assigment2Images/screwdrivericon.tga";
+				break;
+			case Key:
+				description = "A key";
+				image = "Assigment2Images/keyicon.tga";
 				break;
 			}
 		}
@@ -95,6 +101,21 @@ public:
 			}
 			open = false;
 			selected = 0;
+		}
+
+		bool isInside(Item* itemptr)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				if (items[i] != nullptr)
+				{
+					if (items[i]->name == itemptr->name)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	};
 

@@ -15,6 +15,7 @@ SceneSP2Room1::SceneSP2Room1()
 	camBlinkOn = true;
 	camBlinkOff = false;
 	camBlinkOffSec = 0;
+	nearKey = false;
 	camBlinkOnSec = 0;
 	showSideBox = true;
 	LSPEED = 10.F;
@@ -48,19 +49,16 @@ SceneSP2Room1::SceneSP2Room1()
 	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
 	fps = 60;
-	itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 	//@pause
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
 	//======
+
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 SceneSP2Room1::~SceneSP2Room1()
@@ -215,6 +213,10 @@ void SceneSP2Room1::Init()
 	meshList[GEO_CEILING]->textureID = LoadTGA("Assigment2Images//housewall.tga");
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateCubeT("Floors", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//ConcreteFloor.tga");
+	meshList[KITCHENFLOOR] = MeshBuilder::GenerateQuadRepeat("pavement", 1, 1, White);
+	meshList[KITCHENFLOOR]->textureID = LoadTGA("Assigment2Images//kitchenfloor.tga");
+	meshList[KITCHENFLOOR]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	//meshList[Ground_Mesh]->textureID = LoadTGA("Assigment2Images//GroundMesh.tga");
 	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
 	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
@@ -248,10 +250,15 @@ void SceneSP2Room1::Init()
 	meshList[STOVE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//kitchenstove.obj");
 	meshList[STOVE]->textureID = LoadTGA("Assigment2Images//stove.tga");
 	meshList[STOVE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-	meshList[FRIDGE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//Frigo.obj");
-	meshList[FRIDGE]->textureID = LoadTGA("Assigment2Images//fridge.tga");
+	meshList[FRIDGE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//fridge2.obj");
+	meshList[FRIDGE]->textureID = LoadTGA("Assigment2Images//fridge2.tga");
 	meshList[FRIDGE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-
+	meshList[BED] = MeshBuilder::GenerateOBJ("man npc", "OBJ//bed.obj");
+	meshList[BED]->textureID = LoadTGA("Assigment2Images//bedtexture.tga");
+	meshList[BED]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[DRESSER] = MeshBuilder::GenerateOBJ("man npc", "OBJ//cabinet.obj");
+	meshList[DRESSER]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
+	meshList[DRESSER]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	
 
 
@@ -378,15 +385,34 @@ void SceneSP2Room1::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
-	houseItems[0] = new Item("battery", Item::BATTERY, Vector3(-22, 7.8, -95));
-	houseItems[1] = new Item("battery", Item::BATTERY, Vector3(35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, Vector3(52, 1, -496));
+	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
+	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
+	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
+	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
+
+	//puzzle items
+	meshList[leverbase] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.f, 0.f));
+	meshList[leverbase]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[leverhandle] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 1.0f, 0.0f));
+	meshList[leverhandle]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[painting] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 0.f, 1.0f));
+	meshList[painting]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[safe] = MeshBuilder::GenerateOBJ("Building", "OBJ//safe.obj");
+	meshList[safe]->textureID = LoadTGA("Image//metal1.tga");
+	meshList[safe]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[key] = MeshBuilder::GenerateOBJ("Building", "OBJ//key.obj");
+	meshList[key]->textureID = LoadTGA("Assigment2Images//key.tga");
+	meshList[key]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	//init update stuff
 	LSPEED = 10.F;
@@ -513,8 +539,17 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[25].setlength(5.5, 15, 10);
 	Colliderlist[25].Setposition(Vector3(30, 4, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[26].setlength(7, 15, 7);
+	Colliderlist[26].Setposition(Vector3(40, 3.7, -532));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(12, 15, 5);
+	Colliderlist[27].Setposition(Vector3(52, 0.7, -532));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[28].setlength(6, 15, 6);
+	Colliderlist[28].Setposition(Vector3(67, 6.5, -520));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[25].getxlength(), Colliderlist[25].getylength(), Colliderlist[25].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[28].getxlength(), Colliderlist[28].getylength(), Colliderlist[28].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -710,6 +745,22 @@ void SceneSP2Room1::Update(double dt)
 		Freleased = false;
 	}
 
+	if (Fpressed == true && nearKey == true)
+	{
+		PickUpItem(houseItems[3]);
+		houseItems[3] = NULL;
+		Fpressed = false;
+
+	}
+
+	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr)
+	{
+		nearKey = true;
+	}
+	else {
+		nearKey = false;
+	}
+
 	//items - batteries
 	pickUpBattery = false;
 	for (int i = 0; i < 3; i++)
@@ -717,7 +768,7 @@ void SceneSP2Room1::Update(double dt)
 		if (houseItems[i] != nullptr)
 		{
 			if (camera.position.z > houseItems[i]->pos.z - 10 && camera.position.z < houseItems[i]->pos.z + 10
-				&& camera.position.x > houseItems[i]->pos.x - 10 && camera.position.x > houseItems[i]->pos.x - 10)
+				&& camera.position.x > houseItems[i]->pos.x - 10 && camera.position.x < houseItems[i]->pos.x + 10)
 			{
 				pickUpBattery = true;
 				if (Fpressed)
@@ -885,7 +936,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case OPENING:
-		rotateY[0] += float(20 * dt);
+		rotateY[0] += float(40 * dt);
 		if (rotateY[0] >= 90)
 		{
 			Background->setSoundVolume(0.f);
@@ -896,7 +947,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case CLOSING:
-		rotateY[0] -= 20 * float(dt);
+		rotateY[0] -= 40 * float(dt);
 		if (rotateY[0] <= 0)
 		{
 			DS_MAIN = CLOSED;
@@ -1267,7 +1318,7 @@ void SceneSP2Room1::Update(double dt)
 		if (ghost->waitTime <= 0)
 		{
 			ghost->state = Ghost::SPEEDRUN;
-			ghost->speed = 50;
+			ghost->speed = 250;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1341,6 +1392,8 @@ void SceneSP2Room1::Update(double dt)
 		jumpscareActive1 = true;
 		jumpscareTimer1 = jumpscareTimerReset1 = rand() % 90 + double(45);
 	}
+
+
 
 	////Jumpscare, living room
 	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
@@ -1419,7 +1472,43 @@ void SceneSP2Room1::Update(double dt)
 	//	jumpscareActive4 = true;
 	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	//}
-	
+
+	//lever rotation
+	//rotate_lever += 40 * float(dt);
+
+	//puzzles
+	//lever pulling logic 
+	switch (leverIsPulled)
+	{
+	case(yes):
+		if (rotate_painting < 180)
+		{
+			rotate_painting += 40 * float(dt);
+		}
+		if (move_safe > 61.5 && rotate_painting >= 180)
+		{
+			move_safe -= 1.5 * float(dt);
+		}
+		break;
+	case(no):
+		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
+		{
+			interact = true;
+			interact_message = "pull lever";
+			if (Fpressed)
+			{
+				leverIsPulled = pulling;
+			}
+		}
+		break;
+	case(pulling):
+		if (rotate_lever < 60)
+			rotate_lever += 60 * float(dt);
+		else if (rotate_lever >= 60)
+			leverIsPulled = yes;
+	}
+
+
 	//switch scenes button for now
 	if (Application::IsKeyPressed('5')) {
 		Background->setSoundVolume(0.f);
@@ -1536,6 +1625,60 @@ void SceneSP2Room1::PauseUpdate()
 	}
 }
 
+
+void SceneSP2Room1::RenderPuzzleItems()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 95.5);
+	modelStack.Scale(2, 3, 0.5);
+	RenderMesh(meshList[leverbase], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 8, 96.7);
+	modelStack.Translate(0, 0, -1.4);
+	modelStack.Rotate(rotate_lever, 1, 0, 0);
+	modelStack.Translate(0, 0, 1.4);
+	modelStack.Scale(0.5, 0.5, 2);
+	RenderMesh(meshList[leverhandle], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(66, 9.5, 150);
+	modelStack.Translate(-2, 0, 0);
+	modelStack.Rotate(rotate_painting, 0, 1, 0);
+	modelStack.Translate(2, 0, 0);
+	modelStack.Scale(4, 5, 0.5);
+	RenderMesh(meshList[painting], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+			modelStack.Translate(move_safe, 7.5, 150);
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Scale(2, 2, 2);
+			RenderMesh(meshList[safe], true);
+
+			if (houseItems[3] != nullptr) {
+				modelStack.PushMatrix();
+				modelStack.Translate(-1, 0.5, -0.5);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(0.15, 0.15, 0.15);
+				RenderMesh(meshList[key], true);
+				modelStack.PopMatrix();
+			}
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(37.5, 7.2, -44);
+	//modelStack.Translate(2.5, 0, 0);
+	//modelStack.Rotate(110, 0, 1, 0);
+	//modelStack.Translate(-2.5, 0, 0);
+	//modelStack.Scale(5, 15.5, 1);
+	//RenderMesh(meshList[GEO_LEFTDOOR], true);
+	//modelStack.PopMatrix();
+}
+
+
 void SceneSP2Room1::Render()
 {
 
@@ -1599,7 +1742,7 @@ void SceneSP2Room1::Render()
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[25].getPosition().x, Colliderlist[25].getPosition().y, Colliderlist[25].getPosition().z);
+	modelStack.Translate(Colliderlist[28].getPosition().x, Colliderlist[28].getPosition().y, Colliderlist[28].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -1638,9 +1781,12 @@ void SceneSP2Room1::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-24.5, 0, -600);
+
+
+	//render puzzle items
+	RenderPuzzleItems();
 	
 	//Main door
-
 	modelStack.PushMatrix();
 	modelStack.Translate(-7.5, 7.5, 270);
 
@@ -1672,6 +1818,14 @@ void SceneSP2Room1::Render()
 	modelStack.Translate(0, 0, 220);
 	modelStack.Scale(20, 1, 100);
 	RenderMesh(meshList[GEO_FLOOR], true);
+	modelStack.PopMatrix();
+
+	//kitchen floor
+
+	modelStack.PushMatrix();
+	modelStack.Translate(71, 1.5, 75);
+	modelStack.Scale(40, 1, 40);
+	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
 
 	//door
@@ -1894,33 +2048,47 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
 	modelStack.PopMatrix();//Added collider
-	//@obj
+
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, -470);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.04, 0.04, 0.04);
 	RenderMesh(meshList[BOOKSHELF], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 3.7, -532);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(4.7, 4.7, 4.7);
 	RenderMesh(meshList[KITCHENSINK], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(52, 0.7, -532);
 	//modelStack.Rotate(, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
+	modelStack.PopMatrix();//Added collider
+	//@obj
+	modelStack.PushMatrix();
+	modelStack.Translate(65, 6.5, -520);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(0.06, 0.07,0.06);
+	RenderMesh(meshList[FRIDGE], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(65, 4, -520);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(2.4, 2.4, 2.4);
-	RenderMesh(meshList[FRIDGE], true);
+	modelStack.Translate(56, 0, -460);
+//	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[BED], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 0, -480);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.05, 0.05, 0.05);
+	RenderMesh(meshList[DRESSER], true);
 	modelStack.PopMatrix();
 
 	
@@ -1964,14 +2132,10 @@ void SceneSP2Room1::Render()
 	
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+
+	
 	//UI OVERLAY
 
 	if (jumpscareActive1 == true)
@@ -2004,8 +2168,15 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-
-	if (pickUpBattery)
+	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	if (pickUpBattery || nearKey)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
@@ -2014,7 +2185,7 @@ void SceneSP2Room1::Render()
 
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2282,7 +2453,7 @@ void SceneSP2Room1::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

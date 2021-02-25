@@ -42,6 +42,7 @@ public:
 		GEO_WALL,
 		GEO_CEILING,
 		GEO_FLOOR,
+		KITCHENFLOOR,
 		GEO_RIGHTDOOR,
 		SOFA,
 		TELEVISION,
@@ -52,6 +53,9 @@ public:
 		KITCHENSINK,
 		STOVE,
 		FRIDGE,
+		BED,
+		DRESSER,
+
 
 		//ground mesh
 		Ground_Mesh,
@@ -82,6 +86,14 @@ public:
 		GEO_SIDEBOX,
 		BATTERY,
 		
+
+		//puzzle items
+		leverbase,
+		leverhandle,
+		painting,
+		safe,
+		key,
+
 
 		//@pause
 		GEO_PAUSEMENU,
@@ -206,7 +218,7 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
-	Item* houseItems[3];
+	Item* houseItems[5];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
@@ -215,6 +227,7 @@ private:
 	double camBlinkOnSec;
 	double camBlinkOffSec;
 	bool inLocker;
+	bool nearKey;
 	bool interact;
 	std::string interact_message;
 //	Mesh* itemImage[8];
@@ -276,6 +289,18 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 
+	//puzzle animation factors and logic
+	float rotate_painting;
+	float rotate_lever;
+	float move_safe;
+	enum leverPulled
+	{
+		yes,
+		no,
+		pulling,
+	};
+	leverPulled leverIsPulled;
+
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
@@ -287,6 +312,6 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderPuzzleItems();
 };
-
 #endif
