@@ -2113,15 +2113,10 @@ void SceneSP2Room1::Render()
 	
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	if (jumpscareActive1 == true)
@@ -2154,7 +2149,14 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-
+	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (pickUpBattery || nearKey)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
