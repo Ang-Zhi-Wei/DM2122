@@ -777,7 +777,7 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr)
+	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr && leverIsPulled == yes)
 	{
 		nearKey = true;
 	}
@@ -785,7 +785,7 @@ void SceneSP2Room1::Update(double dt)
 		nearKey = false;
 	}
 
-	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr)
+	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr && leverIsPulled == yes)
 	{
 		nearWrench = true;
 	}
@@ -1692,7 +1692,7 @@ void SceneSP2Room1::RenderPuzzleItems()
 			modelStack.Scale(2, 2, 2);
 			RenderMesh(meshList[safe], true);
 
-			if (houseItems[3] != nullptr) {
+			if (houseItems[3] != nullptr && leverIsPulled == yes) {
 				modelStack.PushMatrix();
 				modelStack.Translate(-1, 0.5, -0.5);
 				modelStack.Rotate(90, 0, 1, 0);

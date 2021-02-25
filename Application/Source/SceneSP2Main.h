@@ -85,6 +85,8 @@ public:
 		GARAGEDOOR,
 		BATTERY,
 		GEO_SIGN,
+		GEO_LEFTDOOR,
+		GEO_RIGHTDOOR,
 	
 		GEO_TRUCK,
 		Fountain,
