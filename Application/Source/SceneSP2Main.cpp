@@ -2779,6 +2779,11 @@ void SceneSP2Main::Render()
 
 			break;
 		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
+			break;
+		}
 	}
 
 
