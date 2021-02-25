@@ -100,6 +100,7 @@ public:
 			case MysObj:
 				description = "A mysterious figure";
 				image = "Image/diluc.tga";
+				break;
 			case Wrench:
 				description = "A Wrench";
 				image = "Assigment2Images/wrenchicon.tga";
