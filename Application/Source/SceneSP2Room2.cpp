@@ -32,6 +32,10 @@ SceneSP2Room2::SceneSP2Room2()
 
 	rotateobj1 = 28;
 	rotateobj2 = 90;
+
+	puzzleItemPlaced[notebookItem] = false;
+	puzzleItemPlaced[lunchboxItem] = false;
+	puzzleItemPlaced[dilucItem] = false;
 	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
 	itemImage[2] = meshList[GEO_ITEMIMAGE2];
@@ -803,6 +807,23 @@ void SceneSP2Room2::Update(double dt)
 		}
 	}
 
+	placeitemtext = false;
+	if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 522 && camera.position.x <= 527 && !puzzleItemPlaced[lunchboxItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
+	}
+	if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 530 && camera.position.x <= 534.5 && !puzzleItemPlaced[notebookItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
+	}
+    if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 538 && camera.position.x <= 542 && !puzzleItemPlaced[dilucItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
+	}
+
 	if (!Application::IsKeyPressed('E'))
 	{
 		Ereleased = true;
@@ -1563,6 +1584,7 @@ void SceneSP2Room2::PauseUpdate()
 
 void SceneSP2Room2::RenderPuzzleObjects()
 {
+	//render objs in scene
 	if (PuzzleItems[0] != nullptr)
 	{
 		modelStack.PushMatrix();
@@ -1592,26 +1614,63 @@ void SceneSP2Room2::RenderPuzzleObjects()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(525, 7, -99); // pos on map
-	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(rotateobj, 0, 1, 0);
-	RenderMesh(meshList[lunchboxplace], false);
-	modelStack.PopMatrix();
+	//render where obj needs to be palced
+	if (!puzzleItemPlaced[lunchboxItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(525, 7, -99); // pos on map
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[lunchboxplace], false);
+		modelStack.PopMatrix();
+	}
+	if (!puzzleItemPlaced[notebookItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(532, 7, -99); // pos on map
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[notebookplace], false);
+		modelStack.PopMatrix();
+	}
+	if (!puzzleItemPlaced[dilucItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(540, 6, -99); // pos on map
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[mysobjplace], false);
+		modelStack.PopMatrix();
+	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(532, 7, -99); // pos on map
-	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(rotateobj, 0, 1, 0);
-	RenderMesh(meshList[notebookplace], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(540, 6, -99); // pos on map
-	modelStack.Scale(1.5, 1.5, 1.5);
-	modelStack.Rotate(rotateobj, 0, 1, 0);
-	RenderMesh(meshList[mysobjplace], false);
-	modelStack.PopMatrix();
+	//render when object placed on shelf
+	if (puzzleItemPlaced[lunchboxItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(525, 6.5, -99);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[lunchbox], true);
+		modelStack.PopMatrix();
+	}
+	if (puzzleItemPlaced[notebookItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(532, 6, -99);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[notebook], true);
+		modelStack.PopMatrix();
+	}
+	if (puzzleItemPlaced[dilucItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(540, 5.6, -99);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[mysobj], true);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneSP2Room2::Render()
@@ -1901,7 +1960,10 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 	
-
+	if (placeitemtext)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 0.f), 4.f, 20.f, 5.f);
+	}
 	
 	//UI OVERLAY
 
@@ -2150,7 +2212,51 @@ void SceneSP2Room2::UseItem(int itemname)
 
 		//else warning message?
 		break;
-	case Item::FLOWER:
+
+	case Item::ItemA:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 522 && camera.position.x <= 527)
+		{
+			puzzleItemPlaced[lunchboxItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		break;
+	case Item::Notebook:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 530 && camera.position.x <= 534.5)
+		{
+			puzzleItemPlaced[notebookItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		break;
+	case Item::MysObj:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 538 && camera.position.x <= 542)
+		{
+			puzzleItemPlaced[dilucItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
 		break;
 	}
 }

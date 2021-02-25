@@ -309,6 +309,15 @@ private:
 	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
+
+	bool puzzleItemPlaced[3];
+	bool placeitemtext;
+	enum Itemtype
+	{
+		lunchboxItem,
+		notebookItem,
+		dilucItem,
+	};
 	//Mesh* itemImage[8];
 
 	void RenderSkybox();
