@@ -1779,15 +1779,10 @@ void SceneSP2Room2::Render()
 	}
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	//Vision vignette
@@ -1814,6 +1809,13 @@ void SceneSP2Room2::Render()
 	//breathing icon
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (inLocker == true)
 	{
 		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);

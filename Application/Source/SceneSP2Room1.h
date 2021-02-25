@@ -53,6 +53,9 @@ public:
 		KITCHENSINK,
 		STOVE,
 		FRIDGE,
+		BED,
+		DRESSER,
+
 
 		//ground mesh
 		Ground_Mesh,

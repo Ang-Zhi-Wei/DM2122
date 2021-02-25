@@ -253,7 +253,12 @@ void SceneSP2Room1::Init()
 	meshList[FRIDGE] = MeshBuilder::GenerateOBJ("man npc", "OBJ//fridge2.obj");
 	meshList[FRIDGE]->textureID = LoadTGA("Assigment2Images//fridge2.tga");
 	meshList[FRIDGE]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
-
+	meshList[BED] = MeshBuilder::GenerateOBJ("man npc", "OBJ//bed.obj");
+	meshList[BED]->textureID = LoadTGA("Assigment2Images//bedtexture.tga");
+	meshList[BED]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[DRESSER] = MeshBuilder::GenerateOBJ("man npc", "OBJ//cabinet.obj");
+	meshList[DRESSER]->textureID = LoadTGA("Assigment2Images//tvstandtexture.tga");
+	meshList[DRESSER]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	
 
 
@@ -1818,7 +1823,7 @@ void SceneSP2Room1::Render()
 	//kitchen floor
 
 	modelStack.PushMatrix();
-	modelStack.Translate(70, 1.5, 75);
+	modelStack.Translate(71, 1.5, 75);
 	modelStack.Scale(40, 1, 40);
 	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
@@ -2072,6 +2077,20 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[FRIDGE], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(56, 0, -460);
+//	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[BED], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 0, -480);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(0.05, 0.05, 0.05);
+	RenderMesh(meshList[DRESSER], true);
+	modelStack.PopMatrix();
+
 	
 
 	//items
@@ -2113,15 +2132,10 @@ void SceneSP2Room1::Render()
 	
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	if (jumpscareActive1 == true)
@@ -2154,7 +2168,14 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-
+	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (pickUpBattery || nearKey)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
