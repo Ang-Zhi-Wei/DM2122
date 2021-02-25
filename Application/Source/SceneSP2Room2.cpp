@@ -181,8 +181,8 @@ void SceneSP2Room2::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	schoolItems[0] = new Item("battery", Item::BATTERY, Vector3(500, 4.5, -102));
-	schoolItems[1] = new Item("battery", Item::BATTERY, Vector3(491, 4.5, 85));
+	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
+	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -1820,15 +1820,10 @@ void SceneSP2Room2::Render()
 	}
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	//Vision vignette
@@ -1855,6 +1850,13 @@ void SceneSP2Room2::Render()
 	//breathing icon
 	//stamina bar
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (inLocker == true)
 	{
 		//RenderMeshOnScreen(meshList[GEO_BAR], 14, 50, suffocationScale, 1);
@@ -1866,7 +1868,7 @@ void SceneSP2Room2::Render()
 	
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2063,7 +2065,7 @@ void SceneSP2Room2::UseItem(int itemname)
 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

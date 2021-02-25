@@ -49,14 +49,6 @@ SceneSP2Room1::SceneSP2Room1()
 	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
 	fps = 60;
-	itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 	//@pause
 	gamepaused = false;
@@ -393,10 +385,10 @@ void SceneSP2Room1::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 
-	houseItems[0] = new Item("battery", Item::BATTERY, Vector3(-22, 7.8, -95));
-	houseItems[1] = new Item("battery", Item::BATTERY, Vector3(35, 1, -435));
-	houseItems[2] = new Item("battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("key", Item::Key, Vector3(52, 1, -496));
+	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
+	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
+	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
+	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -2140,15 +2132,10 @@ void SceneSP2Room1::Render()
 	
 
 
-	if (showChatbox == true) {
-		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
-	}
+	
 
 
-	if (nearExit == true) {
-		showChatbox = true;
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-	}
+	
 	//UI OVERLAY
 
 	if (jumpscareActive1 == true)
@@ -2181,7 +2168,14 @@ void SceneSP2Room1::Render()
 	RenderMeshOnScreen(meshList[GEO_BAR], 14 - (5 - float(camera.playerStamina) * 0.25f), 52, float(camera.playerStamina) * 0.5f, 1);
 	//stamina icon
 	RenderMeshOnScreen(meshList[GEO_STAMINA], 6, 52, 2, 2);
-
+	
+	if (showChatbox == true) {
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+	}
+	if (nearExit == true) {
+		showChatbox = true;
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
 	if (pickUpBattery || nearKey)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
@@ -2191,7 +2185,7 @@ void SceneSP2Room1::Render()
 
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2459,7 +2453,7 @@ void SceneSP2Room1::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }

@@ -1404,6 +1404,8 @@ void SceneSP2Main::Update(double dt)
 		}
 
 	}
+	
+
 	//items - batteries
 	pickUpBattery = false;
 	for (int i = 0; i < 5; i++)
@@ -2709,7 +2711,7 @@ void SceneSP2Main::Render()
 	//objectives screen
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 12.1f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
 	//objectives
 	switch (ObjectivePhase)
@@ -2821,7 +2823,7 @@ void SceneSP2Main::UseItem(int itemname)
 		 
 		//else warning message?
 		break;
-	case Item::ITEM2:
+	case Item::FLOWER:
 		break;
 	}
 }
