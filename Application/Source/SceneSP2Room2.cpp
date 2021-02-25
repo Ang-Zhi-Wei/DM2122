@@ -1271,6 +1271,12 @@ void SceneSP2Room2::Update(double dt)
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
+			else if (suffocationScale <= 0) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(Lockerlist[i].getfront());
+				glEnable(GL_CULL_FACE);
+				inLocker = false;
+			}
 		}
 		if (Lockerlist[i].status(camera.position, -1 * camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
@@ -1283,9 +1289,30 @@ void SceneSP2Room2::Update(double dt)
 				inLocker = true;
 				Fpressed = false;
 			}
+			
 		}
 	}
+	if (inLocker == true)
+	{
 
+		suffocationScale -= (float)(suffocationScaleDir * dt / 7) * camera.playerStamina;
+		suffocationTranslate -= (float)(suffocationTranslateDir * dt / 7) * camera.playerStamina;
+		if (suffocationScale <= 0)
+		{
+			suffocationScaleDir = 0;
+		}
+		if (suffocationTranslate <= 0)
+		{
+			suffocationTranslateDir = 0;
+		}
+	}
+	if (inLocker == false)
+	{
+		suffocationScale = 15;
+		suffocationTranslate = 14;
+		suffocationScaleDir = 1;
+		suffocationTranslateDir = 1;
+	}
 	//trap detection
 	bool detected = false;
 	for (int i = 0; i < signed(traplist.size()); i++) {
@@ -1915,6 +1942,10 @@ void SceneSP2Room2::Render()
 	if (interact)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
+	}
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
 	std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
