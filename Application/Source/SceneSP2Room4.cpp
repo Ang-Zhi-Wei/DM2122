@@ -382,7 +382,8 @@ void SceneSP2Room4::Init()
 	main_door[0].mid.Set(-470, 7.75, 2.5);
 	main_door[1].mid.Set(-470, 7.75, -2.5);
 	main_door[0].lengthz = main_door[1].lengthz = 5;
-
+	main_door[0].rotateY = 90;
+	main_door[1].rotateY = -90;
 
 
 	//list of lockers
@@ -706,6 +707,7 @@ void SceneSP2Room4::UseItem(int itemname)
 		{
 			
 			itemplaced[body_op] = true;
+			DS_main = OPENING;
 			if (inventory->items[inventory->selected]->count > 1)
 			{
 				inventory->items[inventory->selected]->count--;
@@ -757,6 +759,10 @@ void SceneSP2Room4::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
+	Application::SetCursorPos(480, camera.mousePosY);
+	DS_main = OPEN;
+	main_door[0].rotateY = 90;
+	main_door[1].rotateY = -90;
 	//inventory item image
 	for (int i = 0; i < 8; i++)
 	{
@@ -1075,7 +1081,7 @@ void SceneSP2Room4::Update(double dt)
 	{
 	case OPEN:
 		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
+		if ((camera.position - origin).Length() >= 20 && !itemplaced[body_op])
 		{
 			DS_main = CLOSING;
 		}
@@ -1095,30 +1101,26 @@ void SceneSP2Room4::Update(double dt)
 		if (camera.position.z >= -5 && camera.position.z <= 5 && camera.position.x <= -471 && camera.position.x >= -480)
 		{
 			interact = true;
-			interact_message = "Exit Hospital";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_main = OPENING;
-			}
+			interact_message = "Door is Locked";
 		}
 		break;
 	case OPENING:
-		main_door[0].rotateY -= float(20 * dt);
-		main_door[1].rotateY += float(20 * dt);
-		if (main_door[1].rotateY >= 90)
+		main_door[0].rotateY += float(20 * dt);
+		main_door[1].rotateY -= float(20 * dt);
+		if (main_door[0].rotateY >= 90)
 		{
-			Background->setSoundVolume(0.f);
-			Effect->setSoundVolume(0.f);
-			Jumpscare->setSoundVolume(0.f);
-			Application::setscene(Scene_Main);
+			main_door[0].rotateY = 90;
+			main_door[1].rotateY = -90;
+			DS_main = OPEN;
 		}
 		break;
 	case CLOSING:
-		main_door[0].rotateY += 20 * float(dt);
-		main_door[1].rotateY -= 20 * float(dt);
-		if (main_door[1].rotateY <= 0)
+		main_door[0].rotateY -= 70 * float(dt);
+		main_door[1].rotateY += 70 * float(dt);
+		if (main_door[0].rotateY <= 0)
 		{
+			main_door[0].rotateY = 0;
+			main_door[1].rotateY = 0;
 			DS_main = CLOSED;
 		}
 		break;
@@ -1983,6 +1985,9 @@ void SceneSP2Room4::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(main_door[0].mid.x, main_door[0].mid.y, main_door[0].mid.z);
 
+	modelStack.Translate(0.25, 0, 2.5);
+	modelStack.Rotate(main_door[0].rotateY, 0, 1, 0);
+	modelStack.Translate(-0.25, 0, -2.5);
 
 	modelStack.Scale(1, 15.5, 5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
@@ -1991,6 +1996,9 @@ void SceneSP2Room4::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(main_door[1].mid.x, main_door[1].mid.y, main_door[1].mid.z);
 
+	modelStack.Translate(0.25, 0, -2.5);
+	modelStack.Rotate(main_door[1].rotateY, 0, 1, 0);
+	modelStack.Translate(-0.25, 0, 2.5);
 
 	modelStack.Scale(1, 15.5, 5);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
