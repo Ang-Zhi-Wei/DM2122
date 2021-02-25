@@ -258,7 +258,11 @@ private:
 	bool showChatbox;
 	bool showSideBox;
 
-
+	//In locker stuff
+	float suffocationTranslate;
+	float suffocationTranslateDir;
+	float suffocationScale;
+	float suffocationScaleDir;
 	//game related vars
 	bool inLocker;
 

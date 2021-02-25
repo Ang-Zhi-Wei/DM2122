@@ -540,8 +540,14 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[25].setlength(5.5, 15, 10);
 	Colliderlist[25].Setposition(Vector3(30, 4, -470));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[26].setlength(7, 15, 7);
+	Colliderlist[26].Setposition(Vector3(40, 3.7, -532));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[27].setlength(12, 15, 5);
+	Colliderlist[27].Setposition(Vector3(52, 0.7, -532));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[25].getxlength(), Colliderlist[25].getylength(), Colliderlist[25].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[27].getxlength(), Colliderlist[27].getylength(), Colliderlist[27].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -760,7 +766,7 @@ void SceneSP2Room1::Update(double dt)
 		if (houseItems[i] != nullptr)
 		{
 			if (camera.position.z > houseItems[i]->pos.z - 10 && camera.position.z < houseItems[i]->pos.z + 10
-				&& camera.position.x > houseItems[i]->pos.x - 10 && camera.position.x > houseItems[i]->pos.x - 10)
+				&& camera.position.x > houseItems[i]->pos.x - 10 && camera.position.x < houseItems[i]->pos.x + 10)
 			{
 				pickUpBattery = true;
 				if (Fpressed)
@@ -1734,7 +1740,7 @@ void SceneSP2Room1::Render()
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
 	modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[25].getPosition().x, Colliderlist[25].getPosition().y, Colliderlist[25].getPosition().z);
+	modelStack.Translate(Colliderlist[27].getPosition().x, Colliderlist[27].getPosition().y, Colliderlist[27].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();
 
@@ -2032,21 +2038,21 @@ void SceneSP2Room1::Render()
 	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
 	modelStack.PopMatrix();//Added collider
-	//@obj
+
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, -470);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.04, 0.04, 0.04);
 	RenderMesh(meshList[BOOKSHELF], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
 	modelStack.Translate(40, 3.7, -532);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(4.7, 4.7, 4.7);
 	RenderMesh(meshList[KITCHENSINK], true);
-	modelStack.PopMatrix();
-
+	modelStack.PopMatrix();//Added collider
+	//@obj
 	modelStack.PushMatrix();
 	modelStack.Translate(52, 0.7, -532);
 	//modelStack.Rotate(, 0, 1, 0);

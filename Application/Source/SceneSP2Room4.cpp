@@ -411,19 +411,19 @@ void SceneSP2Room4::Init()
 	//@collider
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(1, 17, 12);
+	Colliderlist[0].setlength(3, 17, 12);
 	Colliderlist[0].Setposition(Vector3(-59, 7, -65));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[1].setlength(1, 17, 12);
+	Colliderlist[1].setlength(3, 17, 12);
 	Colliderlist[1].Setposition(Vector3(59, 7, -65));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(1, 25, 100);
+	Colliderlist[2].setlength(3, 25, 100);
 	Colliderlist[2].Setposition(Vector3(-60, 12, -50));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(1, 25, 100);
+	Colliderlist[3].setlength(3, 25, 100);
 	Colliderlist[3].Setposition(Vector3(60, 12, -50));
 
 	//@bedcolliders
@@ -468,13 +468,13 @@ void SceneSP2Room4::Init()
 
 	//back wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(165, 25, 1);
+	Colliderlist[13].setlength(165, 25, 3);
 	Colliderlist[13].Setposition(Vector3(0, 12, -100));
 
 
 	//entrance walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(1, 25, 43);
+	Colliderlist[14].setlength(3, 25, 43);
 	Colliderlist[14].Setposition(Vector3(-15, 12, -22));
 
 	Colliderlist.push_back(ColliderBox());
@@ -483,24 +483,24 @@ void SceneSP2Room4::Init()
 
 	//room front walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(20, 25, 1);
+	Colliderlist[16].setlength(20, 25, 3);
 	Colliderlist[16].Setposition(Vector3(20, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(20, 25, 1);
+	Colliderlist[17].setlength(20, 25, 3);
 	Colliderlist[17].Setposition(Vector3(50, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(20, 25, 1);
+	Colliderlist[18].setlength(20, 25, 3);
 	Colliderlist[18].Setposition(Vector3(-20, 12, -44));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(20, 25, 1);
+	Colliderlist[19].setlength(20, 25, 3);
 	Colliderlist[19].Setposition(Vector3(-50, 12, -44));
 
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[20].setlength(10, 25, 1);
+	Colliderlist[20].setlength(10, 25, 3);
 	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
 
 	//metal cabinet
@@ -531,7 +531,7 @@ void SceneSP2Room4::Init()
 
 	//front wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[27].setlength(165, 25, 1);
+	Colliderlist[27].setlength(165, 25, 3);
 	Colliderlist[27].Setposition(Vector3(0, 12, 0));
 
 	//lockercollider
@@ -566,7 +566,7 @@ void SceneSP2Room4::Init()
 	meshList[GEO_STAMINA]->textureID = LoadTGA("Assigment2Images//sprint.tga");
 	meshList[GEO_OVERLAY] = MeshBuilder::GenerateQuad2("for overlays", 80, 60, 0);
 	meshList[GEO_OVERLAY2] = MeshBuilder::GenerateQuad2("Camcorder", 80, 60, 0);
-	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, White);
+	meshList[GEO_BAR] = MeshBuilder::GenerateQuad2("UI usage", 1, 1, Yellow);
 	meshList[GEO_OVERLAY]->textureID = LoadTGA("Image//VISIONOFF.tga");
 	meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//camcorder2.tga");
 	meshList[GEO_REDDOT] = MeshBuilder::GenerateQuad2("dot", 1, 1, White);
@@ -1190,6 +1190,12 @@ void SceneSP2Room4::Update(double dt)
 				glEnable(GL_CULL_FACE);
 				inLocker = false;
 			}
+			else if (suffocationScale <= 0) {
+				Lockerlist[i].Sethidden(false);
+				camera.teleport(Lockerlist[i].getfront());
+				glEnable(GL_CULL_FACE);
+				inLocker = false;
+			}
 		}
 		if (Lockerlist[i].status(camera.position, -1*camera.view, Fpressed)) {
 			if (Lockerlist[i].gethidden() == false) {
@@ -1204,7 +1210,27 @@ void SceneSP2Room4::Update(double dt)
 			}
 		}
 	}
+	if (inLocker == true)
+	{
 
+		suffocationScale -= (float)(suffocationScaleDir * dt / 7) * camera.playerStamina;
+		suffocationTranslate -= (float)(suffocationTranslateDir * dt / 7) * camera.playerStamina;
+		if (suffocationScale <= 0)
+		{
+			suffocationScaleDir = 0;
+		}
+		if (suffocationTranslate <= 0)
+		{
+			suffocationTranslateDir = 0;
+		}
+	}
+	if (inLocker == false)
+	{
+		suffocationScale = 15;
+		suffocationTranslate = 14;
+		suffocationScaleDir = 1;
+		suffocationTranslateDir = 1;
+	}
 	//trap detection
 	bool detected = false;
 	for (int i = 0; i < signed(traplist.size()); i++) {
@@ -1212,7 +1238,6 @@ void SceneSP2Room4::Update(double dt)
 		case trap::beartrap:
 			if (traplist[i].nearby(camera.position)) {
 				detected = true;
-				
 			}
 			break;
 		}
@@ -1861,10 +1886,10 @@ void SceneSP2Room4::Render()
 	}
 	//colliderbox for checking
 	//@collider
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//inventory
 	if (Epressed)
@@ -2301,7 +2326,10 @@ void SceneSP2Room4::Render()
 		}
 
 	}
-
+	if (inLocker == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_BAR], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
+	}
 	/*if (placeitem)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Place Flower", Color(1, 1, 0), 4, 22, 5);
