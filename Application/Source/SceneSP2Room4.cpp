@@ -376,8 +376,8 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
+	items[2] = new Item("Battery", Item::BATTERY, Vector3(17, 6.5, -13));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(8, 6.5, -73));
 
 
@@ -1064,7 +1064,7 @@ void SceneSP2Room4::Update(double dt)
 				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
 			{
 				interact = true;
-				interact_message = "F to pick up" + items[i]->name;
+				interact_message = "F to pick up " + items[i]->name;
 				if (Fpressed)
 				{
 					PickUpItem(items[i]);
@@ -1476,14 +1476,14 @@ void SceneSP2Room4::Update(double dt)
 		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
 		{
 			interact = true;
-			interact_message = "take spark plug";
+			interact_message = "Take spark plug";
 			if (Fpressed)
 			{
 				translateobj = 100;
 				takenspark = true;
 				PickUpItem(items[0]);
 				items[0] = NULL;
-				std::cout << "taken spark plug" << std::endl;
+				std::cout << "Taken spark plug" << std::endl;
 			}
 		}
 	}
@@ -1492,7 +1492,7 @@ void SceneSP2Room4::Update(double dt)
 	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
 	{
 		interact = true;
-		interact_message = "Press f to pay respects";
+		interact_message = "Press F to pay respects";
 		if (Fpressed)
 		{
 
