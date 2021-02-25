@@ -2447,9 +2447,9 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(488, 10, -20);
+	modelStack.Translate(486, 13, -20);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(15.0f, 30.0f, 1.0f);
+	modelStack.Scale(15.0f, 34.0f, 1.0f);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();//Added collider
 
