@@ -25,7 +25,6 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOnSec = 0;
 	fps = 60;
 	DS_opRoom = CLOSED;
-	DS_lounge = CLOSED;
 	DS_main = OPEN;
 	camBlinkOn = false;
 	camBlinkOff = true;
@@ -58,7 +57,7 @@ void SceneSP2Room4::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(-475, 9, 0), Vector3(-495, 9, 0), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	//...
@@ -375,174 +374,158 @@ void SceneSP2Room4::Init()
 
 
 	//scene items
-	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(0, 6.3, -69.6));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(17, 6.5, -13));
-	items[3] = new Item("Roses", Item::FLOWER, Vector3(8, 6.5, -73));
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(-130, -3, 0));
+	items[1] = new Item("battery", Item::BATTERY, Vector3(-539.6, 6.3, 0));
+	items[2] = new Item("battery", Item::BATTERY, Vector3(-483, 6.5, -17));
+	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
+	main_door[0].mid.Set(-470, 7.75, 2.5);
+	main_door[1].mid.Set(-470, 7.75, -2.5);
+	main_door[0].lengthz = main_door[1].lengthz = 5;
 
-	
-	//chairs/table
-	for (int row = 0; row < 4; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			classroom_tables[row * 5 + col].mid.Set(float(40 + row * 15), float(3), float(-80 + (col * 15)));
-			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
-			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
-			//lengthy unset
-			classroom_chairs[row * 5 + col].mid.Set(float(40 + row * 15 + 5), float(3), float(-80 + (col * 15)));
-			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
-			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
-			//lengthy unset
-		}
-	}
-	lounge_table.mid.Set(-105, 2.5, -30); //y value estimated
-	lounge_table.lengthx = 10; //not sure since obj
-	lounge_table.lengthz = 20; //not sure since obj
-	//lengthy unset
 
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(-58.f, -0.2f, -80.f));
+	Lockerlist[0].setpos(Vector3(-550.f, -0.2f, 58.f));
+	Lockerlist[0].setyaw(90);
 
 	//wall colliders
 	//@collider
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[0].setlength(3, 17, 12);
-	Colliderlist[0].Setposition(Vector3(-59, 7, -65));
+	Colliderlist[0].setlength(12, 17, 3);
+	Colliderlist[0].Setposition(Vector3(-535, 7, 59));
 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[1].setlength(3, 17, 12);
-	Colliderlist[1].Setposition(Vector3(59, 7, -65));
+	Colliderlist[1].Setposition(Vector3(-535, 7, -59));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[2].setlength(3, 25, 100);
-	Colliderlist[2].Setposition(Vector3(-60, 12, -50));
+	Colliderlist[2].setlength(100, 25, 3);
+	Colliderlist[2].Setposition(Vector3(-520, 12, 60));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[3].setlength(3, 25, 100);
-	Colliderlist[3].Setposition(Vector3(60, 12, -50));
+	Colliderlist[3].setlength(100, 25, 3);
+	Colliderlist[3].Setposition(Vector3(-520, 12, -60));
 
 	//@bedcolliders
 	//right row
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[4].setlength(12, 7, 10);
-	Colliderlist[4].Setposition(Vector3(23, 0, -5));
+	Colliderlist[4].setlength(10, 7, 12);
+	Colliderlist[4].Setposition(Vector3(-475, 0, -23));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[5].setlength(12, 7, 10);
-	Colliderlist[5].Setposition(Vector3(23, 0, -20));
+	Colliderlist[5].setlength(10, 7, 12);
+	Colliderlist[5].Setposition(Vector3(-490, 0, -23));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[6].setlength(12, 7, 10);
-	Colliderlist[6].Setposition(Vector3(23, 0, -35));
+	Colliderlist[6].setlength(10, 7, 12);
+	Colliderlist[6].Setposition(Vector3(-505, 0, 23));
 
 	//left row
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[7].setlength(12, 7, 10);
-	Colliderlist[7].Setposition(Vector3(53, 0, -5));
+	Colliderlist[7].setlength(10, 7, 12);
+	Colliderlist[7].Setposition(Vector3(-475, 0, -53));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[8].setlength(12, 7, 10);
-	Colliderlist[8].Setposition(Vector3(53, 0, -20));
+	Colliderlist[8].setlength(10, 7, 12);
+	Colliderlist[8].Setposition(Vector3(-490, 0, -53));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[9].setlength(12, 7, 10);
-	Colliderlist[9].Setposition(Vector3(53, 0, -35));
+	Colliderlist[9].setlength(10, 7, 12);
+	Colliderlist[9].Setposition(Vector3(-505, 0, -53));
 
 	//right room colliders
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[10].setlength(25, 7, 12);
-	Colliderlist[10].Setposition(Vector3(-40, 3, -19));
+	Colliderlist[10].setlength(12, 7, 25);
+	Colliderlist[10].Setposition(Vector3(-489, 3, 40));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[11].setlength(10, 7, 16);
-	Colliderlist[11].Setposition(Vector3(-28, 9, -24));
+	Colliderlist[11].setlength(16, 7, 10);
+	Colliderlist[11].Setposition(Vector3(-494, 9, 28));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[12].setlength(10, 7, 20);
-	Colliderlist[12].Setposition(Vector3(-56, 9, -24));
+	Colliderlist[12].setlength(20, 7, 10);
+	Colliderlist[12].Setposition(Vector3(-494, 9, 56));
 
 	//back wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[13].setlength(165, 25, 3);
-	Colliderlist[13].Setposition(Vector3(0, 12, -100));
+	Colliderlist[13].setlength(3, 25, 165);
+	Colliderlist[13].Setposition(Vector3(-570, 12, 0));
 
 
 	//entrance walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[14].setlength(3, 25, 43);
-	Colliderlist[14].Setposition(Vector3(-15, 12, -22));
+	Colliderlist[14].setlength(43, 25, 3);
+	Colliderlist[14].Setposition(Vector3(-492, 12, 15));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(1, 25, 43);
-	Colliderlist[15].Setposition(Vector3(15, 12, -22));
+	Colliderlist[15].setlength(43, 25, 1);
+	Colliderlist[15].Setposition(Vector3(-492, 12, -15));
 
 	//room front walls
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[16].setlength(20, 25, 3);
-	Colliderlist[16].Setposition(Vector3(20, 12, -44));
+	Colliderlist[16].setlength(3, 25, 20);
+	Colliderlist[16].Setposition(Vector3(-514, 12, -20));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[17].setlength(20, 25, 3);
-	Colliderlist[17].Setposition(Vector3(50, 12, -44));
+	Colliderlist[17].setlength(3, 25, 20);
+	Colliderlist[17].Setposition(Vector3(-514, 12, -50));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[18].setlength(20, 25, 3);
-	Colliderlist[18].Setposition(Vector3(-20, 12, -44));
+	Colliderlist[18].setlength(3, 25, 20);
+	Colliderlist[18].Setposition(Vector3(-514, 12, 20));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[19].setlength(20, 25, 3);
-	Colliderlist[19].Setposition(Vector3(-50, 12, -44));
+	Colliderlist[19].setlength(3, 25, 20);
+	Colliderlist[19].Setposition(Vector3(-514, 12, 50));
 
 	//OP room door 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[20].setlength(10, 25, 3);
-	Colliderlist[20].Setposition(Vector3(-35, 12, -44));
+	Colliderlist[20].setlength(3, 25, 10);
+	Colliderlist[20].Setposition(Vector3(-514, 12, 35));
 
 	//metal cabinet
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[21].setlength(9, 12, 9);
-	Colliderlist[21].Setposition(Vector3(37.5, 7, -4));
+	Colliderlist[21].Setposition(Vector3(-474, 7, -37.5));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[22].setlength(5, 12, 24);
-	Colliderlist[22].Setposition(Vector3(57, 0, -18));
+	Colliderlist[22].setlength(24, 12, 5);
+	Colliderlist[22].Setposition(Vector3(-488, 0, -57));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[23].setlength(5, 12, 24);
-	Colliderlist[23].Setposition(Vector3(16, 0, -18));
+	Colliderlist[23].setlength(24, 12, 5);
+	Colliderlist[23].Setposition(Vector3(-488, 0, -16));
 
 	//left room doors
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[24].setlength(5, 15.5, 4);
-	Colliderlist[24].Setposition(Vector3(32, 7.2, -42.5));
+	Colliderlist[24].setlength(4, 15.5, 5);
+	Colliderlist[24].Setposition(Vector3(-512.5, 7.2, -32));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[25].setlength(2, 15.5, 4);
-	Colliderlist[25].Setposition(Vector3(41, 7.2, -42.5));
+	Colliderlist[25].setlength(4, 15.5, 2);
+	Colliderlist[25].Setposition(Vector3(-512.5, 7.2, -41));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[26].setlength(22, 15.5, 7.5);
-	Colliderlist[26].Setposition(Vector3(0, 3, -72));
+	Colliderlist[26].setlength(7.5, 15.5, 22);
+	Colliderlist[26].Setposition(Vector3(-542, 3, 0));
 
 	//front wall
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[27].setlength(165, 25, 3);
-	Colliderlist[27].Setposition(Vector3(0, 12, 0));
+	Colliderlist[27].setlength(3, 25, 165);
+	Colliderlist[27].Setposition(Vector3(-470, 12, 0));
 
 	//lockercollider
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[28].setlength(3.9, 10, 4.3);
+	Colliderlist[28].setlength(4.3, 10, 3.9);
 	Colliderlist[28].Setposition(Vector3(Lockerlist[0].getpos()));
 
 	//easter egg collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[29].setlength(10, 6, 10);
-	Colliderlist[29].Setposition(Vector3(-45, 0, -9));
+	Colliderlist[29].Setposition(Vector3(-479, 0, 45));
 
 
 	//colliderbox for checking any collider(just one)
@@ -592,7 +575,7 @@ void SceneSP2Room4::Init()
 	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
+	camera.SetBounds(-1500, 1500, -365, 360);
 	//camblink
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
@@ -607,8 +590,8 @@ void SceneSP2Room4::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-480, 0, -10)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-535, 0, 25)));
 }
 
 void SceneSP2Room4::UseItem(int itemname)
@@ -632,7 +615,7 @@ void SceneSP2Room4::UseItem(int itemname)
 		//else warning message?
 		break;
 	case Item::FLOWER:
-		if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
+		if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -483 && camera.position.x <= -479 && !itemplaced[3])
 		{
 			//left body top
 			
@@ -646,7 +629,7 @@ void SceneSP2Room4::UseItem(int itemname)
 				inventory->items[inventory->selected] = nullptr;
 			}
 		}
-		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
+		else if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -496 && camera.position.x <= -484 && !itemplaced[4])
 		{
 			//left body med
 			
@@ -660,7 +643,7 @@ void SceneSP2Room4::UseItem(int itemname)
 				inventory->items[inventory->selected] = nullptr;
 			}
 		}
-		else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
+		else if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -512 && camera.position.x <= -498 && !itemplaced[5])
 		{
 		
 			itemplaced[body3_l] = true;
@@ -674,7 +657,7 @@ void SceneSP2Room4::UseItem(int itemname)
 			}
 			
 		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -483 && camera.position.x <= -479 && !itemplaced[0])
 		{
 			
 			itemplaced[body1_r] = true;
@@ -688,7 +671,7 @@ void SceneSP2Room4::UseItem(int itemname)
 			}
 			
 		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -496 && camera.position.x <= -484 && !itemplaced[1])
 		{
 		
 			itemplaced[body2_r] = true;
@@ -702,7 +685,7 @@ void SceneSP2Room4::UseItem(int itemname)
 			}
 			
 		}
-		else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -511 && camera.position.x <= -499 && !itemplaced[2])
 		{
 			
 			itemplaced[body3_r] = true;
@@ -716,7 +699,7 @@ void SceneSP2Room4::UseItem(int itemname)
 			}
 			
 		}
-		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
+		else if (camera.position.z <= 43 && camera.position.z >= 36 && camera.position.x >= -498 && camera.position.x <= -495 && !itemplaced[6])
 		{
 			
 			itemplaced[body_op] = true;
@@ -930,7 +913,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (campos_z > -9 && campos_x > -4 && campos_x < 4)
+	if (campos_x > -479 && campos_z < 4 && campos_z > -4)
 	{
 		nearExit = true;
 	}
@@ -1020,8 +1003,7 @@ void SceneSP2Room4::Update(double dt)
 
 	//INTERACTION CHECKS
 	interact = false;
-	Vector3 origin(0, 5, 0);
-
+	
 	//@pause
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
 	if (!Application::IsKeyPressed(VK_ESCAPE))
@@ -1056,12 +1038,12 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 	//items
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) 
 	{
 		if (items[i] != nullptr)
 		{
-			if (camera.position.z > items[i]->pos.z - 10 && camera.position.z < items[i]->pos.z + 10
-				&& camera.position.x > items[i]->pos.x - 10 && camera.position.x > items[i]->pos.x - 10)
+			if (camera.position.z > items[i]->pos.z - 5 && camera.position.z < items[i]->pos.z + 5
+				&& camera.position.x > items[i]->pos.x - 5 && camera.position.x < items[i]->pos.x + 5)
 			{
 				interact = true;
 				interact_message = "F to pick up" + items[i]->name;
@@ -1070,50 +1052,74 @@ void SceneSP2Room4::Update(double dt)
 					PickUpItem(items[i]);
 					Fpressed = false;
 					items[i] = nullptr;
+					if (i == 3)
+					{
+						flowerstaken = true;
+					}
 				}
 			}
 		}
 	}
 
 	//door states
+	Vector3 origin(470, 7.75, 0);
 	switch (DS_main)
 	{
 	case OPEN:
 		//doors close on their own
-		/*if ((camera.position - origin).Length() >= 20)
+		if ((camera.position - origin).Length() >= 20)
 		{
-			DS_school = CLOSING;
+			DS_main = CLOSING;
 		}
-		if (camera.position.x <= 5 && camera.position.x >= -5 && camera.position.z <= -1 && camera.position.z >= -10)
+		if (camera.position.z >= -5 && camera.position.z <= 5 && camera.position.x <= -471 && camera.position.x >= -480)
 		{
 			interact = true;
-			interact_message = "Exit School";
+			interact_message = "Exit Hospital";
 			if (Fpressed)
 			{
 				Fpressed = false;
 				Application::setscene(Scene_Main);
 			}
+			
 		}
 		break;
 	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -5 && camera.position.z <= -1 && camera.position.z >= -10)
+		if (camera.position.z >= -5 && camera.position.z <= 5 && camera.position.x <= -471 && camera.position.x >= -480)
 		{
 			interact = true;
-			interact_message = "Exit School";
+			interact_message = "Exit Hospital";
 			if (Fpressed)
 			{
 				Fpressed = false;
-				DS_school = OPENING;
+				DS_main = OPENING;
 			}
 		}
-		break;*/
+		break;
+	case OPENING:
+		main_door[0].rotateY -= float(20 * dt);
+		main_door[1].rotateY += float(20 * dt);
+		if (main_door[1].rotateY >= 90)
+		{
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Application::setscene(Scene_Main);
+		}
+		break;
+	case CLOSING:
+		main_door[0].rotateY += 20 * float(dt);
+		main_door[1].rotateY -= 20 * float(dt);
+		if (main_door[1].rotateY <= 0)
+		{
+			DS_main = CLOSED;
+		}
 		break;
 	}
 
 	switch (DS_opRoom)
 	{
 	case CLOSED:
-		if (camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && doorunlocked)
+		if (camera.position.z >= 33 && camera.position.z <= 36 && camera.position.x <= -503 && camera.position.x >= -520 && doorunlocked)
 		{
 			interact = true;
 			interact_message = "Open Door";
@@ -1125,7 +1131,7 @@ void SceneSP2Room4::Update(double dt)
 				camera.setchecker(Colliderlist);
 			}
 		}
-		else if(camera.position.x <= -33 && camera.position.x >= -36 && camera.position.z <= -33 && camera.position.z >= -50 && !doorunlocked && !flowerstaken)
+		else if(camera.position.z >= 33 && camera.position.z <= 36 && camera.position.x <= -503 && camera.position.x >= -520 && !doorunlocked && !flowerstaken)
 		{
 			interact = true;
 			interact_message = "Locked";
@@ -1416,55 +1422,55 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 	//check if placed flowers on bed
-	
-	if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[3])
+	if (flowerstaken)
 	{
-		//left body top
-		interact = true;
-		interact_message = "Place Flower";
+		if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -483 && camera.position.x <= -479 && !itemplaced[3])
+		{
+			//left body top
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -496 && camera.position.x <= -484 && !itemplaced[4])
+		{
+			//left body med
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= -45 && camera.position.z >= -55 && camera.position.x >= -512 && camera.position.x <= -498 && !itemplaced[5])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -483 && camera.position.x <= -479 && !itemplaced[0])
+		{
+			//left body top
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -496 && camera.position.x <= -484 && !itemplaced[1])
+		{
+			//left body med
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= -20 && camera.position.z >= -30 && camera.position.x >= -511 && camera.position.x <= -499 && !itemplaced[2])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else if (camera.position.z <= 43 && camera.position.z >= 36 && camera.position.x >= -498 && camera.position.x <= -495 && !itemplaced[6])
+		{
+			//left body bottom
+			interact = true;
+			interact_message = "Place Flower";
+		}
+		else
+		{
+			placeitem = false;
+		}
 	}
-	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[4])
-	{
-		//left body med
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else if (camera.position.x >= 45 && camera.position.x <= 55 && camera.position.z >= -42 && camera.position.z <= -28 && !itemplaced[5])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -13 && camera.position.z <= -9 && !itemplaced[0])
-	{
-		//left body top
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -26 && camera.position.z <= -14 && !itemplaced[1])
-	{
-		//left body med
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else if (camera.position.x >= 20 && camera.position.x <= 30 && camera.position.z >= -41 && camera.position.z <= -29 && !itemplaced[2])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && !itemplaced[6])
-	{
-		//left body bottom
-		interact = true;
-		interact_message = "Place Flower";
-	}
-	else
-	{
-		placeitem = false;
-	}
-
-
 
 	//if final item placed, give sparkplug
 	if (itemplaced[6])
@@ -1473,7 +1479,7 @@ void SceneSP2Room4::Update(double dt)
 		{
 			translateobj += float(0.5 * dt);
 		}
-		else if (camera.position.x >= -43 && camera.position.x <= -36 && camera.position.z >= -28 && camera.position.z <= -25 && translateobj >= 7 && !takenspark)
+		else if (camera.position.z <= 43 && camera.position.z >= 36 && camera.position.x >= -498 && camera.position.x <= -495 && translateobj >= 7 && !takenspark)
 		{
 			interact = true;
 			interact_message = "take spark plug";
@@ -1489,7 +1495,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 	
 	//easter egg jumpscare
-	if (camera.position.x >= -55 && camera.position.x <= -35 && camera.position.z >= -11 && camera.position.z <= -3 && !bruhmoment)
+	if (camera.position.z <= 55 && camera.position.z >= 35 && camera.position.x >= -481 && camera.position.x <= -473 && !bruhmoment)
 	{
 		interact = true;
 		interact_message = "Press f to pay respects";
@@ -1904,7 +1910,7 @@ void SceneSP2Room4::RenderRightRoom()
 void SceneSP2Room4::Render()
 {
 
-	
+
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -1962,49 +1968,24 @@ void SceneSP2Room4::Render()
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
-
-	//@doors
-	//left room doors
+	//SOFT CODED
+	//main door
 	modelStack.PushMatrix();
-	modelStack.Translate(37.5, 7.2, -44);
-	modelStack.Translate(2.5, 0,0);
-	modelStack.Rotate(110, 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0);
-	modelStack.Scale(5, 15.5, 1);
-	RenderMesh(meshList[GEO_LEFTDOOR], true);
-	modelStack.PopMatrix();
+	modelStack.Translate(main_door[0].mid.x, main_door[0].mid.y, main_door[0].mid.z);
 
-	modelStack.PushMatrix();
-	modelStack.Translate(32.5, 7.2, -44);
-	modelStack.Translate(-2.5, 0, 0);
-	modelStack.Rotate(-40, 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0);
-	modelStack.Scale(5, 15.5, 1);
+
+	modelStack.Scale(1, 15.5, 5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
 	modelStack.PopMatrix();
 
-	//right room doors
 	modelStack.PushMatrix();
-	modelStack.Translate(-32.5, 7.2, -44);
-	modelStack.Translate(2.5, 0, 0);
-	modelStack.Rotate(opRoom_door[1].rotateY, 0, 1, 0);
-	modelStack.Translate(-2.5, 0, 0);
-	modelStack.Scale(5, 15.5, 1);
+	modelStack.Translate(main_door[1].mid.x, main_door[1].mid.y, main_door[1].mid.z);
+
+
+	modelStack.Scale(1, 15.5, 5);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-37.5, 7.2, -44);
-	modelStack.Translate(-2.5, 0, 0);
-	modelStack.Rotate(opRoom_door[0].rotateY, 0, 1, 0);
-	modelStack.Translate(2.5, 0, 0);
-	modelStack.Scale(5, 15.5, 1);
-	RenderMesh(meshList[GEO_RIGHTDOOR], true);
-	modelStack.PopMatrix();
-
-
-	//skybox
-	//RenderSkybox();
 	//trap rendering
 	for (int i = 0; i < signed(traplist.size()); i++) {
 		switch (traplist[i].TRAPTYPE) {
@@ -2017,159 +1998,229 @@ void SceneSP2Room4::Render()
 			break;
 		}
 	}
-	
-	
-	
 
-	//front desk
+	
+	//HARD CODED
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 3, -73);
+	modelStack.Translate(-470, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(0.1, 0.15, 0.1);
-	RenderMesh(meshList[frontdesk], true);
-	modelStack.PopMatrix();
-
-	//roses on front desk
-	if (items[3] != nullptr)
 	{
+
+
+		//@doors
+
+		//left room doors
 		modelStack.PushMatrix();
-		modelStack.Translate(7, 6.5, -73);
-		modelStack.Rotate(40, 0, 1, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
-		RenderMesh(meshList[rose], true);
+		modelStack.Translate(37.5, 7.2, -44);
+		modelStack.Translate(2.5, 0, 0);
+		modelStack.Rotate(110, 0, 1, 0);
+		modelStack.Translate(-2.5, 0, 0);
+		modelStack.Scale(5, 15.5, 1);
+		RenderMesh(meshList[GEO_LEFTDOOR], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(32.5, 7.2, -44);
+		modelStack.Translate(-2.5, 0, 0);
+		modelStack.Rotate(-40, 0, 1, 0);
+		modelStack.Translate(2.5, 0, 0);
+		modelStack.Scale(5, 15.5, 1);
+		RenderMesh(meshList[GEO_RIGHTDOOR], true);
+		modelStack.PopMatrix();
+
+		//right room doors
+		modelStack.PushMatrix();
+		modelStack.Translate(-32.5, 7.2, -44);
+		modelStack.Translate(2.5, 0, 0);
+		modelStack.Rotate(opRoom_door[1].rotateY, 0, 1, 0);
+		modelStack.Translate(-2.5, 0, 0);
+		modelStack.Scale(5, 15.5, 1);
+		RenderMesh(meshList[GEO_LEFTDOOR], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-37.5, 7.2, -44);
+		modelStack.Translate(-2.5, 0, 0);
+		modelStack.Rotate(opRoom_door[0].rotateY, 0, 1, 0);
+		modelStack.Translate(2.5, 0, 0);
+		modelStack.Scale(5, 15.5, 1);
+		RenderMesh(meshList[GEO_RIGHTDOOR], true);
+		modelStack.PopMatrix();
+
+
+		//skybox
+		//RenderSkybox();
+
+
+		//front desk
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 3, -73);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.1, 0.15, 0.1);
+		RenderMesh(meshList[frontdesk], true);
+		modelStack.PopMatrix();
+
+		//roses on front desk
+		if (items[3] != nullptr)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(7, 6.5, -73);
+			modelStack.Rotate(40, 0, 1, 0);
+			modelStack.Scale(0.05, 0.05, 0.05);
+			RenderMesh(meshList[rose], true);
+			modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			modelStack.Translate(9, 6.5, -73);
+			modelStack.Rotate(-30, 0, 1, 0);
+			modelStack.Scale(0.05, 0.05, 0.05);
+			RenderMesh(meshList[rose], true);
+			modelStack.PopMatrix();
+		}
+
+		//left and right main walls
+		modelStack.PushMatrix();
+		modelStack.Translate(-60, 12, -50);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(25, 1, 100);
+		RenderMesh(meshList[GEO_WALL], true);
 		modelStack.PopMatrix();
 		modelStack.PushMatrix();
-		modelStack.Translate(9, 6.5, -73);
-		modelStack.Rotate(-30, 0, 1, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
-		RenderMesh(meshList[rose], true);
+		modelStack.Translate(60, 12, -50);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(25, 1, 100);
+		RenderMesh(meshList[GEO_WALL], true);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-59, 7, -65);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(12, 17, 1);
+		RenderMesh(meshList[Hdoors], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(59, 7, -65);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(12, 17, 1);
+		RenderMesh(meshList[Hdoors], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 12, -100);
+		//modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(165, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		//entrance walls
+		modelStack.PushMatrix();
+		modelStack.Translate(-15, 12, -22);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(43, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(15, 12, -22);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(43, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+
+		//front walls
+		modelStack.PushMatrix();
+		modelStack.Translate(-43.5, 12, 0);
+		modelStack.Scale(70.5, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(43.5, 12, 0);
+		modelStack.Scale(70.5, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		//left room front walls
+		modelStack.PushMatrix();
+		modelStack.Translate(20, 12, -44);
+		modelStack.Scale(20, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(50, 12, -44);
+		modelStack.Scale(20, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(37.5, 20, -44);
+		modelStack.Scale(20, 10, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		//right room front walls
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 12, -44);
+		modelStack.Scale(20, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-50, 12, -44);
+		modelStack.Scale(20, 25, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-37.5, 20, -44);
+		modelStack.Scale(20, 10, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		//signholder wall
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 20, 0);
+		modelStack.Scale(30, 10, 1);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+
+		RenderLeftRoom();
+
+		RenderRightRoom();
+
+		//school floor
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, -50);
+		modelStack.Scale(165, 1, 100);
+		modelStack.Rotate(-90, 1, 0, 0);
+		RenderMesh(meshList[GEO_QUAD], true);
+		modelStack.PopMatrix();
+		//school ceiling
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 24.5, -50);
+		modelStack.Scale(165, 1, 100);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[GEO_QUAD], true);
+		modelStack.PopMatrix();
+
+		if (items[1] != nullptr) {
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 6.3, -69.6);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.03, 0.03, 0.03);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
+
+		if (items[2] != nullptr) {
+			modelStack.PushMatrix();
+			modelStack.Translate(17, 6.5, -13);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.03, 0.03, 0.03);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
 	}
-
-	//left and right main walls
-	modelStack.PushMatrix();
-	modelStack.Translate(-60, 12, -50);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(25, 1, 100);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(60, 12, -50);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(25, 1, 100);
-	RenderMesh(meshList[GEO_WALL], true);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-59, 7, -65);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(12, 17, 1);
-	RenderMesh(meshList[Hdoors], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(59, 7, -65);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(12, 17, 1);
-	RenderMesh(meshList[Hdoors], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 12, -100);
-	//modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(165, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	
-	//entrance walls
-	modelStack.PushMatrix();
-	modelStack.Translate(-15, 12, -22);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(43, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(15, 12, -22);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(43, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-
-	//front walls
-	modelStack.PushMatrix();
-	modelStack.Translate(-43.5, 12, 0);
-	modelStack.Scale(70.5, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(43.5, 12, 0);
-	modelStack.Scale(70.5, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-	//left room front walls
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 12, -44);
-	modelStack.Scale(20, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 12, -44);
-	modelStack.Scale(20, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(37.5, 20, -44);
-	modelStack.Scale(20, 10, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-	//right room front walls
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 12, -44);
-	modelStack.Scale(20, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(-50, 12, -44);
-	modelStack.Scale(20, 25, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(-37.5, 20, -44);
-	modelStack.Scale(20, 10, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-	//signholder wall
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 20, 0);
-	modelStack.Scale(30, 10, 1);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();
-
-	RenderLeftRoom();
-
-	RenderRightRoom();
-
-	//school floor
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -50);
-	modelStack.Scale(165, 1, 100);
-	modelStack.Rotate(-90, 1, 0, 0);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
-	//school ceiling
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 24.5, -50);
-	modelStack.Scale(165, 1, 100);
-	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
-
-
+	//SOFTCODED
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
@@ -2189,23 +2240,6 @@ void SceneSP2Room4::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	if (items[1] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 6.3, -69.6);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.03, 0.03, 0.03);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
-	
-	if (items[2] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(17, 6.5, -13);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.03, 0.03, 0.03);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
 	//lockers
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
 		modelStack.PushMatrix();
