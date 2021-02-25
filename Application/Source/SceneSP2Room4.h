@@ -213,6 +213,7 @@ private:
 	float rotateobj;
 	float translateobj;
 	bool takenspark;
+	
 
 
 	//Jumpscare
@@ -283,6 +284,7 @@ private:
 
 
 	Door opRoom_door[2];
+	Door main_door[2];
 	
 
 	int DS_main, DS_opRoom, DS_lounge;
