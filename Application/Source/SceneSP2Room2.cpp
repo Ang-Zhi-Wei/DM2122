@@ -733,7 +733,7 @@ void SceneSP2Room2::Update(double dt)
 		if (schoolItems[i] != nullptr)
 		{
 			if (camera.position.z > schoolItems[i]->pos.z - 10 && camera.position.z < schoolItems[i]->pos.z + 10
-				&& camera.position.x > schoolItems[i]->pos.x - 10 && camera.position.x > schoolItems[i]->pos.x - 10)
+				&& camera.position.x > schoolItems[i]->pos.x - 10 && camera.position.x < schoolItems[i]->pos.x + 10)
 			{
 				pickUpBattery = true;
 				if (Fpressed)
