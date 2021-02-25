@@ -85,6 +85,13 @@ void SceneSP2Main::Init()
 	rotate_Man = 90;
 	ObjectivePhase = 0;
 	is_talking = false;
+
+	Sign = 0;
+	GarageSign = 0; //1
+	HospitalSign = 0; //2
+	HouseSign = 0; //3
+	SchoolSign = 0; //4
+	SignTimer = 2;
 	
 
 	// Init VBO here
@@ -2005,6 +2012,29 @@ void SceneSP2Main::Update(double dt)
 		Application::setscene(Scene_4);
 	}
 
+	//Signs
+	if ((camera.position.y > 0) && (camera.position.z >= 300) && (camera.position.z <= 320) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
+	{
+		Sign = 1;
+	}
+
+	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 340) && (camera.position.x <= 360)) //School
+	{
+		Sign = 2;
+	}
+
+	if ((camera.position.z >= -320) && (camera.position.z <= -300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
+	{
+		Sign = 3;
+	}
+
+	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -360) && (camera.position.x <= -340)) //Hospital
+	{
+		Sign = 4;
+	}
+	else
+		Sign = 0;
+
 }
 
 void SceneSP2Main::PauseUpdate()
@@ -2079,6 +2109,8 @@ void SceneSP2Main::PauseUpdate()
 		bLButtonState = false;
 		std::cout << "LBUTTON UP" << std::endl;
 	}
+
+
 }
 
 void SceneSP2Main::Render()
@@ -2276,31 +2308,34 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
-	//Main sign / garage building
+	// Main sign / garage building
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, 300);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
-	//
+	// School
 	modelStack.PushMatrix();
-	modelStack.Translate(320, 0, 10);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(340, -3, 10);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 	
-	//House
+	// House
 	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -300);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(20, -3, -300);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
-	//
+	// Hospital
 	modelStack.PushMatrix();
-	modelStack.Translate(-320, 0, 10);
-	modelStack.Scale(10, 10, 1);
+	modelStack.Translate(-340, -3, 10);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
 
@@ -2833,6 +2868,7 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
+	RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 }
 
 void SceneSP2Main::Exit()
