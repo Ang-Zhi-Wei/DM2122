@@ -77,7 +77,8 @@ void SceneSP2Loading::Init()
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 	//UI
-	meshList[LOADING] = MeshBuilder::GenerateQuad2("Test Screen", 60, 30, Black);
+	meshList[LOADING] = MeshBuilder::GenerateQuad2("Test Screen", 1, 1, Black);
+	meshList[LOADING]->textureID = LoadTGA("Image//loading2.tga");
 	//init update stuff
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -185,8 +186,8 @@ void SceneSP2Loading::Render()
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE,
 		&MVP.a[0]);
 
-	RenderMeshOnScreen(meshList[LOADING], 0, 0, 10, 10);
-	RenderTextOnScreen(meshList[GEO_TEXT], "This is a loading screen", White, 10, 0, 0);
+	RenderMeshOnScreen(meshList[LOADING], 40, 30, 80, 60);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "", White, 10, 0, 0);
 
 
 
