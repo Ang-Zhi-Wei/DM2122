@@ -464,49 +464,49 @@ void SceneSP2Room1::Init()
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(5, 15, 3);
-	Colliderlist[0].Setposition(Vector3(-32, 7.5, -420));
+	Colliderlist[0].Setposition(Vector3(-32, 7.5, -330));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[1].setlength(15, 20, 3);
-	Colliderlist[1].Setposition(Vector3(-22, 10, -420));
+	Colliderlist[1].Setposition(Vector3(-22, 10, -330));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[2].setlength(3, 20, 100);
-	Colliderlist[2].Setposition(Vector3(-34.5, 10, -470));
+	Colliderlist[2].Setposition(Vector3(-34.5, 10, -380));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[3].setlength(3, 20, 100);
-	Colliderlist[3].Setposition(Vector3(-14.5, 10, -470));
+	Colliderlist[3].Setposition(Vector3(-14.5, 10, -380));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[4].setlength(3, 20, 75);
-	Colliderlist[4].Setposition(Vector3(-34.5, 10, -557.5));
+	Colliderlist[4].Setposition(Vector3(-34.5, 10, -467.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[5].setlength(3, 20, 75);
-	Colliderlist[5].Setposition(Vector3(40.5, 10, -57.5));
+	Colliderlist[5].Setposition(Vector3(40.5, 10, -467.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(70, 20, 3);
-	Colliderlist[6].Setposition(Vector3(5.5, 10, -520));
+	Colliderlist[6].Setposition(Vector3(5.5, 10, -430));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(70, 20, 3);
-	Colliderlist[7].Setposition(Vector3(0.5, 10, -595));
+	Colliderlist[7].Setposition(Vector3(0.5, 10, -505));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[8].setlength(3, 20, 30);
-	Colliderlist[8].Setposition(Vector3(28, 10, -610));
+	Colliderlist[8].Setposition(Vector3(28, 10, -520));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[9].setlength(3, 20, 30);
-	Colliderlist[9].Setposition(Vector3(68, 10, -610));
+	Colliderlist[9].Setposition(Vector3(68, 10, -520));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[10].setlength(40, 20, 3);
-	Colliderlist[10].Setposition(Vector3(48, 10, -625));
+	Colliderlist[10].Setposition(Vector3(48, 10, -535));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[11].setlength(22, 20, 3);
-	Colliderlist[11].Setposition(Vector3(52, 10, -595));
+	Colliderlist[11].Setposition(Vector3(52, 10, -505));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(3, 20, 75);
-	Colliderlist[12].Setposition(Vector3(47.5, 10, -557.5));
+	Colliderlist[12].Setposition(Vector3(47.5, 10, -467.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(3, 20, 75);
-	Colliderlist[13].Setposition(Vector3(68, 10, -557.5));
+	Colliderlist[13].Setposition(Vector3(68, 10, -467.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[14].setlength(25, 20, 3);
-	Colliderlist[14].Setposition(Vector3(58, 10, -520));
+	Colliderlist[14].Setposition(Vector3(58, 10, -430));
 	//Locker colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[15].setlength(3.9, 10, 4.3);
@@ -517,48 +517,48 @@ void SceneSP2Room1::Init()
 	//door colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[17].setlength(5, 15, 3);
-	Colliderlist[17].Setposition(Vector3(-32, 7.5, -520));
+	Colliderlist[17].Setposition(Vector3(-32, 7.5, -430));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[18].setlength(5, 15, 3);
-	Colliderlist[18].Setposition(Vector3(38, 7.5, -595));
+	Colliderlist[18].Setposition(Vector3(38, 7.5, -505));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[19].setlength(5, 15, 3);
-	Colliderlist[19].Setposition(Vector3(65.5, 7.5, -595));
+	Colliderlist[19].Setposition(Vector3(65.5, 7.5, -505));
 	//House obj colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[20].setlength(15, 15, 10);
-	Colliderlist[20].Setposition(Vector3(0, 1, -570));
+	Colliderlist[20].Setposition(Vector3(0, 1, -480));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[21].setlength(22, 15, 8);
-	Colliderlist[21].Setposition(Vector3(0, 9, -540));
+	Colliderlist[21].Setposition(Vector3(0, 9, -450));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[22].setlength(17, 15, 7);
-	Colliderlist[22].Setposition(Vector3(0, -0.5, -560));
+	Colliderlist[22].Setposition(Vector3(0, -0.5, -470));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[23].setlength(10, 15, 4);
-	Colliderlist[23].Setposition(Vector3(0, 8.5, -590));
+	Colliderlist[23].Setposition(Vector3(0, 8.5, -500));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[24].setlength(4.5, 15, 20);
-	Colliderlist[24].Setposition(Vector3(30.5, 4, -560));
+	Colliderlist[24].Setposition(Vector3(30.5, 4, -470));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[25].setlength(5.5, 15, 10);
-	Colliderlist[25].Setposition(Vector3(30, 4, -560));
+	Colliderlist[25].Setposition(Vector3(30, 4, -470));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[26].setlength(7, 15, 7);
-	Colliderlist[26].Setposition(Vector3(40, 3.7, -622));
+	Colliderlist[26].Setposition(Vector3(40, 3.7, -532));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[27].setlength(12, 15, 5);
-	Colliderlist[27].Setposition(Vector3(52, 0.7, -622));
+	Colliderlist[27].Setposition(Vector3(52, 0.7, -532));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[28].setlength(6, 15, 6);
-	Colliderlist[28].Setposition(Vector3(67, 6.5, -610));
+	Colliderlist[28].Setposition(Vector3(67, 6.5, -520));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[29].setlength(10.5, 15, 15);
-	Colliderlist[29].Setposition(Vector3(52, 0, -542.75));
+	Colliderlist[29].Setposition(Vector3(52, 0, -452.75));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[30].setlength(3, 15, 12);
-	Colliderlist[30].Setposition(Vector3(50, 0, -570));
+	Colliderlist[30].Setposition(Vector3(50, 0, -480));
 	//default active
 	for (int i = 0; i < Colliderlist.size(); i++) {
 		Colliderlist[i].setactive(true);
@@ -625,7 +625,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
-	camera.position.Set(-30, 9, -425);
+	camera.position.Set(-30, 9, -420);
 	camera.rawTarget = camera.position;
 
 
@@ -1475,7 +1475,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -620) && (camera.position.z <= -420)) && (inLocker == false))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)) && (inLocker == false))
 	{
 		jumpscareTimerActive1 = true;
 	}
