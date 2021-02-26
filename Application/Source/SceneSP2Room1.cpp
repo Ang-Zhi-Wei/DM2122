@@ -610,7 +610,8 @@ void SceneSP2Room1::Set(Scene* scene)
 	{
 		itemImage[i] = scene->itemImage[i];
 	}
-
+	//death timer
+	deathtimer = 0;
 }
 
 void SceneSP2Room1::SetBackground()
@@ -648,7 +649,19 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
+	if (ghost->kill) {
+		deathtimer += dt;
+		if (deathtimer > 7) {
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
+			Application::setscene(Scene_Menu);
+			return;
+		}
+	}
+	else if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);

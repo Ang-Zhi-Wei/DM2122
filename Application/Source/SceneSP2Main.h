@@ -342,7 +342,8 @@ private:
 	ISoundEngine* Effect;
 
 	Item* items[5];
-
+	//death timer
+	double deathtimer;
 
 	Vector3 temp;
 	void RenderSkybox();

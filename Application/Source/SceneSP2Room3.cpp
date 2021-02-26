@@ -14,13 +14,19 @@ SceneSP2Room3::SceneSP2Room3()
 	flashlight = false;
 	flashlight_lifetime = 90;
 	inLocker = false;
-	exitGarage = false;
-	showSideBox = true;
+	isTalking = false;
+	showChatbox = true;
+	SpeakPhase = 0;
 	SpeakTimer = 0;
+	exitGarage = false;
+	nearCraft = false;
+	craftScrewdriver = false;
+	showSideBox = true;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
+
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	camBlinkOffSec = 0;
@@ -45,6 +51,10 @@ SceneSP2Room3::~SceneSP2Room3()
 
 void SceneSP2Room3::Init()
 {
+
+	showChatbox = true;
+	SpeakPhase = 0;
+	SpeakTimer = 0;
 	// Init VBO here
 	glClearColor(0., 0., 0., 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -226,13 +236,18 @@ void SceneSP2Room3::Init()
 	meshList[garagedoor]->textureID = LoadTGA("Assigment2Images//garagedoor.tga");
 	meshList[garagedoor]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
+	meshList[HANDSAW] = MeshBuilder::GenerateOBJ("Building", "OBJ//saw.obj");
+	meshList[HANDSAW]->textureID = LoadTGA("Assigment2Images//saw.tga");
+	meshList[HANDSAW]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
 	meshList[BATTERY] = MeshBuilder::GenerateOBJ("Building", "OBJ//Battery.obj");
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-	garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-22, 7.8, -95));
-	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(-20, 7.5, -60));
+
+	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
 	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(25, 0, -60));
+	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(24.5, 5.2, -45));
 
 
 	
@@ -319,6 +334,8 @@ void SceneSP2Room3::Init()
 	itemImage[5] = meshList[GEO_ITEMIMAGE5];
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
+
+	
 
 	
 	//init update stuff
@@ -473,8 +490,6 @@ void SceneSP2Room3::Init()
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 
-
-
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -482,6 +497,9 @@ void SceneSP2Room3::Init()
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
 	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
+
+	//death timer
+	deathtimer = 0;
 }
 
 void SceneSP2Room3::Set(Scene* scene)
@@ -520,6 +538,9 @@ void SceneSP2Room3::Set(Scene* scene)
 	{
 		itemImage[i] = scene->itemImage[i];
 	}
+	//Craft 
+	nearCraft = false;
+	craftScrewdriver = false;
 }
 
 void SceneSP2Room3::SetBackground()
@@ -558,7 +579,19 @@ void SceneSP2Room3::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
+	if (ghost->kill) {
+		deathtimer += dt;
+		if (deathtimer > 7) {
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
+			Application::setscene(Scene_Menu);
+			return;
+		}
+	}
+	else if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -577,10 +610,7 @@ void SceneSP2Room3::Update(double dt)
 		Background->setSoundVolume(0.5f);
 	}
 
-	double SPEECH_LENGTH_FAST = 2;
-	double SPEECH_LENGTH_SHORT = 3;
-	double SPEECH_LENGTH_MEDIUM = 5;
-	double SPEECH_LENGTH_LONG = 8;
+
 	//key input
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -626,9 +656,27 @@ void SceneSP2Room3::Update(double dt)
 		Freleased = false;
 	}
 
+
+	if (nearCraft == true && Rpressed == true)
+	{
+		garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-21, 7.1, -65));
+		craftScrewdriver = true;
+
+	}
+
+	if (garageItems[3] == nullptr && isTalking == false)
+	{
+		isTalking = true;
+		SpeakPhase = 1;
+	}
+
+	
+
+
+
 	//items - batteries
 	pickUpItem = false;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (garageItems[i] != nullptr)
 		{
@@ -643,6 +691,7 @@ void SceneSP2Room3::Update(double dt)
 					garageItems[i] = nullptr;
 					if (garageItems[0] == nullptr)
 					{
+						nearCraft = false;
 						screwDriverFound = 1;
 					}
 				}
@@ -728,7 +777,14 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	
+
+	if (campos_x < -15 && campos_z < -55 && campos_z > -66 && garageItems[3] == nullptr && craftScrewdriver == false)
+	{
+		nearCraft = true;
+	}
+	else {
+		nearCraft = false;
+	}
 
 	if (exitGarage == true && nearExit == true)
 	{
@@ -865,6 +921,35 @@ void SceneSP2Room3::Update(double dt)
 		}
 	}
 
+	double SPEECH_LENGTH_FAST = 2;
+	double SPEECH_LENGTH_SHORT = 3;
+	double SPEECH_LENGTH_MEDIUM = 5;
+	double SPEECH_LENGTH_LONG = 8;
+
+	switch (SpeakPhase)
+	{
+		//default
+	case 0:
+		SpeakTimer = 0;
+		break;
+		//starting phase
+	case 1:
+		showChatbox = true;
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+			SpeakPhase = 0;
+			showChatbox = false;
+		}
+		break;
+	case 2:
+		SpeakTimer += dt;
+		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+			SpeakTimer = 0;
+		}
+		break;
+	}
+
 	//@pause
 	//pause key pressed/released (using p for now, maybe change to esc? // copy over to others)
 	if (!Application::IsKeyPressed(VK_ESCAPE))
@@ -907,19 +992,6 @@ void SceneSP2Room3::Update(double dt)
 		}
 	}
 
-	//switch (SpeakPhase)
-	//{
-	//	//default
-	//case 0:
-	//	showChatbox = false;
-	//	SpeakTimer = 0;
-	//case 14:
-	//	SpeakTimer += dt;
-	//	if (SpeakTimer > SPEECH_LENGTH_SHORT) {
-	//		SpeakTimer = 0;
-	//		SpeakPhase = 0;
-	//	}
-	//}
 
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
@@ -1596,18 +1668,27 @@ void SceneSP2Room3::Render()
 	if (garageItems[0] != nullptr)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(-22, 7.8, -95);
-		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Translate(-19, 7.7, -63);
+		//modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(0.27, 0.27, 0.27);
 		RenderMesh(meshList[screwdriver], true);
 		modelStack.PopMatrix();
 	}
 
+	if (garageItems[3] != nullptr) {
+		modelStack.PushMatrix();
+		modelStack.Translate(24.5, 5.2, -45);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(0.04, 0.04, 0.04);
+		RenderMesh(meshList[HANDSAW], true);
+		modelStack.PopMatrix();
+	}
 
 	//batteries
 	if (garageItems[1] != nullptr) {
 		modelStack.PushMatrix();
-		modelStack.Translate(-20, 7.5, -60);
+		modelStack.Translate(-22, 7.8, -95);
 		modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(0.03, 0.03, 0.03);
 		RenderMesh(meshList[BATTERY], true);
@@ -1664,20 +1745,6 @@ void SceneSP2Room3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
 	modelStack.PopMatrix();
 
-
-
-
-	//if (garageItems[0] == nullptr && SpeakPhase != 0)
-	//{
-	//	SpeakPhase = 14;
-	//}
-
-	
-
-	if (pickUpItem)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
-	}
 	
 	
 
@@ -1719,17 +1786,39 @@ void SceneSP2Room3::Render()
 	}
 	//battery bar
 	RenderMeshOnScreen(meshList[GEO_BATTERY], 4.6f + (4.5f - flashlight_lifetime * 0.025f), 6.35f, flashlight_lifetime * 0.05f, 2.1);
+	
+
 	if (showChatbox == true) {
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 	}
+
+	if (nearCraft == true && craftScrewdriver == false)
+	{
+		showChatbox = true;
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "I can craft a screwdriver now..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press R to to craft", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
+
 	if (nearExit == true) {
 		showChatbox = true;
+
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to Exit", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 	if (showSideBox == true) {
 		RenderMeshOnScreen(meshList[GEO_SIDEBOX], 10.f, 32.f, 1.f, 2.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "Objectives:", Color(0.f, 1.f, 0.f), 3.f, 1.f, 11.9f);
 	}
+
+	if (pickUpItem)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
+
+
+
 	switch (ObjectivePhase)
 	{
 	case 0:
@@ -1776,15 +1865,22 @@ void SceneSP2Room3::Render()
 			break;
 		}
 	}
-	//switch (SpeakPhase)
-	//{
-	//case 0:
-	//	RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
-	//	break;
-	//case 14:
-	//	RenderTextOnScreen(meshList[GEO_TEXT], "Got the screwdriver..", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
-	//	break;
-	//}
+
+
+	switch (SpeakPhase)
+	{
+	case 0:
+		RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+		break;
+		//starting phase
+	case 1:
+		RenderTextOnScreen(meshList[GEO_TEXT], "A handsaw.. i can craft at the table.", Color(0, 0, 1), 4, 10, 1.8f);
+		break;
+	case 2:
+		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		break;
+	}
+
 	//inventory
 	if (inventory->open)
 	{
