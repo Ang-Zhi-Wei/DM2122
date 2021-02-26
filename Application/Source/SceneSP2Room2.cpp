@@ -697,6 +697,9 @@ void SceneSP2Room2::SetBackground()
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
@@ -1190,6 +1193,7 @@ void SceneSP2Room2::Update(double dt)
 		//doors close on their own
 		if ((camera.position - origin).Length() >= 20)
 		{
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			DS_school = CLOSING;
 		}
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x <= 480 && camera.position.x >= 471)
@@ -1217,6 +1221,7 @@ void SceneSP2Room2::Update(double dt)
 			if (Fpressed)
 			{
 				Fpressed = false;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				DS_school = OPENING;
 			}
 		}
@@ -1254,6 +1259,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_classroom = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[13].setactive(true);
 			Colliderlist[14].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1266,6 +1272,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(true);
 				Colliderlist[14].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1283,6 +1290,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(false);
 				Colliderlist[14].setactive(false);
 				camera.setchecker(Colliderlist);
@@ -1319,6 +1327,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_lounge = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[15].setactive(true);
 			Colliderlist[16].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1331,6 +1340,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(true);
 				Colliderlist[16].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1346,6 +1356,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(false);
 				Colliderlist[16].setactive(false);
 				camera.setchecker(Colliderlist);

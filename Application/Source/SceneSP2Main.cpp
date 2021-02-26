@@ -1204,6 +1204,9 @@ void SceneSP2Main::SetBackground() {
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav",true);
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Heartbeat->setSoundVolume(0.f);
 	Effect->setSoundVolume(0.f);
 	Background->setSoundVolume(0.5f);//Volume control

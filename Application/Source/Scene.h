@@ -269,6 +269,7 @@ public:
 	ISoundEngine* Jumpscare;
 	ISoundEngine* Effect;
 	ISoundEngine* Heartbeat;
+	ISoundEngine* Creakingdoor;
 	bool flashlight;
 	float flashlight_lifetime;
 	int ObjectivePhase;

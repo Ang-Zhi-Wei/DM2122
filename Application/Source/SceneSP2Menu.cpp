@@ -383,6 +383,9 @@ void SceneSP2Menu::SetBackground()
 	if (!Heartbeat) {
 		Heartbeat = createIrrKlangDevice();
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Background->setSoundVolume(0.5f);//Volume control
 }
 
