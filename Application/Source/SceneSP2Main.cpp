@@ -1091,11 +1091,11 @@ void SceneSP2Main::Init()
 	/*test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
 	battery.Set("Battery", Item::BATTERY);*/
-	items[0] = new Item("battery", Item::BATTERY, Vector3(0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(60, -3, 0));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(-60, -3, 100));
-	items[3] = new Item("battery", Item::BATTERY, Vector3(-185, -3, -200));
-	items[4] = new Item("battery", Item::BATTERY, Vector3(255, -3, -190));
+	items[0] = new Item("Battery", Item::BATTERY, Vector3(0, -3, 340));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(60, -3, 0));
+	items[2] = new Item("Battery", Item::BATTERY, Vector3(-60, -3, 100));
+	items[3] = new Item("Battery", Item::BATTERY, Vector3(-185, -3, -200));
+	items[4] = new Item("Battery", Item::BATTERY, Vector3(255, -3, -190));
 
 
 //to be called only in one frame. placed under init just for testing first
