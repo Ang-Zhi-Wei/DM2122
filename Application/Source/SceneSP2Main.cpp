@@ -1772,14 +1772,22 @@ void SceneSP2Main::Update(double dt)
 		Sign = 0;
 		showChatbox2 = false;
 		GarageSignActive = false;
+		SchoolSignActive = false;
+		HouseSignActive = false;
+		HospitalSignActive = false;
+
 		GarageSign = 0;
+		SchoolSign = 0;
+		HouseSign = 0;
+		HospitalSign = 0;
+
 	}
 //Don't do an else statement, it breaks the code
 	switch (Sign)
 	{
 	case 0:
 		Sign = 0;
-	case 1:
+	/*case 1:
 		switch (GarageSign)
 		{
 		case 0:
@@ -1844,7 +1852,67 @@ void SceneSP2Main::Update(double dt)
 			GarageSignActive = false;
 			break;
 		}
+		break;*/
+
+	case 1: //Garage
+		switch (GarageSign)
+		{
+		case 0:
+			SignTimer += dt;
+			if ((SignTimer >= 0.1) && (GarageSignActive == true))
+			{
+				SignTimer = 0;
+				GarageSign = 1;
+			}
+			break;
+		case 1:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 5:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 6:
+			SignTimer = 0;
+			showChatbox2 = false;
+			GarageSignActive = false;
+			break;
+		}
 		break;
+
 	case 2: //school
 		switch (SchoolSign)
 		{
@@ -1919,7 +1987,162 @@ void SceneSP2Main::Update(double dt)
 			break;
 		}
 	break;
-	
+	case 3:
+		switch (HouseSign)
+		{
+		case 0:
+			SignTimer += dt;
+			if ((SignTimer >= 0.1) && (HouseSignActive == true))
+			{
+				SignTimer = 0;
+				HouseSign = 1;
+			}
+			break;
+		case 1:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 5:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 6:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 7:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 8:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HouseSign++;
+			}
+			break;
+		case 9:
+			SignTimer = 0;
+			showChatbox2 = false;
+			HouseSignActive = false;
+			break;
+		}
+		break;
+
+	case 4: //school
+		switch (HospitalSign)
+		{
+		case 0:
+			SignTimer += dt;
+			if ((SignTimer >= 0.1) && (HospitalSignActive == true))
+			{
+				SignTimer = 0;
+				HospitalSign = 1;
+			}
+			break;
+		case 1:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 5:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 6:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 7:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				HospitalSign++;
+			}
+			break;
+		case 8:
+			SignTimer = 0;
+			showChatbox2 = false;
+			HospitalSignActive = false;
+			break;
+		}
 	}
 	
 	//light
@@ -2717,9 +2940,6 @@ void SceneSP2Main::Render()
 	RenderMesh(meshList[Ground_Mesh2], true);
 	modelStack.PopMatrix();
 
-
-
-
 	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -0.1f, -312.f);
 	modelStack.Scale(750, 8, 30);
@@ -2932,9 +3152,6 @@ void SceneSP2Main::Render()
 		case 5:
 			RenderTextOnScreen(meshList[GEO_TEXT], "taking his stuff for my car", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
-		case 6:
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-			break;
 		}
 	case 2:
 		switch (SchoolSign)
@@ -2962,7 +3179,63 @@ void SceneSP2Main::Render()
 			break;
 
 		}
-		
+	case 3:
+		switch (HouseSign)
+		{
+		case 1:
+			RenderTextOnScreen(meshList[GEO_TEXT], "A school, a house, a garage and a hospital...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 2:
+			RenderTextOnScreen(meshList[GEO_TEXT], "This place really has everything but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 3:
+			RenderTextOnScreen(meshList[GEO_TEXT], "Is this house where everything stemmed from?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 4:
+			RenderTextOnScreen(meshList[GEO_TEXT], "There was a house mentioned multiple times", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 5:
+			RenderTextOnScreen(meshList[GEO_TEXT], "in the tales about this city", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 6:
+			RenderTextOnScreen(meshList[GEO_TEXT], "But it's a city for gods sake", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 7:
+			RenderTextOnScreen(meshList[GEO_TEXT], "There are houses everywhere!", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 8:
+			RenderTextOnScreen(meshList[GEO_TEXT], "But... Exploring this one wouldn't hurt my report", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+
+		}
+	case 4:
+		switch (HospitalSign)
+		{
+		case 1:
+			RenderTextOnScreen(meshList[GEO_TEXT], "'City's Heart Hospital'", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+
+		case 2:
+			RenderTextOnScreen(meshList[GEO_TEXT], "Interesting hospital mame to be sure", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 3:
+			RenderTextOnScreen(meshList[GEO_TEXT], "And probably be the first place a ghost", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 4:
+			RenderTextOnScreen(meshList[GEO_TEXT], "would come from...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 5:
+			RenderTextOnScreen(meshList[GEO_TEXT], "It doesn't seem like it's locked either", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 6:
+			RenderTextOnScreen(meshList[GEO_TEXT], "I hope this doesn't count as grave robbing...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 7:
+			RenderTextOnScreen(meshList[GEO_TEXT], "God I just want to get out of this city already", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+
+		}
+
 	}	
 	//camera position
 	campos_x = camera.position.x;
@@ -3059,6 +3332,7 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
+	RenderTextOnScreen(meshList[GEO_TEXT], "SignCounter" + std::to_string(HouseSign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 5.f);
 }
 
 void SceneSP2Main::Exit()
