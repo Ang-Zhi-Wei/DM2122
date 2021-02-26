@@ -106,6 +106,7 @@ public:
 		metalcabinet,
 		garagedoor,
 		screwdriver,
+		HANDSAW,
 		BATTERY,
 	
 
@@ -194,6 +195,8 @@ private:
 	float campos_y;
 	float campos_z;
 	bool pickUpItem;
+	bool craftScrewdriver;
+	bool nearCraft;
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
@@ -216,7 +219,7 @@ private:
 	double MposX, MposY;
 	double Mousetempx, Mousetempy;
 
-	Item* garageItems[3];
+	Item* garageItems[4];
 
 	struct Wall
 	{

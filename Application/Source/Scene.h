@@ -46,6 +46,7 @@ public:
 			MysObj,
 
 			Wrench,
+			Handsaw,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -104,6 +105,10 @@ public:
 			case Wrench:
 				description = "A Wrench";
 				image = "Assigment2Images/wrenchicon.tga";
+				break;
+			case Handsaw:
+				description = "Use to craft screwdriver";
+				image = "Assigment2Images/saw.tga";
 				break;
 			}
 		}
