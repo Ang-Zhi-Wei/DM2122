@@ -1589,14 +1589,6 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//switch scenes button for now
-	if (Application::IsKeyPressed('5')) {
-		Background->setSoundVolume(0.f);
-		Effect->setSoundVolume(0.f);
-		Jumpscare->setSoundVolume(0.f);
-		Heartbeat->setSoundVolume(0.f);
-		Application::Load();
-		Application::setscene(Scene_Menu);
-	}
 	if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);

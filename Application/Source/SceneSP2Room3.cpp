@@ -571,7 +571,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 	//key input
-	if (Application::IsKeyPressed('1')) {
+	/*if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
 	}
 	else if (Application::IsKeyPressed('2')) {
@@ -582,7 +582,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 	else if (Application::IsKeyPressed('4')) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	}*/
 	if (!Application::IsKeyPressed('Q'))
 	{
 		Qreleased = true;
@@ -1110,14 +1110,6 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 	//switch scenes button for now
-	if (Application::IsKeyPressed('5')) {
-		Background->setSoundVolume(0.f);
-		Effect->setSoundVolume(0.f);
-		Jumpscare->setSoundVolume(0.f);
-		Heartbeat->setSoundVolume(0.f);
-		Application::Load();
-		Application::setscene(Scene_Menu);
-	}
 	if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
