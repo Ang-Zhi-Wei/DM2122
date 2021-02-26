@@ -1997,7 +1997,7 @@ void SceneSP2Room2::Render()
 	}
 
 	//comment out later
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
 	posx << "X:" << campos_x;
@@ -2009,7 +2009,7 @@ void SceneSP2Room2::Render()
 	posz.precision(4);
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	// my god so many booleans just for texts
 	if (pickUpBattery)
