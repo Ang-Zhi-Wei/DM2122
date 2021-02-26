@@ -237,7 +237,6 @@ private:
 	bool interact;
 
 	std::string interact_message;
-//	Mesh* itemImage[8];
 
 	DOOR_STATE DS_MAIN, DS_HALL, DS_LIVING, DS_CONNECTING;
 	float rotateY[4]; //0-main, 1-hall, 2-living room, 3- connecting room door

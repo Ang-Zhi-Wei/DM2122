@@ -402,7 +402,7 @@ void SceneSP2Room1::Init()
 	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
 	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("kitchen Key", Item::Key, Vector3(52, 1, -496));
+	houseItems[3] = new Item("Kitchen Key", Item::Key, Vector3(52, 1, -496));
 	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -496));
 	houseItems[5] = new Item("Bedroom Key", Item::Key2, Vector3(52, 1, -496));
 
@@ -1490,84 +1490,6 @@ void SceneSP2Room1::Update(double dt)
 
 
 
-	////Jumpscare, living room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	//{
-	//	jumpscareTimerActive2 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive2 = false;
-	//	jumpscareActive2 = false;
-	//}
-	//if (jumpscareTimerActive2 == true)
-	//	jumpscareTimer2 -= dt;
-
-	//if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
-	//{
-	//	jumpscareActive2 = false;
-	//}
-	//if (jumpscareTimer2 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive2 = true;
-	//	jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
-	//}
-
-
-
-	////Jumpscare, Connecting room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 28) && (camera.position.x <= 70)) && ((camera.position.z >= -535) && (camera.position.z <= -505)))
-	//{
-	//	jumpscareTimerActive3 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive3 = false;
-	//	jumpscareActive3 = false;
-	//}
-	//if (jumpscareTimerActive3 == true)
-	//	jumpscareTimer3 -= dt;
-	//if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
-	//{
-	//	jumpscareActive3 = false;
-	//}
-	//if (jumpscareTimer3 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive3 = true;	
-	//	jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
-	//}
-
-
-
-	////Jumpscare, Final room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 50)&& (camera.position.x <= 70)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	//{
-	//	jumpscareTimerActive4 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive4 = false;
-	//	jumpscareActive4 = false;
-	//}
-	//if (jumpscareTimerActive4 == true)
-	//	jumpscareTimer4 -= dt;
-
-	//if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
-	//{
-	//	jumpscareActive4 = false;
-	//}
-	//if (jumpscareTimer4 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive4 = true;
-	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
-	//}
-
 
 
 	//puzzles
@@ -2530,7 +2452,7 @@ void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (houseItems[i] != nullptr)
 		{
