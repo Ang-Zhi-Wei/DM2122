@@ -2962,7 +2962,7 @@ void SceneSP2Main::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "My car broke down.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 9:
-		RenderTextOnScreen(meshList[GEO_TEXT], "Do you any way I could fix it?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Is there any way I could fix it?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 		break;
 	case 10:
 		RenderTextOnScreen(meshList[GEO_TEXT], "There's some stuff lying around in the buildings.. ", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
