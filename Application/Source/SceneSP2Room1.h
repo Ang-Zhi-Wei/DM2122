@@ -303,7 +303,8 @@ private:
 		pulling,
 	};
 	leverPulled leverIsPulled;
-
+	//death timer
+	double deathtimer;
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
