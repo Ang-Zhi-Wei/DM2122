@@ -393,12 +393,12 @@ void SceneSP2Room1::Init()
 	ghost = nullptr;
 	inventory = nullptr;
 
-	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
-	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
-	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("Kitchen Key", Item::Key, Vector3(52, 1, -496));
-	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -496));
-	houseItems[5] = new Item("Bedroom Key", Item::Key2, Vector3(52, 1, -496));
+	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -185));
+	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -525));
+	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -586));
+	houseItems[3] = new Item("Kitchen Key", Item::Key, Vector3(52, 1, -586));
+	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -586));
+	houseItems[5] = new Item("Bedroom Key", Item::Key2, Vector3(52, 1, -586));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -579,9 +579,9 @@ void SceneSP2Room1::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -450)));
-	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -510))); 
-	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -470)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -540)));
+	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -600))); 
+	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -560)));
 	//lever
 	rotate_painting = 90;
 	rotate_lever = -60;
@@ -2092,46 +2092,46 @@ void SceneSP2Room1::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 1, -480);
+	modelStack.Translate(0, 1, -570);
 	modelStack.Scale(1.9, 1.9, 1.9);
 	RenderMesh(meshList[SOFA], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 9, -450);
+	modelStack.Translate(0, 9, -540);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[TELEVISION], true);
 	modelStack.PopMatrix();//Added collider
 	
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 4, -450);
+	modelStack.Translate(0, 4, -540);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.03, 0.03, 0.03);
 	RenderMesh(meshList[TV_STAND], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -0.5, -470);
+	modelStack.Translate(0, -0.5, -560);
 	modelStack.Scale(2.1, 2.1, 2.1);
 	RenderMesh(meshList[WOODENTABLE], true);
 	modelStack.PopMatrix();//Added collider
 	
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 8.5, -500);
+	modelStack.Translate(0, 8.5, -590);
 	modelStack.Scale(7.5, 7.5, 7.5);
 	RenderMesh(meshList[SHELVES], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(30, 4, -470);
+	modelStack.Translate(30, 4, -560);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.04, 0.04, 0.04);
 	RenderMesh(meshList[BOOKSHELF], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(40, 3.7, -532);
+	modelStack.Translate(40, 3.7, -622);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(4.7, 4.7, 4.7);
 	RenderMesh(meshList[KITCHENSINK], true);
@@ -2139,28 +2139,28 @@ void SceneSP2Room1::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(52, 0.7, -532);
+	modelStack.Translate(52, 0.7, -622);
 	//modelStack.Rotate(, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
 	modelStack.PopMatrix();//Added collider
 	
 	modelStack.PushMatrix();
-	modelStack.Translate(65, 6.5, -520);
+	modelStack.Translate(65, 6.5, -610);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(0.06, 0.07,0.06);
 	RenderMesh(meshList[FRIDGE], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(56, 0, -460);
+	modelStack.Translate(56, 0, -550);
 //	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(4, 4, 4);
 	RenderMesh(meshList[BED], true);
 	modelStack.PopMatrix();//Added collider
 
 	modelStack.PushMatrix();
-	modelStack.Translate(50, 0, -480);
+	modelStack.Translate(50, 0, -570);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(0.05, 0.05, 0.05);
 	RenderMesh(meshList[DRESSER], true);
@@ -2168,7 +2168,7 @@ void SceneSP2Room1::Render()
 
 	if (houseItems[4] != nullptr) {
 		modelStack.PushMatrix();
-		modelStack.Translate(50, 7.4, -478);
+		modelStack.Translate(50, 7.4, -568);
 		//modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(0.03, 0.03, 0.03);
 		RenderMesh(meshList[WRENCH], true);
@@ -2179,7 +2179,7 @@ void SceneSP2Room1::Render()
 	if (waterstate == flowing)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(38.8, 3.71, -532.4);
+		modelStack.Translate(38.8, 3.71, -622.4);
 		modelStack.Rotate(-90, 0, 1, 0);
 		modelStack.Scale(0.05, 2, 0.05);
 		RenderMesh(meshList[flow], true);
@@ -2187,7 +2187,7 @@ void SceneSP2Room1::Render()
 	}
 
 	modelStack.PushMatrix();
-	modelStack.Translate(38.85, movewater, -531.8);
+	modelStack.Translate(38.85, movewater, -621.8);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(3.5, 3.5, 3.5);
 	RenderMesh(meshList[water], true);
@@ -2196,7 +2196,7 @@ void SceneSP2Room1::Render()
 	if (keyspawn && houseItems[5]!=nullptr)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(38.8, 5.3, -531.7);
+		modelStack.Translate(38.8, 5.3, -621.7);
 		modelStack.Rotate(-90, 0, 1, 0);
 		modelStack.Scale(0.15, 0.15, 0.15);
 		RenderMesh(meshList[key], true);
