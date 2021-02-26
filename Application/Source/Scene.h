@@ -48,6 +48,7 @@ public:
 
 			Wrench,
 			Handsaw,
+			Pliers,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -97,7 +98,7 @@ public:
 				break;
 			case ItemA:
 				description = "A rusty lunchbox";
-				image = "Image//man1.tga";
+				image = "Image//lunchboxitem.tga";
 				break;
 			case Notebook:
 				description = "An old notebook";
@@ -108,12 +109,16 @@ public:
 				image = "Image/diluc.tga";
 				break;
 			case Wrench:
-				description = "A Wrench";
+				description = "A Wrench.";
 				image = "Assigment2Images/wrenchicon.tga";
 				break;
 			case Handsaw:
 				description = "Use to craft screwdriver";
 				image = "Assigment2Images/handsawicon.tga";
+				break;
+			case Pliers:
+				description = "A set of pliers.";
+				image = "Image/pliersitem.tga";
 				break;
 			}
 		}
