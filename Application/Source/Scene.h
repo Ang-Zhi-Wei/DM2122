@@ -39,6 +39,7 @@ public:
 			ITEM3,
 			SPARK_PLUG,
 			Key,
+			Key2,
 
 
 			ItemA,
@@ -87,7 +88,11 @@ public:
 				image = "Assigment2Images/screwdrivericon.tga";
 				break;
 			case Key:
-				description = "A key";
+				description = "A key. A Label on it reads: kitchen";
+				image = "Assigment2Images/keyicon.tga";
+				break;
+			case Key2:
+				description = "A key. A Label on it reads: bedroom";
 				image = "Assigment2Images/keyicon.tga";
 				break;
 			case ItemA:
