@@ -91,7 +91,7 @@ void SceneSP2Main::Init()
 	HospitalSign = 0; //2
 	HouseSign = 0; //3
 	SchoolSign = 0; //4
-	SignTimer = 2;
+	SignTimer = 0;
 	
 
 	// Init VBO here
@@ -1770,6 +1770,81 @@ void SceneSP2Main::Update(double dt)
 		}
 		break;
 	}
+
+
+	//Signs
+	if ((camera.position.z >= 300) && (camera.position.z <= 320) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
+	{
+		Sign = 1;
+		showChatbox = true;
+	}
+
+	if ((camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 340) && (camera.position.x <= 360)) //School
+	{
+		Sign = 2;
+		showChatbox = true;
+	}
+
+	if ((camera.position.z >= -320) && (camera.position.z <= -300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
+	{
+		Sign = 3;
+		showChatbox = true;
+	}
+
+	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -360) && (camera.position.x <= -340)) //Hospital
+	{
+		Sign = 4;
+		showChatbox = true;
+	}
+//Don't do an else statement, it breaks the code
+	switch (Sign)
+	{
+	case 0:
+		Sign = 0;
+	case 1:
+		switch (GarageSign)
+		{
+		case 0:
+			SignTimer += dt;
+			if (SignTimer >= 0.01)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+		case 1:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_LONG)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_LONG)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_LONG)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_LONG)
+			{
+				SignTimer = 0;
+				showChatbox = false;
+				GarageSign++;
+			}
+			break;
+
+		}
+	}
+	
 	//light
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -2007,29 +2082,6 @@ void SceneSP2Main::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 	}
-
-	//Signs
-	if ((camera.position.y > 0) && (camera.position.z >= 300) && (camera.position.z <= 320) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
-	{
-		Sign = 1;
-	}
-
-	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 340) && (camera.position.x <= 360)) //School
-	{
-		Sign = 2;
-	}
-
-	if ((camera.position.z >= -320) && (camera.position.z <= -300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
-	{
-		Sign = 3;
-	}
-
-	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -360) && (camera.position.x <= -340)) //Hospital
-	{
-		Sign = 4;
-	}
-	else
-		Sign = 0;
 
 }
 
@@ -2760,6 +2812,32 @@ void SceneSP2Main::Render()
 	case 1:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Talk to man", Color(1, 1, 0), 4, 22, 5);
 		break;
+	}
+
+	switch (Sign) //1 - Garage, 2 - School, 3 - House, 4 - Hospital
+	{
+	case 1:
+		switch (GarageSign)
+		{
+		case 0:
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+			break;
+			//starting phase
+		case 1:
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down in front of a Garage of all things", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			break;
+		case 2:
+			RenderTextOnScreen(meshList[GEO_TEXT], "The man said there's stuff lying around, right?", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			break;
+		case 3:
+			RenderTextOnScreen(meshList[GEO_TEXT], "The garage would probably be the best bet to find stuff for a car.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			break;
+		case 4:
+			RenderTextOnScreen(meshList[GEO_TEXT], "But then again there's a lot of things to check too anyways.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			break;
+
+		}
+		
 	}
 
 	//camera position
