@@ -55,6 +55,7 @@ void SceneSP2Room3::Init()
 	showChatbox = true;
 	SpeakPhase = 0;
 	SpeakTimer = 0;
+	isTalking = false;
 	// Init VBO here
 	glClearColor(0., 0., 0., 1.0f);
 	glEnable(GL_DEPTH_TEST);
