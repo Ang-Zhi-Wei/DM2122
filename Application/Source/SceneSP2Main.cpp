@@ -20,6 +20,7 @@ SceneSP2Main::SceneSP2Main()
 	camBlinkOn = true;
 	camBlinkOff = false;
 	showChatbox = true;
+	showChatbox2 = false;
 	showSideBox = true;
 	SpeakPhase = 1;
 	SpeakTimer = 0;
@@ -88,9 +89,13 @@ void SceneSP2Main::Init()
 
 	Sign = 0;
 	GarageSign = 0; //1
+	GarageSignActive = false;
 	HospitalSign = 0; //2
+	HospitalSignActive = false;
 	HouseSign = 0; //3
+	HouseSignActive = false;
 	SchoolSign = 0; //4
+	SchoolSignActive = false;
 	SignTimer = 0;
 	
 
@@ -599,6 +604,8 @@ void SceneSP2Main::Init()
 	
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_CHATBOX]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
+	meshList[GEO_CHATBOX2] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
+	meshList[GEO_CHATBOX2]->textureID = LoadTGA("Assigment2Images//chatbox.tga");
 	meshList[GEO_SIDEBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
 	meshList[GEO_SIDEBOX]->textureID = LoadTGA("Assigment2Images//sidebox.tga");
 
@@ -620,6 +627,7 @@ void SceneSP2Main::Init()
 	inLocker = false;
 
 	NearCar = false;
+	WinTrigger = false;
 	WinLevel = 0;
 	winTimerActive = false;
 	winTimer = 30;
@@ -1213,35 +1221,40 @@ void SceneSP2Main::Update(double dt)
 	if ((camera.position.x <= 60) && (camera.position.x >= 10) && (camera.position.z <= 370) && (camera.position.z >= 345))
 	{
 		NearCar = true;
-		if (Fpressed) //Insert win conditions after this as parameters
+		if (Fpressed && ObjectivePhase >= 3) //Insert win conditions after this as parameters
 		{
-			WinLevel = 1;
-			translateWinY += (float)(translateWinYDir * dt);
-			winTimerActive = true;
-			if (winTimerActive == true);
-			{
-				winTimer -= dt;
-				if (winTimer >= 27)
+			WinTrigger = true;
+				if (WinTrigger == true)
 				{
-					translateWinYDir = 0;
+					WinLevel = 1;
+					translateWinY += (float)(translateWinYDir * dt);
+					winTimerActive = true;
+					if (winTimerActive == true);
+					{
+						winTimer -= dt;
+						if (winTimer >= 27)
+						{
+							translateWinYDir = 0;
+						}
+						if (winTimer < 27)
+						{
+							translateWinYDir = 5;
+						}
+						if (winTimer <= 0)
+						{
+							winTimerActive = false;
+							winTimer = 30;
+							translateWinYDir = 0;
+							translateWinY = -10;
+						}
+					}
 				}
-				if (winTimer < 27)
-				{
-					translateWinYDir = 5;
-				}
-				if (winTimer <= 0)
-				{
-					winTimerActive = false;
-					winTimer = 30;
-					translateWinYDir = 0;
-					translateWinY = -10;
-				}
-			}
 		}
 		else
 		{
 			WinLevel = 2;
 		}
+
 	}
 	else
 	{
@@ -1662,8 +1675,9 @@ void SceneSP2Main::Update(double dt)
 		enterBuilding = false;
 	}
 
-	//fps
-	fps = 1.f / float(dt);
+	////fps
+	//fps = 1.f / float(dt);
+	fps = double(dt);
 	//camera
 	camera.Update(dt);
 	camera.can_move = true;
@@ -1794,28 +1808,41 @@ void SceneSP2Main::Update(double dt)
 
 
 	//Signs
-	if ((camera.position.z >= 300) && (camera.position.z <= 320) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
+	if ((camera.position.z >= 280) && (camera.position.z <= 300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //Garage
 	{
 		Sign = 1;
-		showChatbox = true;
+		showChatbox2 = true;
+		GarageSignActive = true;
+		
 	}
 
-	if ((camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 340) && (camera.position.x <= 360)) //School
+	else if ((camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= 320) && (camera.position.x <= 340)) //School
 	{
 		Sign = 2;
-		showChatbox = true;
+		showChatbox2 = true;
+		SchoolSignActive = true;
+
 	}
 
-	if ((camera.position.z >= -320) && (camera.position.z <= -300) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
+	else if ((camera.position.z >= -300) && (camera.position.z <= -280) && (camera.position.x >= 14) && (camera.position.x <= 24)) //House
 	{
 		Sign = 3;
-		showChatbox = true;
+		showChatbox2 = true;
+		HouseSignActive = true;
 	}
 
-	if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -360) && (camera.position.x <= -340)) //Hospital
+	else if ((camera.position.y > 0) && (camera.position.z >= 5) && (camera.position.z <= 15) && (camera.position.x >= -340) && (camera.position.x <= -320)) //Hospital
 	{
 		Sign = 4;
-		showChatbox = true;
+		showChatbox2 = true;
+		HospitalSignActive = true;
+	}
+	else
+	{
+		Sign = 0;
+		showChatbox2 = false;
+		GarageSignActive = false;
+		GarageSign = 0;
 	}
 //Don't do an else statement, it breaks the code
 	switch (Sign)
@@ -1827,43 +1854,142 @@ void SceneSP2Main::Update(double dt)
 		{
 		case 0:
 			SignTimer += dt;
-			if (SignTimer >= 0.01)
+			if ((SignTimer >= 0.1) && (GarageSignActive == true))
 			{
 				SignTimer = 0;
-				GarageSign++;
+				GarageSign = 1;
 			}
+			break;
 		case 1:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_LONG)
+			if (SignTimer > SPEECH_LENGTH_FAST)
 			{
 				SignTimer = 0;
-				GarageSign++;
-			}
-		case 2:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_LONG)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-		case 3:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_LONG)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-		case 4:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_LONG)
-			{
-				SignTimer = 0;
-				showChatbox = false;
 				GarageSign++;
 			}
 			break;
-
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 5:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 6:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				GarageSign++;
+			}
+			break;
+		case 7:
+			SignTimer = 0;
+			showChatbox2 = false;
+			GarageSignActive = false;
+			break;
 		}
+		break;
+	case 2: //school
+		switch (SchoolSign)
+		{
+		case 0:
+			SignTimer += dt;
+			if ((SignTimer >= 0.1) && (SchoolSignActive == true))
+			{
+				SignTimer = 0;
+				SchoolSign = 1;
+			}
+			break;
+		case 1:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 2:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 3:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 4:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 5:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 6:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 7:
+			SignTimer += dt;
+			if (SignTimer > SPEECH_LENGTH_FAST)
+			{
+				SignTimer = 0;
+				SchoolSign++;
+			}
+			break;
+		case 8:
+			SignTimer = 0;
+			showChatbox2 = false;
+			SchoolSignActive = false;
+			break;
+		}
+	break;
+	
 	}
 	
 	//light
@@ -2381,6 +2507,7 @@ void SceneSP2Main::Render()
 	//@sign
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, 300);
+	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();//Added collider
@@ -2388,7 +2515,7 @@ void SceneSP2Main::Render()
 	// School
 	modelStack.PushMatrix();
 	modelStack.Translate(340, -3, 10);
-	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();//Added collider
@@ -2396,7 +2523,6 @@ void SceneSP2Main::Render()
 	// House
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, -300);
-	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();//Added collider
@@ -2404,7 +2530,7 @@ void SceneSP2Main::Render()
 	// Hospital
 	modelStack.PushMatrix();
 	modelStack.Translate(-340, -3, 10);
-	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
 	modelStack.PopMatrix();
@@ -2843,32 +2969,63 @@ void SceneSP2Main::Render()
 		break;
 	}
 
+	if (showChatbox2 == true) 
+	{
+		RenderMeshOnScreen(meshList[GEO_CHATBOX2], 40.f, 10.f, 2.f, 0.7f);
+	}
 	switch (Sign) //1 - Garage, 2 - School, 3 - House, 4 - Hospital
 	{
 	case 1:
 		switch (GarageSign)
 		{
-		case 0:
-			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0, 0, 0), 4, 10, 1.8f);
+		case 1:
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down ", Color(0, 0, 1.f), 4, 10, 1.8f);
 			break;
 			//starting phase
-		case 1:
-			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down in front of a Garage of all things", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
-			break;
 		case 2:
-			RenderTextOnScreen(meshList[GEO_TEXT], "The man said there's stuff lying around, right?", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "In front of a Garage of all things", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 3:
-			RenderTextOnScreen(meshList[GEO_TEXT], "The garage would probably be the best bet to find stuff for a car.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Thompson's Garage? Huh, neat.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 4:
-			RenderTextOnScreen(meshList[GEO_TEXT], "But then again there's a lot of things to check too anyways.", Color(0.f, 0.f, 0.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Wonder if a dead guy would mind me", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 5:
+			RenderTextOnScreen(meshList[GEO_TEXT], "taking his stuff for my car", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 6:
+			RenderTextOnScreen(meshList[GEO_TEXT], "", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		}
+	case 2:
+		switch (SchoolSign)
+		{
+		case 1:
+			RenderTextOnScreen(meshList[GEO_TEXT], "This is the school...?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 2:
+			RenderTextOnScreen(meshList[GEO_TEXT], "With how it looks like, I'd assume it was a warehouse ", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 3:
+			RenderTextOnScreen(meshList[GEO_TEXT], "or something.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 4:
+			RenderTextOnScreen(meshList[GEO_TEXT], "But creepy, abandoned city and a rundown school...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 5:
+			RenderTextOnScreen(meshList[GEO_TEXT], "Really doesn't sound like a good mix.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 6:
+			RenderTextOnScreen(meshList[GEO_TEXT], "There's so many schools in the city, but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			break;
+		case 7:
+			RenderTextOnScreen(meshList[GEO_TEXT], "God, this place just gives me the creeps.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 
 		}
 		
-	}
-
+	}	
 	//camera position
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
@@ -2964,7 +3121,9 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 4.f);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Timer: " + std::to_string(GarageSign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 5.f);
 }
 
 void SceneSP2Main::Exit()
