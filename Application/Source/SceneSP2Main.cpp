@@ -3336,7 +3336,7 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], "SignCounter" + std::to_string(HouseSign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 5.f);
+
 }
 
 void SceneSP2Main::Exit()
