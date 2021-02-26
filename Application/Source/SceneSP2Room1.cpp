@@ -49,6 +49,12 @@ SceneSP2Room1::SceneSP2Room1()
 	suffocationScaleDir = 1;
 	suffocationTranslate = 15;
 	suffocationTranslateDir = 1;
+	movewater = 2;
+	waterstate = notused;
+	residepause = 0;
+	isUnlocked[kitchen] = false;
+	isUnlocked[bedroom] = false;
+	keyspawn = false;
 	fps = 60;
 
 	//@pause
@@ -394,8 +400,9 @@ void SceneSP2Room1::Init()
 	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
 	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("Key", Item::Key, Vector3(52, 1, -496));
+	houseItems[3] = new Item("kitchen Key", Item::Key, Vector3(52, 1, -496));
 	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -496));
+	houseItems[5] = new Item("Bedroom Key", Item::Key2, Vector3(52, 1, -496));
 
 	//UI
 	meshList[GEO_CHATBOX] = MeshBuilder::GenerateQuad2("chatbox", 30, 20, 0);
@@ -405,12 +412,15 @@ void SceneSP2Room1::Init()
 
 	//puzzle items
 	meshList[leverbase] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.f, 0.f));
+	meshList[leverbase]->textureID = LoadTGA("Image//base.tga");
 	meshList[leverbase]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[leverhandle] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 1.0f, 0.0f));
+	meshList[leverhandle]->textureID = LoadTGA("Image//handle.tga");
 	meshList[leverhandle]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[painting] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(0.f, 0.f, 1.0f));
+	meshList[painting]->textureID = LoadTGA("Image//painting.tga");
 	meshList[painting]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[safe] = MeshBuilder::GenerateOBJ("Building", "OBJ//safe.obj");
@@ -420,6 +430,12 @@ void SceneSP2Room1::Init()
 	meshList[key] = MeshBuilder::GenerateOBJ("Building", "OBJ//key.obj");
 	meshList[key]->textureID = LoadTGA("Assigment2Images//key.tga");
 	meshList[key]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[flow] = MeshBuilder::GenerateCylinder("flow", 1, 1, 1, 1);
+	meshList[flow]->textureID = LoadTGA("Image//bloody.tga");
+
+	meshList[water] = MeshBuilder::GenerateCube("flow", 1, 1, 1, White);
+	meshList[water]->textureID = LoadTGA("Image//bloody.tga");
 
 	//init update stuff
 	LSPEED = 10.F;
@@ -1027,121 +1043,143 @@ void SceneSP2Room1::Update(double dt)
 		break;
 	}
 
-	origin.Set(38, 7.5, -505);
-	switch (DS_LIVING)
+	if (isUnlocked[kitchen])
 	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
+		origin.Set(38, 7.5, -505);
+		switch (DS_LIVING)
 		{
-			DS_LIVING = CLOSING;
-			Colliderlist[18].setactive(true);
-			camera.setchecker(Colliderlist);
-	
-		}
-		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
-		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
+		case OPEN:
+			//doors close on their own
+			if ((camera.position - origin).Length() >= 20)
 			{
-				Fpressed = false;
 				DS_LIVING = CLOSING;
 				Colliderlist[18].setactive(true);
 				camera.setchecker(Colliderlist);
+
 			}
+			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+			{
+				interact = true;
+				interact_message = "Close Door";
+				if (Fpressed)
+				{
+					Fpressed = false;
+					DS_LIVING = CLOSING;
+					Colliderlist[18].setactive(true);
+					camera.setchecker(Colliderlist);
+				}
+			}
+			break;
+		case CLOSED:
+			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+			{
+				interact = true;
+				interact_message = "Open Door";
+				if (Fpressed)
+				{
+					Fpressed = false;
+					DS_LIVING = OPENING;
+					Colliderlist[18].setactive(false);
+					camera.setchecker(Colliderlist);
+				}
+			}
+			break;
+		case OPENING:
+			rotateY[2] += 20 * float(dt);
+			if (rotateY[2] >= 90)
+			{
+				rotateY[2] = 90;
+				DS_LIVING = OPEN;
+			}
+			break;
+		case CLOSING:
+			rotateY[2] -= 20 * float(dt);
+
+			if (rotateY[2] <= 0)
+			{
+				rotateY[2] = 0;
+				DS_LIVING = CLOSED;
+			}
+			break;
 		}
-		break;
-	case CLOSED:
+	}
+	else
+	{
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 		{
 			interact = true;
-			interact_message = "Open Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_LIVING = OPENING;
-				Colliderlist[18].setactive(false);
-				camera.setchecker(Colliderlist);
-			}
-		}
-		break;
-	case OPENING:
-		rotateY[2] += 20 * float(dt);
-		if (rotateY[2] >= 90)
-		{
-			rotateY[2] = 90;
-			DS_LIVING = OPEN;
-		}
-		break;
-	case CLOSING:
-		rotateY[2] -= 20 * float(dt);
-		
-		if (rotateY[2] <= 0)
-		{
-			rotateY[2] = 0;
-			DS_LIVING = CLOSED;
-		}
-		break;
-	}
+			interact_message = "door locked";
 
-	origin.Set(65.5, 7.5, -505);
-	switch (DS_CONNECTING)
-	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
-		{
-			DS_CONNECTING = CLOSING;
-			Colliderlist[19].setactive(true);
-			camera.setchecker(Colliderlist);
 		}
-		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+	}
+	if (isUnlocked[bedroom])
+	{
+		origin.Set(65.5, 7.5, -505);
+		switch (DS_CONNECTING)
 		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
+		case OPEN:
+			//doors close on their own
+			if ((camera.position - origin).Length() >= 20)
 			{
-				Fpressed = false;
 				DS_CONNECTING = CLOSING;
 				Colliderlist[19].setactive(true);
 				camera.setchecker(Colliderlist);
 			}
+			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+			{
+				interact = true;
+				interact_message = "Close Door";
+				if (Fpressed)
+				{
+					Fpressed = false;
+					DS_CONNECTING = CLOSING;
+					Colliderlist[19].setactive(true);
+					camera.setchecker(Colliderlist);
+				}
+			}
+			break;
+		case CLOSED:
+			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+			{
+				interact = true;
+				interact_message = "Open Door";
+				if (Fpressed)
+				{
+					Fpressed = false;
+					DS_CONNECTING = OPENING;
+					Colliderlist[19].setactive(false);
+					camera.setchecker(Colliderlist);
+				}
+			}
+			break;
+		case OPENING:
+			rotateY[3] -= 20 * float(dt);
+			if (rotateY[3] <= -90)
+			{
+				rotateY[3] = -90;
+				DS_CONNECTING = OPEN;
+			}
+			break;
+		case CLOSING:
+			rotateY[3] += 20 * float(dt);
+
+			if (rotateY[3] >= 0)
+			{
+				rotateY[3] = 0;
+				DS_CONNECTING = CLOSED;
+			}
+			break;
 		}
-		break;
-	case CLOSED:
+	}
+	else
+	{
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
 		{
 			interact = true;
-			interact_message = "Open Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_CONNECTING = OPENING;
-				Colliderlist[19].setactive(false);
-				camera.setchecker(Colliderlist);
-			}
-		}
-		break;
-	case OPENING:
-		rotateY[3] -= 20 * float(dt);
-		if (rotateY[3] <= -90)
-		{
-			rotateY[3] = -90;
-			DS_CONNECTING = OPEN;
-		}
-		break;
-	case CLOSING:
-		rotateY[3] += 20 * float(dt);
+			interact_message = "door locked";
 
-		if (rotateY[3] >= 0)
-		{
-			rotateY[3] = 0;
-			DS_CONNECTING = CLOSED;
 		}
-		break;
 	}
-
 	/*if (campos_z > -337 && campos_x < -29)
 	{
 		nearExit = true;
@@ -1233,6 +1271,7 @@ void SceneSP2Room1::Update(double dt)
 		Application::pause(true);
 	}
 	
+
 
 	//inventory
 	if (Epressed)
@@ -1488,8 +1527,7 @@ void SceneSP2Room1::Update(double dt)
 	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
 	//}
 
-	//lever rotation
-	//rotate_lever += 40 * float(dt);
+
 
 	//puzzles
 	//lever pulling logic 
@@ -1521,6 +1559,58 @@ void SceneSP2Room1::Update(double dt)
 			rotate_lever += 60 * float(dt);
 		else if (rotate_lever >= 60)
 			leverIsPulled = yes;
+	}
+	//sink water states
+	switch (waterstate)
+	{
+	case (notused):
+		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
+		{
+			interact = true;
+			interact_message = "use sink";
+			if (Fpressed)
+			{
+				waterstate = flowing;
+			}
+		}
+		break;
+	case(flowing):
+		if (movewater <= 3.8)
+			movewater += 0.5 * float(dt);
+		else
+		{
+			keyspawn = true;
+			waterstate = reside;
+		}
+		break;
+	case(reside):
+		residepause += float(dt);
+		if (movewater >= 2.4 && residepause >= 1.5)
+		{
+			movewater -= 0.3 * float(dt);
+		}
+		else if (movewater <= 2.4)
+		{
+			waterstate = resided;
+		}
+		break;
+	case(resided):
+		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
+		{
+			interact = true;
+			interact_message = "pick up key";
+
+			if (Fpressed)
+			{
+				PickUpItem(houseItems[5]);
+				houseItems[5] = NULL;
+				Fpressed = false;
+				waterstate = keycollected;
+			}
+		}
+		break;
+	case(keycollected):
+		break;
 	}
 
 
@@ -1693,6 +1783,7 @@ void SceneSP2Room1::RenderPuzzleItems()
 	//modelStack.Scale(5, 15.5, 1);
 	//RenderMesh(meshList[GEO_LEFTDOOR], true);
 	//modelStack.PopMatrix();
+
 }
 
 
@@ -2080,6 +2171,7 @@ void SceneSP2Room1::Render()
 	RenderMesh(meshList[KITCHENSINK], true);
 	modelStack.PopMatrix();//Added collider
 
+
 	modelStack.PushMatrix();
 	modelStack.Translate(52, 0.7, -532);
 	//modelStack.Rotate(, 0, 1, 0);
@@ -2117,6 +2209,33 @@ void SceneSP2Room1::Render()
 		modelStack.PopMatrix();
 	}
 
+	//puzle 2 items
+	if (waterstate == flowing)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(38.8, 3.71, -532.4);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.05, 2, 0.05);
+		RenderMesh(meshList[flow], true);
+		modelStack.PopMatrix();//Added collider
+	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(38.85, movewater, -531.8);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(3.5, 3.5, 3.5);
+	RenderMesh(meshList[water], true);
+	modelStack.PopMatrix();//Added collider
+
+	if (keyspawn && houseItems[5]!=nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(38.8, 5.3, -531.7);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.15, 0.15, 0.15);
+		RenderMesh(meshList[key], true);
+		modelStack.PopMatrix();//Added collider
+	}
 	
 
 	//items
@@ -2483,7 +2602,32 @@ void SceneSP2Room1::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::FLOWER:
+	case Item::Key:
+
+		isUnlocked[kitchen] = true;
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			delete inventory->items[inventory->selected];
+			inventory->items[inventory->selected] = nullptr;
+		}
+		break;
+
+	case Item::Key2:
+
+		isUnlocked[bedroom] = true;
+		if (inventory->items[inventory->selected]->count > 1)
+		{
+			inventory->items[inventory->selected]->count--;
+		}
+		else
+		{
+			delete inventory->items[inventory->selected];
+			inventory->items[inventory->selected] = nullptr;
+		}
 		break;
 	}
 }

@@ -93,6 +93,8 @@ public:
 		leverbase,
 		leverhandle,
 		painting,
+		flow,
+		water,
 		safe,
 		key,
 
@@ -220,7 +222,7 @@ private:
 	Light light[6];
 	CameraSP2 camera;
 	
-	Item* houseItems[5];
+	Item* houseItems[6];
 	float LSPEED;
 	float fps;
 	bool camBlinkOn;
@@ -232,6 +234,7 @@ private:
 	bool nearKey;
 	bool nearWrench;
 	bool interact;
+
 	std::string interact_message;
 //	Mesh* itemImage[8];
 
@@ -296,6 +299,10 @@ private:
 	float rotate_painting;
 	float rotate_lever;
 	float move_safe;
+	float movewater;
+	float residepause;
+	bool keyspawn;
+
 	enum leverPulled
 	{
 		yes,
@@ -303,6 +310,23 @@ private:
 		pulling,
 	};
 	leverPulled leverIsPulled;
+
+	enum WaterState
+	{
+		flowing,
+		reside,
+		resided,
+		notused,
+		keycollected,
+	};
+	WaterState waterstate;
+
+	bool isUnlocked[2];
+	enum DoorUnlocked
+	{
+		kitchen,
+		bedroom
+	};
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
