@@ -615,7 +615,8 @@ void SceneSP2Room2::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(525, 0.5, 100)));
 	traplist.push_back(trap(trap::beartrap, Vector3(510, 0.5, -15)));
 	traplist.push_back(trap(trap::beartrap, Vector3(540, 0.5, 5)));
-
+	//plier
+	plierstaken = false;
 }
 
 void SceneSP2Room2::Set(Scene* scene)
