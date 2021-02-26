@@ -1692,6 +1692,9 @@ void SceneSP2Main::Update(double dt)
 		camera.can_move = true;
 
 
+	if (dt > 1000/60) {
+		dt = 1000 / 60;
+	}
 	switch (SpeakPhase)
 	{
 		//default
@@ -1874,7 +1877,7 @@ void SceneSP2Main::Update(double dt)
 			if (SignTimer > SPEECH_LENGTH_LONG)
 			{
 				SignTimer = 0;
-				showChatbox = false;
+				//showChatbox = false;
 				GarageSign++;
 			}
 			break;

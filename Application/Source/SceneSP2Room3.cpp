@@ -328,6 +328,8 @@ void SceneSP2Room3::Init()
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
 	
+
+	
 	//init update stuff
 	LSPEED = 10.F;
 	flashlight = false;
@@ -672,6 +674,7 @@ void SceneSP2Room3::Update(double dt)
 					garageItems[i] = nullptr;
 					if (garageItems[0] == nullptr)
 					{
+						nearCraft = false;
 						screwDriverFound = 1;
 					}
 				}
@@ -757,7 +760,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (garageItems[0] == nullptr && campos_x < -15 && campos_z < -55 && campos_z > -66 && craftScrewdriver == false)
+	if (campos_x < -15 && campos_z < -55 && campos_z > -66 && garageItems[3] == nullptr && craftScrewdriver == false)
 	{
 		nearCraft = true;
 	}
