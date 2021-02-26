@@ -70,6 +70,7 @@ public:
 		lunchboxplace,
 		notebookplace,
 		mysobjplace,
+		pliers,
 
 		//game tings
 		GEO_SKULL,
@@ -181,7 +182,8 @@ public:
 
 private:
 
-
+	bool PliersText;
+	bool plierstaken;
 	bool itemPlaced[3];
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -190,7 +192,7 @@ private:
 
 	Item* schoolItems[2];
 	Item* PuzzleItems[3];
-	Item* ShelfItems[3];
+	Item* Pliersitem;
 	bool pickUpBattery;
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];

@@ -1204,6 +1204,9 @@ void SceneSP2Main::SetBackground() {
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav",true);
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Heartbeat->setSoundVolume(0.f);
 	Effect->setSoundVolume(0.f);
 	Background->setSoundVolume(0.5f);//Volume control
@@ -3305,9 +3308,11 @@ void SceneSP2Main::Render()
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
-	/*std::ostringstream test1;
-	test1 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);*/
+
+	//test
+	//std::ostringstream test1;
+	//test1 << "cam pos: " << camera.position;
+	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);

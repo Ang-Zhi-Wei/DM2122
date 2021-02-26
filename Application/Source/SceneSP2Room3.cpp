@@ -65,7 +65,7 @@ void SceneSP2Room3::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, -5), Vector3(0, 9, -25), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 9, 465), Vector3(0, 9, 485), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	SpeakTimer = 0;
@@ -245,10 +245,10 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-
-	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
-	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(25, 0, -60));
-	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(24.5, 5.2, -45));
+	garageItems[0] = nullptr;
+	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(22, 7.8, 555));
+	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(-25, 0, 520));
+	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(-24.5, 5.2, 505));
 
 
 	
@@ -355,98 +355,52 @@ void SceneSP2Room3::Init()
 
 
 
-
-	
-
-
-
-	//doors
-	school_door[0].mid.Set(-2.5, 5, 0);
-	school_door[1].mid.Set(2.5, 5, 0);
-	lounge_door[0].mid.Set(-10, 5, -47.5);
-	lounge_door[1].mid.Set(-10, 5, -52.5);
-	classroom_door[0].mid.Set(10, 5, -97.5);
-	classroom_door[1].mid.Set(10, 5, -92.5);
-	school_door[0].lengthx = 5;
-	school_door[1].lengthx = 5;
-	lounge_door[0].lengthz = 5;
-	lounge_door[1].lengthz = 5;
-	classroom_door[0].lengthz = 5;
-	classroom_door[1].lengthz = 5;
-	for (int i = 0; i < 6; i++)
-	{
-		all_doors[i]->lengthy = 10;
-	}
-	school_door[0].rotateY = -90;
-	school_door[1].rotateY = 90;
-	
-	//chairs/table
-	for (int row = 0; row < 4; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			classroom_tables[row * 5 + col].mid.Set(float(40 + row * 15), float(3), float(-80 + (col * 15)));
-			classroom_tables[row * 5 + col].lengthx = 5; //not sure since obj
-			classroom_tables[row * 5 + col].lengthz = 5; //not sure since obj
-			//lengthy unset
-			classroom_chairs[row * 5 + col].mid.Set(float(40 + row * 15 + 5), float(3), float(-80 + (col * 15)));
-			classroom_chairs[row * 5 + col].lengthx = 5; //not sure since obj
-			classroom_chairs[row * 5 + col].lengthz = 5; //not sure since obj
-			//lengthy unset
-		}
-	}
-	lounge_table.mid.Set(-105, 2.5, -30); //y value estimated
-	lounge_table.lengthx = 10; //not sure since obj
-	lounge_table.lengthz = 20; //not sure since obj
-	//lengthy unset
-
-
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(28.f, -0.2f, -80.f));
+	Lockerlist[0].setpos(Vector3(-28.f, -0.2f, 540.f));
 	Lockerlist[0].setyaw(180);
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(5, 25, 100);
-	Colliderlist[0].Setposition(Vector3(30, 12, -50));
+	Colliderlist[0].Setposition(Vector3(-30, 12, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[1].setlength(5, 25, 100);
-	Colliderlist[1].Setposition(Vector3(-30, 12, -50));
+	Colliderlist[1].Setposition(Vector3(30, 12, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[2].setlength(100, 25, 5);
-	Colliderlist[2].Setposition(Vector3(0, 12, -100));
+	Colliderlist[2].Setposition(Vector3(0, 12, 560));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[3].setlength(20, 30, 5);
-	Colliderlist[3].Setposition(Vector3(-25, 12, 2));
+	Colliderlist[3].Setposition(Vector3(25, 12, 458));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[4].setlength(20, 30, 5);
-	Colliderlist[4].Setposition(Vector3(25, 12, 2));
+	Colliderlist[4].Setposition(Vector3(-25, 12, 458));
 	//random objects colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[5].setlength(5, 20, 7);
-	Colliderlist[5].Setposition(Vector3(10, 0, -34));
+	Colliderlist[5].Setposition(Vector3(-10, 0, 494));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(7, 20, 3);
-	Colliderlist[6].Setposition(Vector3(-20, 0, -95));
+	Colliderlist[6].Setposition(Vector3(20, 0, 555));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(4.5, 20,12.5);
-	Colliderlist[7].Setposition(Vector3 (- 20, 4, -60));
+	Colliderlist[7].Setposition(Vector3 (20, 4, 520));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[8].setlength(17, 20, 38);
-	Colliderlist[8].Setposition(Vector3(0, 1.5, -50));
+	Colliderlist[8].Setposition(Vector3(0, 1.5, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[9].setlength(12, 20, 13);
-	Colliderlist[9].Setposition(Vector3(-25.f, 1.2f, -22.f));
+	Colliderlist[9].Setposition(Vector3(25.f, 1.2f, 482.f));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[10].setlength(12, 20, 12.5);
-	Colliderlist[10].Setposition(Vector3(25.f, 0.8f, -30.f));
+	Colliderlist[10].Setposition(Vector3(-25.f, 0.8f, 490.f));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[11].setlength(10, 20, 19);
-	Colliderlist[11].Setposition(Vector3(26, 4, -47));
+	Colliderlist[11].Setposition(Vector3(-26, 4, 507));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(11.5, 20, 5.5);
-	Colliderlist[12].Setposition(Vector3(25, 8, -94.5));
+	Colliderlist[12].Setposition(Vector3(-25, 8, 554.5));
 	//Locker collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(3.9, 10, 4.3);
@@ -454,7 +408,7 @@ void SceneSP2Room3::Init()
 	//Garage door collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[14].setlength(30, 10, 5);
-	Colliderlist[14].Setposition(Vector3(0, 2.1, 2));
+	Colliderlist[14].Setposition(Vector3(0, 2.1, 458));
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[14].getxlength(), Colliderlist[14].getylength(), Colliderlist[14].getzlength());
 
@@ -478,28 +432,25 @@ void SceneSP2Room3::Init()
 	camera.setchecker(Colliderlist);
 	
 	//Set boundary here
-	camera.SetBounds(-415, 415, -365, 360);
+	camera.SetBounds(-415, 415, 95, 820);
 
-	ghost = new Ghost;
-	inventory = new Inventory;
+	ghost = nullptr;
+	inventory = nullptr;
 
 	//camblink
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
-	//door state
-	DS_classroom = CLOSED;
-	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	
 
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-10, 0, 470)));
+	traplist.push_back(trap(trap::beartrap, Vector3(25, 0, 525)));
 
 	//death timer
 	deathtimer = 0;
@@ -544,6 +495,8 @@ void SceneSP2Room3::Set(Scene* scene)
 	//Craft 
 	nearCraft = false;
 	craftScrewdriver = false;
+
+	Application::SetCursorPos(0, camera.mousePosY);
 }
 
 void SceneSP2Room3::SetBackground()
@@ -564,6 +517,9 @@ void SceneSP2Room3::SetBackground()
 	if (!Heartbeat) {
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
 	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
@@ -660,12 +616,6 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (nearCraft == true && Rpressed == true)
-	{
-		garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-21, 7.1, -65));
-		craftScrewdriver = true;
-
-	}
 
 	if (garageItems[3] == nullptr && isTalking == false)
 	{
@@ -677,7 +627,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 
-	//items - batteries
+	//items 
 	pickUpItem = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -692,7 +642,7 @@ void SceneSP2Room3::Update(double dt)
 					PickUpItem(garageItems[i]);
 					Fpressed = false;
 					garageItems[i] = nullptr;
-					if (garageItems[0] == nullptr)
+					if (i == 0)
 					{
 						nearCraft = false;
 						screwDriverFound = 1;
@@ -770,7 +720,7 @@ void SceneSP2Room3::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_z > -8 && campos_x > -14 && campos_x < 14)
+	if (campos_z < 468 && campos_x < 14 && campos_x > -14)
 	{
 		nearExit = true;
 	}
@@ -781,7 +731,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 
-	if (campos_x < -15 && campos_z < -55 && campos_z > -66 && garageItems[3] == nullptr && craftScrewdriver == false)
+	if (campos_x > 15 && campos_z > 515 && campos_z < 526 && garageItems[3] == nullptr && craftScrewdriver == false)
 	{
 		nearCraft = true;
 	}
@@ -854,41 +804,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	//inventory
-	if (Epressed)
-	{
-		inventory->open = !inventory->open;
-		Epressed = false;
-	}
-	if (inventory->open)
-	{
-		camera.can_move = false;
-		if (Apressed)
-		{
-			inventory->selected--;
-			if (inventory->selected == -1)
-			{
-				inventory->selected = 7;
-			}
-			Apressed = false;
-		}
-		else if (Dpressed)
-		{
-			inventory->selected++;
-			inventory->selected %= 8;
-			Dpressed = false;
-		}
-		else if (Rpressed)
-		{
-			if (inventory->items[inventory->selected] != nullptr)
-			{
-				UseItem(inventory->items[inventory->selected]->type);
-			}
-			//else warning that no item selected?
-			Rpressed = false;
-		}
-	}
-
+	
 	//inventory
 	if (Epressed)
 	{
@@ -1003,164 +919,7 @@ void SceneSP2Room3::Update(double dt)
 
 	//INTERACTION CHECKS
 	interact = false;
-	Vector3 origin(0, 5, 0);
-	//doors
-	switch (DS_school)
-	{
-	case OPEN:
-		//doors close on their own
-		/*if ((camera.position - origin).Length() >= 20)
-		{
-			DS_school = CLOSING;
-		}
-		if (camera.position.x <= 5 && camera.position.x >= -5 && camera.position.z <= -1 && camera.position.z >= -10)
-		{
-			interact = true;
-			interact_message = "Exit School";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				Application::setscene(Scene_Main);
-			}
-		}
-		break;
-	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -5 && camera.position.z <= -1 && camera.position.z >= -10)
-		{
-			interact = true;
-			interact_message = "Exit School";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_school = OPENING;
-			}
-		}*/
-		break;
-	case OPENING:
-		school_door[0].rotateY -= 20 * float(dt);
-		school_door[1].rotateY += 20 * float(dt);
-		if (school_door[1].rotateY >= 90)
-		{
-			Application::setscene(Scene_Main);
-		}
-		break;
-	case CLOSING:
-		school_door[0].rotateY += float(20 * dt);
-		school_door[1].rotateY -= float(20 * dt);
-		if (school_door[1].rotateY <= 0)
-		{
-			DS_school = CLOSED;
-		}
-		break;
-	}
 
-	origin.Set(10, 5, -95);
-	switch (DS_classroom)
-	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
-		{
-			DS_classroom = CLOSING;
-		}
-		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
-		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_classroom = CLOSING;
-
-				
-			}
-		}
-		break;
-	case CLOSED:
-		if (camera.position.x <= 15 && camera.position.x >= 5 && camera.position.z <= -90 && camera.position.z >= -100)
-		{
-			interact = true;
-			interact_message = "Open Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_classroom = OPENING;
-				
-			}
-		}
-		break;
-	case OPENING:
-		classroom_door[0].rotateY += 20 * float(dt);
-		classroom_door[1].rotateY -= 20 * float(dt);
-		if (classroom_door[0].rotateY >= 90)
-		{
-			classroom_door[0].rotateY = 90;
-			DS_classroom = OPEN;
-		}
-		break;
-	case CLOSING:
-		classroom_door[0].rotateY -= 20 * float(dt);
-		classroom_door[1].rotateY += 20 * float(dt);
-	
-		if (classroom_door[0].rotateY <= 0)
-		{
-			classroom_door[0].rotateY = 0;
-			DS_classroom = CLOSED;
-		}
-		break;
-	}
-
-	origin.Set(-10, 5, -50);
-	switch (DS_lounge)
-	{
-	case OPEN:
-		//doors close on their own
-		if ((camera.position - origin).Length() >= 20)
-		{
-			DS_lounge = CLOSING;
-		}
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
-		{
-			interact = true;
-			interact_message = "Close Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_lounge = CLOSING;
-			}
-		}
-		break;
-	case CLOSED:
-		if (camera.position.x <= 5 && camera.position.x >= -10 && camera.position.z <= -45 && camera.position.z >= -55)
-		{
-			interact = true;
-			interact_message = "Open Door";
-			if (Fpressed)
-			{
-				Fpressed = false;
-				DS_lounge = OPENING;
-			}
-		}
-		break;
-	case OPENING:
-		lounge_door[0].rotateY += 20 * float(dt);
-		lounge_door[1].rotateY -= 20 * float(dt);
-		if (lounge_door[0].rotateY >= 90)
-		{
-			lounge_door[0].rotateY = 90;
-			DS_lounge = OPEN;
-		}
-		break;
-	case CLOSING:
-		lounge_door[0].rotateY -= float(20 * dt);
-		lounge_door[1].rotateY += float(20 * dt);
-		if (lounge_door[0].rotateY <= 0)
-		{
-			lounge_door[0].rotateY = 0;
-			DS_lounge = CLOSED;
-		}
-		break;
-	}
 	//ghost
 	switch (ghost->state)
 	{
@@ -1546,174 +1305,177 @@ void SceneSP2Room3::Render()
 	
 
 
-	//all doors
-	//schoolleft
 	
 	modelStack.PushMatrix();
-	modelStack.Translate(30, 12, -50);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(25, 1, 100);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-30, 12, -50);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(25, 1, 100);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();//Added collider
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 12, -100);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(30, 2, 130);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-25, 12,2);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(30, 2, 20);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(25, 12, 2);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(30, 2, 20);
-	RenderMesh(meshList[GEO_WALL], true);
-	modelStack.PopMatrix();//Added collider
-
-
-
-	//school floor
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -50);
-	modelStack.Scale(165, 1, 100);
-	modelStack.Rotate(-90, 1, 0, 0);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
-	//school ceiling
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 25, -50);
-	modelStack.Scale(165, 1, 100);
-	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
-	//longtable in faculty lounge
-	//@obj
-	modelStack.PushMatrix();
-	modelStack.Translate(10, 0, -35);
-	modelStack.Scale(0.4f, 0.4f, 0.4f);
-	RenderMesh(meshList[tire], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 0, -95);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(0.08f, 0.08f, 0.08f);
-	RenderMesh(meshList[shelves], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 4, -60);
-	//modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(6,6,6);
-	RenderMesh(meshList[garagetable], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 1.5,-50);
-	modelStack.Scale(0.13f, 0.13f, 0.13f);
-	RenderMesh(meshList[rustycar], true);
-	modelStack.PopMatrix();//Added collider
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(-22.f, 1.2f, -25.f);
+	modelStack.Translate(0, 0, 460);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(0.1f, 0.1f, 0.1f);
-	RenderMesh(meshList[rustychair], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(25.f, 0.8f, -30.f);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(0.05f, 0.05f, 0.05f);
-	RenderMesh(meshList[barrels], true);
-	modelStack.PopMatrix();//Added collider
-
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(25, 0.8, -30);
-	//modelStack.Rotate(90, 0, 1, 0);
-	//modelStack.Scale(2, 2, 2);
-	//RenderMesh(meshList[workbench], true);
-	//modelStack.PopMatrix();
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(30, 4, -40);
-	//modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(19, 19, 19);
-	RenderMesh(meshList[wheelbarrow], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(25, 8, -95);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[metalcabinet], true);
-	modelStack.PopMatrix();//Added collider
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 2.1, 1);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(0.1, 0.12, 0.155);
-	RenderMesh(meshList[garagedoor], true);
-	modelStack.PopMatrix();
-
-	if (garageItems[0] != nullptr)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(-19, 7.7, -63);
-		//modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.27, 0.27, 0.27);
-		RenderMesh(meshList[screwdriver], true);
-		modelStack.PopMatrix();
-	}
-
-	if (garageItems[3] != nullptr) {
-		modelStack.PushMatrix();
-		modelStack.Translate(24.5, 5.2, -45);
-		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Translate(30, 12, -50);
 		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Scale(0.04, 0.04, 0.04);
-		RenderMesh(meshList[HANDSAW], true);
-		modelStack.PopMatrix();
-	}
+		modelStack.Scale(25, 1, 100);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();//Added collider
 
-	//batteries
-	if (garageItems[1] != nullptr) {
 		modelStack.PushMatrix();
-		modelStack.Translate(-22, 7.8, -95);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.03, 0.03, 0.03);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
+		modelStack.Translate(-30, 12, -50);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(25, 1, 100);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();//Added collider
 
-	if (garageItems[2] != nullptr) {
 		modelStack.PushMatrix();
-		modelStack.Translate(25, 0, -60);
+		modelStack.Translate(0, 12, -100);
+		modelStack.Rotate(90, 1, 0, 0);
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.06, 0.06, 0.06);
-		RenderMesh(meshList[BATTERY], true);
-		modelStack.PopMatrix();
-	}
+		modelStack.Scale(30, 2, 130);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();//Added collider
 
+		modelStack.PushMatrix();
+		modelStack.Translate(-25, 12, 2);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(30, 2, 20);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(25, 12, 2);
+		modelStack.Rotate(90, 1, 0, 0);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(30, 2, 20);
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();//Added collider
+
+
+
+		//school floor
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, -50);
+		modelStack.Scale(165, 1, 100);
+		modelStack.Rotate(-90, 1, 0, 0);
+		RenderMesh(meshList[GEO_QUAD], true);
+		modelStack.PopMatrix();
+		//school ceiling
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 25, -50);
+		modelStack.Scale(165, 1, 100);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[GEO_QUAD], true);
+		modelStack.PopMatrix();
+		//longtable in faculty lounge
+		//@obj
+		modelStack.PushMatrix();
+		modelStack.Translate(10, 0, -35);
+		modelStack.Scale(0.4f, 0.4f, 0.4f);
+		RenderMesh(meshList[tire], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 0, -95);
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Scale(0.08f, 0.08f, 0.08f);
+		RenderMesh(meshList[shelves], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-20, 4, -60);
+		//modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Scale(6, 6, 6);
+		RenderMesh(meshList[garagetable], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 1.5, -50);
+		modelStack.Scale(0.13f, 0.13f, 0.13f);
+		RenderMesh(meshList[rustycar], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-22.f, 1.2f, -25.f);
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Scale(0.1f, 0.1f, 0.1f);
+		RenderMesh(meshList[rustychair], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(25.f, 0.8f, -30.f);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
+		RenderMesh(meshList[barrels], true);
+		modelStack.PopMatrix();//Added collider
+
+
+		//modelStack.PushMatrix();
+		//modelStack.Translate(25, 0.8, -30);
+		//modelStack.Rotate(90, 0, 1, 0);
+		//modelStack.Scale(2, 2, 2);
+		//RenderMesh(meshList[workbench], true);
+		//modelStack.PopMatrix();
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(30, 4, -40);
+		//modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(19, 19, 19);
+		RenderMesh(meshList[wheelbarrow], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(25, 8, -95);
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[metalcabinet], true);
+		modelStack.PopMatrix();//Added collider
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 2.1, 1);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.1, 0.12, 0.155);
+		RenderMesh(meshList[garagedoor], true);
+		modelStack.PopMatrix();
+
+		if (garageItems[0] != nullptr)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(-19, 7.7, -63);
+			//modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.27, 0.27, 0.27);
+			RenderMesh(meshList[screwdriver], true);
+			modelStack.PopMatrix();
+		}
+
+		if (garageItems[3] != nullptr) {
+			modelStack.PushMatrix();
+			modelStack.Translate(24.5, 5.2, -45);
+			modelStack.Rotate(90, 1, 0, 0);
+			modelStack.Rotate(90, 0, 0, 1);
+			modelStack.Scale(0.04, 0.04, 0.04);
+			RenderMesh(meshList[HANDSAW], true);
+			modelStack.PopMatrix();
+		}
+
+		//batteries
+		if (garageItems[1] != nullptr) {
+			modelStack.PushMatrix();
+			modelStack.Translate(-22, 7.8, -95);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.03, 0.03, 0.03);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
+
+		if (garageItems[2] != nullptr) {
+			modelStack.PushMatrix();
+			modelStack.Translate(25, 0, -60);
+			modelStack.Rotate(90, 0, 1, 0);
+			modelStack.Scale(0.06, 0.06, 0.06);
+			RenderMesh(meshList[BATTERY], true);
+			modelStack.PopMatrix();
+		}
+	}
+	modelStack.PopMatrix();
 	//ghost
 	modelStack.PushMatrix();
 	modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
@@ -1741,19 +1503,7 @@ void SceneSP2Room3::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	/*modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();*/
+	
 
 	
 	
@@ -1810,7 +1560,7 @@ void SceneSP2Room3::Render()
 			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		}
 		RenderTextOnScreen(meshList[GEO_TEXT], "I can craft a screwdriver now..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press R to to craft", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Use handsaw to craft", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
 	if (nearExit == true) {
@@ -1928,6 +1678,10 @@ void SceneSP2Room3::Render()
 	//pause menu, place all the way at the bottom in render
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
+
+	/*std::ostringstream test1;
+	test1 << "cam pos: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);*/
 }
 
 void SceneSP2Room3::Exit()
@@ -2037,7 +1791,13 @@ void SceneSP2Room3::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::FLOWER:
+	case Item::Handsaw:
+		if (nearCraft == true)
+		{
+			garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(19, 7.1, 523));
+			craftScrewdriver = true;
+			//handsaw not used up, no deletion
+		}
 		break;
 	}
 }

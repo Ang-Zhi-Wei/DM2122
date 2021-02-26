@@ -9,25 +9,14 @@
 SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
-	LSPEED = 10.F;
-	flashlight = false;
-	flashlight_lifetime = 90;
-	inLocker = false;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
+
 	camBlinkOffSec = 0;
 	showSideBox = true;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
 	interact = false;
-	DS_classroom = CLOSED;
-	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	
 	fps = 60;
 
 	rotateobj1 = 28;
@@ -36,18 +25,12 @@ SceneSP2Room2::SceneSP2Room2()
 	puzzleItemPlaced[notebookItem] = false;
 	puzzleItemPlaced[lunchboxItem] = false;
 	puzzleItemPlaced[dilucItem] = false;
-	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];*/
+	
 
 	//@pause
 	gamepaused = false;
 	PKeypressed = PKeyreleased = false;
+	plierstaken = false;
 	//======
 }
 
@@ -190,6 +173,7 @@ void SceneSP2Room2::Init()
 
 	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
 	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
+	Pliersitem = new Item("Pliers", Item::Pliers, Vector3(491, 4.5, 85));
 
 	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
 	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
@@ -204,6 +188,10 @@ void SceneSP2Room2::Init()
 	meshList[notebook] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
 	meshList[notebook]->textureID = LoadTGA("Image//booktex.tga");
 	meshList[notebook]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[pliers] = MeshBuilder::GenerateOBJ("Book", "OBJ//pliers.obj");
+	meshList[pliers]->textureID = LoadTGA("Image//pliers.tga");
+	meshList[pliers]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[mysobj] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
 	meshList[mysobj]->textureID = LoadTGA("Image//bloody.tga");
@@ -697,6 +685,9 @@ void SceneSP2Room2::SetBackground()
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
@@ -848,6 +839,24 @@ void SceneSP2Room2::Update(double dt)
 	{
 		placeitemtext = true;
 		interact_message = "Place lost item";
+	}
+
+	//Pickpliers
+	PliersText = false;
+	if (puzzleItemPlaced[lunchboxItem] && puzzleItemPlaced[notebookItem] && puzzleItemPlaced[dilucItem])
+	{
+		if (camera.position.z <= -98 && camera.position.z >= -104 && camera.position.x >= 490 && camera.position.x <= 497 && !plierstaken)
+		{
+			PliersText = true;
+			if (Fpressed == true)
+			{
+				PickUpItem(Pliersitem);
+				Pliersitem = NULL;
+				Fpressed = false;
+				plierstaken = true;
+
+			}
+		}
 	}
 
 	if (!Application::IsKeyPressed('E'))
@@ -1190,6 +1199,7 @@ void SceneSP2Room2::Update(double dt)
 		//doors close on their own
 		if ((camera.position - origin).Length() >= 20)
 		{
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			DS_school = CLOSING;
 		}
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x <= 480 && camera.position.x >= 471)
@@ -1217,6 +1227,7 @@ void SceneSP2Room2::Update(double dt)
 			if (Fpressed)
 			{
 				Fpressed = false;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				DS_school = OPENING;
 			}
 		}
@@ -1254,6 +1265,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_classroom = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[13].setactive(true);
 			Colliderlist[14].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1266,6 +1278,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(true);
 				Colliderlist[14].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1283,6 +1296,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(false);
 				Colliderlist[14].setactive(false);
 				camera.setchecker(Colliderlist);
@@ -1319,6 +1333,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_lounge = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[15].setactive(true);
 			Colliderlist[16].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1331,6 +1346,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(true);
 				Colliderlist[16].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1346,6 +1362,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(false);
 				Colliderlist[16].setactive(false);
 				camera.setchecker(Colliderlist);
@@ -1644,6 +1661,16 @@ void SceneSP2Room2::RenderPuzzleObjects()
 		modelStack.Scale(1.5, 1.5, 1.5);
 		modelStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[mysobj], true);
+		modelStack.PopMatrix();
+	}
+
+	if (puzzleItemPlaced[lunchboxItem] && puzzleItemPlaced[notebookItem] && puzzleItemPlaced[dilucItem] && Pliersitem!=nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(495, 5, -102);
+		modelStack.Scale(0.15, 0.15, 0.15);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[pliers], true);
 		modelStack.PopMatrix();
 	}
 
@@ -1968,21 +1995,22 @@ void SceneSP2Room2::Render()
 		modelStack.PopMatrix();
 	}
 
-	//modelStack.PushMatrix();
-	//std::stringstream posx;
-	//posx.precision(4);
-	//posx << "X:" << campos_x;
-	//RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	//modelStack.PopMatrix();
+	//comment out later
+	modelStack.PushMatrix();
+	std::stringstream posx;
+	posx.precision(4);
+	posx << "X:" << campos_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//std::stringstream posz;
-	//posz.precision(4);
-	//posz << "Z:" << campos_z;
-	//RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	std::stringstream posz;
+	posz.precision(4);
+	posz << "Z:" << campos_z;
+	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	modelStack.PopMatrix();
 
-
+	// my god so many booleans just for texts
 	if (pickUpBattery)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
@@ -1996,6 +2024,11 @@ void SceneSP2Room2::Render()
 	if (placeitemtext)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 0.f), 4.f, 20.f, 5.f);
+	}
+
+	if (PliersText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Pick up pliers", Color(1.f, 1.f, 0.f), 4.f, 20.f, 5.f);
 	}
 	
 	//UI OVERLAY
@@ -2186,10 +2219,6 @@ void SceneSP2Room2::Exit()
 		if (PuzzleItems[i] != nullptr)
 		{
 			delete PuzzleItems[i];
-		}
-		if (ShelfItems[i] != nullptr)
-		{
-			delete ShelfItems[i];
 		}
 	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);

@@ -716,6 +716,7 @@ void SceneSP2Room4::UseItem(int itemname)
 		{
 			
 			itemplaced[body_op] = true;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			DS_main = OPENING;
 			if (inventory->items[inventory->selected]->count > 1)
 			{
@@ -802,6 +803,9 @@ void SceneSP2Room4::SetBackground()
 	if (!Heartbeat) {
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
 	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
@@ -1070,7 +1074,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (nearExit == true && Fpressed == true)
+	if (nearExit == true && Fpressed == true && itemplaced[body_op])
 	{
 		exitHospital = true;
 		Fpressed = false;
@@ -1114,6 +1118,7 @@ void SceneSP2Room4::Update(double dt)
 		if ((camera.position - origin).Length() >= 20 && !itemplaced[body_op])
 		{
 			DS_main = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 		}
 		if (camera.position.z >= -5 && camera.position.z <= 5 && camera.position.x <= -471 && camera.position.x >= -480)
 		{
@@ -1167,6 +1172,7 @@ void SceneSP2Room4::Update(double dt)
 			{
 				Fpressed = false;
 				DS_opRoom = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[20].setactive(false);
 				camera.setchecker(Colliderlist);
 			}
