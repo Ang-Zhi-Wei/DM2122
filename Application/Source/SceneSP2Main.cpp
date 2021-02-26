@@ -1874,7 +1874,7 @@ void SceneSP2Main::Update(double dt)
 			if (SignTimer > SPEECH_LENGTH_LONG)
 			{
 				SignTimer = 0;
-				showChatbox = false;
+				//showChatbox = false;
 				GarageSign++;
 			}
 			break;
