@@ -9,25 +9,14 @@
 SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
-	LSPEED = 10.F;
-	flashlight = false;
-	flashlight_lifetime = 90;
-	inLocker = false;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
+
 	camBlinkOffSec = 0;
 	showSideBox = true;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
 	interact = false;
-	DS_classroom = CLOSED;
-	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	
 	fps = 60;
 
 	rotateobj1 = 28;
@@ -36,14 +25,7 @@ SceneSP2Room2::SceneSP2Room2()
 	puzzleItemPlaced[notebookItem] = false;
 	puzzleItemPlaced[lunchboxItem] = false;
 	puzzleItemPlaced[dilucItem] = false;
-	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];*/
+	
 
 	//@pause
 	gamepaused = false;
