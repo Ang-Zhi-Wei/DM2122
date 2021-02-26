@@ -19,15 +19,7 @@ SceneSP2Room1::SceneSP2Room1()
 	nearWrench = false;
 	camBlinkOnSec = 0;
 	showSideBox = true;
-	LSPEED = 10.F;
-	flashlight = false;
-	flashlight_lifetime = 90;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
+
 	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
 	jumpscareEntrance1 = 0;
 	jumpscareActive1 = false;
@@ -398,11 +390,13 @@ void SceneSP2Room1::Init()
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
+	ghost = nullptr;
+	inventory = nullptr;
 
 	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
 	houseItems[2] = new Item("Battery", Item::BATTERY, Vector3(52, 1, -496));
-	houseItems[3] = new Item("kitchen Key", Item::Key, Vector3(52, 1, -496));
+	houseItems[3] = new Item("Kitchen Key", Item::Key, Vector3(52, 1, -496));
 	houseItems[4] = new Item("Wrench", Item::Wrench, Vector3(52, 1, -496));
 	houseItems[5] = new Item("Bedroom Key", Item::Key2, Vector3(52, 1, -496));
 
@@ -446,6 +440,9 @@ void SceneSP2Room1::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 	DS_MAIN = OPEN;
 	DS_LIVING = DS_HALL = DS_CONNECTING = CLOSED;
 	rotateY[0] = 90;
@@ -562,6 +559,10 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[30].setlength(3, 15, 12);
 	Colliderlist[30].Setposition(Vector3(50, 0, -480));
+	//default active
+	for (int i = 0; i < Colliderlist.size(); i++) {
+		Colliderlist[i].setactive(true);
+	}
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[30].getxlength(), Colliderlist[30].getylength(), Colliderlist[30].getzlength());
 	//list of colliders
@@ -586,6 +587,11 @@ void SceneSP2Room1::Init()
 	rotate_lever = -60;
 	leverIsPulled = no;
 	move_safe = 64.5;
+	//door unlock and key
+	isUnlocked[kitchen] = false;
+	isUnlocked[bedroom] = false;
+	keyspawn = false;
+	waterstate = notused;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
@@ -630,6 +636,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	}
 	//death timer
 	deathtimer = 0;
+	
 }
 
 void SceneSP2Room1::SetBackground()
@@ -649,6 +656,9 @@ void SceneSP2Room1::SetBackground()
 	if (!Heartbeat) {
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
+	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
 	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
@@ -956,6 +966,7 @@ void SceneSP2Room1::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_MAIN = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 		}
 		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
@@ -983,6 +994,7 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_MAIN = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			}
 		}
 		else {
@@ -1018,6 +1030,7 @@ void SceneSP2Room1::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_HALL = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[17].setactive(true);
 			camera.setchecker(Colliderlist);
 		}
@@ -1029,6 +1042,7 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_HALL = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[17].setactive(true);
 				camera.setchecker(Colliderlist);
 			}
@@ -1043,6 +1057,7 @@ void SceneSP2Room1::Update(double dt)
 			{
 				Fpressed = false;
 				DS_HALL = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[17].setactive(false);
 				camera.setchecker(Colliderlist);
 			}
@@ -1077,6 +1092,7 @@ void SceneSP2Room1::Update(double dt)
 			if ((camera.position - origin).Length() >= 20)
 			{
 				DS_LIVING = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[18].setactive(true);
 				camera.setchecker(Colliderlist);
 
@@ -1089,6 +1105,7 @@ void SceneSP2Room1::Update(double dt)
 				{
 					Fpressed = false;
 					DS_LIVING = CLOSING;
+					Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 					Colliderlist[18].setactive(true);
 					camera.setchecker(Colliderlist);
 				}
@@ -1103,6 +1120,7 @@ void SceneSP2Room1::Update(double dt)
 				{
 					Fpressed = false;
 					DS_LIVING = OPENING;
+					Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 					Colliderlist[18].setactive(false);
 					camera.setchecker(Colliderlist);
 				}
@@ -1132,7 +1150,7 @@ void SceneSP2Room1::Update(double dt)
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 		{
 			interact = true;
-			interact_message = "door locked";
+			interact_message = "Door locked";
 
 		}
 	}
@@ -1146,6 +1164,7 @@ void SceneSP2Room1::Update(double dt)
 			if ((camera.position - origin).Length() >= 20)
 			{
 				DS_CONNECTING = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[19].setactive(true);
 				camera.setchecker(Colliderlist);
 			}
@@ -1157,6 +1176,7 @@ void SceneSP2Room1::Update(double dt)
 				{
 					Fpressed = false;
 					DS_CONNECTING = CLOSING;
+					Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 					Colliderlist[19].setactive(true);
 					camera.setchecker(Colliderlist);
 				}
@@ -1171,6 +1191,7 @@ void SceneSP2Room1::Update(double dt)
 				{
 					Fpressed = false;
 					DS_CONNECTING = OPENING;
+					Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 					Colliderlist[19].setactive(false);
 					camera.setchecker(Colliderlist);
 				}
@@ -1200,7 +1221,7 @@ void SceneSP2Room1::Update(double dt)
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
 		{
 			interact = true;
-			interact_message = "door locked";
+			interact_message = "Door locked";
 
 		}
 	}
@@ -1480,84 +1501,6 @@ void SceneSP2Room1::Update(double dt)
 
 
 
-	////Jumpscare, living room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 40)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	//{
-	//	jumpscareTimerActive2 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive2 = false;
-	//	jumpscareActive2 = false;
-	//}
-	//if (jumpscareTimerActive2 == true)
-	//	jumpscareTimer2 -= dt;
-
-	//if ((jumpscareTimer2 >= 0.5) && (jumpscareTimer2 <= jumpscareTimerReset2 - 0.2))
-	//{
-	//	jumpscareActive2 = false;
-	//}
-	//if (jumpscareTimer2 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive2 = true;
-	//	jumpscareTimer2 = jumpscareTimerReset2 = double(rand() % 5 + double(5));
-	//}
-
-
-
-	////Jumpscare, Connecting room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 28) && (camera.position.x <= 70)) && ((camera.position.z >= -535) && (camera.position.z <= -505)))
-	//{
-	//	jumpscareTimerActive3 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive3 = false;
-	//	jumpscareActive3 = false;
-	//}
-	//if (jumpscareTimerActive3 == true)
-	//	jumpscareTimer3 -= dt;
-	//if ((jumpscareTimer3 >= 0.5) && (jumpscareTimer3 <= jumpscareTimerReset3 - 0.2))
-	//{
-	//	jumpscareActive3 = false;
-	//}
-	//if (jumpscareTimer3 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive3 = true;	
-	//	jumpscareTimer3 = jumpscareTimerReset3 = double(rand() % 5 + double(5));
-	//}
-
-
-
-	////Jumpscare, Final room
-	//if ((camera.position.y >= 0) && ((camera.position.x >= 50)&& (camera.position.x <= 70)) && ((camera.position.z >= -505) && (camera.position.z <= -430)))
-	//{
-	//	jumpscareTimerActive4 = true;
-	//}
-	//else
-	//{
-	//	jumpscareTimerActive4 = false;
-	//	jumpscareActive4 = false;
-	//}
-	//if (jumpscareTimerActive4 == true)
-	//	jumpscareTimer4 -= dt;
-
-	//if ((jumpscareTimer4 >= 0.5) && (jumpscareTimer4 <= jumpscareTimerReset4 - 0.2))
-	//{
-	//	jumpscareActive4 = false;
-	//}
-	//if (jumpscareTimer4 <= 0)
-	//{
-	//	Jumpscare->play2D("Sound\\Jumpscares\\Horror_Sound_Effects_For_Youtubers_-_No_Copyrighted_SFX_For_Video_Editing (mp3cut.net).wav", false);
-	//	Jumpscare->setSoundVolume(1.f);
-	//	jumpscareActive4 = true;
-	//	jumpscareTimer4 = jumpscareTimerReset4 = rand() % 5 + double(5);
-	//}
-
 
 
 	//puzzles
@@ -1598,7 +1541,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
 		{
 			interact = true;
-			interact_message = "use sink";
+			interact_message = "Use sink";
 			if (Fpressed)
 			{
 				waterstate = flowing;
@@ -1629,7 +1572,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
 		{
 			interact = true;
-			interact_message = "pick up key";
+			interact_message = "Pick up key";
 
 			if (Fpressed)
 			{
@@ -2070,9 +2013,9 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(90, 7.5, 95);
 
-	modelStack.Translate(2.5, 0, 0.25);
+	modelStack.Translate(2.5, 0, -0.25);
 	modelStack.Rotate(rotateY[3], 0, 1, 0);
-	modelStack.Translate(-2.5, 0, -0.25);
+	modelStack.Translate(-2.5, 0, 0.25);
 
 	modelStack.Scale(5, 15, 0.5);
 	RenderMesh(meshList[GEO_RIGHTDOOR], true);
@@ -2520,7 +2463,7 @@ void SceneSP2Room1::Exit()
 {
 	// Cleanup VBO here
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (houseItems[i] != nullptr)
 		{

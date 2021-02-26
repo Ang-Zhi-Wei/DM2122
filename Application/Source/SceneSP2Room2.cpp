@@ -9,25 +9,14 @@
 SceneSP2Room2::SceneSP2Room2()
 {
 	//if you see anything from here missing in init just copy and paste them 
-	LSPEED = 10.F;
-	flashlight = false;
-	flashlight_lifetime = 90;
-	inLocker = false;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
+
 	camBlinkOffSec = 0;
 	showSideBox = true;
 	camBlinkOnSec = 0;
 	camBlinkOn = false;
 	camBlinkOff = true;
 	interact = false;
-	DS_classroom = CLOSED;
-	DS_lounge = CLOSED;
-	DS_school = OPEN;
+	
 	fps = 60;
 
 	rotateobj1 = 28;
@@ -36,14 +25,7 @@ SceneSP2Room2::SceneSP2Room2()
 	puzzleItemPlaced[notebookItem] = false;
 	puzzleItemPlaced[lunchboxItem] = false;
 	puzzleItemPlaced[dilucItem] = false;
-	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
-	itemImage[1] = meshList[GEO_ITEMIMAGE1];
-	itemImage[2] = meshList[GEO_ITEMIMAGE2];
-	itemImage[3] = meshList[GEO_ITEMIMAGE3];
-	itemImage[4] = meshList[GEO_ITEMIMAGE4];
-	itemImage[5] = meshList[GEO_ITEMIMAGE5];
-	itemImage[6] = meshList[GEO_ITEMIMAGE6];
-	itemImage[7] = meshList[GEO_ITEMIMAGE7];*/
+	
 
 	//@pause
 	gamepaused = false;
@@ -703,6 +685,9 @@ void SceneSP2Room2::SetBackground()
 		Heartbeat = createIrrKlangDevice();
 		Heartbeat->play2D("Sound\\Effects\\485076__inspectorj__heartbeat-regular-single-01-01-loop.wav", true);
 	}
+	if (!Creakingdoor) {
+		Creakingdoor = createIrrKlangDevice();
+	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
@@ -1214,6 +1199,7 @@ void SceneSP2Room2::Update(double dt)
 		//doors close on their own
 		if ((camera.position - origin).Length() >= 20)
 		{
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			DS_school = CLOSING;
 		}
 		if (camera.position.z <= 5 && camera.position.z >= -5 && camera.position.x <= 480 && camera.position.x >= 471)
@@ -1241,6 +1227,7 @@ void SceneSP2Room2::Update(double dt)
 			if (Fpressed)
 			{
 				Fpressed = false;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				DS_school = OPENING;
 			}
 		}
@@ -1278,6 +1265,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_classroom = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[13].setactive(true);
 			Colliderlist[14].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1290,6 +1278,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(true);
 				Colliderlist[14].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1307,6 +1296,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_classroom = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[13].setactive(false);
 				Colliderlist[14].setactive(false);
 				camera.setchecker(Colliderlist);
@@ -1343,6 +1333,7 @@ void SceneSP2Room2::Update(double dt)
 		if ((camera.position - origin).Length() >= 20)
 		{
 			DS_lounge = CLOSING;
+			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 			Colliderlist[15].setactive(true);
 			Colliderlist[16].setactive(true);
 			camera.setchecker(Colliderlist);
@@ -1355,6 +1346,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = CLOSING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(true);
 				Colliderlist[16].setactive(true);
 				camera.setchecker(Colliderlist);
@@ -1370,6 +1362,7 @@ void SceneSP2Room2::Update(double dt)
 			{
 				Fpressed = false;
 				DS_lounge = OPENING;
+				Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 				Colliderlist[15].setactive(false);
 				Colliderlist[16].setactive(false);
 				camera.setchecker(Colliderlist);
