@@ -1576,6 +1576,10 @@ void SceneSP2Main::Update(double dt)
 		NearHouse = false;
 	}
 
+	if (SparkplugFound == 1 && wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1)
+	{
+		ObjectivePhase = 3;
+	}
 
 	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13 && ObjectivePhase >= 2)
 	{
@@ -2827,7 +2831,7 @@ void SceneSP2Main::Render()
 		}
 	case 3:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}

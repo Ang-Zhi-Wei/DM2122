@@ -854,6 +854,10 @@ void SceneSP2Room1::Update(double dt)
 
 	
 	//Locker
+	if (wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1 && SparkplugFound)
+	{
+		ObjectivePhase = 3;
+	}
 
 
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -2255,6 +2259,11 @@ void SceneSP2Room1::Render()
 			sparkplug << "Sparkplug:" << SparkplugFound;
 			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
 			modelStack.PopMatrix();
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}

@@ -650,6 +650,10 @@ void SceneSP2Room3::Update(double dt)
 		}
 	}
 
+	if (wrenchFound == 1 && screwDriverFound == 1 && SparkplugFound == 1 && hammerFound == 1)
+	{
+		ObjectivePhase = 3;
+	}
 
 	if (nearExit == true && Fpressed == true)
 	{
@@ -1764,6 +1768,11 @@ void SceneSP2Room3::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
 			modelStack.PopMatrix();
 
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}
