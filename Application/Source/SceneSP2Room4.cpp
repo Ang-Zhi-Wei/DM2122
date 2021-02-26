@@ -1070,7 +1070,7 @@ void SceneSP2Room4::Update(double dt)
 	}
 
 
-	if (nearExit == true && Fpressed == true)
+	if (nearExit == true && Fpressed == true && itemplaced[body_op])
 	{
 		exitHospital = true;
 		Fpressed = false;

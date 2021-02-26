@@ -3033,9 +3033,9 @@ void SceneSP2Main::Render()
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
-	/*std::ostringstream test1;
-	test1 << "ghost state: " << ghost->state;
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);*/
+	std::ostringstream test1;
+	test1 << "cam pos: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
