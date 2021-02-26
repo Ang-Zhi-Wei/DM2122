@@ -24,7 +24,6 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
 	fps = 60;
-	DS_opRoom = CLOSED;
 	DS_main = OPEN;
 	camBlinkOn = false;
 	camBlinkOff = true;
@@ -379,12 +378,17 @@ void SceneSP2Room4::Init()
 	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
+
+	//itemplaced
+	for (int i = 0; i < 7; i++) {
+		itemplaced[i] = false;
+	}
+
 	main_door[0].mid.Set(-470, 7.69, 4.1);
 	main_door[1].mid.Set(-470, 7.79, -4.1);
 	main_door[0].lengthz = main_door[1].lengthz = 5;
 	main_door[0].rotateY = 90;
 	main_door[1].rotateY = -90;
-
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
@@ -422,7 +426,7 @@ void SceneSP2Room4::Init()
 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(10, 7, 12);
-	Colliderlist[6].Setposition(Vector3(-505, 0, 23));
+	Colliderlist[6].Setposition(Vector3(-505, 0, -23));
 
 	//left row
 	Colliderlist.push_back(ColliderBox());
@@ -462,7 +466,7 @@ void SceneSP2Room4::Init()
 	Colliderlist[14].Setposition(Vector3(-492, 12, 15));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(43, 25, 1);
+	Colliderlist[15].setlength(43, 25, 3);
 	Colliderlist[15].Setposition(Vector3(-492, 12, -15));
 
 	//room front walls
@@ -530,7 +534,7 @@ void SceneSP2Room4::Init()
 
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[29].getxlength(), Colliderlist[29].getylength(), Colliderlist[29].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[9].getxlength(), Colliderlist[9].getylength(), Colliderlist[9].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -575,6 +579,10 @@ void SceneSP2Room4::Init()
 	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 
+	//default active
+	for (int i = 0; i < Colliderlist.size(); i++) {
+		Colliderlist[i].setactive(true);
+	}
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	
@@ -587,7 +595,6 @@ void SceneSP2Room4::Init()
 	camBlinkOff = true;
 	//door state
 	DS_opRoom = CLOSED;
-	DS_lounge = CLOSED;
 	DS_main = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -760,6 +767,9 @@ void SceneSP2Room4::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
 	Application::SetCursorPos(480, camera.mousePosY);
+	//OP room door
+	opRoom_door[0].rotateY = 0;
+	opRoom_door[1].rotateY = 0;
 	DS_main = OPEN;
 	main_door[0].rotateY = 90;
 	main_door[1].rotateY = -90;
@@ -1981,7 +1991,7 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
+	modelStack.Translate(Colliderlist[9].getPosition().x, Colliderlist[9].getPosition().y, Colliderlist[9].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
@@ -2379,7 +2389,7 @@ void SceneSP2Room4::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
 			break;

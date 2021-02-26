@@ -563,6 +563,11 @@ void SceneSP2Room1::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -450)));
 	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -510))); 
 	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -470)));
+	//lever
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
@@ -1513,7 +1518,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
 		{
 			interact = true;
-			interact_message = "pull lever";
+			interact_message = "Pull lever";
 			if (Fpressed)
 			{
 				leverIsPulled = pulling;
@@ -2257,7 +2262,7 @@ void SceneSP2Room1::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 			break;
 		}

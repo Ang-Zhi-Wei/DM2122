@@ -1065,8 +1065,21 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[138].setlength(70, 100, 105);
 	Colliderlist[138].Setposition(Vector3(0, -4, 510));
+	//sign colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[139].setlength(9, 10, 3);
+	Colliderlist[139].Setposition(Vector3(20, -3, 300));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[140].setlength(9, 10, 3);
+	Colliderlist[140].Setposition(Vector3(20, -3, -300));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[141].setlength(3, 10, 9);
+	Colliderlist[141].Setposition(Vector3(340, -3, 10));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[142].setlength(3, 10, 9);
+	Colliderlist[142].Setposition(Vector3(-340, -3, 10));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[45].getxlength(), Colliderlist[45].getylength(), Colliderlist[45].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[139].getxlength(), Colliderlist[139].getylength(), Colliderlist[139].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -2307,17 +2320,18 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[45].getPosition().x, Colliderlist[45].getPosition().y, Colliderlist[45].getPosition().z);
+	modelStack.Translate(Colliderlist[139].getPosition().x, Colliderlist[139].getPosition().y, Colliderlist[139].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 	// Main sign / garage building
+	//@sign
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, 300);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	// School
 	modelStack.PushMatrix();
@@ -2325,7 +2339,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	
 	// House
 	modelStack.PushMatrix();
@@ -2333,7 +2347,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	// Hospital
 	modelStack.PushMatrix();
@@ -2824,7 +2838,7 @@ void SceneSP2Main::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
 			break;

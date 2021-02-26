@@ -191,8 +191,8 @@ void SceneSP2Room2::Init()
 	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
 	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
-	PuzzleItems[0] = new Item("lunchbox", Item::ItemA, Vector3(505, 5, -102));
-	PuzzleItems[1] = new Item("notebook", Item::Notebook, Vector3(478, 7.7, 60));
+	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
+	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
 	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
 
 
@@ -612,6 +612,10 @@ void SceneSP2Room2::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+	//puzzle item placed
+	for (int i = 0; i < 3; i++) {
+		puzzleItemPlaced[i] = false;
+	}
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -692,6 +696,7 @@ void SceneSP2Room2::SetBackground()
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
+	Jumpscare->setSoundVolume(1.f);
 
 }
 
@@ -2057,7 +2062,7 @@ void SceneSP2Room2::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
 			break;
