@@ -1142,7 +1142,7 @@ void SceneSP2Room1::Update(double dt)
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 		{
 			interact = true;
-			interact_message = "door locked";
+			interact_message = "Door locked";
 
 		}
 	}
@@ -1210,7 +1210,7 @@ void SceneSP2Room1::Update(double dt)
 		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
 		{
 			interact = true;
-			interact_message = "door locked";
+			interact_message = "Door locked";
 
 		}
 	}
@@ -1608,7 +1608,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
 		{
 			interact = true;
-			interact_message = "use sink";
+			interact_message = "Use sink";
 			if (Fpressed)
 			{
 				waterstate = flowing;
@@ -1639,7 +1639,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
 		{
 			interact = true;
-			interact_message = "pick up key";
+			interact_message = "Pick up key";
 
 			if (Fpressed)
 			{
