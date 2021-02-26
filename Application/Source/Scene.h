@@ -108,7 +108,7 @@ public:
 				break;
 			case Handsaw:
 				description = "Use to craft screwdriver";
-				image = "Assigment2Images/saw.tga";
+				image = "Assigment2Images/handsawicon.tga";
 				break;
 			}
 		}
