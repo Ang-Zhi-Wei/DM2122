@@ -24,7 +24,6 @@ SceneSP2Room4::SceneSP2Room4()
 	camBlinkOffSec = 0;
 	camBlinkOnSec = 0;
 	fps = 60;
-	DS_opRoom = CLOSED;
 	DS_main = OPEN;
 	camBlinkOn = false;
 	camBlinkOff = true;
@@ -379,12 +378,17 @@ void SceneSP2Room4::Init()
 	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
+
+	//itemplaced
+	for (int i = 0; i < 7; i++) {
+		itemplaced[i] = false;
+	}
+
 	main_door[0].mid.Set(-470, 7.69, 4.1);
 	main_door[1].mid.Set(-470, 7.79, -4.1);
 	main_door[0].lengthz = main_door[1].lengthz = 5;
 	main_door[0].rotateY = 90;
 	main_door[1].rotateY = -90;
-
 
 	//list of lockers
 	Lockerlist.push_back(Locker());
@@ -575,6 +579,10 @@ void SceneSP2Room4::Init()
 	meshList[locker]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 
+	//default active
+	for (int i = 0; i < Colliderlist.size(); i++) {
+		Colliderlist[i].setactive(true);
+	}
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	
@@ -587,7 +595,6 @@ void SceneSP2Room4::Init()
 	camBlinkOff = true;
 	//door state
 	DS_opRoom = CLOSED;
-	DS_lounge = CLOSED;
 	DS_main = OPEN;
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
@@ -760,6 +767,9 @@ void SceneSP2Room4::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
 	Application::SetCursorPos(480, camera.mousePosY);
+	//OP room door
+	opRoom_door[0].rotateY = 0;
+	opRoom_door[1].rotateY = 0;
 	DS_main = OPEN;
 	main_door[0].rotateY = 90;
 	main_door[1].rotateY = -90;
