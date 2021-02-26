@@ -422,7 +422,7 @@ void SceneSP2Room4::Init()
 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(10, 7, 12);
-	Colliderlist[6].Setposition(Vector3(-505, 0, 23));
+	Colliderlist[6].Setposition(Vector3(-505, 0, -23));
 
 	//left row
 	Colliderlist.push_back(ColliderBox());
@@ -462,7 +462,7 @@ void SceneSP2Room4::Init()
 	Colliderlist[14].Setposition(Vector3(-492, 12, 15));
 
 	Colliderlist.push_back(ColliderBox());
-	Colliderlist[15].setlength(43, 25, 1);
+	Colliderlist[15].setlength(43, 25, 3);
 	Colliderlist[15].Setposition(Vector3(-492, 12, -15));
 
 	//room front walls
@@ -530,7 +530,7 @@ void SceneSP2Room4::Init()
 
 
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[29].getxlength(), Colliderlist[29].getylength(), Colliderlist[29].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[9].getxlength(), Colliderlist[9].getylength(), Colliderlist[9].getzlength());
 
 	//terrain
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad2("floor/ceiling", 1, 1, White);
@@ -1977,7 +1977,7 @@ void SceneSP2Room4::Render()
 	//colliderbox for checking
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[29].getPosition().x, Colliderlist[29].getPosition().y, Colliderlist[29].getPosition().z);
+	modelStack.Translate(Colliderlist[9].getPosition().x, Colliderlist[9].getPosition().y, Colliderlist[9].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
