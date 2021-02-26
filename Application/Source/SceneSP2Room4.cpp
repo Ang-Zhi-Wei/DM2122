@@ -2463,7 +2463,7 @@ void SceneSP2Room4::Render()
 	test2 << "camera view: " << camera.view;
 	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 
-	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(camera.position.x) + " " + std::to_string(camera.position.y) + " " + std::to_string(camera.position.z), Color(0, 1, 0), 4, 0, 3);
+	/*RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(camera.position.x) + " " + std::to_string(camera.position.y) + " " + std::to_string(camera.position.z), Color(0, 1, 0), 4, 0, 3);*/
 	if (jumpscareActive1 == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
