@@ -457,9 +457,9 @@ void SceneSP2Room1::Init()
 
 	//lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));
+	Lockerlist[0].setpos(Vector3(-32.5, 0, -570));
 	Lockerlist.push_back(Locker());
-	Lockerlist[1].setpos(Vector3(66, 0, -445));
+	Lockerlist[1].setpos(Vector3(66, 0, -535));
 	Lockerlist[1].setyaw(180);
 	//wall colliders
 	Colliderlist.push_back(ColliderBox());
