@@ -612,6 +612,10 @@ void SceneSP2Room2::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+	//puzzle item placed
+	for (int i = 0; i < 3; i++) {
+		puzzleItemPlaced[i] = false;
+	}
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -692,6 +696,7 @@ void SceneSP2Room2::SetBackground()
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
+	Jumpscare->setSoundVolume(1.f);
 
 }
 
