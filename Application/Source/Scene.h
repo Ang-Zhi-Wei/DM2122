@@ -39,6 +39,12 @@ public:
 			ITEM3,
 			SPARK_PLUG,
 			Key,
+
+
+			ItemA,
+			Notebook,
+			MysObj,
+
 			Wrench,
 			//add more depending on whta u need, don forget set in Set function
 		};
@@ -82,6 +88,18 @@ public:
 			case Key:
 				description = "A key";
 				image = "Assigment2Images/keyicon.tga";
+				break;
+			case ItemA:
+				description = "A rusty lunchbox";
+				image = "Image//man1.tga";
+				break;
+			case Notebook:
+				description = "An old notebook";
+				image = "Image/book.tga";
+				break;
+			case MysObj:
+				description = "A mysterious figure";
+				image = "Image/diluc.tga";
 				break;
 			case Wrench:
 				description = "A Wrench";

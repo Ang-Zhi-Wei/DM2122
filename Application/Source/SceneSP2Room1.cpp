@@ -440,23 +440,6 @@ void SceneSP2Room1::Init()
 	jumpscareActive1 = false;
 	jumpscareTimerActive1 = false;
 
-	////Jumpscare 2
-	//jumpscareTimerReset2 = jumpscareTimer2 = 7.f;
-	//jumpscareEntrance2 = 0;
-	//jumpscareActive2 = false;
-	//jumpscareTimerActive2 = false;
-
-	////Jumpscare 3
-	//jumpscareTimerReset3 = jumpscareTimer3 = 7.f;
-	//jumpscareEntrance3 = 0;
-	//jumpscareActive3 = false;
-	//jumpscareTimerActive3 = false;
-
-	////Jumpscare 4
-	//jumpscareTimerReset4 = jumpscareTimer4 = 7.f;
-	//jumpscareEntrance4 = 0;
-	//jumpscareActive4 = false;
-	//jumpscareTimerActive4 = false;
 	//lockers
 	Lockerlist.push_back(Locker());
 	Lockerlist[0].setpos(Vector3(-32.5, 0, -480));
@@ -580,6 +563,11 @@ void SceneSP2Room1::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -450)));
 	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -510))); 
 	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -470)));
+	//lever
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
@@ -777,7 +765,7 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr)
+	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr && leverIsPulled == yes)
 	{
 		nearKey = true;
 	}
@@ -785,7 +773,7 @@ void SceneSP2Room1::Update(double dt)
 		nearKey = false;
 	}
 
-	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr)
+	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr && leverIsPulled == yes)
 	{
 		nearWrench = true;
 	}
@@ -871,6 +859,10 @@ void SceneSP2Room1::Update(double dt)
 
 	
 	//Locker
+	if (wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1 && SparkplugFound)
+	{
+		ObjectivePhase = 3;
+	}
 
 
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -1526,7 +1518,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
 		{
 			interact = true;
-			interact_message = "pull lever";
+			interact_message = "Pull lever";
 			if (Fpressed)
 			{
 				leverIsPulled = pulling;
@@ -1692,7 +1684,7 @@ void SceneSP2Room1::RenderPuzzleItems()
 			modelStack.Scale(2, 2, 2);
 			RenderMesh(meshList[safe], true);
 
-			if (houseItems[3] != nullptr) {
+			if (houseItems[3] != nullptr && leverIsPulled == yes) {
 				modelStack.PushMatrix();
 				modelStack.Translate(-1, 0.5, -0.5);
 				modelStack.Rotate(90, 0, 1, 0);
@@ -2270,8 +2262,13 @@ void SceneSP2Room1::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}

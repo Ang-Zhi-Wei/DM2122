@@ -29,6 +29,13 @@ SceneSP2Room2::SceneSP2Room2()
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 	fps = 60;
+
+	rotateobj1 = 28;
+	rotateobj2 = 90;
+
+	puzzleItemPlaced[notebookItem] = false;
+	puzzleItemPlaced[lunchboxItem] = false;
+	puzzleItemPlaced[dilucItem] = false;
 	/*itemImage[0] = meshList[GEO_ITEMIMAGE0];
 	itemImage[1] = meshList[GEO_ITEMIMAGE1];
 	itemImage[2] = meshList[GEO_ITEMIMAGE2];
@@ -183,6 +190,36 @@ void SceneSP2Room2::Init()
 
 	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
 	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
+
+	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
+	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
+	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
+
+
+	//puzzle items
+	meshList[lunchbox] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
+	//meshList[lunchbox] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[lunchbox]->textureID = LoadTGA("Image//lunchbox.tga");
+
+	meshList[notebook] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
+	meshList[notebook]->textureID = LoadTGA("Image//booktex.tga");
+	meshList[notebook]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[mysobj] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
+	meshList[mysobj]->textureID = LoadTGA("Image//bloody.tga");
+	meshList[mysobj]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[lunchboxplace] = MeshBuilder::GenerateOBJ("katana", "OBJ//lunchbox.obj");
+	//meshList[lunchboxplace] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, Color(1.f, 0.1f, 0.1f));
+	meshList[lunchboxplace]->textureID = LoadTGA("Image//yellow.tga");
+
+	meshList[notebookplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//book.obj");
+	meshList[notebookplace]->textureID = LoadTGA("Image//yellow.tga");
+	meshList[notebookplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+
+	meshList[mysobjplace] = MeshBuilder::GenerateOBJ("Book", "OBJ//diluc.obj");
+	meshList[mysobjplace]->textureID = LoadTGA("Image//yellow.tga");
+	meshList[mysobjplace]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Assigment2Images//Arial.tga");
@@ -575,6 +612,10 @@ void SceneSP2Room2::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+	//puzzle item placed
+	for (int i = 0; i < 3; i++) {
+		puzzleItemPlaced[i] = false;
+	}
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -655,8 +696,10 @@ void SceneSP2Room2::SetBackground()
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
+	Jumpscare->setSoundVolume(1.f);
 
 }
+
 
 void SceneSP2Room2::Update(double dt)
 {
@@ -734,8 +777,8 @@ void SceneSP2Room2::Update(double dt)
 	{
 		if (schoolItems[i] != nullptr)
 		{
-			if (camera.position.z > schoolItems[i]->pos.z - 10 && camera.position.z < schoolItems[i]->pos.z + 10
-				&& camera.position.x > schoolItems[i]->pos.x - 10 && camera.position.x < schoolItems[i]->pos.x + 10)
+			if (camera.position.z > schoolItems[i]->pos.z - 5 && camera.position.z < schoolItems[i]->pos.z + 5
+				&& camera.position.x > schoolItems[i]->pos.x - 5 && camera.position.x < schoolItems[i]->pos.x + 5)
 			{
 				pickUpBattery = true;
 				if (Fpressed)
@@ -746,6 +789,49 @@ void SceneSP2Room2::Update(double dt)
 				}
 			}
 		}
+	}
+
+
+	if (wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1 && SparkplugFound == 1)
+	{
+		ObjectivePhase = 3;
+	}
+	//puzzle items
+	puzzleitem = false;
+	for (int i = 0; i < 3; i++)
+	{
+		if (PuzzleItems[i] != nullptr)
+		{
+			if (camera.position.z > PuzzleItems[i]->pos.z - 6 && camera.position.z < PuzzleItems[i]->pos.z + 6
+				&& camera.position.x > PuzzleItems[i]->pos.x - 6 && camera.position.x < PuzzleItems[i]->pos.x + 6)
+			{
+				puzzleitem = true;
+				interact_message = "F to pick up " + PuzzleItems[i]->name;
+				if (Fpressed)
+				{
+					PickUpItem(PuzzleItems[i]);
+					Fpressed = false;
+					PuzzleItems[i] = nullptr;
+				}
+			}
+		}
+	}
+
+	placeitemtext = false;
+	if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 522 && camera.position.x <= 527 && !puzzleItemPlaced[lunchboxItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
+	}
+	if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 530 && camera.position.x <= 534.5 && !puzzleItemPlaced[notebookItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
+	}
+    if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 538 && camera.position.x <= 542 && !puzzleItemPlaced[dilucItem])
+	{
+		placeitemtext = true;
+		interact_message = "Place lost item";
 	}
 
 	if (!Application::IsKeyPressed('E'))
@@ -1426,6 +1512,9 @@ void SceneSP2Room2::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
+
+	rotateobj += 20 * float(dt);
+
 }
 
 void SceneSP2Room2::PauseUpdate()
@@ -1503,10 +1592,101 @@ void SceneSP2Room2::PauseUpdate()
 	}
 }
 
+void SceneSP2Room2::RenderPuzzleObjects()
+{
+	//render objs in scene
+	if (PuzzleItems[0] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(505, 5.5, -102);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[lunchbox], true);
+		modelStack.PopMatrix();
+	}
+	if (PuzzleItems[1] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(478, 7.7, 60);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(27.5, 0, 0, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[notebook], true);
+		modelStack.PopMatrix();
+	}
+	if (PuzzleItems[2] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(540, 1, -108);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[mysobj], true);
+		modelStack.PopMatrix();
+	}
+
+	//render where obj needs to be palced
+	if (!puzzleItemPlaced[lunchboxItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(525, 7, -99); // pos on map
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[lunchboxplace], false);
+		modelStack.PopMatrix();
+	}
+	if (!puzzleItemPlaced[notebookItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(532, 7, -99); // pos on map
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[notebookplace], false);
+		modelStack.PopMatrix();
+	}
+	if (!puzzleItemPlaced[dilucItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(540, 6, -99); // pos on map
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		RenderMesh(meshList[mysobjplace], false);
+		modelStack.PopMatrix();
+	}
+
+	//render when object placed on shelf
+	if (puzzleItemPlaced[lunchboxItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(525, 6.5, -99);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[lunchbox], true);
+		modelStack.PopMatrix();
+	}
+	if (puzzleItemPlaced[notebookItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(532, 6, -99);
+		modelStack.Scale(1, 1, 1);
+		modelStack.Rotate(90, 1, 0, 0);
+		RenderMesh(meshList[notebook], true);
+		modelStack.PopMatrix();
+	}
+	if (puzzleItemPlaced[dilucItem])
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(540, 5.6, -99);
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[mysobj], true);
+		modelStack.PopMatrix();
+	}
+}
+
 void SceneSP2Room2::Render()
 {
 
-	// Render VBO here
+	 //Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
@@ -1625,6 +1805,8 @@ void SceneSP2Room2::Render()
 		modelStack.PopMatrix();
 	}
 
+	RenderPuzzleObjects();
+
 	//all doors
 	//schoolleft
 	modelStack.PushMatrix();
@@ -1694,6 +1876,7 @@ void SceneSP2Room2::Render()
 	modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
+
 	//longtable in faculty lounge
 	//@obj
 	modelStack.PushMatrix();
@@ -1702,8 +1885,8 @@ void SceneSP2Room2::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	RenderMesh(meshList[GEO_LONGTABLE], true);
 	modelStack.PopMatrix();
-	//podium
 
+	//podium
 	modelStack.PushMatrix();
 	modelStack.Translate(podium.mid.x - 3, podium.mid.y, podium.mid.z);
 	modelStack.Rotate(90, 0, 1, 0);
@@ -1782,10 +1965,15 @@ void SceneSP2Room2::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
-
+	if (puzzleitem)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
 	
-
-
+	if (placeitemtext)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 0.f), 4.f, 20.f, 5.f);
+	}
 	
 	//UI OVERLAY
 
@@ -1874,9 +2062,14 @@ void SceneSP2Room2::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}
@@ -1913,6 +2106,7 @@ void SceneSP2Room2::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1, 1, 0), 4, 22, 5);
 	}
+
 	if (inLocker == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
@@ -2033,7 +2227,51 @@ void SceneSP2Room2::UseItem(int itemname)
 
 		//else warning message?
 		break;
-	case Item::FLOWER:
+
+	case Item::ItemA:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 522 && camera.position.x <= 527)
+		{
+			puzzleItemPlaced[lunchboxItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		break;
+	case Item::Notebook:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 530 && camera.position.x <= 534.5)
+		{
+			puzzleItemPlaced[notebookItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
+		break;
+	case Item::MysObj:
+		if (camera.position.z <= -88 && camera.position.z >= -96 && camera.position.x >= 538 && camera.position.x <= 542)
+		{
+			puzzleItemPlaced[dilucItem] = true;
+			if (inventory->items[inventory->selected]->count > 1)
+			{
+				inventory->items[inventory->selected]->count--;
+			}
+			else
+			{
+				delete inventory->items[inventory->selected];
+				inventory->items[inventory->selected] = nullptr;
+			}
+		}
 		break;
 	}
 }

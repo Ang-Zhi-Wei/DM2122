@@ -63,6 +63,13 @@ public:
 		//locker
 		locker,
 
+		//puzzle items
+		lunchbox,
+		notebook,
+		mysobj,
+		lunchboxplace,
+		notebookplace,
+		mysobjplace,
 
 		//game tings
 		GEO_SKULL,
@@ -174,13 +181,15 @@ public:
 private:
 
 
-
+	bool itemPlaced[3];
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	Mesh* meshList[NUM_GEOMETRY];
 
 	Item* schoolItems[2];
+	Item* PuzzleItems[3];
+	Item* ShelfItems[3];
 	bool pickUpBattery;
 	MS modelStack, viewStack, projectionStack;
 	Light light[6];
@@ -245,6 +254,9 @@ private:
 	bool jumpscare2ActiveZone;
 	bool jumpscareActive2;
 
+	float rotateobj1;
+	float rotateobj2;
+
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
@@ -255,6 +267,8 @@ private:
 	float campos_x;
 	float campos_y;
 	float campos_z;
+	float rotateobj;
+	bool puzzleitem;
 	bool exitSchool;
 	bool nearExit;
 	bool showChatbox;
@@ -295,6 +309,15 @@ private:
 	int DS_school, DS_classroom, DS_lounge;
 	bool interact;
 	std::string interact_message;
+
+	bool puzzleItemPlaced[3];
+	bool placeitemtext;
+	enum Itemtype
+	{
+		lunchboxItem,
+		notebookItem,
+		dilucItem,
+	};
 	//Mesh* itemImage[8];
 
 	void RenderSkybox();
@@ -309,6 +332,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, int limit);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
+	void RenderPuzzleObjects();
 	bool camBlinkOn;
 	bool camBlinkOff;
 	double camBlinkOnSec;

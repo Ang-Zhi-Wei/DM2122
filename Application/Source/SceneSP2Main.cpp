@@ -318,6 +318,10 @@ void SceneSP2Main::Init()
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("Building", "OBJ//simplebuilding.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Assigment2Images//buildingtexture.tga");
 	meshList[GEO_BUILDING]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
+	meshList[GEO_LEFTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
+	meshList[GEO_LEFTDOOR]->textureID = LoadTGA("Image//schooldoorleft.tga");
+	meshList[GEO_RIGHTDOOR] = MeshBuilder::GenerateCubeT("door", 1, 1, 1, 0, 0, 1, 1, White);
+	meshList[GEO_RIGHTDOOR]->textureID = LoadTGA("Image//schooldoorright.tga");
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Building", "OBJ//road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Assigment2Images//road.tga");
 	meshList[GEO_ROAD]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
@@ -1061,8 +1065,21 @@ void SceneSP2Main::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[138].setlength(70, 100, 105);
 	Colliderlist[138].Setposition(Vector3(0, -4, 510));
+	//sign colliders
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[139].setlength(9, 10, 3);
+	Colliderlist[139].Setposition(Vector3(20, -3, 300));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[140].setlength(9, 10, 3);
+	Colliderlist[140].Setposition(Vector3(20, -3, -300));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[141].setlength(3, 10, 9);
+	Colliderlist[141].Setposition(Vector3(340, -3, 10));
+	Colliderlist.push_back(ColliderBox());
+	Colliderlist[142].setlength(3, 10, 9);
+	Colliderlist[142].Setposition(Vector3(-340, -3, 10));
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[45].getxlength(), Colliderlist[45].getylength(), Colliderlist[45].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[139].getxlength(), Colliderlist[139].getylength(), Colliderlist[139].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 
@@ -1087,11 +1104,11 @@ void SceneSP2Main::Init()
 	/*test.Set("item2testAAAA", Item::ITEM2);
 	test2.Set("Battery", Item::BATTERY);
 	battery.Set("Battery", Item::BATTERY);*/
-	items[0] = new Item("battery", Item::BATTERY, Vector3(0, -3, 340));
-	items[1] = new Item("battery", Item::BATTERY, Vector3(60, -3, 0));
-	items[2] = new Item("battery", Item::BATTERY, Vector3(-60, -3, 100));
-	items[3] = new Item("battery", Item::BATTERY, Vector3(-185, -3, -200));
-	items[4] = new Item("battery", Item::BATTERY, Vector3(255, -3, -190));
+	items[0] = new Item("Battery", Item::BATTERY, Vector3(0, -3, 340));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(60, -3, 0));
+	items[2] = new Item("Battery", Item::BATTERY, Vector3(-60, -3, 100));
+	items[3] = new Item("Battery", Item::BATTERY, Vector3(-185, -3, -200));
+	items[4] = new Item("Battery", Item::BATTERY, Vector3(255, -3, -190));
 
 
 //to be called only in one frame. placed under init just for testing first
@@ -1572,6 +1589,10 @@ void SceneSP2Main::Update(double dt)
 		NearHouse = false;
 	}
 
+	if (SparkplugFound == 1 && wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1)
+	{
+		ObjectivePhase = 3;
+	}
 
 	if (campos_x > 470 && campos_x < 480 && campos_z > -26 && campos_z < -13 && ObjectivePhase >= 2)
 	{
@@ -2351,17 +2372,18 @@ void SceneSP2Main::Render()
 	//colliderbox to check collider 
 	//@collider
 	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[45].getPosition().x, Colliderlist[45].getPosition().y, Colliderlist[45].getPosition().z);
+	modelStack.Translate(Colliderlist[139].getPosition().x, Colliderlist[139].getPosition().y, Colliderlist[139].getPosition().z);
 	RenderMesh(meshList[Colliderbox], false);
 	modelStack.PopMatrix();*/
 
 	RenderBuilding();
 	// Main sign / garage building
+	//@sign
 	modelStack.PushMatrix();
 	modelStack.Translate(20, -3, 300);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	// School
 	modelStack.PushMatrix();
@@ -2369,7 +2391,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 	
 	// House
 	modelStack.PushMatrix();
@@ -2377,7 +2399,7 @@ void SceneSP2Main::Render()
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(5, 5, 3);
 	RenderMesh(meshList[GEO_SIGN], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//Added collider
 
 	// Hospital
 	modelStack.PushMatrix();
@@ -2492,6 +2514,13 @@ void SceneSP2Main::Render()
 	modelStack.Translate(520, -1, 0);
 	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[HAUNTEDSCHOOL], true);
+	modelStack.PopMatrix();//Added collider
+
+	modelStack.PushMatrix();
+	modelStack.Translate(486.1, 13, -20);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(17.0f, 34.0f, 1.0f);
+	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();//Added collider
 
 	//@buildings
@@ -2887,14 +2916,14 @@ void SceneSP2Main::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
 			break;
 		}
 	case 3:
 		if (showSideBox == true) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}
