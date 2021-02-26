@@ -245,7 +245,7 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->textureID = LoadTGA("Assigment2Images//batterytexture.tga");
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
-
+	garageItems[0] = nullptr;
 	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(22, 7.8, 555));
 	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(-25, 0, 520));
 	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(-24.5, 5.2, 505));
@@ -616,12 +616,6 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	if (nearCraft == true && Rpressed == true)
-	{
-		garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(21, 7.1, 555));
-		craftScrewdriver = true;
-
-	}
 
 	if (garageItems[3] == nullptr && isTalking == false)
 	{
@@ -633,7 +627,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 
-	//items - batteries
+	//items 
 	pickUpItem = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -648,7 +642,7 @@ void SceneSP2Room3::Update(double dt)
 					PickUpItem(garageItems[i]);
 					Fpressed = false;
 					garageItems[i] = nullptr;
-					if (garageItems[0] == nullptr)
+					if (i == 0)
 					{
 						nearCraft = false;
 						screwDriverFound = 1;
@@ -737,7 +731,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 
-	if (campos_x > 15 && campos_z < 515 && campos_z > 526 && garageItems[3] == nullptr && craftScrewdriver == false)
+	if (campos_x > 15 && campos_z > 515 && campos_z < 526 && garageItems[3] == nullptr && craftScrewdriver == false)
 	{
 		nearCraft = true;
 	}
@@ -1566,7 +1560,7 @@ void SceneSP2Room3::Render()
 			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		}
 		RenderTextOnScreen(meshList[GEO_TEXT], "I can craft a screwdriver now..", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press R to to craft", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Use handsaw to craft", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
 	if (nearExit == true) {
@@ -1797,7 +1791,13 @@ void SceneSP2Room3::UseItem(int itemname)
 		
 		//else warning message?
 		break;
-	case Item::FLOWER:
+	case Item::Handsaw:
+		if (nearCraft == true)
+		{
+			garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(19, 7.1, 523));
+			craftScrewdriver = true;
+			//handsaw not used up, no deletion
+		}
 		break;
 	}
 }

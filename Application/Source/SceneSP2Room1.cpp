@@ -19,15 +19,7 @@ SceneSP2Room1::SceneSP2Room1()
 	nearWrench = false;
 	camBlinkOnSec = 0;
 	showSideBox = true;
-	LSPEED = 10.F;
-	flashlight = false;
-	flashlight_lifetime = 90;
-	Qpressed = Qreleased = false;
-	Epressed = Ereleased = false;
-	Fpressed = Freleased = false;
-	Apressed = Areleased = false;
-	Dpressed = Dreleased = false;
-	Rpressed = Rreleased = false;
+
 	jumpscareTimerReset1 = jumpscareTimer1 = 7.f;
 	jumpscareEntrance1 = 0;
 	jumpscareActive1 = false;
@@ -398,6 +390,8 @@ void SceneSP2Room1::Init()
 	itemImage[6] = meshList[GEO_ITEMIMAGE6];
 	itemImage[7] = meshList[GEO_ITEMIMAGE7];
 
+	ghost = nullptr;
+	inventory = nullptr;
 
 	houseItems[0] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, -95));
 	houseItems[1] = new Item("Battery", Item::BATTERY, Vector3(35, 1, -435));
@@ -446,6 +440,9 @@ void SceneSP2Room1::Init()
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
+	Apressed = Areleased = false;
+	Dpressed = Dreleased = false;
+	Rpressed = Rreleased = false;
 	DS_MAIN = OPEN;
 	DS_LIVING = DS_HALL = DS_CONNECTING = CLOSED;
 	rotateY[0] = 90;
