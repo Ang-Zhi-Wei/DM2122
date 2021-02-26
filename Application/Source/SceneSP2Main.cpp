@@ -3273,7 +3273,7 @@ void SceneSP2Main::Render()
 
 			modelStack.PushMatrix();
 			std::stringstream hammer;
-			hammer << "Hammer:" << hammerFound;
+			hammer << "Plier:" << hammerFound;
 			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
 			modelStack.PopMatrix();
 
