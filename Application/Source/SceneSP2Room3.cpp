@@ -1688,7 +1688,7 @@ void SceneSP2Room3::Render()
 		break;
 		//starting phase
 	case 1:
-		RenderTextOnScreen(meshList[GEO_TEXT], "A handsaw.. i can craft at the table.", Color(0, 0, 1), 4, 10, 1.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "A handsaw.. I can craft at the table.", Color(0, 0, 1), 4, 10, 1.8f);
 		break;
 	case 2:
 		RenderTextOnScreen(meshList[GEO_TEXT], "I guess I better start looking around", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
