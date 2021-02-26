@@ -563,6 +563,11 @@ void SceneSP2Room1::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -450)));
 	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -510))); 
 	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -470)));
+	//lever
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
