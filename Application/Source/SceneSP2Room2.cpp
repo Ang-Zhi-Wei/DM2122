@@ -851,6 +851,7 @@ void SceneSP2Room2::Update(double dt)
 			PliersText = true;
 			if (Fpressed == true)
 			{
+				hammerFound = true;
 				PickUpItem(Pliersitem);
 				Pliersitem = NULL;
 				Fpressed = false;
