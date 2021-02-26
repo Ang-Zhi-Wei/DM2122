@@ -625,7 +625,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 
-	camera.position.Set(-30, 9, -340);
+	camera.position.Set(-30, 9, -420);
 	camera.rawTarget = camera.position;
 
 
