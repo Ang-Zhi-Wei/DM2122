@@ -26,8 +26,7 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
-	int SpeakPhase;
-	double SpeakTimer;
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -207,6 +206,11 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//DIALOGUE
+	int SpeakPhase;
+	double SpeakTimer;
+
 	//In locker stuff
 	float suffocationTranslate;
 	float suffocationTranslateDir;
@@ -215,6 +219,7 @@ private:
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
+	bool isTalking;
 	double Mousex, Mousey;
 	double MposX, MposY;
 	double Mousetempx, Mousetempy;
