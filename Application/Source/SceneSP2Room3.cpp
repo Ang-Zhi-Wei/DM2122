@@ -16,13 +16,14 @@ SceneSP2Room3::SceneSP2Room3()
 	inLocker = false;
 	exitGarage = false;
 	nearCraft = false;
+	craftScrewdriver = false;
 	showSideBox = true;
 	SpeakTimer = 0;
 	Qpressed = Qreleased = false;
 	Epressed = Ereleased = false;
 	Fpressed = Freleased = false;
 	Apressed = Areleased = false;
-	craftScrewdriver = false;
+
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	camBlinkOffSec = 0;
@@ -530,6 +531,9 @@ void SceneSP2Room3::Set(Scene* scene)
 	{
 		itemImage[i] = scene->itemImage[i];
 	}
+	//Craft 
+	nearCraft = false;
+	craftScrewdriver = false;
 }
 
 void SceneSP2Room3::SetBackground()
