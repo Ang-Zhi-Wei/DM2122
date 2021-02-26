@@ -1509,7 +1509,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
 		{
 			interact = true;
-			interact_message = "pull lever";
+			interact_message = "Pull lever";
 			if (Fpressed)
 			{
 				leverIsPulled = pulling;
