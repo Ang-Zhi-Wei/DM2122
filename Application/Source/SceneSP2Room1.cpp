@@ -361,6 +361,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
 	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
 	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
+	meshList[GEO_YOUDIED] = MeshBuilder::GenerateQuad2("death overlay words", 80, 60, 0);
+	meshList[GEO_YOUDIED]->textureID = LoadTGA("Image//YouDiedScreen.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -579,6 +581,11 @@ void SceneSP2Room1::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(-31.5, 0.5, -450)));
 	traplist.push_back(trap(trap::beartrap, Vector3(39.5, 0.5, -510))); 
 	traplist.push_back(trap(trap::beartrap, Vector3(55.5, 0.5, -470)));
+	//lever
+	rotate_painting = 90;
+	rotate_lever = -60;
+	leverIsPulled = no;
+	move_safe = 64.5;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
@@ -621,7 +628,8 @@ void SceneSP2Room1::Set(Scene* scene)
 	{
 		itemImage[i] = scene->itemImage[i];
 	}
-
+	//death timer
+	deathtimer = 0;
 }
 
 void SceneSP2Room1::SetBackground()
@@ -659,7 +667,19 @@ void SceneSP2Room1::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
+	if (ghost->kill) {
+		deathtimer += dt;
+		if (deathtimer > 7) {
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
+			Application::setscene(Scene_Menu);
+			return;
+		}
+	}
+	else if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -870,6 +890,10 @@ void SceneSP2Room1::Update(double dt)
 
 	
 	//Locker
+	if (wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1 && SparkplugFound)
+	{
+		ObjectivePhase = 3;
+	}
 
 
 	for (int i = 0; i < signed(Lockerlist.size()); i++) {
@@ -1403,6 +1427,13 @@ void SceneSP2Room1::Update(double dt)
 		{
 			camera.target = camera.lockedTarget;
 			ghost->state = Ghost::DEATH;
+			showSideBox = false;
+			inventory->open = false;
+			meshList[GEO_BAR]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_STAMINA]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_REDDOT]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_BATTERY]->textureID = LoadTGA("Image//transparent.tga");
 		}
 
 		break;
@@ -1547,7 +1578,7 @@ void SceneSP2Room1::Update(double dt)
 		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
 		{
 			interact = true;
-			interact_message = "pull lever";
+			interact_message = "Pull lever";
 			if (Fpressed)
 			{
 				leverIsPulled = pulling;
@@ -2261,7 +2292,7 @@ void SceneSP2Room1::Render()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
 	posx << "X:" << campos_x;
@@ -2273,7 +2304,7 @@ void SceneSP2Room1::Render()
 	posz.precision(4);
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 	
 
 
@@ -2293,6 +2324,7 @@ void SceneSP2Room1::Render()
 	if (ghost->state == Ghost::DEATH)
 	{
 		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_YOUDIED], 40, 30, 1, 1);
 	}
 	else if (ghost->distance <= 50)
 	{
@@ -2328,6 +2360,24 @@ void SceneSP2Room1::Render()
 	if (pickUpBattery || nearKey || nearWrench)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+	}
+
+	if (nearKey == true && houseItems[3] != nullptr)
+	{
+		showChatbox = true;
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Oh a key! I can unlock something with it.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+
+	if (nearWrench == true && houseItems[4] != nullptr)
+	{
+		showChatbox = true;
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Found the wrench!", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
 
@@ -2372,8 +2422,13 @@ void SceneSP2Room1::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}
@@ -2433,9 +2488,9 @@ void SceneSP2Room1::Render()
 	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	//}
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	/*RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);*/
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);

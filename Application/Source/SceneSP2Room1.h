@@ -77,6 +77,7 @@ public:
 		GEO_WARNING1,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BAR2,
@@ -310,7 +311,6 @@ private:
 		pulling,
 	};
 	leverPulled leverIsPulled;
-
 	enum WaterState
 	{
 		flowing,
@@ -327,6 +327,8 @@ private:
 		kitchen,
 		bedroom
 	};
+	//death timer
+	double deathtimer;
 
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

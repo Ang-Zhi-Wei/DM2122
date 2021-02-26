@@ -103,13 +103,15 @@ public:
 		GEO_WARNING1,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		GEO_REDDOT, // Camcorder dot
-		GEO_BAR, //stamina
+		GEO_BAR, //battery
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
 		GEO_PLAYGROUND,
 		GEO_LIVES,
 		GEO_CHATBOX,
+		GEO_CHATBOX2,
 		GEO_SIDEBOX,
 		GEO_END,
 		GEO_ENDBACK,
@@ -246,6 +248,7 @@ private:
 	float rotate_Man;
 	float fps;
 	bool showChatbox;
+	bool showChatbox2;
 	bool showSideBox;
 	bool NearGarage;
 	bool pickUpBattery;
@@ -272,9 +275,13 @@ private:
 	//signs
 	int Sign;
 	int GarageSign; //1
+	bool GarageSignActive;
 	int HospitalSign; //2
+	bool HospitalSignActive;
 	int HouseSign; //3
+	bool HouseSignActive;
 	int SchoolSign; //4
+	bool SchoolSignActive;
 	double SignTimer;
 	
 
@@ -324,6 +331,7 @@ private:
 
 	//Win conditions
 	bool NearCar;
+	bool WinTrigger;
 	int WinLevel;
 	bool winTimerActive;
 	double winTimer;
@@ -335,7 +343,8 @@ private:
 	ISoundEngine* Effect;
 
 	Item* items[5];
-
+	//death timer
+	double deathtimer;
 
 	Vector3 temp;
 	void RenderSkybox();

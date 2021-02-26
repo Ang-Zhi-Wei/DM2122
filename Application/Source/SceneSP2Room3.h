@@ -26,8 +26,7 @@ public:
 	virtual void Set(Scene* scene);
 	virtual void SetBackground();
 
-	int SpeakPhase;
-	double SpeakTimer;
+	
 
 	enum GEOMETRY_TYPE
 	{
@@ -50,6 +49,7 @@ public:
 		GEO_PAUSEMENU,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		SUFFOCATION,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
@@ -106,6 +106,7 @@ public:
 		metalcabinet,
 		garagedoor,
 		screwdriver,
+		HANDSAW,
 		BATTERY,
 	
 
@@ -194,6 +195,8 @@ private:
 	float campos_y;
 	float campos_z;
 	bool pickUpItem;
+	bool craftScrewdriver;
+	bool nearCraft;
 	bool exitGarage;
 	bool nearExit;
 	bool showSideBox;
@@ -204,6 +207,11 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	//DIALOGUE
+	int SpeakPhase;
+	double SpeakTimer;
+
 	//In locker stuff
 	float suffocationTranslate;
 	float suffocationTranslateDir;
@@ -212,11 +220,12 @@ private:
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
+	bool isTalking;
 	double Mousex, Mousey;
 	double MposX, MposY;
 	double Mousetempx, Mousetempy;
 
-	Item* garageItems[3];
+	Item* garageItems[4];
 
 	struct Wall
 	{
@@ -294,7 +303,8 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
-
+	//death timer
+	double deathtimer;
 	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
 	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);

@@ -99,6 +99,7 @@ public:
 		GEO_JUMPSCARE1,
 		GEO_REDDOT,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		SUFFOCATION,
 		GEO_WARNING2,
 		GEO_WARNING1,
@@ -316,7 +317,8 @@ private:
 	bool doorunlocked;
 	bool bruhmoment;
 	bool flowerstaken;
-
+	//death timer
+	double deathtimer;
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;

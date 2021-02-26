@@ -47,6 +47,7 @@ public:
 			MysObj,
 
 			Wrench,
+			Handsaw,
 			//add more depending on whta u need, don forget set in Set function
 		};
 	
@@ -109,6 +110,10 @@ public:
 			case Wrench:
 				description = "A Wrench";
 				image = "Assigment2Images/wrenchicon.tga";
+				break;
+			case Handsaw:
+				description = "Use to craft screwdriver";
+				image = "Assigment2Images/handsawicon.tga";
 				break;
 			}
 		}
@@ -179,8 +184,8 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(100, 3, 0); //far far away so no one knows its there
-			rawPos.Set(100, 0, 0);
+			pos.Set(1000, 3, 1000); //far far away so no one knows its there
+			rawPos.Set(800, 0, 0);
 			rotateY = 0;
 			state = UNSPAWNED;
 			waitTime = 3;

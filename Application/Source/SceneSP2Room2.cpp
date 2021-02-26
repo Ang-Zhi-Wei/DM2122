@@ -191,8 +191,8 @@ void SceneSP2Room2::Init()
 	schoolItems[0] = new Item("Battery", Item::BATTERY, Vector3(500, 4.5, -102));
 	schoolItems[1] = new Item("Battery", Item::BATTERY, Vector3(491, 4.5, 85));
 
-	PuzzleItems[0] = new Item("lunchbox", Item::ItemA, Vector3(505, 5, -102));
-	PuzzleItems[1] = new Item("notebook", Item::Notebook, Vector3(478, 7.7, 60));
+	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
+	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
 	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
 
 
@@ -557,6 +557,8 @@ void SceneSP2Room2::Init()
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
 	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
 	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
+	meshList[GEO_YOUDIED] = MeshBuilder::GenerateQuad2("death overlay words", 80, 60, 0);
+	meshList[GEO_YOUDIED]->textureID = LoadTGA("Image//YouDiedScreen.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -612,6 +614,10 @@ void SceneSP2Room2::Init()
 	DS_classroom = CLOSED;
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
+	//puzzle item placed
+	for (int i = 0; i < 3; i++) {
+		puzzleItemPlaced[i] = false;
+	}
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -663,6 +669,8 @@ void SceneSP2Room2::Set(Scene* scene)
 	{
 		itemImage[i] = scene->itemImage[i];
 	}
+	//death timer
+	deathtimer = 0;
 
 	camera.position.Set(475, 9, 0);
 	camera.rawTarget = camera.position;
@@ -692,6 +700,7 @@ void SceneSP2Room2::SetBackground()
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
 	Effect->setSoundVolume(0.f);
+	Jumpscare->setSoundVolume(1.f);
 
 }
 
@@ -707,7 +716,19 @@ void SceneSP2Room2::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
+	if (ghost->kill) {
+		deathtimer += dt;
+		if (deathtimer > 7) {
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
+			Application::setscene(Scene_Menu);
+			return;
+		}
+	}
+	else if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);
@@ -786,6 +807,11 @@ void SceneSP2Room2::Update(double dt)
 		}
 	}
 
+
+	if (wrenchFound == 1 && screwDriverFound == 1 && hammerFound == 1 && SparkplugFound == 1)
+	{
+		ObjectivePhase = 3;
+	}
 	//puzzle items
 	puzzleitem = false;
 	for (int i = 0; i < 3; i++)
@@ -1126,6 +1152,13 @@ void SceneSP2Room2::Update(double dt)
 		{
 			camera.target = camera.lockedTarget;
 			ghost->state = Ghost::DEATH;
+			showSideBox = false;
+			inventory->open = false;
+			meshList[GEO_BAR]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_STAMINA]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_REDDOT]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_BATTERY]->textureID = LoadTGA("Image//transparent.tga");
 		}
 
 		break;
@@ -1935,19 +1968,19 @@ void SceneSP2Room2::Render()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posx;
+	//posx.precision(4);
+	//posx << "X:" << campos_x;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posz;
+	//posz.precision(4);
+	//posz << "Z:" << campos_z;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	//modelStack.PopMatrix();
 
 
 	if (pickUpBattery)
@@ -1973,6 +2006,7 @@ void SceneSP2Room2::Render()
 	if (ghost->state == Ghost::DEATH)
 	{
 		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_YOUDIED], 40, 30, 1, 1);
 	}
 	else if (ghost->distance <= 50)
 	{
@@ -2052,9 +2086,14 @@ void SceneSP2Room2::Render()
 			modelStack.PushMatrix();
 			std::stringstream sparkplug;
 			sparkplug << "Sparkplug:" << SparkplugFound;
-			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 8.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], sparkplug.str(), Color(1, 1, 0), 2.5f, 1.2f, 9.2f);
 			modelStack.PopMatrix();
 
+			break;
+		}
+	case 3:
+		if (showSideBox == true) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "GET BACK TO CAR AND ESCAPE!", Color(1.f, 1.f, 0.f), 2.8f, 1.2f, 11.7f);
 			break;
 		}
 	}
@@ -2096,7 +2135,7 @@ void SceneSP2Room2::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
-	std::ostringstream test1;
+	/*std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
@@ -2104,7 +2143,7 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost pos: " << ghost->pos;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -2120,9 +2159,9 @@ void SceneSP2Room2::Render()
 	}
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);\
 

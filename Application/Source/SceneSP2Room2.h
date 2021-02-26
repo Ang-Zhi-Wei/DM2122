@@ -82,6 +82,7 @@ public:
 		GEO_WARNING1,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
 		GEO_BAR2, //suffocation
@@ -319,7 +320,8 @@ private:
 		dilucItem,
 	};
 	//Mesh* itemImage[8];
-
+	//death timer
+	double deathtimer;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;
