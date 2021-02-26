@@ -1732,7 +1732,7 @@ void SceneSP2Room3::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
 	posx << "X:" << campos_x;
@@ -1744,7 +1744,7 @@ void SceneSP2Room3::Render()
 	posz.precision(4);
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	
 	

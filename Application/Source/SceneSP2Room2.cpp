@@ -1959,19 +1959,19 @@ void SceneSP2Room2::Render()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posx;
+	//posx.precision(4);
+	//posx << "X:" << campos_x;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posz;
+	//posz.precision(4);
+	//posz << "Z:" << campos_z;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	//modelStack.PopMatrix();
 
 
 	if (pickUpBattery)
@@ -2125,7 +2125,7 @@ void SceneSP2Room2::Render()
 	{
 		RenderMeshOnScreen(meshList[GEO_BAR2], 14 - (4.75 - float(suffocationTranslate) * 0.25f), 50, float(suffocationScale) * 0.5f, 1);
 	}
-	std::ostringstream test1;
+	/*std::ostringstream test1;
 	test1 << "ghost state: " << ghost->state;
 	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	std::ostringstream test3;
@@ -2133,7 +2133,7 @@ void SceneSP2Room2::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
 	std::ostringstream test2;
 	test2 << "ghost pos: " << ghost->pos;
-	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);
+	RenderTextOnScreen(meshList[GEO_TEXT], test2.str(), Color(0, 1, 0), 4, 0, 9);*/
 	////checking
 	//std::cout << camera.position.x << std::endl;
 	//std::cout << camera.position.z << std::endl;
@@ -2149,9 +2149,9 @@ void SceneSP2Room2::Render()
 	}
 
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare2Counter" + std::to_string(jumpscare2Counter), Color(0, 1, 0), 3, 35, 2);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "JumpscareTimer" + std::to_string(jumpscareTimer2), Color(0, 1, 0), 3, 35, 1);\
 

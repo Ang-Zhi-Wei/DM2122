@@ -2718,19 +2718,19 @@ void SceneSP2Main::Render()
 
 
 
-	modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posx;
+	//posx.precision(4);
+	//posx << "X:" << campos_x;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
+	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//std::stringstream posz;
+	//posz.precision(4);
+	//posz << "Z:" << campos_z;
+	//RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
+	//modelStack.PopMatrix();
 
 	
 
@@ -2983,7 +2983,7 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Sign Counter: " + std::to_string(Sign), Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 }
 
 void SceneSP2Main::Exit()

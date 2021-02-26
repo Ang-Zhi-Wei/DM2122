@@ -2164,7 +2164,7 @@ void SceneSP2Room1::Render()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
 	posx << "X:" << campos_x;
@@ -2176,7 +2176,7 @@ void SceneSP2Room1::Render()
 	posz.precision(4);
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 	
 
 
@@ -2359,9 +2359,9 @@ void SceneSP2Room1::Render()
 	//	RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
 	//}
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
+	/*RenderTextOnScreen(meshList[GEO_TEXT], "X:" + std::to_string(camera.position.x), Color(0, 1, 0), 3, 35, 5);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Y:" + std::to_string(camera.position.y), Color(0, 1, 0), 3, 35, 4);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Z:" + std::to_string(camera.position.z), Color(0, 1, 0), 3, 35, 3);*/
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer1: " + std::to_string(jumpscareTimer1), Color(1, 1, 1), 3, 20, 5);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer2: " + std::to_string(jumpscareTimer2), Color(1, 1, 1), 3, 20, 4);
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Jumpscare Timer3: " + std::to_string(jumpscareTimer3), Color(1, 1, 1), 3, 20, 3);
