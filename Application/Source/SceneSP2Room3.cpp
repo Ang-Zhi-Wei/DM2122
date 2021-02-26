@@ -65,7 +65,7 @@ void SceneSP2Room3::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//camera
-	camera.Init(Vector3(0, 9, 455), Vector3(0, 9, 435), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 9, 465), Vector3(0, 9, 485), Vector3(0, 1, 0));
 	//shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	SpeakTimer = 0;
@@ -246,9 +246,9 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 
-	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(-22, 7.8, 365));
-	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(25, 0, 400));
-	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(24.5, 5.2, 415));
+	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(22, 7.8, 555));
+	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(-25, 0, 520));
+	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(-24.5, 5.2, 505));
 
 
 	
@@ -355,56 +355,52 @@ void SceneSP2Room3::Init()
 
 
 
-
-	
-
-
 	//list of lockers
 	Lockerlist.push_back(Locker());
-	Lockerlist[0].setpos(Vector3(28.f, -0.2f, 380.f));
+	Lockerlist[0].setpos(Vector3(-28.f, -0.2f, 540.f));
 	Lockerlist[0].setyaw(180);
 	//wall colliders
 	//@collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[0].setlength(5, 25, 100);
-	Colliderlist[0].Setposition(Vector3(30, 12, 410));
+	Colliderlist[0].Setposition(Vector3(-30, 12, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[1].setlength(5, 25, 100);
-	Colliderlist[1].Setposition(Vector3(-30, 12, 410));
+	Colliderlist[1].Setposition(Vector3(30, 12, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[2].setlength(100, 25, 5);
-	Colliderlist[2].Setposition(Vector3(0, 12, 360));
+	Colliderlist[2].Setposition(Vector3(0, 12, 560));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[3].setlength(20, 30, 5);
-	Colliderlist[3].Setposition(Vector3(-25, 12, 462));
+	Colliderlist[3].Setposition(Vector3(25, 12, 458));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[4].setlength(20, 30, 5);
-	Colliderlist[4].Setposition(Vector3(25, 12, 462));
+	Colliderlist[4].Setposition(Vector3(-25, 12, 458));
 	//random objects colliders
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[5].setlength(5, 20, 7);
-	Colliderlist[5].Setposition(Vector3(10, 0, 426));
+	Colliderlist[5].Setposition(Vector3(-10, 0, 494));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(7, 20, 3);
-	Colliderlist[6].Setposition(Vector3(-20, 0, 365));
+	Colliderlist[6].Setposition(Vector3(20, 0, 555));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[7].setlength(4.5, 20,12.5);
-	Colliderlist[7].Setposition(Vector3 (- 20, 4, 400));
+	Colliderlist[7].Setposition(Vector3 (20, 4, 520));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[8].setlength(17, 20, 38);
-	Colliderlist[8].Setposition(Vector3(0, 1.5, 410));
+	Colliderlist[8].Setposition(Vector3(0, 1.5, 510));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[9].setlength(12, 20, 13);
-	Colliderlist[9].Setposition(Vector3(-25.f, 1.2f, 438.f));
+	Colliderlist[9].Setposition(Vector3(25.f, 1.2f, 482.f));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[10].setlength(12, 20, 12.5);
-	Colliderlist[10].Setposition(Vector3(25.f, 0.8f, 430.f));
+	Colliderlist[10].Setposition(Vector3(-25.f, 0.8f, 490.f));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[11].setlength(10, 20, 19);
-	Colliderlist[11].Setposition(Vector3(26, 4, 413));
+	Colliderlist[11].Setposition(Vector3(-26, 4, 507));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[12].setlength(11.5, 20, 5.5);
-	Colliderlist[12].Setposition(Vector3(25, 8, 365.5));
+	Colliderlist[12].Setposition(Vector3(-25, 8, 554.5));
 	//Locker collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[13].setlength(3.9, 10, 4.3);
@@ -412,7 +408,7 @@ void SceneSP2Room3::Init()
 	//Garage door collider
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[14].setlength(30, 10, 5);
-	Colliderlist[14].Setposition(Vector3(0, 2.1, 462));
+	Colliderlist[14].Setposition(Vector3(0, 2.1, 458));
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[14].getxlength(), Colliderlist[14].getylength(), Colliderlist[14].getzlength());
 
@@ -453,8 +449,8 @@ void SceneSP2Room3::Init()
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
 	meshList[GEO_BEARTRAP]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 	//trap list
-	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, 450)));
-	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, 395)));
+	traplist.push_back(trap(trap::beartrap, Vector3(-10, 0, 470)));
+	traplist.push_back(trap(trap::beartrap, Vector3(25, 0, 525)));
 
 	//death timer
 	deathtimer = 0;
@@ -619,7 +615,7 @@ void SceneSP2Room3::Update(double dt)
 
 	if (nearCraft == true && Rpressed == true)
 	{
-		garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(-21, 7.1, 395));
+		garageItems[0] = new Item("Screwdriver", Item::Screwdriver, Vector3(21, 7.1, 555));
 		craftScrewdriver = true;
 
 	}
@@ -727,7 +723,7 @@ void SceneSP2Room3::Update(double dt)
 		Rreleased = false;
 	}
 
-	if (campos_z > 452 && campos_x > -14 && campos_x < 14)
+	if (campos_z < 468 && campos_x < 14 && campos_x > -14)
 	{
 		nearExit = true;
 	}
@@ -738,7 +734,7 @@ void SceneSP2Room3::Update(double dt)
 
 
 
-	if (campos_x < -15 && campos_z < 405 && campos_z > 394 && garageItems[3] == nullptr && craftScrewdriver == false)
+	if (campos_x > 15 && campos_z < 515 && campos_z > 526 && garageItems[3] == nullptr && craftScrewdriver == false)
 	{
 		nearCraft = true;
 	}
@@ -811,41 +807,7 @@ void SceneSP2Room3::Update(double dt)
 	}
 
 
-	//inventory
-	if (Epressed)
-	{
-		inventory->open = !inventory->open;
-		Epressed = false;
-	}
-	if (inventory->open)
-	{
-		camera.can_move = false;
-		if (Apressed)
-		{
-			inventory->selected--;
-			if (inventory->selected == -1)
-			{
-				inventory->selected = 7;
-			}
-			Apressed = false;
-		}
-		else if (Dpressed)
-		{
-			inventory->selected++;
-			inventory->selected %= 8;
-			Dpressed = false;
-		}
-		else if (Rpressed)
-		{
-			if (inventory->items[inventory->selected] != nullptr)
-			{
-				UseItem(inventory->items[inventory->selected]->type);
-			}
-			//else warning that no item selected?
-			Rpressed = false;
-		}
-	}
-
+	
 	//inventory
 	if (Epressed)
 	{
@@ -1346,10 +1308,10 @@ void SceneSP2Room3::Render()
 	
 
 
-	//all doors
-	//schoolleft
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, 460);
+	modelStack.Rotate(180, 0, 1, 0);
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(30, 12, -50);
@@ -1544,19 +1506,7 @@ void SceneSP2Room3::Render()
 		RenderMesh(meshList[locker], true);
 		modelStack.PopMatrix();
 	}
-	/*modelStack.PushMatrix();
-	std::stringstream posx;
-	posx.precision(4);
-	posx << "X:" << campos_x;
-	RenderTextOnScreen(meshList[GEO_TEXT], posx.str(), Color(1, 0, 0), 4, 30, 6);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	std::stringstream posz;
-	posz.precision(4);
-	posz << "Z:" << campos_z;
-	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();*/
+	
 
 	
 	
@@ -1731,6 +1681,10 @@ void SceneSP2Room3::Render()
 	//pause menu, place all the way at the bottom in render
 	if (gamepaused)
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
+
+	std::ostringstream test1;
+	test1 << "cam pos: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 }
 
 void SceneSP2Room3::Exit()
