@@ -1615,10 +1615,9 @@ void SceneSP2Main::Update(double dt)
 		camera.can_move = true;
 
 
-	if (dt > 1000 / 60) {
-		dt = 1000 / 60;
+	if (dt > 0.02) {
+		dt = 0.017;
 	}
-
 
 	switch (SpeakPhase)
 	{
