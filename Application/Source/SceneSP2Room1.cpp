@@ -562,6 +562,10 @@ void SceneSP2Room1::Init()
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[30].setlength(3, 15, 12);
 	Colliderlist[30].Setposition(Vector3(50, 0, -480));
+	//default active
+	for (int i = 0; i < Colliderlist.size(); i++) {
+		Colliderlist[i].setactive(true);
+	}
 	//colliderbox for checking any collider(just one)
 	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[30].getxlength(), Colliderlist[30].getylength(), Colliderlist[30].getzlength());
 	//list of colliders
@@ -586,6 +590,11 @@ void SceneSP2Room1::Init()
 	rotate_lever = -60;
 	leverIsPulled = no;
 	move_safe = 64.5;
+	//door unlock and key
+	isUnlocked[kitchen] = false;
+	isUnlocked[bedroom] = false;
+	keyspawn = false;
+	waterstate = notused;
 }
 
 void SceneSP2Room1::Set(Scene* scene)
@@ -630,6 +639,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	}
 	//death timer
 	deathtimer = 0;
+	
 }
 
 void SceneSP2Room1::SetBackground()
