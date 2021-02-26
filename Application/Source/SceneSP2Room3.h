@@ -297,7 +297,8 @@ private:
 	std::vector<Locker>Lockerlist;
 	std::vector<trap>traplist;
 	Vector3 temp;
-
+	//death timer
+	double deathtimer;
 	bool PickUpItem(Item* item); //shud be called only in one frame, delete item after pick up
 	void UseItem(int itemtype); //rmb to edit this function as u add items
 	void RenderMesh(Mesh* mesh, bool enableLight);

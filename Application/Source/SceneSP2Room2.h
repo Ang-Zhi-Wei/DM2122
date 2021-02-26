@@ -319,7 +319,8 @@ private:
 		dilucItem,
 	};
 	//Mesh* itemImage[8];
-
+	//death timer
+	double deathtimer;
 	void RenderSkybox();
 	std::vector<ColliderBox>Colliderlist;
 	std::vector<Locker>Lockerlist;

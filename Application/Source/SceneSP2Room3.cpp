@@ -480,8 +480,6 @@ void SceneSP2Room3::Init()
 	DS_lounge = CLOSED;
 	DS_school = OPEN;
 
-
-
 	//trap mesh
 	meshList[GEO_BEARTRAP] = MeshBuilder::GenerateOBJ("Beartrap", "OBJ//BearTrap.obj");
 	meshList[GEO_BEARTRAP]->textureID = LoadTGA("Assigment2Images//BearTrap.tga");
@@ -489,6 +487,9 @@ void SceneSP2Room3::Init()
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(10, 0, -10)));
 	traplist.push_back(trap(trap::beartrap, Vector3(-25, 0, -65)));
+
+	//death timer
+	deathtimer = 0;
 }
 
 void SceneSP2Room3::Set(Scene* scene)
@@ -565,7 +566,19 @@ void SceneSP2Room3::Update(double dt)
 		Effect->setSoundVolume(0.f);
 	}
 	//sounds when ghost get too close
-	if (ghost->kill == false && ghost->state == Ghost::SPIN) {
+	if (ghost->kill) {
+		deathtimer += dt;
+		if (deathtimer > 7) {
+			Background->setSoundVolume(0.f);
+			Effect->setSoundVolume(0.f);
+			Jumpscare->setSoundVolume(0.f);
+			Heartbeat->setSoundVolume(0.f);
+			Application::Load();
+			Application::setscene(Scene_Menu);
+			return;
+		}
+	}
+	else if (ghost->kill == false && ghost->state == Ghost::SPIN) {
 		ghost->kill = true;
 		Heartbeat->setSoundVolume(0.f);
 		Jumpscare->play2D("Sound\\Jumpscares\\523984__brothermster__jumpscare-sound.wav", false);

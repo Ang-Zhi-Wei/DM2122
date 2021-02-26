@@ -316,7 +316,8 @@ private:
 	bool doorunlocked;
 	bool bruhmoment;
 	bool flowerstaken;
-
+	//death timer
+	double deathtimer;
 	//@pause 
 	bool PKeypressed, PKeyreleased;
 	bool gamepaused;
