@@ -806,7 +806,7 @@ void SceneSP2Room1::Update(double dt)
 
 	}
 
-	if (campos_x > 34 && campos_x < 38 && campos_z > -453 && campos_z < -450 && houseItems[3] != nullptr && leverIsPulled == yes)
+	if (campos_x > 34 && campos_x < 38 && campos_z > -543 && campos_z < -540 && houseItems[3] != nullptr && leverIsPulled == yes)
 	{
 		nearKey = true;
 	}
@@ -814,7 +814,7 @@ void SceneSP2Room1::Update(double dt)
 		nearKey = false;
 	}
 
-	if (campos_x < 55 && campos_x > 52 && campos_z < -475 && campos_z > -482 && houseItems[4] != nullptr && leverIsPulled == yes)
+	if (campos_x < 55 && campos_x > 52 && campos_z < -565 && campos_z > -572 && houseItems[4] != nullptr && leverIsPulled == yes)
 	{
 		nearWrench = true;
 	}
@@ -968,7 +968,7 @@ void SceneSP2Room1::Update(double dt)
 			DS_MAIN = CLOSING;
 			Creakingdoor->play2D("Sound\\Effects\\383083__chrisreierson__creaking-door-2.wav", false);
 		}
-		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
+		if (camera.position.z <= -415 && camera.position.z >= -425 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
 			nearExit = true;
 			if (Fpressed)
@@ -987,7 +987,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case CLOSED:
-		if (camera.position.z <= -325 && camera.position.z >= -335 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
+		if (camera.position.z <= -415 && camera.position.z >= -425 && camera.position.x <= -29.5 && camera.position.x >= -34.5)
 		{
 			nearExit = true;
 			if (Fpressed)
@@ -1034,7 +1034,7 @@ void SceneSP2Room1::Update(double dt)
 			Colliderlist[17].setactive(true);
 			camera.setchecker(Colliderlist);
 		}
-		if (camera.position.z <= -425 && camera.position.z >= -435 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
+		if (camera.position.z <= -515 && camera.position.z >= -515 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
 		{
 			interact = true;
 			interact_message = "Close Door";
@@ -1049,7 +1049,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case CLOSED:
-		if (camera.position.z <= -425 && camera.position.z >= -435 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
+		if (camera.position.z <= -515 && camera.position.z >= -525 && camera.position.x >= -34.5 && camera.position.x <= -29.5)
 		{
 			interact = true;
 			interact_message = "Open Door";
@@ -1097,7 +1097,7 @@ void SceneSP2Room1::Update(double dt)
 				camera.setchecker(Colliderlist);
 
 			}
-			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+			if (camera.position.z <= -590 && camera.position.z >= -600 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 			{
 				interact = true;
 				interact_message = "Close Door";
@@ -1112,7 +1112,7 @@ void SceneSP2Room1::Update(double dt)
 			}
 			break;
 		case CLOSED:
-			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+			if (camera.position.z <= -590 && camera.position.z >= -600 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 			{
 				interact = true;
 				interact_message = "Open Door";
@@ -1147,7 +1147,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else
 	{
-		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
+		if (camera.position.z <= -590 && camera.position.z >= -600 && camera.position.x >= 35.5 && camera.position.x <= 40.5)
 		{
 			interact = true;
 			interact_message = "Door locked";
@@ -1183,7 +1183,7 @@ void SceneSP2Room1::Update(double dt)
 			}
 			break;
 		case CLOSED:
-			if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+			if (camera.position.z <= -590 && camera.position.z >= -600 && camera.position.x >= 63 && camera.position.x <= 68)
 			{
 				interact = true;
 				interact_message = "Open Door";
@@ -1218,7 +1218,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 	else
 	{
-		if (camera.position.z <= -500 && camera.position.z >= -510 && camera.position.x >= 63 && camera.position.x <= 68)
+		if (camera.position.z <= -590 && camera.position.z >= -600 && camera.position.x >= 63 && camera.position.x <= 68)
 		{
 			interact = true;
 			interact_message = "Door locked";
@@ -1518,7 +1518,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case(no):
-		if (campos_x < 8 && campos_x > -8 && campos_z < -501 && campos_z > -503)
+		if (campos_x < 8 && campos_x > -8 && campos_z < -591 && campos_z > -593)
 		{
 			interact = true;
 			interact_message = "Pull lever";
@@ -1538,7 +1538,7 @@ void SceneSP2Room1::Update(double dt)
 	switch (waterstate)
 	{
 	case (notused):
-		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
+		if (campos_x < 40 && campos_x > 35 && campos_z < -615 && campos_z > -623)
 		{
 			interact = true;
 			interact_message = "Use sink";
@@ -1569,7 +1569,7 @@ void SceneSP2Room1::Update(double dt)
 		}
 		break;
 	case(resided):
-		if (campos_x < 40 && campos_x > 35 && campos_z < -525 && campos_z > -533)
+		if (campos_x < 40 && campos_x > 35 && campos_z < -615 && campos_z > -623)
 		{
 			interact = true;
 			interact_message = "Pick up key";
