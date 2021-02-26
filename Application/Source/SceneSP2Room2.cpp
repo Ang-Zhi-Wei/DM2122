@@ -615,7 +615,8 @@ void SceneSP2Room2::Init()
 	traplist.push_back(trap(trap::beartrap, Vector3(525, 0.5, 100)));
 	traplist.push_back(trap(trap::beartrap, Vector3(510, 0.5, -15)));
 	traplist.push_back(trap(trap::beartrap, Vector3(540, 0.5, 5)));
-
+	//plier
+	plierstaken = false;
 }
 
 void SceneSP2Room2::Set(Scene* scene)
@@ -850,6 +851,7 @@ void SceneSP2Room2::Update(double dt)
 			PliersText = true;
 			if (Fpressed == true)
 			{
+				hammerFound = true;
 				PickUpItem(Pliersitem);
 				Pliersitem = NULL;
 				Fpressed = false;
@@ -1996,7 +1998,7 @@ void SceneSP2Room2::Render()
 	}
 
 	//comment out later
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	std::stringstream posx;
 	posx.precision(4);
 	posx << "X:" << campos_x;
@@ -2008,7 +2010,7 @@ void SceneSP2Room2::Render()
 	posz.precision(4);
 	posz << "Z:" << campos_z;
 	RenderTextOnScreen(meshList[GEO_TEXT], posz.str(), Color(1, 0, 0), 4, 30, 10);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	// my god so many booleans just for texts
 	if (pickUpBattery)
@@ -2106,7 +2108,7 @@ void SceneSP2Room2::Render()
 
 			modelStack.PushMatrix();
 			std::stringstream hammer;
-			hammer << "Hammer:" << hammerFound;
+			hammer << "Plier:" << hammerFound;
 			RenderTextOnScreen(meshList[GEO_TEXT], hammer.str(), Color(1, 1, 0), 2.5f, 1.2f, 11.6f);
 			modelStack.PopMatrix();
 
