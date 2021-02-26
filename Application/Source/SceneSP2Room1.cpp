@@ -2233,6 +2233,24 @@ void SceneSP2Room1::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press F to pick up", Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 
+	if (nearKey == true && houseItems[3] != nullptr)
+	{
+		showChatbox = true;
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Oh a key! I can unlock something with it.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+
+	if (nearWrench == true && houseItems[4] != nullptr)
+	{
+		showChatbox = true;
+		if (showChatbox == true) {
+			RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		}
+		RenderTextOnScreen(meshList[GEO_TEXT], "Found the wrench!", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+
 
 
 	if (showSideBox == true) {
