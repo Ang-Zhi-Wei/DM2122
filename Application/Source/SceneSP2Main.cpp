@@ -587,6 +587,8 @@ void SceneSP2Main::Init()
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
 	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
 	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
+	meshList[GEO_YOUDIED] = MeshBuilder::GenerateQuad2("death overlay words", 80, 60, 0);
+	meshList[GEO_YOUDIED]->textureID = LoadTGA("Image//YouDiedScreen.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -1146,7 +1148,7 @@ void SceneSP2Main::Set(Scene* scene)
 	inventory = scene->inventory;
 	if (ghost->state == Ghost::UNSPAWNED)
 	{
-		//ghost->pos.Set(0, 0, -1000);
+		ghost->pos.Set(0, 3, 0);
 		ghost->state = Ghost::NORMAL;
 	}
 	else
@@ -1206,6 +1208,7 @@ void SceneSP2Main::SetBackground() {
 	Effect->setSoundVolume(0.f);
 	Background->setSoundVolume(0.5f);//Volume control
 }
+
 void SceneSP2Main::Update(double dt)
 {
 	// mouse cursor show / hide
@@ -1506,99 +1509,7 @@ void SceneSP2Main::Update(double dt)
 			}
 		}
 	}
-	/*
-	{if (nearBattery == true && Fpressed == true)
-	{
-		PickUpItem(items[0]);
-		nearBattery = false;
-		Fpressed = false;
-		items[0] = NULL;
-		
-	}
-
-	if (nearBattery1 == true && Fpressed == true)
-	{
-		PickUpItem(items[1]);
-		nearBattery1 = false;
-		Fpressed = false;
-		items[1] = NULL;
-
-	}
-
-	if (nearBattery2 == true && Fpressed == true)
-	{
-		PickUpItem(items[2]);
-		nearBattery2 = false;
-		Fpressed = false;
-		items[2] = NULL;
-
-	}
-
-	if (nearBattery3 == true && Fpressed == true)
-	{
-		PickUpItem(items[3]);
-		nearBattery3 = false;
-		Fpressed = false;
-		items[3] = NULL;
-
-	}
-
-	if (nearBattery4 == true && Fpressed == true)
-	{
-		PickUpItem(items[4]);
-		nearBattery4 = false;
-		Fpressed = false;
-		items[4] = NULL;
-
-	}
-
-	if (campos_z > 328 && campos_z < 350 && campos_x > -5 && campos_x < 5 && items[0] != nullptr )
-	{
-		nearBattery = true;
-	}
-	else {
-		nearBattery = false;
-	}
-
-
-	if (campos_z < 15 && campos_z > 5  && campos_x > 53 && campos_x < 64 && items[1] != nullptr )
-	{
-
-		nearBattery1 = true;
-	}
-	else {
-		nearBattery1 = false;
-	}
-
-
-	if (campos_z < 112 && campos_z > 100 && campos_x > -63 && campos_x < -53 && items[2] != nullptr)
-	{
-
-		nearBattery2 = true;
-	}
-	else {
-		nearBattery2 = false;
-	}
-
-	if (campos_z < -186 && campos_z > -195 && campos_x > -187 && campos_x < -175 && items[3] != nullptr)
-	{
-
-		nearBattery3 = true;
-	}
-	else {
-		nearBattery3 = false;
-	}
-
-	if (campos_z < -178 && campos_z > -190 && campos_x > 240 && campos_x < 255 && items[4] != nullptr)
-	{
-
-		nearBattery4 = true;
-	}
-	else {
-		nearBattery4 = false;
-	}
-	}
-	*/
+	
 
 
 	if (campos_z > 430 && campos_x > -17 && campos_x < 17 && ObjectivePhase >= 2)
@@ -2161,6 +2072,13 @@ void SceneSP2Main::Update(double dt)
 		{
 			camera.target = camera.lockedTarget;
 			ghost->state = Ghost::DEATH;
+			showSideBox = false;
+			inventory->open = false;
+			meshList[GEO_BAR]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_STAMINA]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_REDDOT]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_BATTERY]->textureID = LoadTGA("Image//transparent.tga");
 		}
 
 		break;
@@ -2873,6 +2791,7 @@ void SceneSP2Main::Render()
 	if (ghost->state == Ghost::DEATH)
 	{
 		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_YOUDIED], 40, 30, 1, 1);
 	}
 	else if (ghost->state == Ghost::CHASING)
 	{

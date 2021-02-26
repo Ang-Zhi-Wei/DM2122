@@ -179,7 +179,7 @@ public:
 			speed = 5;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
-			pos.Set(800, 3, 0); //far far away so no one knows its there
+			pos.Set(1000, 3, 1000); //far far away so no one knows its there
 			rawPos.Set(800, 0, 0);
 			rotateY = 0;
 			state = UNSPAWNED;

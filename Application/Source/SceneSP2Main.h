@@ -103,8 +103,9 @@ public:
 		GEO_WARNING1,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		GEO_REDDOT, // Camcorder dot
-		GEO_BAR, //stamina
+		GEO_BAR, //battery
 		GEO_BREATHINGBAR, // breathing
 		GEO_STAMINA,
 		GEO_PLAYGROUND,

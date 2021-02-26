@@ -355,6 +355,8 @@ void SceneSP2Room1::Init()
 	meshList[GEO_WARNING2]->textureID = LoadTGA("Image//redtint.tga");
 	meshList[GEO_DEATH] = MeshBuilder::GenerateQuad2("death overlay", 80, 60, 0);
 	meshList[GEO_DEATH]->textureID = LoadTGA("Image//death.tga");
+	meshList[GEO_YOUDIED] = MeshBuilder::GenerateQuad2("death overlay words", 80, 60, 0);
+	meshList[GEO_YOUDIED]->textureID = LoadTGA("Image//YouDiedScreen.tga");
 	meshList[GEO_INVENTORY] = MeshBuilder::GenerateQuad2("inventory", 5, 1, White);
 	meshList[GEO_INVENTORY]->textureID = LoadTGA("Image//inventory.tga");
 	meshList[GEO_SELECT] = MeshBuilder::GenerateQuad2("highlight", 1, 1, White);
@@ -1386,6 +1388,13 @@ void SceneSP2Room1::Update(double dt)
 		{
 			camera.target = camera.lockedTarget;
 			ghost->state = Ghost::DEATH;
+			showSideBox = false;
+			inventory->open = false;
+			meshList[GEO_BAR]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_OVERLAY2]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_STAMINA]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_REDDOT]->textureID = LoadTGA("Image//transparent.tga");
+			meshList[GEO_BATTERY]->textureID = LoadTGA("Image//transparent.tga");
 		}
 
 		break;
@@ -2196,6 +2205,7 @@ void SceneSP2Room1::Render()
 	if (ghost->state == Ghost::DEATH)
 	{
 		RenderMeshOnScreen(meshList[GEO_DEATH], 40, 30, 1, 1);
+		RenderMeshOnScreen(meshList[GEO_YOUDIED], 40, 30, 1, 1);
 	}
 	else if (ghost->distance <= 50)
 	{

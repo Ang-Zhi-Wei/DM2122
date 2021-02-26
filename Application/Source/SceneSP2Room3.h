@@ -49,6 +49,7 @@ public:
 		GEO_PAUSEMENU,
 		GEO_WARNING2,
 		GEO_DEATH,
+		GEO_YOUDIED,
 		SUFFOCATION,
 		GEO_REDDOT, // Camcorder dot
 		GEO_BAR, //stamina
