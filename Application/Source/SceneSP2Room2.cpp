@@ -2181,6 +2181,17 @@ void SceneSP2Room2::Exit()
 			delete schoolItems[i];
 		}
 	}
+	for (int i = 0; i < 3; i++)
+	{
+		if (PuzzleItems[i] != nullptr)
+		{
+			delete PuzzleItems[i];
+		}
+		if (ShelfItems[i] != nullptr)
+		{
+			delete ShelfItems[i];
+		}
+	}
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }
