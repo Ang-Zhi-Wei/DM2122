@@ -9,9 +9,6 @@
 
 
 
-
-
-
 using namespace irrklang;
 
 SceneSP2Main::SceneSP2Main()
@@ -1229,34 +1226,10 @@ void SceneSP2Main::Update(double dt)
 	if ((camera.position.x <= 60) && (camera.position.x >= 10) && (camera.position.z <= 370) && (camera.position.z >= 345))
 	{
 		NearCar = true;
-		if (Fpressed && ObjectivePhase >= 3) //Insert win conditions after this as parameters
+		if (Fpressed/* && ObjectivePhase >= 3*/) //Insert win conditions after this as parameters
 		{
-			WinTrigger = true;
-				if (WinTrigger == true)
-				{
-					WinLevel = 1;
-					translateWinY += (float)(translateWinYDir * dt);
-					winTimerActive = true;
-					if (winTimerActive == true);
-					{
-						winTimer -= dt;
-						if (winTimer >= 27)
-						{
-							translateWinYDir = 0;
-						}
-						if (winTimer < 27)
-						{
-							translateWinYDir = 5;
-						}
-						if (winTimer <= 0)
-						{
-							winTimerActive = false;
-							winTimer = 30;
-							translateWinYDir = 0;
-							translateWinY = -10;
-						}
-					}
-				}
+			if(ObjectivePhase >= 3)
+				WinTrigger = true;
 		}
 		else
 		{
@@ -1269,6 +1242,42 @@ void SceneSP2Main::Update(double dt)
 		NearCar = false;
 		WinLevel = 0;
 	}
+
+
+
+
+	if (WinTrigger == true)
+	{
+		WinLevel = 1;
+		translateWinY += (float)(translateWinYDir * dt);
+		winTimerActive = true;
+		if (winTimerActive == true);
+		{
+			winTimer -= dt;
+			if (winTimer >= 27)
+			{
+				translateWinYDir = 0;
+			}
+			if (winTimer < 27)
+			{
+				translateWinYDir = 5;
+			}
+			if (winTimer <= 0)
+			{
+				winTimerActive = false;
+				winTimer = 30;
+				translateWinYDir = 0;
+				translateWinY = -10;
+			}
+		}
+	}
+
+
+
+
+
+
+
 	//sounds when ghost get too close
 	if (ghost->kill) {
 		deathtimer += dt;
@@ -3317,7 +3326,6 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_ENDBACK], 40, 30, 80, 60);
 		RenderMeshOnScreen(meshList[GEO_END], 40, translateWinY, 45, 100);
 	}
-
 	if ((WinLevel == 2) && (ObjectivePhase == 1))
 	{
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
