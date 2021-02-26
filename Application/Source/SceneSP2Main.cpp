@@ -1618,7 +1618,6 @@ void SceneSP2Main::Update(double dt)
 	if (dt > 0.02) {
 		dt = 0.017;
 	}
-	std::cout << dt << std::endl;
 
 	switch (SpeakPhase)
 	{
