@@ -1475,7 +1475,7 @@ void SceneSP2Room1::Update(double dt)
 	}
 
 	//Jumpscare, Entrance hallway
-	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -620) && (camera.position.z <= -420)) && (inLocker == false))
+	if ((camera.position.y >= 0) && ((camera.position.x >= -35) && (camera.position.x <= 70)) && ((camera.position.z >= -530) && (camera.position.z <= -330)) && (inLocker == false))
 	{
 		jumpscareTimerActive1 = true;
 	}
