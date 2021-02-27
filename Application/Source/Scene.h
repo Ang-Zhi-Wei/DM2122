@@ -186,7 +186,7 @@ public:
 		Ghost()
 		{
 			up.Set(0, 1, 0);
-			speed = 5;
+			speed = 10;
 			facing.Set(0, 0, -1);
 			axis = facing.Cross(up);
 			pos.Set(1000, 3, 1000); //far far away so no one knows its there
