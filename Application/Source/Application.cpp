@@ -179,6 +179,7 @@ void Application::Run()
 	delete scene4;
 	delete sceneMain;
 	delete sceneMenu;
+	delete sceneLoading;
 }
 unsigned Application::m_width;
 unsigned Application::m_height;
