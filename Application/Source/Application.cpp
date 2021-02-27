@@ -79,10 +79,10 @@ void Application::Init()
 
 
 	//FullScreen
-    //m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
+    m_window = glfwCreateWindow(1920, 1080, "The Ghost City", glfwGetPrimaryMonitor(), NULL);
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
+	//m_window = glfwCreateWindow(1920, 1080, "The Ghost City", NULL, NULL);
 
 	//megumin
 	//m_window = glfwCreateWindow(1440, 1080, "Megumin", NULL, NULL);
