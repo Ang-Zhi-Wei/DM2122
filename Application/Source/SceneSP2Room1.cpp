@@ -1471,7 +1471,7 @@ void SceneSP2Room1::Update(double dt)
 		camera.can_move = false;
 
 
-		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.newTarget += (camera.lockedTarget - camera.newTarget).Normalized() * 10 * dt;
 		camera.target = camera.newTarget;
 		camera.view = (camera.target - camera.position).Normalized();
 

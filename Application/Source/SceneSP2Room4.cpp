@@ -1305,7 +1305,7 @@ void SceneSP2Room4::Update(double dt)
 	case Ghost::SPIN:
 		camera.can_move = false;
 
-		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.newTarget += (camera.lockedTarget - camera.newTarget).Normalized() * 10 * dt;
 		camera.target = camera.newTarget;
 		camera.view = (camera.target - camera.position).Normalized();
 
