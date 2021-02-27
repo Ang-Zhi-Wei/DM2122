@@ -2381,7 +2381,8 @@ void SceneSP2Main::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
-	//switch scenes button for now
+
+	//switch scenes button for now ,comment out later
 	/*if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);

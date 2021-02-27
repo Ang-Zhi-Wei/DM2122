@@ -269,12 +269,18 @@ public:
 	};
 	Inventory* inventory;
 	Ghost* ghost;
-
+	//universal sounds
 	ISoundEngine* Background;
 	ISoundEngine* Jumpscare;
 	ISoundEngine* Effect;
 	ISoundEngine* Heartbeat;
 	ISoundEngine* Creakingdoor;
+	//room 1 sounds
+	ISoundEngine* Lever;
+	ISoundEngine* Tap;
+	ISoundEngine* Water;
+	ISoundEngine* Key;
+	ISoundEngine* Unlock;
 	bool flashlight;
 	float flashlight_lifetime;
 	int ObjectivePhase;

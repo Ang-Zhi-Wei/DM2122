@@ -414,7 +414,7 @@ void SceneSP2Menu::Update(double dt)
 		std::cout << "LBUTTON DOWN" << std::endl;
 		std::cout << "posX:" << MposX << " , posY:" << MposY << std::endl;
 		//check for start
-		if (MposX > 1.5 && MposX < 12 && MposY >10.6 && MposY < 11 && !show_credits)
+		if (MposX > 1.5 && MposX < 12 && MposY >10.9 && MposY < 11.5 && !show_credits)
 		{
 			std::cout << "S Hit!" << std::endl;
 			Background->setSoundVolume(0.f);
