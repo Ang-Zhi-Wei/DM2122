@@ -44,6 +44,7 @@ SceneSP2Main::SceneSP2Main()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	PKeypressed = PKeyreleased = false;
+	Mouseclick = Mousereleased = false;
 	Application::GetCursorPos(&Mousex, &Mousey);
 	MposX = Mousex / 80;
 	MposY = Mousey / 60;
@@ -1420,6 +1421,23 @@ void SceneSP2Main::Update(double dt)
 		}
 		Qreleased = false;
 	}
+
+	//register mouse click
+	if (!Application::IsMousePressed(0))
+	{
+		Mousereleased = true;
+		Mouseclick = false;
+	}
+	else
+	{
+		if (Mousereleased)
+		{
+			Mouseclick = true;
+
+		}
+		Mousereleased = false;
+	}
+
 	if (!Application::IsKeyPressed('F'))
 	{
 		Freleased = true;
@@ -1686,7 +1704,8 @@ void SceneSP2Main::Update(double dt)
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakPhase++;
 			SpeakTimer = 0;
 		}
@@ -1695,56 +1714,64 @@ void SceneSP2Main::Update(double dt)
 		//man turns around
 		rotate_Man = -90;
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 5:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 6:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 7:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 8:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 9:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 10:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 11:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
@@ -1752,14 +1779,16 @@ void SceneSP2Main::Update(double dt)
 
 	case 12:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 	case 13:
 		SpeakTimer += dt;
 		rotate_Man = 90;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			is_talking = false;
 			SpeakPhase = 0;
