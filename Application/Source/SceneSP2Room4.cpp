@@ -1550,7 +1550,7 @@ void SceneSP2Room4::Update(double dt)
 				translateobj = 100;
 				takenspark = true;
 				PickUpItem(items[0]);
-				items[0] = NULL;
+				items[0] = nullptr;
 				std::cout << "Taken spark plug" << std::endl;
 			}
 		}
