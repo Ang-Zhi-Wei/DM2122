@@ -262,6 +262,8 @@ private:
 	bool Apressed, Areleased;
 	bool Dpressed, Dreleased;
 	bool Rpressed, Rreleased;
+
+	bool Mouseclick, Mousereleased;
     
 	bool manAppear;
 	bool gamepaused;
