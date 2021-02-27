@@ -481,6 +481,7 @@ void SceneSP2Room3::Set(Scene* scene)
 	light[3].power = 0;
 	light[4].power = 0;
 	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
