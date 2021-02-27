@@ -1104,8 +1104,7 @@ void SceneSP2Main::Init()
 
 	ghost = new Ghost;
 	inventory = new Inventory;
-
-
+	manAppear = true;
 
 	//test examples for item
 	/*test.Set("item2testAAAA", Item::ITEM2);
@@ -1117,7 +1116,11 @@ void SceneSP2Main::Init()
 	items[3] = new Item("Battery", Item::BATTERY, Vector3(-185, -3, -200));
 	items[4] = new Item("Battery", Item::BATTERY, Vector3(255, -3, -190));
 
-
+	//item found
+	SparkplugFound = false;
+	hammerFound = false;
+	wrenchFound = false;
+	screwDriverFound = false;
 //to be called only in one frame. placed under init just for testing first
 	//PickUpItem(&test2); //to be called only in one frame.
 	//PickUpItem(&battery);
@@ -1228,8 +1231,12 @@ void SceneSP2Main::Update(double dt)
 		NearCar = true;
 		if (Fpressed/* && ObjectivePhase >= 3*/) //Insert win conditions after this as parameters
 		{
-			if(ObjectivePhase >= 3)
+			if (ObjectivePhase >= 3) {
 				WinTrigger = true;
+				ghost->state = Ghost::UNSPAWNED;
+				ghost->pos.Set(1000, 1000, 1000);
+			}
+				
 		}
 		else
 		{
@@ -1246,31 +1253,7 @@ void SceneSP2Main::Update(double dt)
 
 
 
-	if (WinTrigger == true)
-	{
-		WinLevel = 1;
-		translateWinY += (float)(translateWinYDir * dt);
-		winTimerActive = true;
-		if (winTimerActive == true);
-		{
-			winTimer -= dt;
-			if (winTimer >= 27)
-			{
-				translateWinYDir = 0;
-			}
-			if (winTimer < 27)
-			{
-				translateWinYDir = 5;
-			}
-			if (winTimer <= 0)
-			{
-				winTimerActive = false;
-				winTimer = 30;
-				translateWinYDir = 0;
-				translateWinY = -10;
-			}
-		}
-	}
+	
 
 
 
@@ -1286,6 +1269,7 @@ void SceneSP2Main::Update(double dt)
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Creakingdoor->setSoundVolume(0.f);
 			Application::Load();
 			Application::setscene(Scene_Menu);
 			return;
@@ -1310,7 +1294,36 @@ void SceneSP2Main::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Background->setSoundVolume(0.5f);
 	}
-
+	//win
+	if (WinTrigger == true)
+	{
+		WinLevel = 1;
+		translateWinY += (float)(translateWinYDir * dt);
+		winTimerActive = true;
+		Jumpscare->setSoundVolume(0.f);
+		Background->setSoundVolume(0.f);
+		Heartbeat->setSoundVolume(0.f);
+		Effect->setSoundVolume(0.f);
+		Creakingdoor->setSoundVolume(0.f);
+		if (winTimerActive == true);
+		{
+			winTimer -= dt;
+			if (winTimer >= 27)
+			{
+				translateWinYDir = 0;
+			}
+			if (winTimer < 27)
+			{
+				translateWinYDir = 5;
+			}
+			if (winTimer <= 0)
+			{
+				Application::Load();
+				Application::setscene(Scene_Menu);
+				return;
+			}
+		}
+	}
 	//camera dot blink logic (not the best, but works)
 	if (camBlinkOff && camBlinkOffSec >= 0.5)
 	{
@@ -1577,6 +1590,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Creakingdoor->setSoundVolume(0.f);
 		Application::setscene(Scene_3);
 		enterBuilding = false;
 
@@ -1588,6 +1602,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Creakingdoor->setSoundVolume(0.f);
 		Application::setscene(Scene_1);
 		enterBuilding = false;
 	}
@@ -1599,6 +1614,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Creakingdoor->setSoundVolume(0.f);
 		Application::setscene(Scene_2);
 		enterBuilding = false;
 	}
@@ -1609,6 +1625,7 @@ void SceneSP2Main::Update(double dt)
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
+		Creakingdoor->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
 		enterBuilding = false;
 	}
@@ -2349,21 +2366,23 @@ void SceneSP2Main::Update(double dt)
 	}
 	//================================================================
 
-
-	if (PKeypressed)
-	{
-		PKeypressed = false;
-		gamepaused = true;
-		Application::GetCursorPos(&Mousetempx, &Mousetempy);
-		Application::hidemousecursor(false);
-		Application::pause(true);
+	if (WinTrigger==false) {
+		if (PKeypressed)
+		{
+			PKeypressed = false;
+			gamepaused = true;
+			Application::GetCursorPos(&Mousetempx, &Mousetempy);
+			Application::hidemousecursor(false);
+			Application::pause(true);
+		}
 	}
+	
 
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
 	//switch scenes button for now
-	if (Application::IsKeyPressed('7')) {
+	/*if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
@@ -2391,7 +2410,7 @@ void SceneSP2Main::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
-	}
+	}*/
 
 }
 
@@ -3331,10 +3350,15 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "... My car broke down... Maybe that man can help me?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}//If player doesn't have everything yet
-	if ((WinLevel == 2) && (ObjectivePhase >= 2))
+	if ((WinLevel == 2) && (ObjectivePhase == 2))
 	{
 		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
 		RenderTextOnScreen(meshList[GEO_TEXT], "I... I Think I'm still missing something...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+	}
+	if ((WinLevel == 2) && (ObjectivePhase >= 3)) 
+	{
+		RenderMeshOnScreen(meshList[GEO_CHATBOX], 40.f, 10.f, 2.f, 0.7f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Better fix this quick and get out of here!", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 	}
 
 }

@@ -479,7 +479,7 @@ void SceneSP2Room1::Init()
 	Colliderlist[4].Setposition(Vector3(-34.5, 10, -557.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[5].setlength(3, 20, 75);
-	Colliderlist[5].Setposition(Vector3(40.5, 10, -57.5));
+	Colliderlist[5].Setposition(Vector3(40.5, 10, -555.5));
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[6].setlength(70, 20, 3);
 	Colliderlist[6].Setposition(Vector3(5.5, 10, -520));
@@ -564,7 +564,7 @@ void SceneSP2Room1::Init()
 		Colliderlist[i].setactive(true);
 	}
 	//colliderbox for checking any collider(just one)
-	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[30].getxlength(), Colliderlist[30].getylength(), Colliderlist[30].getzlength());
+	meshList[Colliderbox] = MeshBuilder::GenerateColliderBox("Box", Colliderlist[5].getxlength(), Colliderlist[5].getylength(), Colliderlist[5].getzlength());
 	//list of colliders
 	camera.setchecker(Colliderlist);
 	//Locker Mesh
@@ -684,6 +684,7 @@ void SceneSP2Room1::Update(double dt)
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Creakingdoor->setSoundVolume(0.f);
 			Application::Load();
 			Application::setscene(Scene_Menu);
 			return;
@@ -747,18 +748,18 @@ void SceneSP2Room1::Update(double dt)
 		camera.Setslow(false);
 	}
 	//key input
-	if (Application::IsKeyPressed('1')) {
-		glEnable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed('2')) {
-		glDisable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed('3')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if (Application::IsKeyPressed('4')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	//if (Application::IsKeyPressed('1')) {
+	//	glEnable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed('2')) {
+	//	glDisable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed('3')) {
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//}
+	//else if (Application::IsKeyPressed('4')) {
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//}
 	if (!Application::IsKeyPressed('Q'))
 	{
 		Qreleased = true;
@@ -978,6 +979,7 @@ void SceneSP2Room1::Update(double dt)
 				Effect->setSoundVolume(0.f);
 				Jumpscare->setSoundVolume(0.f);
 				Heartbeat->setSoundVolume(0.f);
+				Creakingdoor->setSoundVolume(0.f);
 				Application::setscene(Scene_Main);
 			}
 		}
@@ -1010,6 +1012,7 @@ void SceneSP2Room1::Update(double dt)
 			Effect->setSoundVolume(0.f);
 			Jumpscare->setSoundVolume(0.f);
 			Heartbeat->setSoundVolume(0.f);
+			Creakingdoor->setSoundVolume(0.f);
 			Application::setscene(Scene_Main);
 		}
 		break;
@@ -1589,7 +1592,7 @@ void SceneSP2Room1::Update(double dt)
 
 
 	//switch scenes button for now
-	if (Application::IsKeyPressed('6')) {
+	/*if (Application::IsKeyPressed('6')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Jumpscare->setSoundVolume(0.f);
@@ -1616,7 +1619,7 @@ void SceneSP2Room1::Update(double dt)
 		Jumpscare->setSoundVolume(0.f);
 		Heartbeat->setSoundVolume(0.f);
 		Application::setscene(Scene_4);
-	}
+	}*/
 
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
@@ -1815,10 +1818,10 @@ void SceneSP2Room1::Render()
 
 	//Any one Collider,must make sure correct Colliderlist is entered;
 	//@collider
-	/*modelStack.PushMatrix();
-	modelStack.Translate(Colliderlist[30].getPosition().x, Colliderlist[30].getPosition().y, Colliderlist[30].getPosition().z);
-	RenderMesh(meshList[Colliderbox], false);
-	modelStack.PopMatrix();*/
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Colliderlist[5].getPosition().x, Colliderlist[5].getPosition().y, Colliderlist[5].getPosition().z);
+	//RenderMesh(meshList[Colliderbox], false);
+	//modelStack.PopMatrix();
 
 	
 	//trap rendering
