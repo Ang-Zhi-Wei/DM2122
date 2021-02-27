@@ -2889,16 +2889,16 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 6, 120);
+	modelStack.Translate(0, 6, 123);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(357, 20, 50);
+	modelStack.Scale(345, 20, 50);
 	RenderMesh(meshList[GEO_PATH], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 6, -120);
+	modelStack.Translate(0, 6, -125);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(357, 20, 50);
+	modelStack.Scale(345, 20, 50);
 	RenderMesh(meshList[GEO_PATH], true);
 	modelStack.PopMatrix();
 
@@ -2957,6 +2957,12 @@ void SceneSP2Main::Render()
 	//ground mesh 2
 
 	modelStack.PushMatrix();
+	modelStack.Translate(30.f, -0.1f, 312.f);
+	modelStack.Scale(750, 8, 30);
+	RenderMesh(meshList[GEO_PAVEMENT], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(30.f, -2.8f, 530.f);
 	modelStack.Scale(950, 1, 300);
 	RenderMesh(meshList[Ground_Mesh2], true);
@@ -2975,7 +2981,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-352, 0, 0);
+	modelStack.Translate(-355, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(730, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
@@ -2989,7 +2995,7 @@ void SceneSP2Main::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(352, 0, 0);
+	modelStack.Translate(355, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(730, 8, 30);
 	RenderMesh(meshList[GEO_PAVEMENT], true);
