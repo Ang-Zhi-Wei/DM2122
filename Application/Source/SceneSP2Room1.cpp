@@ -629,7 +629,8 @@ void SceneSP2Room1::Set(Scene* scene)
 	camera.position.Set(-30, 9, -425);
 	camera.rawTarget = camera.position;
 
-
+	DS_MAIN = OPEN;
+	rotateY[0] = 90;
 	//inventory item image
 	for (int i = 0; i < 8; i++)
 	{
@@ -1400,7 +1401,6 @@ void SceneSP2Room1::Update(double dt)
 		ghost->UpdateMovement(dt);
 		if (ghost->distance <= 7 && inLocker)
 		{
-
 			ghost->state = Ghost::TOLOCKER;
 			ghost->waitTime = 3;
 		}
@@ -1433,6 +1433,12 @@ void SceneSP2Room1::Update(double dt)
 			ghost->facing.Normalize();
 			ghost->state = Ghost::WAITING;
 		}
+		if (!inLocker)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
 		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
@@ -1441,6 +1447,12 @@ void SceneSP2Room1::Update(double dt)
 		{
 			ghost->state = Ghost::SPEEDRUN;
 			ghost->speed = 250;
+		}
+		if (!inLocker)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -2278,7 +2290,6 @@ void SceneSP2Room1::Render()
 
 	
 	//UI OVERLAY
-
 	if (jumpscareActive1 == true)
 	{
 		RenderMeshOnScreen(meshList[GEO_JUMPSCARE1], 40, 30, 100, 100);
