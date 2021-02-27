@@ -768,6 +768,7 @@ void SceneSP2Room4::Set(Scene* scene)
 	light[3].power = 0;
 	light[4].power = 0;
 	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
@@ -1099,7 +1100,10 @@ void SceneSP2Room4::Update(double dt)
 				interact_message = "F to pick up " + items[i]->name;
 				if (Fpressed)
 				{
-					PickUpItem(items[i]);
+					if (PickUpItem(items[i]))
+					{
+						delete items[i];
+					}
 					Fpressed = false;
 					items[i] = nullptr;
 					if (i == 3)
@@ -2568,10 +2572,9 @@ bool SceneSP2Room4::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 void SceneSP2Room4::RenderMesh(Mesh* mesh, bool enableLight)

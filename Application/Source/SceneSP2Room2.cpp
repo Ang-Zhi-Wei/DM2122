@@ -177,7 +177,7 @@ void SceneSP2Room2::Init()
 
 	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
 	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
-	PuzzleItems[2] = new Item("Diluc Figurine", Item::MysObj, Vector3(540, 1, -108));
+	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
 
 
 	//puzzle items
@@ -648,6 +648,7 @@ void SceneSP2Room2::Set(Scene* scene)
 	light[3].power = 0;
 	light[4].power = 0;
 	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
@@ -791,7 +792,11 @@ void SceneSP2Room2::Update(double dt)
 				pickUpBattery = true;
 				if (Fpressed)
 				{
-					PickUpItem(schoolItems[i]);
+					
+					if (PickUpItem(schoolItems[i]))
+					{
+						delete schoolItems[i];
+					}
 					Fpressed = false;
 					schoolItems[i] = nullptr;
 				}
@@ -2358,10 +2363,9 @@ bool SceneSP2Room2::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 

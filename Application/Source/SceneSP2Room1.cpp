@@ -620,6 +620,7 @@ void SceneSP2Room1::Set(Scene* scene)
 	light[3].power = 0;
 	light[4].power = 0;
 	light[5].power = 0;
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
@@ -659,6 +660,21 @@ void SceneSP2Room1::SetBackground()
 	}
 	if (!Creakingdoor) {
 		Creakingdoor = createIrrKlangDevice();
+	}
+	if (!Lever) {
+		Lever = createIrrKlangDevice();
+	}
+	if (!Water) {
+		Water = createIrrKlangDevice();
+	}
+	if (!Tap) {
+		Tap = createIrrKlangDevice();
+	}
+	if (!Unlock) {
+		Unlock = createIrrKlangDevice();
+	}
+	if (!Key) {
+		Key = createIrrKlangDevice();
 	}
 	Heartbeat->setSoundVolume(0.f);
 	Background->setSoundVolume(0.25f);//Volume control
@@ -790,6 +806,7 @@ void SceneSP2Room1::Update(double dt)
 
 	if (Fpressed == true && nearKey == true)
 	{
+		Key->play2D("Sound\\Effects\\clink1", true);
 		PickUpItem(houseItems[3]);
 		houseItems[3] = NULL;
 		Fpressed = false;
@@ -835,7 +852,10 @@ void SceneSP2Room1::Update(double dt)
 				pickUpBattery = true;
 				if (Fpressed)
 				{
-					PickUpItem(houseItems[i]);
+					if (PickUpItem(houseItems[i]))
+					{
+						delete houseItems[i];
+					}
 					Fpressed = false;
 					houseItems[i] = nullptr;
 				}
@@ -1527,11 +1547,13 @@ void SceneSP2Room1::Update(double dt)
 			interact_message = "Pull lever";
 			if (Fpressed)
 			{
+				Lever->play2D("Sound\\Effects\\lever.wav", false);
 				leverIsPulled = pulling;
 			}
 		}
 		break;
 	case(pulling):
+		
 		if (rotate_lever < 60)
 			rotate_lever += 60 * float(dt);
 		else if (rotate_lever >= 60)
@@ -1547,13 +1569,17 @@ void SceneSP2Room1::Update(double dt)
 			interact_message = "Use sink";
 			if (Fpressed)
 			{
+				Tap->play2D("Sound\\Effects\\lever1.wav", false);
+				Water->play2D("Sound\\Effects\\waterfall2.wav", false);
 				waterstate = flowing;
 			}
 		}
 		break;
 	case(flowing):
 		if (movewater <= 3.8)
+		{
 			movewater += 0.5 * float(dt);
+		}
 		else
 		{
 			keyspawn = true;
@@ -1579,6 +1605,7 @@ void SceneSP2Room1::Update(double dt)
 
 			if (Fpressed)
 			{
+				Key->play2D("Sound\\Effects\\clink1", true);
 				PickUpItem(houseItems[5]);
 				houseItems[5] = NULL;
 				Fpressed = false;
@@ -2598,6 +2625,7 @@ void SceneSP2Room1::UseItem(int itemname)
 	case Item::Key:
 
 		isUnlocked[kitchen] = true;
+		Unlock->play2D("Sound\\Effects\\unlock.wav", false);
 		if (inventory->items[inventory->selected]->count > 1)
 		{
 			inventory->items[inventory->selected]->count--;
@@ -2612,6 +2640,7 @@ void SceneSP2Room1::UseItem(int itemname)
 	case Item::Key2:
 
 		isUnlocked[bedroom] = true;
+		Unlock->play2D("Sound\\Effects\\unlock.wav", false);
 		if (inventory->items[inventory->selected]->count > 1)
 		{
 			inventory->items[inventory->selected]->count--;
@@ -2645,10 +2674,9 @@ bool SceneSP2Room1::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 void SceneSP2Room1::RenderText(Mesh* mesh, std::string text, Color color)
 {

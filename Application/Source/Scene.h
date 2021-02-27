@@ -171,7 +171,7 @@ public:
 			DEATH,
 		};
 		int state;
-		bool kill;
+		bool kill; // for sound purposes
 		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction
@@ -269,12 +269,18 @@ public:
 	};
 	Inventory* inventory;
 	Ghost* ghost;
-
+	//universal sounds
 	ISoundEngine* Background;
 	ISoundEngine* Jumpscare;
 	ISoundEngine* Effect;
 	ISoundEngine* Heartbeat;
 	ISoundEngine* Creakingdoor;
+	//room 1 sounds
+	ISoundEngine* Lever;
+	ISoundEngine* Tap;
+	ISoundEngine* Water;
+	ISoundEngine* Key;
+	ISoundEngine* Unlock;
 	bool flashlight;
 	float flashlight_lifetime;
 	int ObjectivePhase;

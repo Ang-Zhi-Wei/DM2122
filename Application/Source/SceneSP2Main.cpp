@@ -44,6 +44,7 @@ SceneSP2Main::SceneSP2Main()
 	Dpressed = Dreleased = false;
 	Rpressed = Rreleased = false;
 	PKeypressed = PKeyreleased = false;
+	Mouseclick = Mousereleased = false;
 	Application::GetCursorPos(&Mousex, &Mousey);
 	MposX = Mousex / 80;
 	MposY = Mousey / 60;
@@ -1173,6 +1174,7 @@ void SceneSP2Main::Set(Scene* scene)
 	light[3].power = 2;
 	light[4].power = 2;
 	light[5].power = 2;
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
 	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
 	glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
@@ -1419,6 +1421,23 @@ void SceneSP2Main::Update(double dt)
 		}
 		Qreleased = false;
 	}
+
+	//register mouse click
+	if (!Application::IsMousePressed(0))
+	{
+		Mousereleased = true;
+		Mouseclick = false;
+	}
+	else
+	{
+		if (Mousereleased)
+		{
+			Mouseclick = true;
+
+		}
+		Mousereleased = false;
+	}
+
 	if (!Application::IsKeyPressed('F'))
 	{
 		Freleased = true;
@@ -1527,7 +1546,10 @@ void SceneSP2Main::Update(double dt)
 				pickUpBattery = true;
 				if (Fpressed)
 				{
-					PickUpItem(items[i]);
+					if (PickUpItem(items[i]))
+					{
+						delete items[i];
+					}
 					Fpressed = false;
 					items[i] = nullptr;
 				}
@@ -1682,7 +1704,8 @@ void SceneSP2Main::Update(double dt)
 		canTalk_man = false;
 		showChatbox = true;
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakPhase++;
 			SpeakTimer = 0;
 		}
@@ -1691,56 +1714,64 @@ void SceneSP2Main::Update(double dt)
 		//man turns around
 		rotate_Man = -90;
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 5:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 6:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 7:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 8:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 9:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 10:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_MEDIUM) {
+		if (SpeakTimer > SPEECH_LENGTH_MEDIUM || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 		break;
 	case 11:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_FAST) {
+		if (SpeakTimer > SPEECH_LENGTH_FAST || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
@@ -1748,14 +1779,16 @@ void SceneSP2Main::Update(double dt)
 
 	case 12:
 		SpeakTimer += dt;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			SpeakPhase++;
 		}
 	case 13:
 		SpeakTimer += dt;
 		rotate_Man = 90;
-		if (SpeakTimer > SPEECH_LENGTH_SHORT) {
+		if (SpeakTimer > SPEECH_LENGTH_SHORT || Mouseclick) {
+			Mouseclick = false;
 			SpeakTimer = 0;
 			is_talking = false;
 			SpeakPhase = 0;
@@ -1815,73 +1848,6 @@ void SceneSP2Main::Update(double dt)
 	{
 	case 0:
 		Sign = 0;
-	/*case 1:
-		switch (GarageSign)
-		{
-		case 0:
-			SignTimer += dt;
-			if ((SignTimer >= 0.1) && (GarageSignActive == true))
-			{
-				SignTimer = 0;
-				GarageSign = 1;
-			}
-			break;
-		case 1:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 2:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 3:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 4:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 5:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 6:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 7:
-			SignTimer = 0;
-			showChatbox2 = false;
-			GarageSignActive = false;
-			break;
-		}
-		break;*/
-
 	case 1: //Garage
 		switch (GarageSign)
 		{
@@ -1970,7 +1936,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > 1)
 			{
 				SignTimer = 0;
 				SchoolSign++;
@@ -1978,7 +1944,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 4:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				SchoolSign++;
@@ -2028,7 +1994,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 1:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2036,7 +2002,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 2:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2044,7 +2010,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2052,7 +2018,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 4:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2084,7 +2050,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 8:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2119,7 +2085,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 2:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2127,7 +2093,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2151,7 +2117,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 6:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2159,7 +2125,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 7:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2381,7 +2347,8 @@ void SceneSP2Main::Update(double dt)
 	campos_x = camera.position.x;
 	campos_y = camera.position.y;
 	campos_z = camera.position.z;
-	//switch scenes button for now
+
+	//switch scenes button for now ,comment out later
 	/*if (Application::IsKeyPressed('7')) {
 		Background->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
@@ -3165,14 +3132,14 @@ void SceneSP2Main::Render()
 		switch (GarageSign)
 		{
 		case 1:
-			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down ", Color(0, 0, 1.f), 4, 10, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Thompson's Garage? Huh, neat. ", Color(0, 0, 1.f), 4, 10, 1.8f);
 			break;
 			//starting phase
 		case 2:
-			RenderTextOnScreen(meshList[GEO_TEXT], "In front of a Garage of all things", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 3:
-			RenderTextOnScreen(meshList[GEO_TEXT], "Thompson's Garage? Huh, neat.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "In front of a Garage of all things", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 4:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Wonder if a dead guy would mind me", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3194,7 +3161,7 @@ void SceneSP2Main::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "or something.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 4:
-			RenderTextOnScreen(meshList[GEO_TEXT], "But creepy, abandoned city and a rundown school...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "But a creepy, abandoned city and a rundown school...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 5:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Really doesn't sound like a good mix.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3214,7 +3181,7 @@ void SceneSP2Main::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "A school, a house, a garage and a hospital...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 2:
-			RenderTextOnScreen(meshList[GEO_TEXT], "This place really has everything but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "This neighbourhood really has everything but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 3:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Is this house where everything stemmed from?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3242,7 +3209,6 @@ void SceneSP2Main::Render()
 		case 1:
 			RenderTextOnScreen(meshList[GEO_TEXT], "'City's Heart Hospital'", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
-
 		case 2:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Interesting hospital mame to be sure", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
@@ -3439,10 +3405,9 @@ bool SceneSP2Main::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 

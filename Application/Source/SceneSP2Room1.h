@@ -303,6 +303,7 @@ private:
 	float residepause;
 	bool keyspawn;
 
+
 	enum leverPulled
 	{
 		yes,
@@ -319,6 +320,7 @@ private:
 		keycollected,
 	};
 	WaterState waterstate;
+	
 
 	bool isUnlocked[2];
 	enum DoorUnlocked
