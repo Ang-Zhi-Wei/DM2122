@@ -792,7 +792,11 @@ void SceneSP2Room2::Update(double dt)
 				pickUpBattery = true;
 				if (Fpressed)
 				{
-					PickUpItem(schoolItems[i]);
+					
+					if (PickUpItem(schoolItems[i]))
+					{
+						delete schoolItems[i];
+					}
 					Fpressed = false;
 					schoolItems[i] = nullptr;
 				}
@@ -2359,10 +2363,9 @@ bool SceneSP2Room2::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 

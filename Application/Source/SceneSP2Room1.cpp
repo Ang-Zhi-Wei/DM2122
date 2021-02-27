@@ -852,7 +852,10 @@ void SceneSP2Room1::Update(double dt)
 				pickUpBattery = true;
 				if (Fpressed)
 				{
-					PickUpItem(houseItems[i]);
+					if (PickUpItem(houseItems[i]))
+					{
+						delete houseItems[i];
+					}
 					Fpressed = false;
 					houseItems[i] = nullptr;
 				}
@@ -2671,10 +2674,9 @@ bool SceneSP2Room1::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 void SceneSP2Room1::RenderText(Mesh* mesh, std::string text, Color color)
 {

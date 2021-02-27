@@ -171,7 +171,7 @@ public:
 			DEATH,
 		};
 		int state;
-		bool kill;
+		bool kill; // for sound purposes
 		Vector3 up;
 		Vector3 pos;
 		Vector3 facing; //ghost direction

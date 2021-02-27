@@ -1100,7 +1100,10 @@ void SceneSP2Room4::Update(double dt)
 				interact_message = "F to pick up " + items[i]->name;
 				if (Fpressed)
 				{
-					PickUpItem(items[i]);
+					if (PickUpItem(items[i]))
+					{
+						delete items[i];
+					}
 					Fpressed = false;
 					items[i] = nullptr;
 					if (i == 3)
@@ -2569,10 +2572,9 @@ bool SceneSP2Room4::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 void SceneSP2Room4::RenderMesh(Mesh* mesh, bool enableLight)

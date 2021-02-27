@@ -639,7 +639,10 @@ void SceneSP2Room3::Update(double dt)
 				pickUpItem = true;
 				if (Fpressed)
 				{
-					PickUpItem(garageItems[i]);
+					if (PickUpItem(garageItems[i]))
+					{
+						delete garageItems[i];
+					}
 					Fpressed = false;
 					garageItems[i] = nullptr;
 					if (i == 0)
@@ -1756,10 +1759,9 @@ bool SceneSP2Room3::PickUpItem(Item* item)
 		{
 			inventory->items[i] = item;
 			itemImage[i]->textureID = LoadTGA(item->image);
-			return true;
+			return false;
 		}
 	}
-	return false;
 }
 
 void SceneSP2Room3::UseItem(int itemname)
