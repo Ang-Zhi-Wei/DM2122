@@ -980,6 +980,13 @@ void SceneSP2Room3::Update(double dt)
 			ghost->facing.Normalize();
 			ghost->state = Ghost::WAITING;
 		}
+
+		if(!inLocker)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
 		break;
 	case Ghost::WAITING:
 		ghost->waitTime -= float(dt);
@@ -988,6 +995,12 @@ void SceneSP2Room3::Update(double dt)
 		{
 			ghost->state = Ghost::SPEEDRUN;
 			ghost->speed = 250;
+		}
+		if (!inLocker)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
 		}
 		break;
 	case Ghost::SPEEDRUN:
@@ -1006,7 +1019,7 @@ void SceneSP2Room3::Update(double dt)
 		camera.can_move = false;
 
 
-		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.newTarget += (camera.lockedTarget - camera.newTarget).Normalized() * 10 * dt;
 		camera.target = camera.newTarget;
 		camera.view = (camera.target - camera.position).Normalized();
 

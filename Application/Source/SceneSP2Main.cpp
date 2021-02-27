@@ -2260,6 +2260,12 @@ void SceneSP2Main::Update(double dt)
 			ghost->state = Ghost::SPEEDRUN;
 			ghost->speed = 250;
 		}
+		if (!inLocker)
+		{
+			camera.lockedTarget.Set(ghost->pos.x, ghost->pos.y + 15, ghost->pos.z);
+			camera.newTarget = camera.target;
+			ghost->state = Ghost::SPIN;
+		}
 		break;
 	case Ghost::SPEEDRUN:
 		ghost->facing = ghost->pos - camera.position;
@@ -2276,8 +2282,7 @@ void SceneSP2Main::Update(double dt)
 	case Ghost::SPIN:
 		camera.can_move = false;
 		
-		
-		camera.newTarget += (camera.lockedTarget - camera.target).Normalized() * 10 * dt;
+		camera.newTarget += (camera.lockedTarget - camera.newTarget).Normalized() * 10 * dt;
 		camera.target = camera.newTarget;
 		camera.view = (camera.target - camera.position).Normalized();
 
@@ -3302,9 +3307,9 @@ void SceneSP2Main::Render()
 
 
 	//test
-	//std::ostringstream test1;
-	//test1 << "cam pos: " << camera.position;
-	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	std::ostringstream test1;
+	test1 << "length: " << (camera.lockedTarget - camera.target).Length();
+	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
