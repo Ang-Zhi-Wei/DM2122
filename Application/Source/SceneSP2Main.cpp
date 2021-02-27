@@ -1848,73 +1848,6 @@ void SceneSP2Main::Update(double dt)
 	{
 	case 0:
 		Sign = 0;
-	/*case 1:
-		switch (GarageSign)
-		{
-		case 0:
-			SignTimer += dt;
-			if ((SignTimer >= 0.1) && (GarageSignActive == true))
-			{
-				SignTimer = 0;
-				GarageSign = 1;
-			}
-			break;
-		case 1:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 2:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 3:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 4:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 5:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 6:
-			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
-			{
-				SignTimer = 0;
-				GarageSign++;
-			}
-			break;
-		case 7:
-			SignTimer = 0;
-			showChatbox2 = false;
-			GarageSignActive = false;
-			break;
-		}
-		break;*/
-
 	case 1: //Garage
 		switch (GarageSign)
 		{
@@ -2003,7 +1936,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > 1)
 			{
 				SignTimer = 0;
 				SchoolSign++;
@@ -2011,7 +1944,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 4:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				SchoolSign++;
@@ -2061,7 +1994,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 1:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2069,7 +2002,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 2:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2077,7 +2010,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2085,7 +2018,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 4:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2117,7 +2050,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 8:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HouseSign++;
@@ -2152,7 +2085,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 2:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2160,7 +2093,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 3:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2184,7 +2117,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 6:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -2192,7 +2125,7 @@ void SceneSP2Main::Update(double dt)
 			break;
 		case 7:
 			SignTimer += dt;
-			if (SignTimer > SPEECH_LENGTH_FAST)
+			if (SignTimer > SPEECH_LENGTH_SHORT)
 			{
 				SignTimer = 0;
 				HospitalSign++;
@@ -3199,14 +3132,14 @@ void SceneSP2Main::Render()
 		switch (GarageSign)
 		{
 		case 1:
-			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down ", Color(0, 0, 1.f), 4, 10, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Thompson's Garage? Huh, neat. ", Color(0, 0, 1.f), 4, 10, 1.8f);
 			break;
 			//starting phase
 		case 2:
-			RenderTextOnScreen(meshList[GEO_TEXT], "In front of a Garage of all things", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ah, ironic that my car decides to break down", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 3:
-			RenderTextOnScreen(meshList[GEO_TEXT], "Thompson's Garage? Huh, neat.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "In front of a Garage of all things", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 4:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Wonder if a dead guy would mind me", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3228,7 +3161,7 @@ void SceneSP2Main::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "or something.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 4:
-			RenderTextOnScreen(meshList[GEO_TEXT], "But creepy, abandoned city and a rundown school...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "But a creepy, abandoned city and a rundown school...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 5:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Really doesn't sound like a good mix.", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3248,7 +3181,7 @@ void SceneSP2Main::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "A school, a house, a garage and a hospital...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 2:
-			RenderTextOnScreen(meshList[GEO_TEXT], "This place really has everything but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
+			RenderTextOnScreen(meshList[GEO_TEXT], "This neighbourhood really has everything but...", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
 		case 3:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Is this house where everything stemmed from?", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
@@ -3276,7 +3209,6 @@ void SceneSP2Main::Render()
 		case 1:
 			RenderTextOnScreen(meshList[GEO_TEXT], "'City's Heart Hospital'", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
-
 		case 2:
 			RenderTextOnScreen(meshList[GEO_TEXT], "Interesting hospital mame to be sure", Color(0.f, 0.f, 1.f), 4.f, 10.f, 1.8f);
 			break;
