@@ -3306,10 +3306,10 @@ void SceneSP2Main::Render()
 		RenderMeshOnScreen(meshList[GEO_PAUSEMENU], 40, 30, 35, 54);
 
 
-	//test
-	std::ostringstream test1;
-	test1 << "length: " << (camera.lockedTarget - camera.target).Length();
-	RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
+	////test
+	//std::ostringstream test1;
+	//test1 << "length: " << (camera.lockedTarget - camera.target).Length();
+	//RenderTextOnScreen(meshList[GEO_TEXT], test1.str(), Color(0, 1, 0), 4, 0, 6);
 	/*std::ostringstream test3;
 	test3 << "ghost facing: " << ghost->facing;
 	RenderTextOnScreen(meshList[GEO_TEXT], test3.str(), Color(0, 1, 0), 4, 0, 3);
