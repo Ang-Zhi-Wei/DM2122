@@ -1934,7 +1934,7 @@ void SceneSP2Room4::RenderRightRoom()
 		modelStack.PushMatrix();
 		modelStack.Translate(-39, translateobj, -22);
 		modelStack.Rotate(rotateobj, 0, 1, 0);
-		modelStack.Scale(0.2, 0.2, 0.2);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[sparkplug], true);
 		modelStack.PopMatrix();
 	}
