@@ -176,7 +176,7 @@ void SceneSP2Room2::Init()
 	Pliersitem = new Item("Pliers", Item::Pliers, Vector3(491, 4.5, 85));
 
 	PuzzleItems[0] = new Item("Lunchbox", Item::ItemA, Vector3(505, 5, -102));
-	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478, 7.7, 60));
+	PuzzleItems[1] = new Item("Notebook", Item::Notebook, Vector3(478.f, 7.7f, 60.f));
 	PuzzleItems[2] = new Item("???", Item::MysObj, Vector3(540, 1, -108));
 
 
