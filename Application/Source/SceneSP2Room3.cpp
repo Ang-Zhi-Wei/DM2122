@@ -1012,7 +1012,7 @@ void SceneSP2Room3::Update(double dt)
 		if (ghost->distance > 500 || !inLocker)
 		{
 			ghost->state = Ghost::NORMAL;
-			ghost->speed = 10;
+			ghost->speed = 7;
 		}
 		break;
 	case Ghost::SPIN:
