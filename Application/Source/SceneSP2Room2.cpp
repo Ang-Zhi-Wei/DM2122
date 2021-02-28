@@ -2034,7 +2034,7 @@ void SceneSP2Room2::Render()
 
 	if (puzzleitem)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(1.f, 1.f, 1.f), 4.f, 20.f, 5.f);
+		RenderTextOnScreen(meshList[GEO_TEXT], interact_message, Color(0.f, 1.f, 1.f), 4.f, 20.f, 5.f);
 	}
 	
 	if (placeitemtext)
