@@ -213,7 +213,6 @@ private:
 
 	float rotateobj;
 	float translateobj;
-	bool takenspark;
 	
 
 

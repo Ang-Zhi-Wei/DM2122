@@ -373,7 +373,7 @@ void SceneSP2Room4::Init()
 
 
 	//scene items
-	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(-130, -3, 0));
+	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(-492, -3, 39));
 	items[1] = new Item("Battery", Item::BATTERY, Vector3(-539.6, 6.3, 0));
 	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
@@ -605,8 +605,7 @@ void SceneSP2Room4::Init()
 	//trap list
 	traplist.push_back(trap(trap::beartrap, Vector3(-480, 0, -10)));
 	traplist.push_back(trap(trap::beartrap, Vector3(-535, 0, 25)));
-	//taken spark
-	takenspark = false;
+	
 }
 
 void SceneSP2Room4::UseItem(int itemname)
@@ -1083,10 +1082,7 @@ void SceneSP2Room4::Update(double dt)
 		Fpressed = false;
 	}
 
-	if (Fpressed == true && items[0] == nullptr)
-	{
-		SparkplugFound = 1;
-	}
+
 
 	//items
 	for (int i = 0; i < 4; i++) 
@@ -1109,6 +1105,10 @@ void SceneSP2Room4::Update(double dt)
 					if (i == 3)
 					{
 						flowerstaken = true;
+					}
+					else if (i == 0)
+					{
+						SparkplugFound = 1;
 					}
 				}
 			}
@@ -1541,19 +1541,6 @@ void SceneSP2Room4::Update(double dt)
 		{
 			translateobj += float(0.5 * dt);
 		}
-		else if (camera.position.z <= 43 && camera.position.z >= 36 && camera.position.x >= -498 && camera.position.x <= -495 && translateobj >= 7 && !takenspark)
-		{
-			interact = true;
-			interact_message = "Take spark plug";
-			if (Fpressed)
-			{
-				translateobj = 100;
-				takenspark = true;
-				PickUpItem(items[0]);
-				items[0] = nullptr;
-				std::cout << "Taken spark plug" << std::endl;
-			}
-		}
 	}
 
 	//easter egg jumpscare
@@ -1942,12 +1929,15 @@ void SceneSP2Room4::RenderRightRoom()
 		modelStack.PopMatrix();
 	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-39, translateobj, -22);
-	modelStack.Rotate(rotateobj, 0, 1, 0);
-	modelStack.Scale(0.2, 0.2, 0.2);
-	RenderMesh(meshList[sparkplug], true);
-	modelStack.PopMatrix();
+	if (items[0] != nullptr)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-39, translateobj, -22);
+		modelStack.Rotate(rotateobj, 0, 1, 0);
+		modelStack.Scale(0.2, 0.2, 0.2);
+		RenderMesh(meshList[sparkplug], true);
+		modelStack.PopMatrix();
+	}
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-28, 1, -24);
