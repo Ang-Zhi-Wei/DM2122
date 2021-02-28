@@ -1307,7 +1307,7 @@ void SceneSP2Main::Update(double dt)
 		Heartbeat->setSoundVolume(0.f);
 		Effect->setSoundVolume(0.f);
 		Creakingdoor->setSoundVolume(0.f);
-		if (winTimerActive == true);
+		if (winTimerActive == true)
 		{
 			winTimer -= dt;
 			if (winTimer >= 27)

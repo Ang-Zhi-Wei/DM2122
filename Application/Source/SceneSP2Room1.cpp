@@ -1590,7 +1590,7 @@ void SceneSP2Room1::Update(double dt)
 	case(flowing):
 		if (movewater <= 3.8)
 		{
-			movewater += 0.5 * float(dt);
+			movewater += 0.5f * float(dt);
 		}
 		else
 		{
@@ -1777,7 +1777,7 @@ void SceneSP2Room1::RenderPuzzleItems()
 				modelStack.PushMatrix();
 				modelStack.Translate(-1, 0.5, -0.5);
 				modelStack.Rotate(90, 0, 1, 0);
-				modelStack.Scale(0.15, 0.15, 0.15);
+				modelStack.Scale(0.15f, 0.15f, 0.15f);
 				RenderMesh(meshList[key], true);
 				modelStack.PopMatrix();
 			}
@@ -1939,7 +1939,7 @@ void SceneSP2Room1::Render()
 	//kitchen floor
 
 	modelStack.PushMatrix();
-	modelStack.Translate(72.4, 1.1, 75);
+	modelStack.Translate(72.4f, 1.1f, 75.f);
 	modelStack.Scale(40, 1, 40);
 	RenderMesh(meshList[KITCHENFLOOR], true);
 	modelStack.PopMatrix();
@@ -2168,7 +2168,7 @@ void SceneSP2Room1::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(30, 4, -560);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(0.04, 0.04, 0.04);
+	modelStack.Scale(0.04f, 0.04f, 0.04f);
 	RenderMesh(meshList[BOOKSHELF], true);
 	modelStack.PopMatrix();//Added collider
 
@@ -2181,7 +2181,7 @@ void SceneSP2Room1::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Translate(52, 0.7, -622);
+	modelStack.Translate(52.f, 0.7f, -622.f);
 	//modelStack.Rotate(, 0, 1, 0);
 	modelStack.Scale(7, 7, 7);
 	RenderMesh(meshList[STOVE], true);
@@ -2229,7 +2229,7 @@ void SceneSP2Room1::Render()
 	}
 
 	modelStack.PushMatrix();
-	modelStack.Translate(38.85, movewater, -621.8);
+	modelStack.Translate(38.85f, movewater, -621.8f);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Scale(3.5, 3.5, 3.5);
 	RenderMesh(meshList[water], true);

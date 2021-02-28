@@ -374,7 +374,7 @@ void SceneSP2Room4::Init()
 
 	//scene items
 	items[0] = new Item("Spark Plug", Item::SPARK_PLUG, Vector3(-130, -3, 0));
-	items[1] = new Item("Battery", Item::BATTERY, Vector3(-539.6, 6.3, 0));
+	items[1] = new Item("Battery", Item::BATTERY, Vector3(-539.6f, 6.3f, 0.f));
 	items[2] = new Item("Battery", Item::BATTERY, Vector3(-483, 6.5, -17));
 	items[3] = new Item("Roses", Item::FLOWER, Vector3(-538, 6.5, -8)); //pos diff from in render
 
@@ -385,7 +385,7 @@ void SceneSP2Room4::Init()
 	}
 
 	main_door[0].mid.Set(-470, 7.69, 4.1);
-	main_door[1].mid.Set(-470, 7.79, -4.1);
+	main_door[1].mid.Set(-470.f, 7.79f, -4.1f);
 	main_door[0].lengthz = main_door[1].lengthz = 5;
 	main_door[0].rotateY = 90;
 	main_door[1].rotateY = -90;
@@ -507,7 +507,7 @@ void SceneSP2Room4::Init()
 	//left room doors
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[24].setlength(4, 15.5, 5);
-	Colliderlist[24].Setposition(Vector3(-512.5, 7.2, -32));
+	Colliderlist[24].Setposition(Vector3(-512.5f, 7.2f, -32.f));
 
 	Colliderlist.push_back(ColliderBox());
 	Colliderlist[25].setlength(4, 15.5, 2);
@@ -582,7 +582,7 @@ void SceneSP2Room4::Init()
 	meshList[locker]->textureID = LoadTGA("Assigment2Images//locker.tga");
 
 	//default active
-	for (int i = 0; i < Colliderlist.size(); i++) {
+	for (int i = 0; i < signed(Colliderlist.size()); i++) {
 		Colliderlist[i].setactive(true);
 	}
 	//list of colliders
@@ -1664,18 +1664,18 @@ void SceneSP2Room4::RenderLeftRoom()
 		modelStack.Rotate(180, 0, 1, 0);
 		modelStack.Scale(1, 1, 1);
 			modelStack.PushMatrix();
-			modelStack.Translate(0, 1.7, 0);
-			modelStack.Scale(0.1, 0.1, 0.1);
+			modelStack.Translate(0.f, 1.7f, 0.f);
+			modelStack.Scale(0.1f, 0.1f, 0.1f);
 			RenderMesh(meshList[matress], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 1, 0);
-			modelStack.Scale(0.165, 0.165, 0.165);
+			modelStack.Scale(0.165f, 0.165f, 0.165f);
 			RenderMesh(meshList[bedframe], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 			modelStack.Translate(-0.3, 3, 0);
-			modelStack.Scale(0.06, 0.06, 0.06);
+			modelStack.Scale(0.06f, 0.06f, 0.06f);
 			RenderMesh(meshList[corpse], true);
 			modelStack.PopMatrix();
 
@@ -1692,7 +1692,7 @@ void SceneSP2Room4::RenderLeftRoom()
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 1, 0);
-			modelStack.Scale(0.165, 0.165, 0.165);
+			modelStack.Scale(0.165f, 0.165f, 0.165f);
 			RenderMesh(meshList[bedframe], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1708,7 +1708,7 @@ void SceneSP2Room4::RenderLeftRoom()
 		modelStack.Scale(1, 1, 1);
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 1.7, 0);
-			modelStack.Scale(0.1, 0.1, 0.1);
+			modelStack.Scale(0.1f, 0.1f, 0.1f);
 			RenderMesh(meshList[matress], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1717,8 +1717,8 @@ void SceneSP2Room4::RenderLeftRoom()
 			RenderMesh(meshList[bedframe], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-			modelStack.Translate(-0.3, 3, 0);
-			modelStack.Scale(0.06, 0.06, 0.06);
+			modelStack.Translate(-0.3f, 3.f, 0.f);
+			modelStack.Scale(0.06f, 0.06f, 0.06f);
 			RenderMesh(meshList[corpse], true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
@@ -1735,7 +1735,7 @@ void SceneSP2Room4::RenderLeftRoom()
 		modelStack.Scale(1, 1, 1);
 			modelStack.PushMatrix();
 			modelStack.Translate(0, 1.7, 0);
-			modelStack.Scale(0.1, 0.1, 0.1);
+			modelStack.Scale(0.1f, 0.1f, 0.1f);
 			RenderMesh(meshList[matress], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
@@ -1744,7 +1744,7 @@ void SceneSP2Room4::RenderLeftRoom()
 			RenderMesh(meshList[bedframe], true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-			modelStack.Translate(-0.3, 3, 0);
+			modelStack.Translate(-0.3f, 3.f, 0.f);
 			modelStack.Scale(0.06, 0.06, 0.06);
 			RenderMesh(meshList[corpse], true);
 			modelStack.PopMatrix();
@@ -1863,7 +1863,7 @@ void SceneSP2Room4::RenderLeftRoom()
 		modelStack.PushMatrix();
 		modelStack.Translate(52, 4.4, -5);
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[rose], true);
 		modelStack.PopMatrix();
 	}
@@ -1881,9 +1881,9 @@ void SceneSP2Room4::RenderLeftRoom()
 	if (itemplaced[5])
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(52, 4.4, -35);
+		modelStack.Translate(52.f, 4.4f, -35.f);
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[rose], true);
 		modelStack.PopMatrix();
 	}
@@ -1901,7 +1901,7 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PushMatrix();
 	modelStack.Translate(-40, 0, -13);
 	modelStack.Rotate(50, 0, 1, 0);
-	modelStack.Scale(0.16, 0.16, 0.16);
+	modelStack.Scale(0.16f, 0.16f, 0.16f);
 	RenderMesh(meshList[bedscreenZ], true);
 	modelStack.PopMatrix();
 
@@ -1928,7 +1928,7 @@ void SceneSP2Room4::RenderRightRoom()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-40.2, 5.5, -22);
-	modelStack.Scale(0.06, 0.06, 0.06);
+	modelStack.Scale(0.06f, 0.06f, 0.06f);
 	RenderMesh(meshList[corpse], true);
 	modelStack.PopMatrix();
 
@@ -1937,7 +1937,7 @@ void SceneSP2Room4::RenderRightRoom()
 		modelStack.PushMatrix();
 		modelStack.Translate(-40.2, 6.8, -22);
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.05, 0.05, 0.05);
+		modelStack.Scale(0.05f, 0.05f, 0.05f);
 		RenderMesh(meshList[rose], true);
 		modelStack.PopMatrix();
 	}
@@ -1945,7 +1945,7 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PushMatrix();
 	modelStack.Translate(-39, translateobj, -22);
 	modelStack.Rotate(rotateobj, 0, 1, 0);
-	modelStack.Scale(0.2, 0.2, 0.2);
+	modelStack.Scale(0.2f, 0.2f, 0.2f);
 	RenderMesh(meshList[sparkplug], true);
 	modelStack.PopMatrix();
 
@@ -1966,7 +1966,7 @@ void SceneSP2Room4::RenderRightRoom()
 	modelStack.PushMatrix();
 	modelStack.Translate(-50, 0, -20);
 	modelStack.Rotate(-30, 0, 1, 0);
-	modelStack.Scale(0.12, 0.12, 0.12);
+	modelStack.Scale(0.12f, 0.12f, 0.12f);
 	RenderMesh(meshList[bedtable], true);
 	modelStack.PopMatrix();
 }
@@ -2052,7 +2052,7 @@ void SceneSP2Room4::Render()
 	modelStack.Rotate(main_door[1].rotateY, 0, 1, 0);
 	modelStack.Translate(-0.25, 0, 2.5);
 
-	modelStack.Scale(1, 15, 8.2);
+	modelStack.Scale(1.f, 15.f, 8.2f);
 	RenderMesh(meshList[GEO_LEFTDOOR], true);
 	modelStack.PopMatrix();
 
@@ -2126,7 +2126,7 @@ void SceneSP2Room4::Render()
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 3, -73);
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(0.1, 0.15, 0.1);
+		modelStack.Scale(0.1f, 0.15f, 0.1f);
 		RenderMesh(meshList[frontdesk], true);
 		modelStack.PopMatrix();
 
@@ -2283,7 +2283,7 @@ void SceneSP2Room4::Render()
 			modelStack.PushMatrix();
 			modelStack.Translate(17, 6.5, -13);
 			modelStack.Rotate(90, 0, 1, 0);
-			modelStack.Scale(0.03, 0.03, 0.03);
+			modelStack.Scale(0.03f, 0.03f, 0.03f);
 			RenderMesh(meshList[BATTERY], true);
 			modelStack.PopMatrix();
 		}

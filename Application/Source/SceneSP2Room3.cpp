@@ -246,7 +246,7 @@ void SceneSP2Room3::Init()
 	meshList[BATTERY]->material.kAmbient.Set(0.35f, 0.35f, 0.35f);
 
 	garageItems[0] = nullptr;
-	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(22, 7.8, 555));
+	garageItems[1] = new Item("Battery", Item::BATTERY, Vector3(22.f, 7.8f, 555.f));
 	garageItems[2] = new Item("Battery", Item::BATTERY, Vector3(-25, 0, 520));
 	garageItems[3] = new Item("Handsaw", Item::Handsaw, Vector3(-24.5, 5.2, 505));
 
